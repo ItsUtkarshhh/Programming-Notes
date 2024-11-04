@@ -13,7 +13,7 @@
 // Flowchart : A diagramatic representation of the program/approach is called a flowchart! isme hum kuch symbols ka use krke apne rough solution ko diagramatic form me represent krte hai!
 // Pseudo Code : Generic way of representing a particular solution so that it can be coded in different languages!
 
-// FLowchart Components : Oval block (represents that the program start or ends here), parallelogram block (represents input/output), rectangle (represents a process), and then a decision block (used for if/else statement)!
+// FLowchart Components : Oval block (represents that the program start or ends here), parallelogram block (represents input/output), rectangle (represents a process), and then a decision block which is of diamond shape (used for if/else statement)!
 // Suppose you want to create a flowchart of the sum of two values, so it will be like : [Already done in handwritten notes! or if not then visit Love Babbar vdo 1 of DSA Series at 9:42 minutes]
 // Pseudo code for the above program will be, Start -> Read a, b -> sum = a + b -> print sum -> end!, And pseudo code is a generic code which represents a code in a most general way such that it can be coded in other languages also!
 
@@ -22,12 +22,9 @@
 // In code the compilation start with int main() and flowchart me jo start vaala component hota hai vo int main() ke liye hota hai!
 // C++ me jo using namespace std; likhte hai, iska mtlb ye hai ki like C++ me kuch namespaces hote hai unme se hum std vaala namespace use krna chahte hai! like example cout function alag alag namespace me alag type se define hoga, pr hume std (standard) vaala jo defintion hai cout ka usko use krenge output print krne ke liye!
 
-// Modulus operator does not support float values!
-// Also writing printf(0) in C is not right! and will give the runtime error!
-
 // How the cpp file converts to the executable file!
 // Preprocessing -> Compilation -> Assembler -> Linker
-// Preprocessor : Isme ye hota hai ki jo bhi pre processor directives hote hai, like file inclusion, macros expansion and all! ye sab hota hai like jo bhi hum likhte hai #include me vo saari directories and files include hoti hai file me! and saare macros expand hote hai like #define and all! and then iss step me humari ".cpp" file ".i" file me convert hoti hai!
+// Preprocessor : Isme ye hota hai ki jo bhi pre processor directives hote hai, like file inclusion, macros expansion and all! ye sab hota hai like jo bhi hum likhte hai #include me vo saari directories and files include hoti hai file me! and saare macros expand hote hai like #define and all! and then iss step me humari ".cpp" file ".i" or ".ii" file me convert hoti hai!
 // Compilation : Isme jo humari preprocessed file hai vo ".i" se ".s" me convert hoti hai! and jo humara C++ ka code hai vo assembly code me convert hota hai! also iss process me saare errors and all check hote hai!
 // Assembler : Isme jo humari compiled file hoti hai ".s" vaali ye ".o" object file me convert hoti hai! means isme jo assembly code hai vo machine language code me convert hota hai! and the object file contains machine-level code, along with other information necessary for linking. 
 // Linker : Isme saari object files include hoti hai and then ek final ".exe" file banti hai, jo final executable file hoti hai!
@@ -44,7 +41,7 @@ int main() {
     cout<<ch<<endl; // Yahaa bhi vaisa hi hua jo upar hua, yahaa pr jab humne 99 jo ek integer value hai jab humne vo store krne ki koshish ki tab 99 jiss character se map hota hai ASCII table ke according vo charcater print hojayega, here that character is c toh vo print hogya! 
 
     char ch2 = 123456;
-    cout<<ch2<<endl; // Yahaa as we know that unsigned int me 0 -> 2^32-1 tak ki values store ho sakti hai, and char me 0 -> 2^8-1 tak ki values print ho sakti hai! so what if agar hum koi 2^16 jaisi value store kraane ki koshish kre toh in character, tab kya hoga? then jo least significant byte mtlb jo rightmost 8 bits hongi (as becoz char 1 byte = 8 bits ki value store krta hai) toh utni values ko lekr utne ko hi character me convert hojayega and vo print hojayegi!
+    cout<<ch2<<endl; // Yahaa as we know that unsigned int me 0 -> 2^32-1 tak ki values store ho sakti hai, and char me 0 -> 2^8-1 tak ki values store ho sakti hai! so what if agar hum koi 2^16 jaisi value store kraane ki koshish kre toh in character, tab kya hoga? then jo least significant byte mtlb jo rightmost 8 bits hongi (as becoz char 1 byte = 8 bits ki value store krta hai) toh utni values ko lekr utne ko hi character me convert hojayega and vo print hojayegi!
 } // Means like here in ch2 we tried to store 123456, so ho sakta hai jo rightmost byte hogi usme 64 ban rha hoga and 64 maps with @ character in the ASCII table, toh bss vo print hogya!
 
 // Now abhi tak toh hum ye samajh gye ki positive numbers kaise store hote hai memory me, but negative numbers kaise hote hai store?? So ans is that if first bit is 1 it is -ve and if 0 then +ve!
@@ -74,7 +71,7 @@ int main() {
 }
 
 // Use case 3 : const int* ptr; Pointer to Constant Data : Ye line ka matlab hai ki ptr ek pointer hai jo constant integer data ko point karta hai. Iska matlab hai ki ptr dvara point kiye gaye data ko modify nahi kiya ja sakta, lekin khud pointer ko dusre data ko point karne ke liye change kiya ja sakta hai.
-//            : Also is pointer ka use krke value ko change nhi kiya jaa sakta! but value ko itself memory block se cha ge kiya jaa sakta hai! bss ptr ko use krke nhi!
+//            : Also is pointer ka use krke value ko change nhi kiya jaa sakta! but value ko itself memory block se change kiya jaa sakta hai! bss ptr ko use krke nhi!
 // Example :
 #include <iostream>
 
@@ -116,7 +113,7 @@ public:
     MyClass(int val) : value(val) {}
 
     void print() const {
-        // value = 100; // This will cause a compilation error because print() is a constant member function
+        // value = 100; // This will cause a compilation error because print() is a constant member function and hence it cannot change the value of "value" variable becoz it is a data member of the class!
         printf("Value: %d\n", value);
     }
 };
@@ -1179,6 +1176,7 @@ int main() {
 }
 // Now as of this course of Love Babbar DSA, now its time for watching out operators precedence, but that is not very important, we can always go and check to get to know that, but kuch yaad rehna chahiye, so they are...
 // Priority order : 1) ! 2) *, /, % 3) +, - 4) <, <=, >=, > 5) ==, != 6) && 7) ||
+// Modulus operator does not support float values!
 
 // Leetcode Question 1 : Subtract the product and sum of all the digits of an Integer!
 // Approach : Yahaa hum ek number input kraate hai toh vo number ke harr digit ka product and sum ka subtraction nikalna hai and vo print krna hai,
@@ -2409,6 +2407,11 @@ int main() {
 }
 
 // ---------------------------------------------------------- Some Extras --------------------------------------------------------------------------------------------------------->
+// Note : Writing printf(0) in C is not right! and will give the runtime error! but cout<<0; will not throw any error, reason is, printf() function is made to print strings, if you see we put all our output in a string format and then we use format specifiers to print our own values! but eventually it is printing a string!
+// But "cout" can print all other types of datatype it can print number, string, bool, float or any other... so in that way "cout" is more flexible to print values! but it is said that in terms of optimization, printf() is more optimized tht cout... but that is not always true, it depends on cases when you are using what!
+// Hence, printf() can be faster for basic output tasks, especially in performance-sensitive applications.
+// But, cout is more versatile, type-safe, and easier to use, but it might be slower due to synchronization and extra overhead. However, disabling synchronization (std::ios::sync_with_stdio(false);) can speed up cout.
+// So, yes it depends on your use case!
 
 // College Bootcamp Question : Write a program to display the sum of the series: 1 + 22 + 333 + 4444 + ... where the number of terms in the series is provided by the user.
 #include<iostream>
