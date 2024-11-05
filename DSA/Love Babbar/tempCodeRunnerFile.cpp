@@ -1,18 +1,23 @@
-#include <iostream>
+#include<iostream>
+using namespace std;
 
-const int getValue() {
-    return 42;
-}
-
-const int func(int x) {
-    x = x + 1;
-    return x;
+void swapalt(int arr[], int n) {
+    for(int i = 0; i<n; i = i+2) {
+        if(i+1 < n) {
+            swap(arr[i], arr[i+1]);
+        }
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
 }
 
 int main() {
-    const int val = getValue();
-    // val = 100; // This will cause a compilation error because val is declared as const
-    std::cout << "Value: " << val << std::endl; // Output: Value: 42
-    func(3);
-    return 0;
+    int arr[1000] = {0};
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    swapalt(arr,n);
 }
