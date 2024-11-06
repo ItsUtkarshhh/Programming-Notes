@@ -1,23 +1,19 @@
 #include<iostream>
+#include<typeinfo>
 using namespace std;
 
-void swapalt(int arr[], int n) {
-    for(int i = 0; i<n; i = i+2) {
-        if(i+1 < n) {
-            swap(arr[i], arr[i+1]);
-        }
-    }
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
-    }
-}
-
 int main() {
-    int arr[1000] = {0};
-    int n;
-    cin>>n;
-    for(int i = 0; i<n; i++) {
-        cin>>arr[i];
-    }
-    swapalt(arr,n);
+    float x = 34.4f; // "f" or "F" is used to specify float number
+    long double y = 34.4l; // "l" or "L" is used to specify long double number
+
+    // By default in C++ floating point numbers are treated as double, to convert them into float we have to use type casting
+    // 34.4 -> its a double, to convert it into float we will write f after it
+    // 34.4f now its a floating point number
+    cout<<"the value of x is : "<<x<<endl<<"the value of y is : "<<y<<endl;
+
+    float i = 3.14;
+    cout<<sizeof(i)<<endl;
+    cout<<typeid(i).name()<<endl; // It will print float!
+    cout<<typeid(3.14).name()<<endl;
+    return 0;
 }

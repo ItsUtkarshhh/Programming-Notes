@@ -2048,8 +2048,7 @@ int main()
 #include <iostream>
 using namespace std;
 
-int main()
-{
+int main() {
     int n;
     cin >> n;
     int arr[10000];
@@ -2098,9 +2097,9 @@ int main() {
         cin>>arr1[i];
     }
     cout<<"The Unique Element is : "<<findUnique(arr1, size);
-
 }
 // This is applicable for only 1 unique element! multiple honge toh unn sabka XOR hoke answer milega!
+// Also it is not applicable when there are odd number of duplicates for a number!
 // The above solutions will not only check whether an array contain a unique element, but also it will tell what are frequency of all the elements and find the unique element! for checking frequencies of other elements, you can use the Maps! it will be best to use! and for most optimal solution you can use the first solution! and for the unique solution you can use the last solution!
 
 // Leetcode Question 3 : You are given an array, and it contains each element between 1 -> n-1 at least once, there is a single integer value that present in the array twice, Your task is to find the duplicate value integer value present in the array!
@@ -2659,8 +2658,8 @@ int main() {
 
 // Unions :
 // Union is very similar to structure! bss jo main difference vo ye hai ki jaise pehle toh ki ye dono hi user defined data types hote hai! but jo difference vo ye hai ki jaise structure me jo data members hote hai unn sabko ek individual alag se memory milti hai apne apne data ko store krne ke liye! but in case of unions jitne bhi data members hote hai unn sabke ke liye ek common memory allocate hoti hai! and utni memory allocate hogi jitni jiss data member ki sabse zyada hogi!
-// Now suppose an example of structure, where it has data members like, int roll_number; float cgpa, char name[30]; now isme kyunki ye ek structure se define hui hai toh yahaa pr harr data member ke liye alag alag memory allocate hogi! now like jaise int ke liye 4 bytes allocate hue + float ke liye 4 bytes + then char name[30] means 30 bytes for name! means in total structure needs 38 bytes in total to store values of its data members when objects/instances of structure are created
-// But in the same example, if we just replace struct with union, then then jo data member sabse zyada memory lega utni memory bss allocate hogi! but sab data member ke liye alag memory allocate nhi hogi! means in total memory will be 30 bytes only! unions use krne ka ek fayeda hota hai ki memory kaafi efficiently use hoti hai! like isme agar hum instances bnaate hai union ke then jaise humne agar [instance].id = 3 krdi toh uss 30 bytes ki memory me ye 3 jaake store hojayega! but agar iske baad agar hum [instance].cgpa = 8.9, toh jo pehle id store tha ek instance vo corrupt hojayega and uss hi same memory space me ye cgpa store hojayegi! and similalry agar ab cgpa ke baad name store krte hai toh fir cgpa corrupt hojayegi and uss hi same memory space me name store hojayga! means jo hum end me value assign krenge jiss data member ki vo value store hogi memory me! and usse pehle jitne bhi data members ki value hai vo erase ho jayegi! but agar hum structures me dekhe toh harr data member ki value store rehti hai! and dusre data members ka initiallization kisi aur data member ki value ko change/erase/corrupt nhi krta!
+// Now suppose an example of structure, where it has data members like, int roll_number; float cgpa, char name[30]; now isme kyunki ye ek structure se define hui hai toh yahaa pr harr data member ke liye alag alag memory allocate hogi! now like jaise int ke liye 4 bytes allocate hue + float ke liye 4 bytes + then char name[30] means 30 bytes for name! means in total structure needs 38 bytes in total to store values of its data members when objects/instances of structure are created.
+// But in the same example, if we just replace struct with union, then then jo data member sabse zyada memory lega utni memory bss allocate hogi! but sab data member ke liye alag memory allocate nhi hogi! means in total memory will be 30 bytes only! unions use krne ka ek fayeda hota hai ki memory kaafi efficiently use hoti hai! like isme agar hum instances bnaate hai union ke then jaise humne agar [instance].id = 3 krdi toh uss 30 bytes ki memory me ye 3 jaake store hojayega! but agar iske baad agar hum [instance].cgpa = 8.9, toh jo pehle id store tha ek instance vo corrupt hojayega and uss hi same memory space me ye cgpa store hojayegi! and similarly agar ab cgpa ke baad name store krte hai toh fir cgpa corrupt hojayegi and uss hi same memory space me name store hojayga! means jo hum end me value assign krenge jiss data member ki vo value store hogi memory me! and usse pehle jitne bhi data members ki value hai vo erase ho jayegi! but agar hum structures me dekhe toh harr data member ki value store rehti hai! and dusre data members ka initiallization kisi aur data member ki value ko change/erase/corrupt nhi krta!
 // Lets code this and understand with an example...
 #include<stdio.h>
 #include<string.h>
@@ -2801,6 +2800,7 @@ int main() {
 }
 
 #include<iostream>
+#include<typeinfo> // To check type related info
 using namespace std;
 
 int main() {
@@ -2811,6 +2811,11 @@ int main() {
     // 34.4 -> its a double, to convert it into float we will write f after it
     // 34.4f now its a floating point number
     cout<<"the value of x is : "<<x<<endl<<"the value of y is : "<<y<<endl;
+
+    float i = 3.14;
+    cout<<sizeof(i)<<endl;
+    cout<<typeid(i).name()<<endl; // It will print float! as it was already declared and initiallized using float! so it will print float!
+    cout<<typeid(3.14).name()<<endl; // It will print double! as decimals are treated as double by default in C++
     return 0;
 }
 
@@ -2827,8 +2832,6 @@ int main() {
     cout<<"the size of 34.4F is :"<<sizeof(34.4F)<<endl;
     cout<<"the size of 34.4l is :"<<sizeof(34.4l)<<endl;
     cout<<"the size of 34.4L is :"<<sizeof(34.4L)<<endl;
-
-    return 0;
 }
 
 // Refrence Variables
@@ -2842,7 +2845,6 @@ int main() {
     cout<<"value of b :"<<b<<endl;
     return 0;
 }
-
 
 #include<iostream>
 using namespace std;
@@ -2867,7 +2869,6 @@ int main() {
     cout<<"Update2 Value : "<<x<<endl;
     return 0;
 }
-
 
 // Type casting
 #include<iostream>
@@ -2964,8 +2965,6 @@ int main() {
 
     // You can also chain manipulators
     std::cout << std::setw(10) << std::setfill('*') << num << std::endl; // Outputs "*******123", means ki pehle humne set krdiya ki 10 characters ka jagah output lega! and then agar output usse chhota hai toh humare paas choice hai ki yaa toh usko hum khaali chhor de, yaa toh setfill ka use krke unn spaces ko fill krde! and agar output more than 10 characters hota toh simply vo jo limit hai uski koi value nhi rehti!
-
-    return 0;
 }
 
 // ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->

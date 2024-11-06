@@ -620,3 +620,279 @@ int main() {
     }
     swapalt(arr,n);
 }
+
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = (int*)calloc(n,sizeof(n));
+    int max_element = INT_MIN;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        max_element = max(arr[i], max_element);
+    }
+
+    int* freq = (int*)calloc(max_element+1,sizeof(n));
+    for(int i = 0; i<n; i++) {
+        freq[arr[i]]++;
+    }
+    int ans = 0;
+    bool found = false;
+    for(int i = 0; i<=max_element; i++) {
+        if(freq[i] == 1) {
+            ans = i;
+            found = true;
+            break;
+        }
+    }
+    cout<<ans;
+    if(found == false) {
+        cout<<"No Unique Element found!";
+    }
+}
+
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    map<int,int> mp;
+    int num;
+    for(int i = 0; i<n; i++) {
+        cin>>num;
+        mp[num]++;
+    }
+    for(auto it:mp) {
+        cout<<"Occurence of :"<<it.first<<" is : "<<it.second<<endl;
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+void findUniq(int arr[], int n) {
+    int ans = 0;
+    for(int i = 0; i<n; i++) {
+        ans = ans^arr[i];
+    }
+    cout<<ans;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    findUniq(arr,n);
+}
+
+#include<iostream>
+using namespace std;
+
+findDuplicate(int arr[], int n) {
+    int ans = 0;
+    for(int i = 0; i<n; i++) {
+        ans = ans^i;
+    }
+    for(int i = 0; i<n; i++) {
+        ans = ans^arr[i];
+    }
+    cout<<ans;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    findDuplicate(arr,n);
+}
+
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersection(vector<int> arr1, int size1, vector<int> arr2, int size2) {
+    vector<int> temp;
+    for(int i = 0; i<size1; i++) {
+        int element = arr1[i];
+        for(int j = 0; j<size2; j++) {
+            if(element < arr2[i]) {
+                break;
+            }
+            if(element == arr2[j]) {
+                temp.push_back(element);
+                arr1[i] = INT_MIN;
+                break;
+            }
+        }
+    }
+    return temp;
+}
+
+int main() {
+    int size1;
+    cin>>size1;
+    vector<int> arr1(size1);
+    for(int i = 0; i<size1; i++) {
+        cin>>arr1[i];
+    }
+
+    int size2;
+    cin>>size2;
+    vector<int> arr2(size2);
+    for(int i = 0; i<size2; i++) {
+        cin>>arr2[i];
+    }
+
+    vector<int> ans = intersection(arr1, size1, arr2, size2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersection(vector<int> arr1, int size1, vector<int> arr2, int size2) {
+    vector<int> temp;
+    int i = 0; int j = 0;
+    while(i<size1 && j<size2) {
+        int element = arr1[i];
+        if(element == arr2[j]) {
+            temp.push_back(arr1[i]);
+            i++;
+            j++;
+        }
+        else if(element < arr2[i]) {
+            i++;
+        }
+        else {
+            j++;
+        }
+    }
+    return temp;
+}
+
+int main() {
+    int size1;
+    cin>>size1;
+    vector<int> arr1(size1);
+    for(int i = 0; i<size1; i++) {
+        cin>>arr1[i];
+    }
+
+    int size2;
+    cin>>size2;
+    vector<int> arr2(size2);
+    for(int i = 0; i<size2; i++) {
+        cin>>arr2[i];
+    }
+
+    vector<int> ans = intersection(arr1, size1, arr2, size2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<vector<int>> pairsum(vector<int> arr, int n, int sum) {
+    vector<vector<int>> pair;
+    for(int i = 0; i<n; i++) {
+        for(int j = i+1; j<n; j++) {
+            if(arr[i] + arr[j] == sum) {
+                vector<int> temp;
+                temp.push_back(min(arr[i],arr[j]));
+                temp.push_back(max(arr[i],arr[j]));
+                pair.push_back(temp);
+            }
+        }
+    }
+    sort(pair.begin(), pair.end());
+    return pair;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int sum;
+    cin>>sum;
+    vector<int> arr(n);
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    vector<vector<int>> ans = pairsum(arr, n, sum);
+    for(vector<int> pair : ans) {
+        cout<<"("<<pair[0]<<","<<pair[1]<<")"<<endl;
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+void sort01(int arr[], int n) {
+    int i = 0;
+    int j = n-1;
+    while(i<j) {
+        while(arr[i] == 0 && i<j) {
+            i++;
+        }
+        while(arr[j] == 1 && i<j) {
+            j--;
+        }
+        if(i<j) {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main() {
+    int arr[1000];
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    sort01(arr,n);
+}
+
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+void series(int n) {
+    cout<<1<<" ";
+    for(int i = 1; i<n; i++) {
+        int seq = ((i+1) * ceil(pow(10,i))) + (i+1);
+        cout<<seq<<" ";
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    series(n);
+}
