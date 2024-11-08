@@ -1,19 +1,43 @@
 #include<iostream>
-#include<typeinfo>
 using namespace std;
 
+void SelectionSort(int arr[], int n) {
+    int minIndex = 0;
+    for(int i = 0; i<n; i++) {
+        minIndex = i;
+        for(int j = i+1; j<n; j++) {
+            if(arr[minIndex] > arr[j]) {
+                minIndex = j;
+            }
+        }
+        swap(arr[minIndex], arr[i]);
+    }
+}
+
+void BubbleSort(int arr[], int n) {
+    for(int i = 1; i<n; i++) {
+        for(int j = 0; j<n-i; j++) {
+            if(arr[j] > arr[j+1]) {
+                swap(arr[j], arr[j+1]);
+            }
+        }
+    }
+}
+
 int main() {
-    float x = 34.4f; // "f" or "F" is used to specify float number
-    long double y = 34.4l; // "l" or "L" is used to specify long double number
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    SelectionSort(arr,n);
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
 
-    // By default in C++ floating point numbers are treated as double, to convert them into float we have to use type casting
-    // 34.4 -> its a double, to convert it into float we will write f after it
-    // 34.4f now its a floating point number
-    cout<<"the value of x is : "<<x<<endl<<"the value of y is : "<<y<<endl;
-
-    float i = 3.14;
-    cout<<sizeof(i)<<endl;
-    cout<<typeid(i).name()<<endl; // It will print float!
-    cout<<typeid(3.14).name()<<endl;
-    return 0;
+    BubbleSort(arr,n);
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
 }

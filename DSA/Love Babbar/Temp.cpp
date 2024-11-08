@@ -896,3 +896,212 @@ int main() {
     cin>>n;
     series(n);
 }
+
+#include<iostream>
+using namespace std;
+
+int peakElement(int arr[], int size) {
+    if(size==0) return arr[0];
+    if(arr[0] > arr[1]) return arr[0];
+    if(arr[size-1] > arr[size-2]) return arr[size-1];
+    int s = 0;
+    int e = size-1;
+    int mid = s + (e-s)/2;
+    while(s<=e) {
+        if(arr[mid] > arr[mid-1] && arr[mid] > arr[mid+1]) {
+            return arr[mid];
+        }
+        else if(arr[mid] > arr[mid-1] && arr[mid] < arr[mid+1]) {
+            s = mid + 1;
+        }
+        else if(arr[mid] < arr[mid-1] && arr[mid] > arr[mid+1]) {
+            e = mid - 1;
+        }
+        else {
+            s = mid + 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    cout<<peakElement(arr,n);
+}
+
+#include<iostream>
+using namespace std;
+
+int binarySearch(int arr[], int s, int e, int key) {
+    int start = s;
+    int end = e-1;
+    int mid = start + (end-start)/2;
+    while(start<=end) {
+        if(arr[mid] == key) {
+            return mid;
+        }
+        if(arr[mid] > key) {
+            end = mid - 1;
+        }
+        else {
+            start = mid + 1;
+        }
+        mid = start + (end-start)/2;
+    }
+    return -1;
+}
+
+int pivot(int arr[], int n) {
+    int s = 0;
+    int e = n-1;
+    int mid = s + (e-s)/2;
+    while(s<e) {
+        if(arr[mid] <= arr[0]) {
+            e = mid;
+        }
+        else {
+            s = mid + 1;
+        }
+        mid = s + (e-s)/2;
+    }
+    return s;
+}
+
+int findElement(int arr[], int n, int key) {
+    int pivotElement = pivot(arr,n);
+    int s = 0;
+    int e = n-1;
+    if(key > arr[0] && key < arr[pivotElement]) {
+        return binarySearch(arr,0,pivotElement-1,key);
+    }
+    else {
+        return binarySearch(arr,pivotElement,e,key);
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int key;
+    cin>>key;
+    cout<<findElement(arr,n,key);
+}
+
+#include<iostream>
+using namespace std;
+
+int binarySearch(int arr[], int s, int e, int key) {
+    int start = s;
+    int end = e;
+    int mid = start + (end-start)/2;
+    while(start<=end) {
+        if(arr[mid] == key) {
+            return mid;
+        }
+        if(key > arr[mid]) {
+            start = mid + 1;
+        }
+        else {
+            end = mid - 1;
+        }
+        mid = start + (end-start)/2;
+    }
+    return -1;
+}
+
+int pivot(int arr[], int n) {
+    int s = 0;
+    int e = n-1;
+    int mid = s + (e-s)/2;
+    while(s<e) {
+        if(arr[mid] >= arr[0]) {
+            s = mid + 1;
+        }
+        else {
+            e = mid;
+        }
+        mid = s + (e-s)/2;
+    }
+    return s;
+}
+
+int findElement(int arr[], int n, int key) {
+    int pivotIndex = pivot(arr,n);
+    if(key >= arr[pivotIndex] && key <= arr[n-1]) {
+        cout<<"HI";
+        return binarySearch(arr,pivotIndex,n-1,key);
+    }
+    else {
+        return binarySearch(arr,0,pivotIndex-1,key);
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int key;
+    cin>>key;
+    cout<<"Index of the key : "<<findElement(arr, n, key);
+}
+
+
+#include<iostream>
+using namespace std;
+
+void SelectionSort(int arr[], int n) {
+    int minIndex = 0;
+    for(int i = 0; i<n; i++) {
+        minIndex = i;
+        for(int j = i+1; j<n; j++) {
+            if(arr[minIndex] > arr[j]) {
+                minIndex = j;
+            }
+        }
+        swap(arr[minIndex], arr[i]);
+    }
+}
+
+void BubbleSort(int arr[], int n) {
+    for(int i = 1; i<n; i++) {
+        for(int j = 0; j<n-i; j++) {
+            if(arr[j] > arr[j+1]) {
+                swap(arr[j], arr[j+1]);
+            }
+        }
+    }
+}
+
+void InsertionSort(int arr[], int n) {
+    
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    SelectionSort(arr,n);
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+
+    BubbleSort(arr,n);
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
