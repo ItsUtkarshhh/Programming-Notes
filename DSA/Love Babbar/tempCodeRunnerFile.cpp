@@ -1,43 +1,68 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
-void SelectionSort(int arr[], int n) {
-    int minIndex = 0;
-    for(int i = 0; i<n; i++) {
-        minIndex = i;
-        for(int j = i+1; j<n; j++) {
-            if(arr[minIndex] > arr[j]) {
-                minIndex = j;
-            }
-        }
-        swap(arr[minIndex], arr[i]);
+void reverse(vector<int>& v) {
+    int s = 0;
+    int e = v.size()-1;
+    while(s<e) {
+        swap(v[s],v[e]);
+        s++;
+        e--;
     }
 }
 
-void BubbleSort(int arr[], int n) {
-    for(int i = 1; i<n; i++) {
-        for(int j = 0; j<n-i; j++) {
-            if(arr[j] > arr[j+1]) {
-                swap(arr[j], arr[j+1]);
-            }
-        }
+void sum(int arr1[], int n1, int arr2[], int n2) {
+    int carry = 0;
+    int i = n1-1; int j = n2-1;
+    int value = 0;
+    vector<int> v;
+    while(i >= 0 && j >= 0) {
+        int val1 = arr1[i];
+        int val2 = arr2[j];
+        value = carry + val1 + val2;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        i--;
+        j--;
+    }
+    while(i >= 0) {
+        int val1 = arr1[i];
+        value = carry + val1;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        i--;
+    }
+    while(j >= 0) {
+        int val2 = arr2[j];
+        value = carry + val2;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        j--;
+    }
+    while(carry != 0) {
+        v.push_back(carry%10);
+        carry = carry/10;
+    }
+    reverse(v);
+    for(int i : v) {
+        cout<<i;
     }
 }
 
 int main() {
-    int n;
-    cin>>n;
-    int arr[1000] = {0};
-    for(int i = 0; i < n; i++) {
-        cin>>arr[i];
+    int n1,n2;
+    cin>>n1>>n2;
+    int arr1[100] = {0};
+    int arr2[100] = {0};
+    for(int i = 0; i<n1; i++) {
+        cin>>arr1[i];
     }
-    SelectionSort(arr,n);
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
+    for(int i = 0; i<n2; i++) {
+        cin>>arr2[i];
     }
-
-    BubbleSort(arr,n);
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
-    }
+    sum(arr1,n1,arr2,n2);
 }

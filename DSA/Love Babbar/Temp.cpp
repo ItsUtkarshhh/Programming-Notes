@@ -1105,3 +1105,338 @@ int main() {
         cout<<arr[i]<<" ";
     }
 }
+
+
+#include<iostream>
+using namespace std;
+
+void bubbleSort2(int arr[], int n) {
+    for(int i = 1; i<n; i++) {
+        for(int j = 0; j<n-i; j++) {
+            if(arr[j] > arr[j+1]) {
+                swap(arr[j], arr[j+1]);
+            }
+        }
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+void selectionSort(int arr[], int n) {
+    for(int i = 0; i < n-1; i++) {
+        int minIndex = i;
+        for(int j = i+1; j<n; j++) {
+            if(arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+    swap(arr[minIndex], arr[i]);
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+void insertionSort(int arr[], int n) {
+    int j;
+    for(int i = 1; i<n; i++) {
+        int temp = arr[i];
+        for(j = i-1; j>=0; j--) {
+            if(arr[j] > temp) {
+                arr[j+1] = arr[j];
+            }
+            else {
+                break;
+            }
+        }
+        arr[j+1] = temp;
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    bubbleSort2(arr,n);
+    selectionSort(arr,n);
+    insertionSort(arr,n);
+}
+
+#include<iostream>
+using namespace std;
+
+void reverseAfter(int arr[], int n, int m) {
+    int s = m;
+    int e = n-1;
+    while(s<e) {
+        swap(arr[s], arr[e]);
+        s++;
+        e--;
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int after;
+    cin>>after;
+    reverseAfter(arr,n,after);
+}
+
+
+#include<iostream>
+using namespace std;
+
+void mergeArrays(int arr1[], int n1, int arr2[], int n2) {
+    int n3 = n1 + n2;
+    int* arr3 = new int[n3];
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    while(i<n1 && j<n2) {
+        if(arr1[i] <= arr2[j]) {
+            arr3[k++] = arr1[i++]; 
+        }
+        else {
+            arr3[k++] = arr2[j++];
+        }
+    }
+    while(i<n1) {
+        arr3[k++] = arr1[i++];
+    }
+    while(j<n2) {
+        arr3[k++] = arr2[j++];
+    }
+    for(int i = 0; i<n3; i++) {
+        cout<<arr3[i]<<" ";
+    }
+}
+
+int main() {
+    int arr1[1000] = {0};
+    int n1;
+    cin>>n1;
+    for(int i = 0; i<n1; i++) {
+        cin>>arr1[i];
+    }
+
+    int arr2[1000] = {0};
+    int n2;
+    cin>>n2;
+    for(int i = 0; i<n2; i++) {
+        cin>>arr2[i];
+    }
+    mergeArrays(arr1,n1,arr2,n2);
+}
+
+#include<iostream>
+using namespace std;
+
+void moveZeroes(int arr[], int n) {
+    int j = 0;
+    for(int i = 0; i<n; i++) {
+        if(arr[i] != 0) {
+            swap(arr[i], arr[j]);
+            j++;
+        }
+    }
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    moveZeroes(arr,n);
+}
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void rotate(vector<int> v, int k) {
+    vector<int> temp(v.size());
+    for(int i = 0; i<v.size(); i++) {
+        temp[(k+i)%v.size()] = v[i];
+    }
+    v = temp;
+    for(int i : v) {
+        cout<<i<<" ";
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v1(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v1[i];
+    }
+    int k;
+    cin>>k;
+    rotate(v1,k);
+}
+
+
+
+
+#include<iostream>
+using namespace std;
+
+int pivot(int arr[], int n) {
+    if(n == 0) return -1;
+    if(arr[n-1] > arr[0]) return 0;
+
+    int s = 0;
+    int e = n-1;
+    int mid = s + (e-s)/2;
+    while(s<e) {
+        if(arr[mid] >= arr[0]) {
+            s = mid + 1;
+        }
+        else {
+            e = mid;
+        }
+        mid = s + (e-s)/2;
+    }
+    return s;
+}
+
+bool SortedandRotated(int arr[], int n) {
+    if(n == 0) return false;
+    int pivotIndex = pivot(arr, n);
+    if (pivotIndex == 0) {
+        return true;
+    }
+
+    for(int i = 0; i<pivotIndex-1; i++) {
+        if(arr[i] > arr[i+1]) return false;
+    }
+    for(int i = pivotIndex; i<n-1; i++) {
+        if(arr[i] > arr[i+1]) return false;
+    }
+    if (arr[n - 1] > arr[0]) return false;
+    return true;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int arr[1000] = {0};
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    cout<<SortedandRotated(arr,n);
+}
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void reverse(vector<int>& v) {
+    int s = 0;
+    int e = v.size()-1;
+    while(s<e) {
+        swap(v[s],v[e]);
+        s++;
+        e--;
+    }
+}
+
+void sum(int arr1[], int n1, int arr2[], int n2) {
+    int carry = 0;
+    int i = n1-1; int j = n2-1;
+    int value = 0;
+    vector<int> v;
+    while(i >= 0 && j >= 0) {
+        int val1 = arr1[i];
+        int val2 = arr2[j];
+        value = carry + val1 + val2;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        i--;
+        j--;
+    }
+    while(i >= 0) {
+        int val1 = arr1[i];
+        value = carry + val1;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        i--;
+    }
+    while(j >= 0) {
+        int val2 = arr2[j];
+        value = carry + val2;
+        value = value%10;
+        carry = value/10;
+        v.push_back(value);
+        j--;
+    }
+    while(carry != 0) {
+        v.push_back(carry%10);
+        carry = carry/10;
+    }
+    reverse(v);
+    for(int i : v) {
+        cout<<i;
+    }
+}
+
+int main() {
+    int n1,n2;
+    cin>>n1>>n2;
+    int arr1[100] = {0};
+    int arr2[100] = {0};
+    for(int i = 0; i<n1; i++) {
+        cin>>arr1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>arr2[i];
+    }
+    sum(arr1,n1,arr2,n2);
+}
+
+
+#include<iostream>
+using namespace std;
+
+bool isValid(string s1) {
+    int i = 0;
+    if(s[i] >= 'a' && s[i] <= 'z' || s[i] >= 'A' && s[i] <= 'Z' || s[i] >= '0' && s[i] <= '9') {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int main() {
+    string str = "utka&%$$%&aktu";
+    if(isPalindrome(str)) {
+        cout<<"it is a Palindrome!";
+    }
+    else {
+        cout<<"Not a palindrome!";
+    }
+}

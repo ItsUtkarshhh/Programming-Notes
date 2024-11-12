@@ -239,7 +239,7 @@ int main() {
 // but the thing is, C language me, hum ek toh character arrays bnaate hai! and ek C-type-string bnaate hai! jisme se normal character arrays me hum simply array of character store krlete hai! but in C-type-strings me we add a null character at the end of the character array to make it a C-type-string and so that we can also all the functions of strings in C!
 // C-Type Strings Functions like :
 // strlen(str) : Finds the length of the C-type-string!
-// strcmp(str1,str2) : compares the two strings and return that which string is smaller and which is larger! (if string contains alphanets, then the comparison is based on ASCII values)
+// strcmp(str1,str2) : compares the two strings and return that which string is smaller and which is larger! (if string contains alphabets, then the comparison is based on ASCII values
 // strcat(str1,str2) : Concatenates two strings!
 // strcpy(newStr,oldStr) : copies old string to new string!
 // strrev(str) : It is used to reverse the strings! 
@@ -251,7 +251,7 @@ int main() {
 // Strings me array ki tarah hi values store rehti hai bss difference is that ki yahaa sirf characters store hoti hai!
 // Strings are intiallized like char ch[10]; this will be character array (string) of length 10, and isme input lene ke liye we write cin>>ch; that's it, there is one difference and that is ki yahaa pr jab humara input khatam hota hai toh last input ke next vaale block me ek null character (\0) store ho jaata hai which denotes the termination of the character array! and its ASCII value is 0!
 // Vaise hi jab input lene ke liye cout krenge tab bhi jahaa pr null character aayega vahaa pr execution ruk jayega! so suppose there is a character array like, a\0ba\0c\0, isme kya hoga ki jaise hi a ke baad cout ko \0 dikhega vhi pr execution ruk jayega and the final output will be "a" only!
-// Here we have used word character array and strings very interchangebly! but there are pretty different! like, Character array ek aisi array hoti hai jo characters ko store karti hai. Ye C-style strings kehlaati hain (agar last me null character daala gya toh). + Character array ke last me ek special character \0 (null terminator) hota hai jo string ke end ko indicate karta hai... and on the other side, string C++ Standard Library me defined ek class hai jo dynamic array of characters ko manage karta hai. + string me null terminator automatically handle hota hai. Aapko manually set karne ki zarurat nahi hoti.
+// Here we have used word character array and strings very interchangebly! but there are pretty different! like, Character array ek aisi array hoti hai jo characters ko store karti hai. Ye C-style strings kehlaati hain (agar last me null character daala gya toh) + Character array ke last me ek special character \0 (null terminator) hota hai jo string ke end ko indicate karta hai... and on the other side, string C++ Standard Library me defined ek class hai jo dynamic array of characters ko manage karta hai. + string me null terminator automatically handle hota hai. Aapko manually set karne ki zarurat nahi hoti.
 // Character array ko manually manage karna padta hai. Aapko pata hona chahiye ki array kitni badi hai aur null terminator ko include karna padta hai. but string apni memory ko khud manage karta hai. Agar string badi hoti hai to memory automatically adjust hoti hai.
 // Character arrays me string handling functions jaise strlen, strcpy, strcat ka use karte hain. Yeh functions <cstring> header file me milte hain. and string class me kai useful functions aur operators hote hain jaise length(), substr(), find(), + operator for concatenation, etc.
 
@@ -284,7 +284,6 @@ int main() {
     cout<<"Enter you name : "<<endl;
     cin>>name;
     name[2] = '\0'; // Humne bss name ke 2nd index pr ek null character daal diya ab as our logic says ki pehle user input krega and then uss input ke 2nd index pr \0 humne daal diya and toh jab cout hoga name, tab pooraa name nhi print hoga sirf index 0,1 print honge kyunki 2nd pr execution ruk gya! toh like agar Utkarsh input doge toh iss naam ke 2nd index pr \0 ajayega and it will look like Ut\0karsh and then print sirf Ut hoga!
-
     cout<<"Your name is "<<name<<endl;
 }
 
@@ -2148,46 +2147,3 @@ int main() {
 // Const Keyword : it is used to initiallize constant variables and they are variables whose values cannot be changed once they are initialized, and they are declared using the const keyword. Keywords, on the other hand, are reserved words in C++ that have special meanings and play a vital role in defining the syntax and structure of the language.
 
 // ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->
-// Binary Search Questions :
-// Practice Question 1 : Implement Binary Search!
-// Practice Question 2 : Find the First occurence of any number in series of numbers!
-// Practice Question 3 : Find the Last occurence of any number in series of numbers!
-// Practice Question 4 : Find the Total number of occurence of a number in series of numbers!
-// Practice Question 5 : Find the peak element of a sequence of numbers! (Single Peak + Multiple Peaks)
-// Practice Question 6 : Find a pivot element!
-// Practice Question 7 : Search an element in sorted rotated array!
-// Practice Question 8 : Find square root of a number (Integer part + decimal part also!)
-// Practice Question 9 : Rotate an array K times clockwise and anti-clockwise!
-
-// Advanced Binary Search Questions : 
-// Practice Question 10 : Book Allocation Problem!
-// Practice Question 11 : Aggressive Cows Problem!
-
-// Sorting Algorithms :
-// Practice : Selection Sort
-// Practice : Bubble Sort
-// Practice : Insertion Sort
-
-// STLs Data Structures :
-// Practice : Arrays
-// Practice : Vector
-// Practice : Double Ended Queue
-// Practice : Linked Lists (List)
-// Practice : Stack
-// Practice : Queue
-// Practice : Priority Queue
-// Practice : Sets
-// Practice : Maps
-
-// STL Algorithms :
-// Practice : binary Search()
-// Practice : lowerbound() and upperbound()
-// Practice : swap()
-// Practice : reverse()
-// Practice : rotate()
-// Practice : sort()
-
-// Pattern Making Questions :
-// Practice Question 12 : Reverse an array after a particular index!
-// Practice Question 13 : Merge 2 arrays!
-// Practice Question 14 : Move zeroes to the rightmost!
