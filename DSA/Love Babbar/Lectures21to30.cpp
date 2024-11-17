@@ -550,6 +550,58 @@ int main() {
     cout<<isPalindrome(s2);
 }
 
+// My Approach (Better Approach) : TC and SC are same, its just more readable and reduces unneccesary operations...
+#include<iostream>
+using namespace std;
+
+bool isValid(char ch) {
+    int i = 0;
+    if(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9') {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+char lowercase(char ch) {
+    if(ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9') {
+        return ch;
+    }
+    else {
+        return ch - 'A' + 'a';
+    }
+}
+
+bool validPalindrome(string s) {
+    string temp = "";
+    for(int i = 0; i<s.length(); i++) {
+        if(isValid(s[i])) {
+            temp.push_back(lowercase(s[i]));
+        }
+    }
+    int i = 0;
+    int j = temp.length() - 1;
+    while(i<j) {
+        if(temp[i] != temp[j]) {
+            return false;
+        }
+        i++;
+        j--;
+    }
+    return true;
+}
+
+int main() {
+    string str = "utka&%$$%&aktk";
+    if(validPalindrome(str)) {
+        cout<<"it is a Palindrome!";
+    }
+    else {
+        cout<<"Not a palindrome!";
+    }
+}
+
 // Question 5 : Find the maximum occuring characters in a string!
 // Approach : Here we are going to consider only lowercase characters and both the uppercase and lower case characters both will be considered same and if a string has a and A both, then count of 'a' will be 2, becoz a and A both are considered same!
 // Now lets code and then will discuss the approach...

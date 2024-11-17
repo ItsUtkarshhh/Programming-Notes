@@ -1421,9 +1421,9 @@ int main() {
 #include<iostream>
 using namespace std;
 
-bool isValid(string s1) {
+bool isValid(char ch) {
     int i = 0;
-    if(s[i] >= 'a' && s[i] <= 'z' || s[i] >= 'A' && s[i] <= 'Z' || s[i] >= '0' && s[i] <= '9') {
+    if(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9') {
         return true;
     }
     else {
@@ -1431,12 +1431,67 @@ bool isValid(string s1) {
     }
 }
 
+char lowercase(char ch) {
+    if(ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9') {
+        return ch;
+    }
+    else {
+        return ch - 'A' + 'a';
+    }
+}
+
+bool validPalindrome(string s) {
+    string temp = "";
+    for(int i = 0; i<s.length(); i++) {
+        if(isValid(s[i])) {
+            temp.push_back(lowercase(s[i]));
+        }
+    }
+    int i = 0;
+    int j = temp.length() - 1;
+    while(i<j) {
+        if(temp[i] != temp[j]) {
+            return false;
+        }
+        i++;
+        j--;
+    }
+    return true;
+}
+
 int main() {
-    string str = "utka&%$$%&aktu";
-    if(isPalindrome(str)) {
+    string str = "utka&%$$%&aktk";
+    if(validPalindrome(str)) {
         cout<<"it is a Palindrome!";
     }
     else {
         cout<<"Not a palindrome!";
     }
+}
+
+
+#include<iostream>
+#include<climits>
+using namespace std;
+
+char maxOccChar(string str) {
+    int count[26] = {0};
+    for(int i = 0; i<str.length(); i++) {
+        int Charindex = str[i] - 'A' + 'a';
+        count[Charindex]++;
+    }
+    int maxi = INT_MIN;
+    int charNum = -1;
+    for(int i = 0; i<26; i++) {
+        if(count[i] > maxi) {
+            maxi = count[i];
+            charNum = i;
+        }
+    }
+}
+
+int main() {
+    string str;
+    cin>>str;
+    cout<<maxOccChar(str);
 }
