@@ -1,26 +1,23 @@
 #include<iostream>
-#include<climits>
 using namespace std;
 
-char maxOccChar(string str) {
-    int count[26] = {0};
-    for(int i = 0; i<str.length(); i++) {
-        int index = str[i] - 'A'  + 'a';
-        count[index]++;
+// int fact(int n) {
+//     int ans = 1;
+//     for(int i = n; i>0; i--) {
+//         ans = ans*i;
+//     }
+//     return ans;
+// }
+
+int fact(int n) {
+    if(n == 0) {
+        return 1;
     }
-    int maxi = INT_MIN;
-    int charNum = -1;
-    for(int i = 0; i<26; i++) {
-        if(count[i] > maxi) {
-            maxi = count[i];
-            charNum = i;
-        }
-    }
-    return 'A' + charNum;
+    return n * fact(n-1);
 }
 
 int main() {
-    string str;
-    cin>>str;
-    cout<<maxOccChar(str);
+    int n;
+    cin>>n;
+    cout<<fact(n);
 }

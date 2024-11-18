@@ -2,32 +2,49 @@
 using namespace std;
 
 class Base {
+    int data1; // This data1 can not be inherited as it is a private member of the base class!
     public :
-    int var_base;
-    virtual void display() {
-        cout<<"1 Displaying Base class variable var_base : "<<var_base<<endl;
-    }
+        int data2;
+        void setdata();
+        int getdata1();
+        int getdata2();
 };
 
-class Derived : public Base {
+void Base :: setdata(void) { // Here we defined the setdata function of the base class! ye default set kr rhe hai data1 and 2 ko! hum abhi khud se data1 and data2 ko set nhi kr payenge!
+    data1 = 10;
+    data2 = 20;
+}
+
+int Base :: getdata1() { // Here we defined the getdata1 function of the base class!
+    return data1;
+}
+
+int Base :: getdata2() { // Here we defined the getdata2 function of the base class!
+    return data2;
+}
+
+class Derived : public Base { // Class is being derived publically hence all of the public data members of the base class are derived publiclally for the derived class also!
+    int data3;
     public :
-    int var_derived;
-    void display() {
-        cout<<"2 Displaying Base class variable var_base : "<<var_base<<endl;
-        cout<<"2 Displaying Derived class variable var_derived : "<<var_derived<<endl;
-    }
+        void process();
+        void display();
+
 };
+
+void Derived :: process() { // Defining the data members of the derived class, data1 ke liye getdata1() mwthod use krna padega kyunki data1 ek private memeber hai bhale hi hum Base class inherit ki hai Derived class me pr data1 ek private member tha base class ka isliye vo inherit nhi hua so usko use krne ke liye hume getdata1() method use krna padega!
+    data3 = data2*getdata1();
+}
+
+void Derived :: display() { // Defining the data members of the derived class
+    cout<<"Value of data 1 is : "<<getdata1()<<endl;
+    cout<<"Value of data 2 is : "<<data2<<endl;
+    cout<<"Value of data 3 is : "<<data3<<endl;
+}
 
 int main() {
-    Base* base_class_pointer;
-    Base Obj_base;
-    Derived Obj_derived;
-    base_class_pointer = &Obj_derived;
-    // base_class_pointer->display(); // jaisa bhi tak ho rha tha toh agar abhi hum isko run krenge toh bhale hi humne abhi kisi var ki value set nhi ki hai,
-    // pr we know ki yahaa pr by-default base class ka display function run hoga! pr agar hum chahte hai ki ye cheez change ho, and derived class ka display function run ho, kyunki dervied ke hi object ko base class ka pointer point kr rha hai, toh yhi pr use hote hai virtual functions! Toh ab hum base class ke display ko virtual declare krdenge!
-    
-    base_class_pointer->var_base = 30;
-    base_class_pointer->display(); // agar abhi hum bss aise hi display karayenge then we know hum var_derived ko value nhi de payenge, kyunki hum base class ke pointer se derived class ke data members ko access nhi kr sakte, isliye hum usko set nhi kar payenge, but haa ye sirf ye dikhane ke liye tha ki hum base class ke pointer se bhi derived class ke member function ko access kr sakte hai, through virtual functions!
-    // and ye sab decision bhale hi pehle compiler ne dekh liya ho, but binding and all functions ki and pointers ki vo sab runtime pr hi hui hai! vo bhi pointer ke type ko dekh kr!
-    // yhaa pr humne base class ke member function ko virtual declare krdiya taaki base class ka pointer jab display function call kre tab derived class ka display function dikhe bss! and vhi call hojaye, but ofcourse as becoz hum derived class ke data member toh set nhi kr sakte hai toh var_derived ke liye toh garbage value hi print hogi, but okay our main purpose was to ye samajhna ki kaise base class ke pointer se hum derived class ka display function call kar paye, and that is through virtual function!
+    Derived der;
+    der.setdata(); // Here we can use the setdata() getdata() methods of the base class with the objects of the derived class, as becoz we have inherited the the base class hence means we can use all of its public data members! 
+    der.process();
+    der.display();
+    return 0;
 }

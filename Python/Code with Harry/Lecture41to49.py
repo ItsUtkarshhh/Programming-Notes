@@ -69,7 +69,7 @@ for index,value in enumerate(fruits2,start=1) :
 # "[virtual_environment_name]\Scripts\activate.bat" or "[virtual_environment_name]\Scripts\activate" Ab isse virtual environment activate hojayega ab iske andar hum kuch bhi kre usse bahar ke system ko fark nhi padega! ab ye ek alag se hi pc ke andar ek alag pc ban gya hai aisa maanlo! jisme hum apni development kr sakte hai! we can install any version of any package inside this (kr toh external pc me sakte hai) like ek venv me koi aur package dusre me koi aur package!
 # for that you just need write things like, vaise commands you can google anytime, bss tareeka and flow and logic ptaa hona chaiye cheez krne ka ki koi cheez kaise ho rhi hai and kyu ho rhi hai!, code toh internet se mil hi jaata hai! so like suppose just for example you want to install pandas version 1.5.2 on one venv and on another I want to install 1.4.4, then for that you have to write this in cmd : pip install pandas==1.5.2 on one venv and on another pip install pandas==1.4.4 
 
-# 2.2) Activating Virtual Environment! (forpowershell)
+# 2.2) Activating Virtual Environment! (for powershell)
 # ".\[virtual_environment_name]\Scripts\activate.ps1" or ".\[virtual_environment_name]\Scripts\activate" Ab baaki jab krenge tab dekhenge, for now itna knowldge kaafi hai!
 # Now if your work is done and now, you want to deactivate your venv, then...
 

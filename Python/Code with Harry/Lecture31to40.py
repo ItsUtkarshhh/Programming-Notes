@@ -150,8 +150,12 @@ for key,value in students.items() :
     print(f"The value corresponding to the key {keys} is {value}")
 
 # Dictionary methods :
-# .update() : It updates the dictionary, agar jo key-value pair add krna chah rhe hai uska key already exist krta hai toh uska value update hojayega but agar key exist nhi krta tih ek nayaa key-value pair add hojayega!
-example1 = {"name" : "Utkarsh", "age" : "22", "DOB" : "14th Feb"}
+# .update() : It updates the dictionary, agar jo key-value pair add krna chah rhe hai uska key already exist krta hai toh uska value update hojayega but agar key exist nhi krta toh ek nayaa key-value pair add hojayega!
+example1 = {
+    "name" : "Utkarsh",
+    "age" : "22",
+    "DOB" : "14th Feb"
+}
 example1.update({"DOB" : "14th Feb 2003"})
 example1.update({"Profession" : "Student"})
 print(example1.items())

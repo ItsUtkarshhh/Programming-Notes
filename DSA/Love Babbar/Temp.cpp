@@ -1495,3 +1495,174 @@ int main() {
     cin>>str;
     cout<<maxOccChar(str);
 }
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+void replace(string s) {
+    string temp = "";
+    for(int i = 0; i<s.length(); i++) {
+        if(s[i] == ' ') {
+            temp.push_back('@');
+            temp.push_back('4');
+            temp.push_back('0');
+        }
+        else {
+            temp.push_back(s[i]);
+        }
+    }
+    cout<<temp;
+}
+
+int main() {
+    string s;
+    getline(cin,s);
+    replace(s);
+}
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+void removeOcc(string str, string substr) {
+    while(str.length() != 0 && str.find(substr) < str.length()) {
+        str.erase(str.find(substr),substr.length());
+    }
+    cout<<str;
+}
+
+int main() {
+    string str;
+    string substr;
+    getline(cin,str);
+    getline(cin,substr);
+    removeOcc(str,substr);
+}
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+int checkEqual(int count1[], int count2[]) {
+    int i = 0;
+    int j = 0;
+    while(i < 26 && j < 26) {
+        if(count1[i] != count2[j]) {
+            return false;
+        }
+        i++;
+        j++;
+    }
+    return true;
+}
+
+void permutation(string mainstr, string substr) {
+    int count1[26] = {0};
+    for(int i = 0; i<substr.length(); i++) {
+        char substrchar = substr[i];
+        int index1 = substrchar - 'a';
+        count1[index1]++;
+    }
+
+    int i = 0;
+    int windowSize = substr.length();
+    int count2[26] = {0};
+
+    while(i<windowSize && i<mainstr.length()) {
+        char mainstrchar = mainstr[i];
+        int index2 = mainstrchar - 'a';
+        count2[index2]++;
+        i++;
+    }
+
+    if(checkEqual(count1, count2)) {
+        cout<<"Permutation available!";
+        return;
+    }
+    else {
+        cout<<"Permutation not available!";
+        return;
+    }
+
+    while(i<mainstr.length()) {
+        char newchar = mainstr[i];
+        int index1 = newchar - 'a';
+        count2[index1]++;
+
+        char oldchar = mainstr[i - windowSize];
+        int index2 = oldchar - 'a';
+        count2[index2]--;
+        i++;
+
+        if(checkEqual(count1, count2)) {
+            cout<<"Permutation available!";
+            return;
+        }
+        else {
+            cout<<"Permutation not available!";
+            return;
+        }
+    }
+}
+
+int main() {
+    string mainStr;
+    getline(cin,mainStr);
+    string substr;
+    getline(cin,substr);
+    permutation(mainStr, substr);
+}
+
+#include<iostream>
+using namespace std;
+
+// int fact(int n) {
+//     int ans = 1;
+//     for(int i = n; i>0; i--) {
+//         ans = ans*i;
+//     }
+//     return ans;
+// }
+
+int fact(int n) {
+    if(n == 0) {
+        return 1;
+    }
+    return n * fact(n-1);
+}
+
+int main() {
+    int n;
+    cin>>n;
+    cout<<fact(n);
+}
+
+#include<iostream>
+using namespace std;
+
+void merge(int* arr, int s, int e) {
+    int len1 = 
+}
+
+void mergeSort(int* arr, int s, int e) {
+    if(s>e) {
+        return;
+    }
+    int mid = s + (e-s)/2;
+    mergeSort(arr,s,mid);
+    mergeSort(arr,mid+1,e);
+    merge(arr,s,e);
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int s = 0;
+    int e = n-1;
+    mergeSort(arr,s,e);
+}

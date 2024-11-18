@@ -308,6 +308,7 @@ int main()
     int key = 10;
     cout << binarySearch(arr, start, end, key);
 }
+
 // ---------------------------------------------------------- LECTURE 34 - Recursion Day-4 : Recursion with Strings --------------------------------------------------------------------------------------------------------->
 // Question 1 : Reverse a string using recursion!
 #include <iostream>

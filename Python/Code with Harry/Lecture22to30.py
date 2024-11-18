@@ -78,7 +78,7 @@ print(num.index(1))
 num = [1,9,1,3,1,6,5]
 print(num.count(1))
 
-# .copy() : It copies one list to aanother!
+# .copy() : It copies one list to another!
 # Lets see this in depth! agar hum simply ek list ko "=" operator ko use krke dusri list me daalde! toh isse list copy nhi hoti, balki bss ek aur reference ban jaata hai uss same list ka! isse jo changes dusre list me honge vhi original list me bhi hojayenge! so "=" operator use krke nhi krna hai! we will use .copy() function for this!
 num = [1,9,1,3,1,6,5]
 num2 = num.copy()
@@ -165,6 +165,7 @@ print(tuple3.count(10))
 print(tuple3.index(10)) # it will print 5
 # We can also check index within a particular slice of the tuple... for that after the element whose index we want to check, we will add two more paramters which will denote the start and end of the slice!
 print(tuple3.index(10,6,9)) # it will print 6
+# The method call tuple3.index(10, 6, 9) is attempting to find the index of the value 10 in the tuple tuple3, but only within the specified range of indices [6, 9).
 
 # Lectures 26 and 27 were exercise, you can try it on your own! and their answers are in the playlist videos only!
 

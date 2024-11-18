@@ -284,7 +284,7 @@ int main() {
     Hero1 Utkarsh2; // This object will call the default constructor! Thing is agar tumne koi default object bnaya hua hai and tumne agar pehle se compiler vaale constructor ko hataa ke apna koi constructor nhi banaya toh koi error nhi aayega! but agar tumne ek baar apna default constructor banaa diya! toh vo pehle vaala default constructor toh hatt gya hai! and ab jab bhi tum koi default object banaoge and then tum agar Default constructor hataate ho tab error show krega!
     // Pehle toh chalo theek tha default object banao ya naa banao, compiler ka default ka constructor sambhal le rha tha! but jaise hi tumne koi default constructor bnaa diya and tumhara koi default object bnaa hua hai... and ab agar tum vo default constructor hataoge tab error show krega!
     // means default constructor ko default object ke hone ya naa hone se fark nhi padta but default object ke liye ek default constructor hona zaruri hai!
-} // Passing multiple paramters in parameterized constructor is also possible, we can use "this" for both the paramters also jo pass hue hai uss constructor me! 
+} // Passing multiple paramters in parameterized constructor is also possible, we can use "this" for both the parameters also jo pass hue hai uss constructor me! 
 
 // Copy Constructor!
 // This constructor is used to copy objects!.. ek compiler ka khud ka copy constructor hota hai! agar hum apna explicitly create nhi krte hai toh vo default me jo ek compiler ka copy constructor rakhaa hua hai bg me vhi call hojaata hai jab bhi hum objects copy krne ka try krte hai!
@@ -898,7 +898,7 @@ int main() {
 }
 
 // Hybrid Inheritance : Combination of more than one type of inheritance!
-// lets see...
+// lets see...                                                                                                                                                                                                                                                                                                                                                    
 #include<iostream>
 using namespace std;
 

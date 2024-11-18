@@ -16,7 +16,7 @@
 #include<iostream>
 using namespace std;
 
-Base Class
+// Base Class
 class Employee {
     // int id; // Lets not keep anything private, as becoz we will not be able to inherit these properties of the base class!
     public :
@@ -360,14 +360,14 @@ using namespace std;
 class Base {
     public :
     void greet() {
-        cout<<"Hello World"<<endl; //Greet function of the base class!
+        cout<<"Hello World"<<endl; // Greet function of the base class!
     }
 };
 
 class Derived : public Base {
     public :
     void greet() {
-        cout<<"Learning OOPS in C++"<<endl; //Greet function of derived class!
+        cout<<"Learning OOPS in C++"<<endl; // Greet function of derived class!
     }
 };
 

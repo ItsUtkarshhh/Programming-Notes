@@ -236,7 +236,7 @@ int main() {
 
 // ---------------------------------------------------------- LECTURE 22 - Character Arrays and Strings --------------------------------------------------------------------------------------------------------->
 // Character Arrays and Strings are often used interchangebly!
-// but the thing is, C language me, hum ek toh character arrays bnaate hai! and ek C-type-string bnaate hai! jisme se normal character arrays me hum simply array of character store krlete hai! but in C-type-strings me we add a null character at the end of the character array to make it a C-type-string and so that we can also all the functions of strings in C!
+// But the thing is, C language me, hum ek toh character arrays bnaate hai! and ek C-type-string bnaate hai! jisme se normal character arrays me hum simply array of character store krlete hai! but in C-type-strings me we add a null character at the end of the character array to make it a C-type-string and so that we can also all the functions of strings in C!
 // C-Type Strings Functions like :
 // strlen(str) : Finds the length of the C-type-string!
 // strcmp(str1,str2) : compares the two strings and return that which string is smaller and which is larger! (if string contains alphabets, then the comparison is based on ASCII values
@@ -813,7 +813,8 @@ string removeDuplicates(string s) {
             if (i > 0) {
                 i--; // Move one step back to recheck for new duplicates
             }
-        } else {
+        }
+        else {
             i++; // Only move to the next character if no duplicate was found
         }
         // Check if the string is empty after erasing
@@ -1317,7 +1318,7 @@ int main() {
     cin>>x1>>m1>>n1;
     cout<<moduloExponentiation(x1,n1,m1);
 } // Upar me modulo use krne ka yhi kaaran hai ki, jo output ya jo value hai vo ek particular range me rahe! and vo range kya hai? if we let modulo be "m", then range will be, from 1 -> m-1.
-// Modulo ki kuch properties me se ek ye bhi property hoti hai ki, agar hum chahte hai ki kisi product ka modulo krna, jaise iss case me where we were trying to do, (x^n)%m, iss case me agar hum modulo ko ditribute krna chahte hai toh vo aise hoga ki pehle toh jitni baar n hai utni baar modulo hoga uss x ka m se! but then inn sabko multiple krke jo ans ayega usko bhi firse modulo krna padega m se!
+// Modulo ki kuch properties me se ek ye bhi property hoti hai ki, agar hum chahte hai ki kisi product ka modulo krna, jaise iss case me where we were trying to do, (x^n)%m, iss case me agar hum modulo ko distribute krna chahte hai toh vo aise hoga ki pehle toh jitni baar n hai utni baar modulo hoga uss x ka m se! but then inn sabko multiple krke jo ans ayega usko bhi firse modulo krna padega m se!
 // Means, (x^5)%m = ( (x%m) * (x%m) * (x%m) * (x%m) * (x%m) ) % m -> This is the right way of distributing modulo in multiplication!
 // To check this, you can try with the example of (5^5)%3.
 // Toh bss humne yhi logic apply kiya hai upar vaale solution me! ki multiplication me modulo ko distribute krne ke liye!
