@@ -18,7 +18,7 @@
 // Pseudo code for the above program will be, Start -> Read a, b -> sum = a + b -> print sum -> end!, And pseudo code is a generic code which represents a code in a most general way such that it can be coded in other languages also!
 
 // In these notes, almost everything is covered for C/C++ and its complete! more variety in questions practice from LC, CS, IB, HR, HE, GFG, CC.
-// Compiler is used to translate code and find errors in the code like compile time error amnd runtime error!
+// Compiler is used to translate code and find errors in the code like compile time error and runtime error!
 // In code the compilation start with int main() and flowchart me jo start vaala component hota hai vo int main() ke liye hota hai!
 // C++ me jo using namespace std; likhte hai, iska mtlb ye hai ki like C++ me kuch namespaces hote hai unme se hum std vaala namespace use krna chahte hai! like example cout function alag alag namespace me alag type se define hoga, pr hume std (standard) vaala jo defintion hai cout ka usko use krenge output print krne ke liye!
 
@@ -41,7 +41,7 @@ int main() {
     cout<<ch<<endl; // Yahaa bhi vaisa hi hua jo upar hua, yahaa pr jab humne 99 jo ek integer value hai jab humne vo store krne ki koshish ki tab 99 jiss character se map hota hai ASCII table ke according vo charcater print hojayega, here that character is c toh vo print hogya! 
 
     char ch2 = 123456;
-    cout<<ch2<<endl; // Yahaa as we know that unsigned int me 0 -> 2^32-1 tak ki values store ho sakti hai, and char me 0 -> 2^8-1 tak ki values store ho sakti hai! so what if agar hum koi 2^16 jaisi value store kraane ki koshish kre toh in character, tab kya hoga? then jo least significant byte mtlb jo rightmost 8 bits hongi (as becoz char 1 byte = 8 bits ki value store krta hai) toh utni values ko lekr utne ko hi character me convert hojayega and vo print hojayegi!
+    cout<<ch2<<endl; // Yahaa as we know that unsigned int me 0 -> 2^31-1 tak ki values store ho sakti hai, and char me 0 -> 2^8-1 tak ki values store ho sakti hai! so what if agar hum koi 2^16 jaisi value store kraane ki koshish kre toh in character, tab kya hoga? then jo least significant byte mtlb jo rightmost 8 bits hongi (as becoz char 1 byte = 8 bits ki value store krta hai) toh utni values ko lekr utne ko hi character me convert hojayega and vo print hojayegi!
 } // Means like here in ch2 we tried to store 123456, so ho sakta hai jo rightmost byte hogi usme 64 ban rha hoga and 64 maps with @ character in the ASCII table, toh bss vo print hogya!
 
 // Now abhi tak toh hum ye samajh gye ki positive numbers kaise store hote hai memory me, but negative numbers kaise hote hai store?? So ans is that if first bit is 1 it is -ve and if 0 then +ve!
@@ -56,6 +56,7 @@ int main() {
 // "const" keyword Use Cases : The const keyword in C and C++ is used to declare constants - variables whose values cannot be changed after initialization!
 // Use case 1 : const int MAX_VALUE = 100; This declares a constant MAX_VALUE with the value 100. Once initialized, its value cannot be modified.
 // Use case 2 : void printMessage(const char* message) { printf("%s\n", message); } The const keyword can be used in function parameters to indicate that the function will not modify the value passed to it. This can help prevent accidental modifications and improve code clarity.
+//            : Also another is "char* const var_name", it means its a constant pointer!
 // Example :
 #include <iostream>
 
@@ -140,7 +141,7 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 2 - Basics --------------------------------------------------------------------------------------------------------->
-// And now we have 2 variation while assigning a data type, that is signed and unsigned, signed jab hota hai toh -(2^31-1) -> (2^31-1) itni range ki values store ho sakti hai and jab unsigned hota hai tab 0 -> (2^32-1) values store hoti hai! means only positive values!
+// And now we have 2 variation while assigning a data type, that is signed and unsigned, signed jab hota hai toh -(2^31) -> (2^31-1) itni range ki values store ho sakti hai and jab unsigned hota hai tab 0 -> (2^32-1) values store hoti hai! means only positive values!
 #include<iostream>
 using namespace std;
 

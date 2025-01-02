@@ -1,23 +1,19 @@
 #include<iostream>
 using namespace std;
 
-// int fact(int n) {
-//     int ans = 1;
-//     for(int i = n; i>0; i--) {
-//         ans = ans*i;
-//     }
-//     return ans;
-// }
-
-int fact(int n) {
-    if(n == 0) {
-        return 1;
+void LCM(int n1, int n2) {
+    int value = max(n1,n2);
+    while(1) {
+        if(value % n1 == 0 && value % n2 == 0) {
+            cout<<value;
+            return;
+        }
+        value++;
     }
-    return n * fact(n-1);
 }
 
 int main() {
-    int n;
-    cin>>n;
-    cout<<fact(n);
+    int n1,n2;
+    cin>>n1>>n2;
+    LCM(n1,n2);
 }
