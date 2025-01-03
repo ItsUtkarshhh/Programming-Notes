@@ -1493,28 +1493,32 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 6 - Decimal to Binary & Binary to Decimal --------------------------------------------------------------------------------------------------------->
-// How to convert Decimal to Binary and vice versa!
 // Decimal to Binary Conversion :
-// 1st Approach : Let a number we want to convert to binary be n, now first we divide that number n by 2, then we store its remainder in another variable in answer variable, then we repeat the previous two steps until the number n!=0, and finally now we do the reverse of the number which was stored in the remainder.
-// For example : Suppose we have a number 10, now we will divide it with 2, we will get 5 and remainder = 0 -> Now we will divide that 5 which was obtained as quotient by 2, and now we will get the quotient = 2 and remainder = 1 -> Now we will again divide that quotient 2 by 2 and now we will get the quotient = 1 and remainder = 0 -> Now we will again divide the quotient by 2 and now we will get the quotient = 0 and remainder = 1. And now as our quotient = 0 (or can say our n=0, so now we will stop this process) So the final value obtained is 0101, but this is not 10, so now we will reverse the final number obtained and we will get 1010 and that is the final answer!
+// 1st Approach : Divide the decimal number by 2, store the remainder, and repeat until the number becomes 0. Then reverse the remainders to get the binary representation.
+// Use Case : When you want to convert positive integers into binary.
+// For example : To convert 10 to binary, Divide 10 by 2 : Remainder : 0 & Quotient : 5 -> Divide 5 by 2 : Remainder : 1 & Quotient : 2 -> Divide 2 by 2 : Remainder : 0 & Quotient : 1 -> Divide 1 by 2 : Remainder : 1 & Quotient : 0
+//             : Stop when the quotient becomes 0
+//             : Now, write the remainders in reverse order : 1010, Thats the binary representation of 10
 
-// 2nd Approach : Agar hum thora soche, toh we can see that kisi number ka 1 ke saath bitwise & krne pr, agar output 1 aaye toh vo ek odd number and agar 0 aaye toh vo ek even number hai! Another way of looking at it is like agar kisi number ka 1 ke saath bitwise & krne pr 1 output aata hai toh mtlb ki uske rightmost bit 1 hai, and vahi agar output 0 aaye toh mtlb ki uska rightmost bit (jisse hum calculate kr rhe hai) 0 hai, so from here we can see that ki hum kisi number ka 1 ke saath bitwise and krne se hum uska rightmost bit nikal sakte hai, toh bss hum aise hi krenge and after humne rightmost bit ka nikal liye ek baar, toh fir uss number ko rightshift krdenge taaki baaki ke places me bhi konsi bit hai 1 ya 0 vo nikal sake,
-// hence our flow will be, We will find the bitwise & of that number with 1 and then we will do the rightshift and then again we will find the bitwise & with 1, and we will do it until we have checked all the bits! But now the thing is how we will create or generate our final answer! so for that we will create a formula...
-// Initiallize a variable ans = 0; now, yahaa hum digit vaale variable me vo saare bits rakhenge jo upar bitwise & vaale operation kr kr ke obtained hue hai!
-// Demo : Suppose our given number is 5, so applying the above 2nd approach to find its binary form, from the above bitwise & process humne iske alag alag bits nikal liye hai, but unn sabko saath me rakh ke ek number bnane ke liye we will apply this formula, and it will go like...
-// ans = (10^0 * 1) + ans; -> ans = 1
-// ans = (10^1 * 0) + ans; -> ans = 01
-// ans = (10^2 * 1) + ans; -> ans = 101, hence we got our final answer!
+// 2nd Approach : Kisi number ko 1 ke saath bitwise AND karne se : If result is 1 then ODD number & if result is 0 then EVEN number.
+//              : From here we can say that, we using bitwise AND operator, we can find the rightmost bit of a number!
+//              : Now to check all bits, just keep doing the bitwise AND of that number, and keep doing the right-shift! to check all the bits of that number! and when the number becomes 0, then stop!
+// Use Cases : Checking if a Number is Odd or Even
+//           : Extracting the Rightmost Bit of a Number
+//           : Binary Representation of a Number
+//           : Bit Counting (Hamming Weight)
+//           : Reversing the Bits
+//           : Optimized Looping for Bitwise Tasks (Avoiding unnecessary checks by directly iterating over the bits of the number.)
+//           : Power of Two Check (A number is a power of two if it has exactly one 1 in its binary representation.)
+// Example : Start with ans = 0, which will store the final binary number. Use a variable digit to store the bits obtained through bitwise operations.
+//         : Using bitwise operations, extract each bit of the given number (as explained earlier using n&1 and right-shift n = n>>1).
+//         : To form the binary number from individual bits, use the formula : ans = (10^i * digits) + ans.
 
-// Also the above formula is used to find the reverse of the number given to us! like agar 1,2,3 diya hota toh ye formula ans = (10^i * digits) + ans; toh iss formula se answer aata 321. but upar 101 me pta nhi chlaa ye cheez kyunki humaare paas 1,0,1 number aaye toh unko ulta ya seedha likhe koi fark nhi pad rha tha, but yes this formula is used to reverse the digits and form a number.
-// But if we want ki like, 1,2,3 ka 123 ban jaye, then we use....
-// Initiallize the ans = 0; then we use this formula : ans = (ans * 10) + digit;
-// Demo : Suppose we have given three numbers 1,2,3 so now, we will proceed like...
-// ans = (0 * 10) + 1; -> ans = 1
-// ans = (1 * 10) + 2; -> ans = 12
-// ans = (12 * 10) + 3; -> ans = 123, That's how we get our final answer!
+// Note : There is another formula, which is : (ans = ans * 10) + digit... Use case discussed below...
+//      : (ans = ans * 10) + digit : It will be used when, you want ki jiss order me digits retrieve hue hai uss hi order me combine krke output aaye! Example : If you got digits 1 2 3, then applying this formula will combine the number in the order they are retreived! means output will be 123.
+//      : ans = (10^i * digits) + ans : It will be used when, you want ki jiss order me digits retrieve hue hai uske reverse order me combine krke output aaye! Example : If you got digits 1 2 3, then applying this formula will combine the number in the reverse of the order in which they are retreived! means output will be 321.
 
-// Now actually implement the above things :
+// Implementations :
 // First Approach :
 #include<iostream>
 #include<math.h>
@@ -1553,7 +1557,7 @@ int main() {
     cout<<ans;
 }
 
-// Converting a -ve number into binary! We already know the logic, like how a -ve number is stored in binary in memory, and then how it is printed, we already know the logic and theory, but now lets implement it in code!
+// This method can convert both +ve/-ve number into binary!
 #include <iostream>
 using namespace std;
 
@@ -1569,21 +1573,15 @@ int main() {
     int n;
     cout << "Enter an integer: ";
     cin >> n;
-
-    // Print the binary representation using two's complement for negative numbers
     printBinary(n);
-
     return 0;
 }
-// Here kya ho rha hai ki jo number humne input kiya jaise -10, vo seedha jaake memory me toh -ve number jaise store hote hai vaise hi store hoga! and then hum bss ye code uss binary representation ko as it is print krde rha hai! and same cheez +ve numbers ke case me bhi hoti hai kyunki usme hum koi convert nhi krte, hum bss jo input aaya vo jaise jaake memory me store hua hai usko hi as it is print krdete hai!
-// So yahaa agar -10 input krenge, toh being a -ve value ye 11111111 11111111 11111111 11110110 aise store ho rakha hoga memory me! toh humne bss isko ((n >> i) & 1) krke print krte gye! and here we get the answer!
-// And ye code +ve integers ko bhi print krdega! jaise vo memory me stored hai!
-// Toh upar vaali do approaches ka kya kaam hai? so they are more specific to performing operations on that input taaki smallest answer mile! as becoz upar vaale approaches me toh hum 5 ka binary 101 nikal paa rhe hai kuch operations krke! but isme hum vo 32 bit int variable me kaise stored hai vo dekh paa rhe hai!
+// Use this approach, when you just want to take a look at that how a number (+ve/-ve) is stored in the memory! +ve numbers get stored in memory as it is after converting in binary, -ve numbers goes through 1s and 2s complement and then get to store in memory! so this method just simply print what is stored in memory as it is!
+// So what are the above 2 approaches, they also convert decimal to binary! but they convert only bits which we want for other operations! this method is just when you need to see all 32 bits! but the above method will not show you all 32 bits coz as soon as number == 0 they will terminate! But both approaches are correct for conversion!
 // Both are correct approaches! but for negative this is the one! kyunki upar vaale approaches -ve decimals ko convert nhi kr rhe hai binary me!
 
 // Binary to Decimal Conversion :
-// So our approach here will be like, as we know hum binary numbers ko mathematically kaise dekhte hai, that is 2 ki power me! so hum right se left jaate hue 2 ki ek power badhaa dete hai! So...
-// So whenever we will encounter 1 while going right to left of the binary number we increase the power of 2 with 1 and then we will print the answer!
+// Approach : To convert binary to decimal, we use the fact that each bit in the binary number represents a power of 2, starting from 2^0 for the rightmost bit. Start from the rightmost bit (least significant bit). If the bit is 1, add 2^n (where n is the position of the bit) to the total sum. Move to the next bit and repeat until you've processed all the bits.
 #include<iostream>
 #include<math.h>
 using namespace std;
@@ -1603,15 +1601,9 @@ int main() {
     }
     cout<<ans;
 }
-// But here we need to keep somethings in mind and they are, jab input le rhe hai tab hum, like for example, agar kisine 101 input diya toh vo actually hum ek decimal 101 number input de rhe hai naa ki binary number, toh agar binary se decimal convert krna hai toh hume binary number hi input dena hoga!
-// Toh vo kaise hoga? Toh what we have done above is we have divided the input number with 10 and then we have used the remainder taaki fir hum bit by bit krke binary se decimal me convert krne ke liye code likh sake!
-// Vaise agar jab hum thore aur concepts padh lenge tab hum strings ko use krke binary se decimal convert kr sakte hai! taaki jo number hum input kr rhe hai vo bit by bit krke string ke harr ek entry me store hojaye! and that's how thing will proceed!
-
-// Before moving on, lets clarify one important concept! and that reversing the number and printing the number in the same order! So it all depends on in which order you are picking the digits! Last se pick krna shuru kiye ho, ya starting se pick krna shuru kiye ho! kyunki uske basis pr hum "digits" nikalte hai!
-// Agar starting se hi numbers pick krna shuru kiye ho tab toh koi dikkat nhi hai, digits vhi honge jo given order me hai!
-// But agar last se digits pick krna shuru krna hai then digits aise nikaloge, digits = n%10;
-// Now, Jiss order me numbers pick kiye hai uss hi same order me print krna chahte ho toh use this formula : ans = (ans * 10) + digits;
-// Jiss order me numbers pick kiye hai uske reverse order me print krna chahte ho toh use this formula : ans = (10^i * digits) + ans;
+// Note : But here we need to keep somethings in mind and they are, jab input le rhe hai tab hum, like for example, agar kisine 101 input diya toh vo actually hum ek decimal 101 number input de rhe hai naa ki binary number, toh agar binary se decimal convert krna hai toh hume binary number hi input dena hoga!
+//      : Toh vo kaise hoga? Toh what we have done above is we have divided the input number with 10 and then we have used the remainder taaki fir hum bit by bit krke binary se decimal me convert krne ke liye code likh sake!
+//      : Vaise agar jab hum thore aur concepts padh lenge tab hum strings ko use krke binary se decimal convert kr sakte hai! taaki jo number hum input kr rhe hai vo bit by bit krke string ke harr ek entry me store hojaye! and that's how thing will proceed!
 
 // ---------------------------------------------------------- LECTURE 7 - Leetcode Questions --------------------------------------------------------------------------------------------------------->
 // Practice Question 1 : Reverse an Integer! but if it goes out of the range of int them print 0! 
@@ -1627,7 +1619,7 @@ int main() {
     int ans = 0;
     while(n!=0) {
         int digit = n%10;
-        if((ans>INT_MAX/10 || ans < INT_MIN/10)) {
+        if((ans*10 >INT_MAX || ans*10 < INT_MIN)) {
             cout<<0;
         }
         ans = (ans * 10) + digit;
@@ -1638,18 +1630,17 @@ int main() {
 }
 
 // Practice Question 2 : Complement of an Integer!
-// Approach : We will get an input but that will be in decimal! so first we will use negation (~) and then we will get a number, but as we know that int number are of 32 bits so, lets understand with an example...
-// Suppose we have a number 5, its binary form is 101, but in 32 bits it is 00000000 00000000 00000000 00000101, now its negation will be ~5 = 11111111 11111111 11111111 11111010, now the rigtmost 3 bits are the answer we need! so now kisi tarah we need to remove the rest of the bits on the left of 010, so for that we will proceed like, we know that agar hum unn remaining 1's ka & lele 0 ke saath and 010 ka 1's ke saath & lele toh hum unn sabko 0 bnaa sakte hai and 010 bach jayega! so then we will left with 00000000 00000000 00000000 00000'010' and we will get the answer!
-// So overall hume aisa koi number create krna padega, jisse ye strategy which we discussed above kaam kre, toh for that we create that number and let that number be called mask, because it will mask all the bits except our answer bits!
-// So we will create it like...jo number input me mila hai usko right shift krte jayenge, and har right shift me check krenge ki vo 0 hua hai ya nhi! ab 0 ho jayega toh stop hojayenge, lets understand this with an example, 00000000 00000000 00000000 000000101, now we will right shift, so after 3 times right-shifting, vo number ab 0 ban jayega! toh now we now that left se 29 bits pr 0 chahiye and baaki right ki remaining 3 pr 1 chahiye!
-// So now we will do the start the left-shifting, and ab iss baar jab bhi left shift kr rhe honge toh 1 ke saath 'or' krenge taaki jo bhi nayaa padding vaala zero aaye vo 1 ke saath 'or' me 1 ban jaye, and that is how we will get the mask! continue the above example : abhi tak we got, 00000000 00000000 00000000 00000, on doing three times left shifting and then performing 'or' operation with 1 will attach 1 bits to its rightmost bits, and we will get, 00000000 00000000 00000000 00000111 and this is the mask we needed!
-// Overall what actually happened her is this...
-// 1) Entered number (5) : 00000000 00000000 00000000 00000101
-// 2) Performed (~5) :     11111111 11111111 11111111 11111010
-// 3) Mask created :       00000000 00000000 00000000 00000111
-// Answer :                00000000 00000000 00000000 00000010
-// 2nd and 3rd step me & operation perform krne ke baad we got our final answer!
-// Now lets code the above things :
+// Approach : You are given a decimal number, example : 5
+//          : Find the 32-bit Negation : Convert the number to a 32-bit binary representation. For 5, it's 00000000 00000000 00000000 00000101.
+//                                     : Apply the negation (~) to flip all bits (0 becomes 1 and 1 becomes 0). For 5, the negation (~5) is 11111111 11111111 11111111 11111010.
+//          : Create a mask : To create the mask, we need to determine the number of bits that are 1 in the result.
+//                          : Right shift the number repeatedly until it becomes 0. This will help us identify the number of relevant bits (i.e., how many bits were 1 in the original number).
+//                          : For 5 (which is 00000000 00000000 00000000 00000101), after 3 right shifts, it becomes 0, and we know that there are 3 bits involved.
+//                          : Build the mask by left shifting 1 a number of times equal to the number of bits (3 in this case). Then, OR (|) the result with 1 to set the bits to 1. After 3 left shifts, the mask will be 00000000 00000000 00000000 00000111.
+//          : Apply the mask : Now, apply the bitwise AND ( & ) operation between the negated number (~5) and the mask. The negated number (~5) is 11111111 11111111 11111111 11111010. The mask is 00000000 00000000 00000000 00000111. Perform ~5 & mask, which gives 00000000 00000000 00000000 00000010.
+//          : Final Result : The result after applying the mask is 00000000 00000000 00000000 00000010, which is 2 in decimal.
+
+// Implementations :
 #include<iostream>
 using namespace std;
 
@@ -1692,6 +1683,29 @@ int main() {
     }
 }
 
+// More efficient approach (Using previous use case of Decimal to Binary conversion) :
+// Logic : Power of Two Check (A number is a power of two if it has exactly one 1 in its binary representation.)
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int count = 0;
+    while(n!=0) {
+        if(n&1) {
+            count++;
+        }
+        n = n>>1;
+    }
+    if(count == 1) {
+        cout<<"Power of 2";
+    }
+    else {
+        cout<<"Not a power of 2";
+    }
+}
+
 // ---------------------------------------------------------- LECTURE 8 - Switch Case and Functions! --------------------------------------------------------------------------------------------------------->
 // A demo example for switch case!
 #include<iostream>
@@ -1699,8 +1713,7 @@ using namespace std;
 
 int main() {
     int num = 1;
-    switch (num)
-    {
+    switch (num) {
     case 1:
         cout<<"First case"<<endl;
         break;
@@ -1712,16 +1725,13 @@ int main() {
         break;
     }
 }
-// Here break statement help krta hai jab humari jo condition match hojaati hai, uss case ko execute krne ke baad poore switch statement se bahar aane me!
-// Like agar aise likha hota....
-// Toh iss case me case 1 and 2 dono execute hojaate! kyunki pehla case jab jab match kiya condition se and jab execute hua toh uske baad break nhi kiya humne, iss hi kaaran case 2 bhi execute hogya!
+
 #include<iostream>
 using namespace std;
 
 int main() {
     int num = 1;
-    switch (num)
-    {
+    switch (num) {
     case 1:
         cout<<"First case"<<endl;
         // break;
@@ -1733,14 +1743,13 @@ int main() {
         break;
     }
 }
-// Another variation...
+
 #include<iostream>
 using namespace std;
 
 int main() {
     int num = 2;
-    switch (num)
-    {
+    switch (num) {
     case 1:
         cout<<"First case"<<endl;
         break;
@@ -1752,9 +1761,11 @@ int main() {
         break;
     }
 }
-// So we get to know that break statement is a very integral part of switch statement!
-// Also default condition optional hoti hai, lagao ya na lagao koi error toh nhi aayega, pr agar jab koi condition match nhi hogi toh kuch toh execute krne ke liye chahiye, isliye hum default use krte hai!
+// In the above 3 examples : 1st one, its an normal switch-case, where each case is ending with a break statement, that if condition matches at that point, and if there's a break statement in that "case" then it will exit switch statement then and there!
+// And in the next 2nd and 3rd examples, until we will not encounter break statement, it wont exit the switch case! and will keep executing the next "case". Hence, we get to know that break statement is a very integral part of switch statement!
+// Default case if optional, but use it when it may happen that none of the cases gets true!
 // Nested loops and Switch cases are inter-convertible!
+
 // Suppose you have a infinite loop of while, and you have a switch statement inside it, so how will you exit both switch statement and while loop providing you can only use break statement onlyy inside of SWITCH statement...
 #include<iostream>
 #include<cstdlib>
@@ -1763,8 +1774,7 @@ using namespace std;
 int main() {
     int num = 1;
     while(1) {
-        switch (num)
-        {
+        switch (num) {
         case 1:
             cout<<"First case"<<endl;
             // break;
@@ -1781,9 +1791,8 @@ int main() {
     }
 }
 // Here what happened is that agar hum break use krenge toh yahaa ek infinite loop ban jayega jisme sirf "First Case" print hoga! so, even if in this infinite loop we want to print only particular cases, then we need to use exit() statement!
-// As exit not just pull you out of a loop, it pull you out of the entire program!
-// That's why using exit() statement, we managed to handle the infinite loop!
-// More elaboration of exit() statement : In C++, the exit() function is used to terminate a program. It is defined in the <cstdlib> header. When exit() is called, it performs some cleanup tasks and terminates the program. You can also specify an exit status code as an argument to exit().
+// As exit not just pull you out of a loop, it pull you out of the entire program! That's why using exit() statement, we managed to handle the infinite loop!
+// exit() statement : In C++, the exit() function is used to terminate a program. It is defined in the <cstdlib> header. When exit() is called, it performs some cleanup tasks and terminates the program. You can also specify an exit status code as an argument to exit().
 // Keep in mind that, similar to the Python exit() function, using exit() in C++ should be done with caution. In more complex programs, you might want to use return statements from the main() function or throw exceptions to handle program termination more gracefully.
 // If you're working with a specific function or a block of code within a program, you might prefer to use return to exit from that function or block, rather than calling exit().
 
@@ -1820,7 +1829,6 @@ int main() {
 // We used function and function calls!
 // Function Call Stack : And the flow of function calls are, In int main() we called the function nCr(n,r) then in nCr(n,r) we called the function fact() then in fact() we returned the value of fact, then we returned another value, then we used that value in int main()!
 // Return was a statement we were using to get out of the function!
-// Now we also know that how pass by value and pass by reference works! these notes are already there in C language notes!
 
 // Some questions on this lecture!
 #include<iostream>
@@ -1864,10 +1872,9 @@ int main() {
 // Also maan lo agar int dost[10]; ek array banaya, toh ye memory me kaise dikhega, it will like suppose the first element is at memory address 100, now the 2nd element (means 1st index) will be at 104 becoz its data type is int and int has 4 byte, so one memory location (which will contain 32 bits) will be able to store a value of the int range which we know already! so means, dost[10] ka mtlb ki aisi 10 memory locations alot hojayengi dost naam ke variable ko jahaa pr hum 10 different (or same) values of same data type (here it is int) daal sakte hai and harr ek memory location (which is of 4 bytes = 32 bits) will be able to store value of the int range, which is -2^31 -> 2^31-1.
 
 // Initiallization of Arrays : int dost[5] = {1,2,3,4,5}; Isse memory me 5 block bane and unn sab blocks me harr ek index ke according value store hogyi!
-// Now another way of initiallizing array is, int dost[5] = {0}; isse kya hua ki jitne memory blocks allocate hue iss array ko unn sab me 0 store hogya!
-// Another way is, int dost[10]; isse kya hua ki 10 memory locations ke according memory allocate hui and sab jagah garbage value store hogyi!
-// But the thing is ye cheez iss case me nhi hota hai, int dost[5] = {1}; isse sirf first index pr hi store hota hai 1 and baaki remaining 4 memory locations pr 0 value store hojaati hai!
-// agar array ko declared but un-initiallized rakhenge tab saare locations pr garbage value store hojayegi!
+//                           : int dost[5] = {0}; isse kya hua ki jitne memory blocks allocate hue iss array ko unn sab me 0 store hogya!
+//                           : int dost[10]; isse kya hua ki 10 memory locations ke according memory allocate hui and sab jagah garbage value store hogyi! means agar array ko declared but un-initiallized rakhenge tab saare locations pr garbage value store hojayegi!
+// So that's how memory allocations works, unlike this case : int dost[5] = {1}; isse sirf first index pr hi store hota hai 1 and baaki remaining 4 memory locations pr 0 value store hojaati hai!
 // But agar hum chahte hai ki 0 ki tarah sirf int dost[5] = {1}; likhne se harr index pr 1 store hojaye, toh iske liye what we have to do? so answer is : this will be done by using vectors! and it is demonstrated below...
 #include <iostream>
 #include <vector>
@@ -1894,7 +1901,6 @@ int main() {
     cout<<arr[2]<<endl;
     cout<<arr[3]<<endl;
     cout<<arr[4]<<endl;
-    
     return 0;
 }
 
@@ -1908,11 +1914,10 @@ int main() {
     for(int i = 0; i<10; i++) {
         cout<<arr[i]<<endl;
     }
-    // Isse humari prblm toh solve hogyi ki hume baar baar cout nhi likhna padega jab index ki values print karwayenge toh, but iske saath saath ek aur cheez hui ki like humari array toh 10 size ki thi, but humne enter toh sirf 5 hi values ki hai toh after doing this baaki saari remaining indexes pr 0 store ho jayega! This is becoz of the C++ Standards!
+    // Isse humari problem toh solve hogyi ki hume baar baar cout nhi likhna padega jab index ki values print karwayenge toh, but iske saath saath ek aur cheez hui ki like humari array toh 10 size ki thi, but humne enter toh sirf 5 hi values ki hai toh after doing this baaki saari remaining indexes pr 0 store ho jayega! This is becoz of the C++ Standards!
 }
 
-// Arrays with Functions!
-// Using the arrays with functions has the same reason as of the using normal functions and that is code ki readability and usability badhti hai!
+// Arrays with Functions! : Using the arrays with functions has the same reason as of the using normal functions and that is code ki readability and usability badhti hai!
 #include<iostream>
 using namespace std;
 
@@ -1949,7 +1954,7 @@ int main() {
 
     // Now suppose we want to find the size of an array, then we will do this...
     int arr1size = sizeof(arr1)/sizeof(int);
-    cout<<"Size of arr1 : "<<arr1size; // it will print 5, which is the size of the array arr1.
+    cout<<"Size of arr1 : "<<arr1size; // It will print 5, which is the size of the array arr1.
     // But maanlo like humare array 10 size ka hai and usme 5 hi element pade hue hai then hume uska actual size nikalna possible nhi hai toh uss case me hi hum int size naam se ek parameter daalte hai function declaration me!
 
     int arr2size = sizeof(arr2)/sizeof(int);
@@ -1993,7 +1998,6 @@ int getMin(int arr[], int n) {
 int main() {
     int size;
     cin>>size;
-
     // int arr[size]; // This is not at all a good practice as here we are trying to make the size of the array a variable, but this is not how you do it!, that we will learn later on, but for now lets keep its size static!
     int arr1[100];
 
@@ -2065,12 +2069,12 @@ using namespace std;
 int linearSearch(int arr[], int n, int key) {
     for(int i=0; i<n; i++) {
         if(arr[i]==key) {
-            return true;
-            // return 1; // Can also write this
+            return 1;
+            // return true; // Can also write this
         }
     }
-    return false;
-    // return 0; // Can also write this
+    return 0;
+    // return false; // Can also write this
 }
 
 int main() {
@@ -2240,7 +2244,39 @@ int main() {
     else{
         cout<<"No distinct element found"<<endl;
     }
+    delete[] arr;
+    delete[] freq;
     return 0;
+}
+
+// Logic is same, but you also solve like this...
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    int max_element = INT_MIN;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        if(arr[i] > max_element) {
+            max_element = arr[i];
+        }
+    }
+
+    int* count = new int[max_element+1](); // adding parenthesis at the end makes it works like calloc, as it initiallize the array with 0!
+    for(int i = 0; i<n; i++) {
+        count[arr[i]]++;
+    }
+    for(int i = 0; i<=max_element; i++) {
+        if(count[i] == 1) {
+            cout<<"There is atleast one unique element, that is : "<<i;
+        }
+    }
+    delete[] arr;
+    delete[] count;
 }
 
 // 2nd (Using STL library map) : This we will study further going in... so for now you can ignore this solution but once you understand STL then you can check it again!
