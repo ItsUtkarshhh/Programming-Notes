@@ -2284,18 +2284,17 @@ int main() {
 #include<map>
 using namespace std;
 
-int main()
-{
-    int n; cin>>n;
+int main() {
+    int n;
+    cin>>n;
     map<int,int> mp;
     int num;
-    for(int i=0; i<n; i++) {
+    for(int i = 0; i<n; i++) {
         cin>>num;
-        mp[num] += 1; // key ki value ko 1 se se increment kr rhe hain
+        mp[num]++; // Incrementing value by 1 at that index!
     }
-    for(auto it:mp)
-    {
-        cout<<"Element:"<<it.first<<" occurence --> "<<it.second<<endl;
+    for(auto it:mp) {
+        cout<<"Element "<<it.first<<" has "<<it.second<<" occurence!"<<endl;
     }
 }
 
@@ -2353,13 +2352,12 @@ int main() {
     }
     cout<<"The Unique Element is : "<<findUnique(arr1, size);
 }
-// This is applicable for only 1 unique element! multiple honge toh unn sabka XOR hoke answer milega!
-// Also it is not applicable when there are odd number of duplicates for a number!
-// The above solutions will not only check whether an array contain a unique element, but also it will tell what are frequency of all the elements and find the unique element! for checking frequencies of other elements, you can use the Maps! it will be best to use! and for most optimal solution you can use the first solution! and for the unique solution you can use the last solution!
+// Constraints : Applicable for only 1 unique element! multiple honge toh unn sabka XOR hoke answer milega!
+//             : Also it is not applicable when there are odd number of duplicates for a number!
+// Overall, The above solutions will not only check whether an array contain a unique element, but also it will tell what are frequency of all the elements and find the unique element! for checking frequencies of other elements, you can use the Maps! it will be best to use! and for most optimal solution you can use the first solution! and for the unique solution you can use the last solution!
 
 // Leetcode Question 3 : You are given an array, and it contains each element between 1 -> n-1 at least once, there is a single integer value that present in the array twice, Your task is to find the duplicate value integer value present in the array!
 // Approach : Pehli approach toh vhi hai ki harr element ko count krlo and jiss element ka count 2 ke equal hoga vo humara answer hojayega! this is a brute force approach!
-// Brute Force Approach : My Solution...
 // This is a very good brute force solution also it is very optimized, but nevertheless it is a brute force solution, so it can optimized more! But yeah kuddos for that!
 #include<iostream>
 #include<climits>
@@ -2373,7 +2371,6 @@ int countTwo(int arr[], int size, int max_element) {
     }
     for(int i = 0; i<=max_element; i++) {
         if(count[i] == 2) {
-            free(count);
             return i;
         }
     }
@@ -2504,7 +2501,7 @@ vector<int> findIntersection(vector<int> &arr1, int size1, vector<int> &arr2, in
     for(int i=0; i<size1; i++) {
         int element = arr1[i];
         for(int j=0; j<size2; j++) {
-            if(element < arr2[j]) { // Here we are considering that the arrays are sorted already tab hi toh comparisons kr paa rhe hai! ki agar element < arr[j], then we wont proceed further!
+            if(element < arr2[j]) { // Here we are considering that the arrays are sorted already tab hi toh comparisons kr paa rhe hai! ki agar element < arr[j], then we won't proceed further!
                 break;
             }
             if(element == arr2[j]) {
@@ -2537,48 +2534,59 @@ int main() {
 // But again this is still giving warning of TLE, so we will go with optimization 2 : now this thing is pehli baat toh time limit isliye bhi exceed ho rhi kyunki hum 2 loops use kr rhe hai! so pehle toh hume try krna hai ki ek loop kam kre, then...
 // Lets learn a different approach which is called 2 pointer approach, which says, suppose two arr1 = [1,2,2,2,3,4] and arr2 = [2,2,3,3] now hum pehla pointer (not really pointer vaala pointer), its just a iteration, so first humne i arr1 ke first element pr rakha and next humne arr2 ke 1st element pr rakha! now we will compare...
 // So first thing jo hume dhyaan se ek condition banani hai ki, arr1[i] < arr2[j], then i++ krdo
-// Now second thing jo hume dhyaan se ek aur condition banani hai ki, arr1[i] == arr2[j], then print krdo/vector me push krdo and i++ and j++ krdo
+// Now second thing jo hume dhyaan se ek aur condition banani hai ki, arr1[i] == arr2[j], then print krdo vector me push krdo and i++ and j++ krdo
 // Now lastly ek aur condition banani hai ki, agar arr1[i] > arr2[j] hogya, then j++ krdo
 // Also tab tak hi loop chalana hai jab tak dono array me se koi bhi ek ke saare elements traverse na hojaye! kisi bhi ek ke saare elements traverse hojaate hai toh exit the loop
 // So now lets follow this approach :
 #include<iostream>
 #include<vector>
-#include<climits>
 using namespace std;
 
-vector<int> findIntersection(vector<int> &arr1, int size1, vector<int> &arr2, int size2) {
-    vector<int> ans;
-    int i = 0, j = 0;
-    while(i<size1 & j<size2) {
+void printArray(vector<int> arr) {
+    for(int i = 0; i<arr.size(); i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+void intersectArrays(vector<int> arr1, vector<int> arr2) {
+    vector<int> ansArray;
+    int i = 0;
+    int j = 0;
+    bool commonPresent = false;
+    while(i<arr1.size() && j<arr2.size()) {
         if(arr1[i] == arr2[j]) {
-            ans.push_back(arr1[i]);
-        }
-        else if(arr1[i] < arr2[j]) {
+            commonPresent = true;
+            ansArray.push_back(arr1[i]);
             i++;
-        }
-        else {
             j++;
         }
+        if(arr1[i1] > arr2[j]) {
+            j++;
+        }
+        else {
+            i++;
+        }
     }
-    return ans;
-} // So this time we have applied all the conditions here now! and now this is the most optimized solution!
+    if(commonPresent) {
+        printArray(ansArray);
+    }
+    else {
+        cout<<-1;
+    }
+}
 
 int main() {
-    int size1, size2;
-    cin>>size1>>size2;
-    vector<int> arr1(size1);
-    vector<int> arr2(size2);
-    for(int i=0; i<size1; i++) {
+    int n1,n2;
+    cin>>n1>>n2;
+    vector<int> arr1(n1);
+    vector<int> arr2(n2);
+    for(int i = 0; i<n1; i++) {
         cin>>arr1[i];
     }
-    for(int i=0; i<size2; i++) {
+    for(int i = 0; i<n2; i++) {
         cin>>arr2[i];
     }
-    vector<int> result = findIntersection(arr1, size1, arr2, size2);
-    cout << "Intersection: ";
-    for (int i : result) {
-        cout << i << " ";
-    }
+    intersectArrays(arr1,arr2);
 }
 
 // Leetcode Question 5 : You are given an int array of size n, your task is return the list of all pairs of elements, such that sum of elements of each pair equals S. Each pair should be sorted and first value should be less than the second value, also...
@@ -2662,40 +2670,41 @@ int main() {
 
 // ---------------------------------------------------------- Some Extras --------------------------------------------------------------------------------------------------------->
 // Note : Writing printf(0) in C is not right! and will give the runtime error! but cout<<0; will not throw any error, reason is, printf() function is made to print strings, if you see we put all our output in a string format and then we use format specifiers to print our own values! but eventually it is printing a string!
-// But "cout" can print all other types of datatype it can print number, string, bool, float or any other... so in that way "cout" is more flexible to print values! but it is said that in terms of optimization, printf() is more optimized tht cout... but that is not always true, it depends on cases when you are using what!
+// But "cout" can print all other types of datatype it can print number, string, bool, float or any other... so in that way "cout" is more flexible to print values! but it is said that in terms of optimization, printf() is more optimized than cout... but that is not always true, it depends on cases when you are using what!
 // Hence, printf() can be faster for basic output tasks, especially in performance-sensitive applications.
 // But, cout is more versatile, type-safe, and easier to use, but it might be slower due to synchronization and extra overhead. However, disabling synchronization (std::ios::sync_with_stdio(false);) can speed up cout.
 // So, yes it depends on your use case!
 
 // College Bootcamp Question : Write a program to display the sum of the series: 1 + 22 + 333 + 4444 + ... where the number of terms in the series is provided by the user.
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-int sumofArrays(int arr[], int size) {
+int calculateSeriesSum(int size) {
     int sum = 0;
     for (int i = 1; i <= size; i++) {
         int term = 0;
         for (int j = 0; j < i; j++) {
-            term = term * 10 + i;
+            term = term * 10 + i; // Create the term 1, 22, 333, etc.
         }
-        sum += term;
-    return sum;
+        sum += term; // Add the term to the sum
     }
+    return sum;
 }
 
 int main() {
-    int arr1[500];
     int size;
-    cin>>size;
-    int ans = sumofArrays(arr1,size);
-    cout<<"Sum of arrays : "<<ans;
+    cout << "Enter the number of terms in the series: ";
+    cin >> size;
+    int ans = calculateSeriesSum(size);
+    cout << "Sum of the series: " << ans << endl;
+    return 0;
 }
 
 // Dynamic Memory Allocation! in C/C++.
 // It is a way of allocating the memory to the data structure during the runtime! and we do this using some functions like, calloc(), malloc(), realloc() and free()
 // malloc() : Malloc() ek function hai jo C programming language mein dynamic memory allocate karne ke kaam aata hai. Iska full form hai "memory allocation". Isko use karke hum runtime par memory allocate kar sakte hain, jo humein flexibility aur efficiency deta hai.
 //          : Takes the number of bytes to allocate & return a pointer of the type void!
-//          : Syntax : int *ptr; ptr = (int*)malloc(10*sizeof(int)); Here we have allocated 10 int size of uninitiallized memory and returned the address of first index of that memory to the pointer ptr, so that it can be accessed easily! and while returning we have type casted it into int, kyunki vrna bina type caste ke krte toh ek void pointer return hota 1st index ka! so that is why we have type casted it into int!
+//          : Syntax : int *ptr; ptr = (int*)malloc(10*sizeof(int)); Here we have allocated 10 int size of uninitiallized memory and returned the address of first index of that memory to the pointer ptr, so that it can be accessed easily! and while returning we have type casted it into int, kyunki vrna bina typecast ke krte toh ek void pointer return hota 1st index ka! so that is why we have type casted it into int!
 // Example :
 #include <stdio.h>
 #include <stdlib.h>
@@ -2769,7 +2778,7 @@ int main() {
 //           : realloc ek function hai jo dynamically allocated memory ki size ko adjust karne ke kaam aata hai. Iska use tab hota hai jab aapko pehle se allocated memory block ko chhota ya bada karna ho. Yeh malloc aur calloc se allocated memory ko resize karta hai.
 //           : If we take reference syntax like this, void* realloc(void* ptr, size_t new_size); so, jab realloc function call hota hai, yeh existing memory block (pointed by ptr) ko new_size bytes ka banane ki koshish karta hai. Agar successful hota hai, to wahi memory block resize ho jata hai aur same pointer return hota hai. Agar existing memory block ko resize karna possible nahi hota, to nayi memory allocate karta hai, purani values ko copy karta hai, aur nayi memory block ka address return karta hai. Purani memory block free kar di jaati hai.
 //           : syntax : int* ptr; realloc(ptr, new size); isme almost sab cheeze same hai malloc calloc ka jo basic logic hai ki dynamically memory allocate ho rhi hai! bss isme ye hai ki ye new size ke hisaab se already allocated memory ko increase ya decrease krta hai! like, agar pehle 5 size of int ki memory allocated hai! and agar hum 8 size of int ki memory all allocate krte hai realloc ke through! so yaa toh jo already allocated memory hai vo 5 size ki hai toh usme hi 3 bytes aur add hojayenge size of int ke! otherwise ek poora nayaa memory series of memory block banega of size 8, and usme pehle toh saara data copy hoga unn poorani 5 bytes and then uske baad 3 bytes ki memory aur allocate hogi! mtlb ki poorani bytes rehti hai and usme aur add on hoti hai new add on bytes!
-//           : Its like, pehle se 5 thi, size badhai humne 8 ki, toh agar vhi ke vhi allocate hogyi toh bss 3 bytes aur add hongi kyunki pehle se 5 thi and new allocated memory 8 ki hai! in other case, ek new 8 bytes ki size allocate hogi! and then usme pehle toh vo 5 bytes copy hongi! and then uske baad 3 bytes bachi rahengi! toh yahaa bhi size badh gyi!
+//           : Its like, pehle se 5 thi, size badhai humne 8 ki, toh agar vhi ke vhi allocate hogyi toh bss 3 bytes aur add hongi kyunki pehle se 5 thi and new allocated memory 8 ki hai! in other case, ek new 8 bytes ki size allocate hogi! and then usme pehle toh vo 5 bytes copy hongi! and then uske baad 3 bytes bachi rahengi! toh yahaa bhi size badh gyi! and pehli vaali 5 bytes vaali memory free krdi jaati hai!
 // Example :
 #include <stdio.h>
 #include <stdlib.h>
