@@ -558,6 +558,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int row = 1; row<=n; row++) {
+        for(int col = 0; col<row; col++) {
+            cout<<row+col<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 9 : Print 1 in 1st row, 2 1 in 2nd row, 3 2 1 in 3rd row and so on...
 #include<iostream>
 using namespace std;
@@ -617,6 +632,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int row = 1; row<=n; row++) {
+        for(int col = row; col>0; col--) {
+            cout<<col<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 10 : Print ABCDE in each row as input by the user.
 #include<iostream>
 using namespace std;
@@ -626,7 +656,7 @@ int main() {
     cin>>n;
     int i = 1;
     while(i<=n) {
-        char j = 1;
+        char j = 1; // But it would be better if we write "int j = 1"! as that is more intuitive and correct semantically too! otherwise it will cause only unnecessary confusion!
         char val = 'A';
         while(j<=n) {
             cout<<val;
@@ -635,6 +665,21 @@ int main() {
         }
         cout<<endl;
         i++;
+    }
+}
+
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 0; j<n; j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
     }
 }
 
@@ -680,6 +725,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<n; j++) {
+            cout<<char('A'+i)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 13 : Print A B C in every row as input by the user!
 #include<iostream>
 using namespace std;
@@ -721,6 +781,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<n; j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 14 : Print A B C and then D E F in the next line and so on...
 #include<iostream>
 using namespace std;
@@ -740,6 +815,22 @@ int main() {
         cout<<endl;
         i++;
     }
+}
+
+// Without using count - It is not very easily intuitive, so not recommended for begineers! but good for competitive programming!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cout << (n * (i - 1) + j) << " "; // To interpret this logic its tough initially! but as you build your problem solving ability it will become more and more intuitive!
+        }
+        cout << endl;
+    }
+    return 0;
 }
 
 // Practice Question 15 : Print A B C, B C D in next row, C D E in next row and so on...
@@ -828,6 +919,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<n; j++) {
+            cout<<char('A'+i+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 16 : Print A, B B then C C C and so on...
 // My Solution :
 #include<iostream>
@@ -870,6 +976,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<=i; j++) {
+            cout<<char('A'+i)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 17 : Print A, B C, D E F, G H I J and so on....
 // My Solution :
 #include<iostream>
@@ -890,6 +1011,22 @@ int main() {
         cout<<endl;
         i++;
     }
+}
+
+// Without extra space : By ChatGPT, These approach will take time to sink in! Its fine... keep practicing!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            cout << char('A' + (i * (i - 1)) / 2 + j - 1) << " "; 
+        }
+        cout << endl;
+    }
+    return 0;
 }
 
 // Practice Question 18 : Print A, B C, C D E, D E F G and so on...
@@ -915,6 +1052,21 @@ int main() {
 }
 // To observe the pattern you need to make a matrix and then find that formula, like here it is A + i + j - 2, isko nikalne ke liye make a matrix and then find the pattern!
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<=i; j++) {
+            cout<<char('A'+i+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 19 : Print a pattern like D, C D, B C D, A B C D and so on...
 #include<iostream>
 using namespace std;
@@ -933,6 +1085,21 @@ int main() {
         }
         cout<<endl;
         i++;
+    }
+}
+
+// Another approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = n; i>0; i--) {
+        for(int j = 0; j<=(n-i); j++) {
+            cout<<char('A'+i+j-1)<<" ";
+        }
+        cout<<endl;
     }
 }
 
@@ -1022,6 +1189,21 @@ int main() {
     }
 }
 
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 1; j<=n-i; j++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 // Practice Question 22 : Print this ****, _***, __**, ___* and so on...
 #include<iostream>
 using namespace std;
@@ -1038,6 +1220,28 @@ int main() {
         int stars;
         for(stars=0; stars<=n-i; stars++)
             cout<<'*';
+        cout<<endl;
+    }
+}
+
+// Another simplest and best approach :
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        int space = i;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+        int j = n-i;
+        while(j>0) {
+            cout<<"*"<<" ";
+            j--;
+        }        
         cout<<endl;
     }
 }
@@ -1083,97 +1287,111 @@ using namespace std;
 
 int main() {
     {
+        cout << "Answer of first block : ";
         int a, b = 1;
         a = 10;
-        if(++a) {
-            cout<<b;
-        }
-        else {
-            cout<<++b;
+        if (++a) {
+            cout << b;
+        } else {
+            cout << ++b;
         }
     }
+    cout << endl << endl;
     {
+        cout << "Answer of second block : ";
         int a = 1;
         int b = 2;
-        if(a-- > 0 && ++b > 2) {
-            cout<<"Stage 1 - Inside If";
+        if (a-- > 0 && ++b > 2) {
+            cout << "Stage 1 - Inside If ";
+        } else {
+            cout << "Stage 2 - Inside Else ";
         }
-        else {
-            cout<<"Stage 2 - Inside Else";
-        }
-        cout<<a<<" "<<b;
+        cout << a << " " << b;
     }
+    cout << endl << endl;
     {
+        cout << "Answer of third block : ";
         int a = 1;
         int b = 2;
-        if(a-- > 0 || ++b > 2) {
-            cout<<"Stage 1 - Inside If";
+        if (a-- > 0 || ++b > 2) {
+            cout << "Stage 1 - Inside If ";
+        } else {
+            cout << "Stage 2 - Inside Else ";
         }
-        else {
-            cout<<"Stage 2 - Inside Else";
-        }
-        cout<<a<<" "<<b;
+        cout << a << " " << b;
     }
+    cout << endl << endl;
     {
+        cout << "Answer of fourth block : ";
         int a = 1;
         int b = 2;
-        if(a-- > 0 || ++b > 2) {
-            cout<<"Stage 1 - Inside If";
+        if (a-- > 0 || ++b > 2) {
+            cout << "Stage 1 - Inside If ";
+        } else {
+            cout << "Stage 2 - Inside Else ";
         }
-        else {
-            cout<<"Stage 2 - Inside Else";
-        }
-        cout<<a<<" "<<b;
+        cout << a << " " << b;
     }
+    cout << endl << endl;
     {
+        cout << "Answer of fifth block : ";
         int number = 3;
-        cout<<25*(++number);
+        cout << 25 * (++number);
     }
+    cout << endl << endl;
     {
+        cout << "Answer of sixth block : ";
         int a = 1;
         int b = a++;
         int c = ++a;
-        cout<<a<<b<<c;
+        cout << a << " " << b << " " << c;
     }
+    cout << endl << endl;
     {
-        for(int i= 0; i<=5; i++) {
-        cout<<i<<" ";
-        i++;
+        cout << "Answer of seventh block : ";
+        for (int i = 0; i <= 5; i++) {
+            cout << i << " ";
         }
     }
+    cout << endl << endl;
     {
-        for(int i= 0; i<=5; i--) {
-        cout<<i<<" ";
-        i++;
+        cout << "Answer of eighth block : ";
+        for (int i = 0; i <= 5; i++) {
+            cout << i << " ";
         }
     }
+    cout << endl << endl;
     {
-        for(int i= 0; i<=15; i+=2) {
-        cout<<i<<" ";
-        if(i&1) {
-            continue;
-        }
-        i++;
-        }
-    }
-    {
-        for(int i=0; i<5; i++) {
-            for(int j=i; j<=5; j++) {
-                cout<<i<<" "<<j<<endl;
+        cout << "Answer of ninth block : ";
+        for (int i = 0; i <= 15; i += 2) {
+            cout << i << " ";
+            if (i & 1) {
+                continue;
             }
         }
     }
+    cout << endl << endl;
     {
-        for(int i=0; i<5; i++) {
-            for(int j=i; j<=5; j++) {
-                if(i+j==10) {
+        cout << "Answer of tenth block : ";
+        for (int i = 0; i < 5; i++) {
+            for (int j = i; j <= 5; j++) {
+                cout << i << " " << j << endl;
+            }
+        }
+    }
+    cout << endl << endl;
+    {
+        cout << "Answer of eleventh block : ";
+        for (int i = 0; i < 5; i++) {
+            for (int j = i; j <= 5; j++) {
+                if (i + j == 10) {
                     break;
                 }
-                cout<<i<<" "<<j<<endl;
+                cout << i << " " << j << endl;
             }
         }
     }
-
+    return 0;
 }
 // Now as of this course of Love Babbar DSA, now its time for watching out operators precedence, but that is not very important, we can always go and check to get to know that, but kuch yaad rehna chahiye, so they are...
 // Priority order : 1) ! 2) *, /, % 3) +, - 4) <, <=, >=, > 5) ==, != 6) && 7) ||
