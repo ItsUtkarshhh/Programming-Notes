@@ -2675,31 +2675,6 @@ int main() {
 // But, cout is more versatile, type-safe, and easier to use, but it might be slower due to synchronization and extra overhead. However, disabling synchronization (std::ios::sync_with_stdio(false);) can speed up cout.
 // So, yes it depends on your use case!
 
-// College Bootcamp Question : Write a program to display the sum of the series: 1 + 22 + 333 + 4444 + ... where the number of terms in the series is provided by the user.
-#include <iostream>
-using namespace std;
-
-int calculateSeriesSum(int size) {
-    int sum = 0;
-    for (int i = 1; i <= size; i++) {
-        int term = 0;
-        for (int j = 0; j < i; j++) {
-            term = term * 10 + i; // Create the term 1, 22, 333, etc.
-        }
-        sum += term; // Add the term to the sum
-    }
-    return sum;
-}
-
-int main() {
-    int size;
-    cout << "Enter the number of terms in the series: ";
-    cin >> size;
-    int ans = calculateSeriesSum(size);
-    cout << "Sum of the series: " << ans << endl;
-    return 0;
-}
-
 // Dynamic Memory Allocation! in C/C++.
 // It is a way of allocating the memory to the data structure during the runtime! and we do this using some functions like, calloc(), malloc(), realloc() and free()
 // malloc() : Malloc() ek function hai jo C programming language mein dynamic memory allocate karne ke kaam aata hai. Iska full form hai "memory allocation". Isko use karke hum runtime par memory allocate kar sakte hain, jo humein flexibility aur efficiency deta hai.
@@ -3067,29 +3042,6 @@ int main() {
     cout<<"The sum of two numbers :"<<c<<endl; 
     cout<<"Value of global C :"<<::c; // Here we used scope resolution operator to access the c outside the main function, as "scope" resolution operator is the name itself enough to understand.
     return 0;
-}
-
-// Finding average!
-#include<iostream>
-using namespace std;
-
-double average(int* arr, int n) {
-    int sum = 0;
-    for(int i = 0; i<n; i++) {
-        sum += arr[i];
-    }
-    return static_cast<double>(sum)/n; // Here, static_cast is a C++ type casting operator used for safe and well-defined type conversions.
-    // It is preferred over C-style casts ((double)sum) because : It is more explicit and type-safe. And, It helps catch unintended or unsafe casts during compilation.
-}
-
-int main() {
-    int n;
-    cin>>n;
-    int* arr = new int[n];
-    for(int i = 0; i<n; i++) {
-        cin>>arr[i];
-    }
-    cout<<average(arr,n);
 }
 
 #include<iostream>
