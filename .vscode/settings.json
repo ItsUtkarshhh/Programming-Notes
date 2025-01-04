@@ -2,7 +2,10 @@
     "files.associations": {
         "new": "cpp",
         "iostream": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

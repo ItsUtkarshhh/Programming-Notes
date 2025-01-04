@@ -1,34 +1,35 @@
 // ---------------------------------------------------------- LECTURE 11 - Time & Space Complexity --------------------------------------------------------------------------------------------------------->
-// Time Complexity : It is the amount of time taken by an algo to run, as a function of length of the input!
-// So means overall hum time complexity ke aadhaar pr ye btaa sakte hai ki koi algo/program acha hai ya bekar, and ye time kitna lega!
+// Time Complexity : It is the amount of time taken by an algo to run, as a function of length of the input! So means overall hum time complexity ke aadhaar pr ye btaa sakte hai ki koi algo/program acha hai ya bekar, and ye time kitna lega!
 // Why Time Complexity : Becoz it helps in making better programs and helps in comparison of different algorithms!
 
 // Now jiss tarah se hum length ko metre me naapte hai volume ko m^3 me, vaise hi time complexity ko 3 ways se naapa jaata hai, and they are : BigO Notation, Theta Notation and Omega Notations!
-// And here BigO represents Upper Bound : Means koi algorithm max to max kitna time lega, that is represented as BigO
-// And then we have Theta which is Average case : Mtlb ki koi algo on an average kitna time lega, that is represented as Theta
-// And then lastly, Omega, which is Lower Bound : Ki koi algorithm kam se kam kitna time lega, this is represented as Omega
+// BigO represents Upper Bound : Means koi algorithm max to max kitna time lega, that is represented as BigO.
+// Theta represents Average Case : Mtlb koi algo on an average kitna time lega, that is represented as Theta.
+// Omega represents Lower Bound : Mtlb koi algorithm kam se kam kitna time lega, this is represented as Omega
 
-// Now constant time is represented using O(1) : jab hum loop, normally 0 - 10 (or kisi constant value tak chalaate hai) that is called constant time complexity and is denoted as O(1).
-// Now there is linear time complexity using O(n) : Jab hum upar vaale case me hi 0 - n (kisi variable jo user ke input pr dependent hoga), uske basis pr chalaa dete hai then that is called linear time complexity and is denoted as O(n).
-// Now there is a logarithmic time complexity O(logn) : It happens in case binary search, we will study it further.
-// Now there is a O(n^2) : Jab do loop ek ke andar ek 0 - n chal jaye, then that is O(n^2).
-// Now there is a O(n^3) : Jab teen loop ek ke andar ek 0 - n chal jaye, then that is O(n^3).
+// Now there are variety of time complexities, some examples are :
+// Constant Time "O(1)" : Jab hum loop, normally 0 - 10 (or kisi constant value tak chalaate hai) that is called constant time complexity and is denoted as O(1).
+// Linear Time Complexity "O(n)" : Jab hum upar vaale case me hi 0 - n (kisi variable jo user ke input pr dependent hoga), uske basis pr chalaa dete hai then that is called linear time complexity and is denoted as O(n).
+// Logarithmic Time Complexity "O(logn)" : It happens in case binary search, we will study it further.
+// Squared Time Complexity "O(n^2)" : Jab do loop ek ke andar ek 0 - n chal jaye, then that is O(n^2).
+// Cubic Time Complexity "O(n^3)" : Jab teen loop ek ke andar ek 0 - n chal jaye, then that is O(n^3).
 
 // Graphs of BigO notations : refer the notes of DSA in the notebook!
 // But one thing I will add on into this notes, that is order of Time Complexities : O(n!) > O(2^n) > O(n^3) > O(n^2) > O(nlogn) > O(n) > O(logn) > O(1)
+// Note : Jab hum ye bolte hai ki ek loop 0-n tak chal rha hai toh iski time complexity O(n) hogi, ye tab hi hoga jab loop ke andar jo operations perform ho rhe hai unki time complexity is O(1) which is constant, tab hi O(n) bolenge! otherwise loop ke andar jo bhi operations hai unn sabki milaa ke jo time complexity ban rhi hai vo final hogi!
 
-// Jab hum ye bolte hai ki ek loop 0-n tak chal rha hai toh iski time complexity O(n) hogi, ye tab hi hoga jab loop ke andar jo operations perform ho rhe hai unki time complexity is O(1) which is constant, tab hi O(n) bolenge! otherwise loop ke andar jo bhi operations hai unn sabki milaa ke jo time complexity ban rhi hai vo final hogi!
-// Now lets see how to Solve TLE : So to solve this, we use 10^8 operation rule, which means, ki aaj kal ki modern machines 10^8 operations perform kr sakte hai ek second me! so hume humara length of input dekh ke uske according aisi algo use krni hai jiski time complexity sabse kam ho!, like agar question me diya hua hai ki time limit : 1 sec, means we are asked to perform 10^8 operations in 1 sec! so in that case we will use a table which is drawn in the notebook, kindly refer that!
+// Now, Lets see how to Solve TLE : So to solve this, we use 10^8 operation rule, which means, ki aaj kal ki modern machines 10^8 operations perform kr sakte hai ek second me! so hume humara length of input dekh ke uske according aisi algo use krni hai jiski time complexity sabse kam ho!, like agar question me diya hua hai ki time limit : 1 sec, means we are asked to perform 10^8 operations in 1 sec! so in that case we will use a table which is drawn in the notebook, kindly refer that!
 // So now if the time limit is given 1 sec, means we are asked to perform 10^8 operations in 1 sec! so according to table we will be using O(n) or O(logn) vaale time complexity vaale algorithms! kyunki agar isse zyada jayenge then time limit exceed hojayega, kyunki if you calculate... O(n) me n is length of input and if n = 10^8 then koi dikkat nhi hai ye araam se ek sec me execute hojayenge! and even with O(logn) me bhi kyunki log ki property ke chalte ye O(8) ban jayega! so yess you got the point, similarly for other cases!
-// Agar length of input 10^6 hai toh hum table ke according O(nlogn) use krenge kyunki again mathematically it will perform 10^6 * 6 operations and which is again possible with in 1 second!
-// Then if length of input gets even less, like 400, then in that case, hum thori high time complexity bhi use kr sakte hai! like O(n^3) kyunki 400^3 wont be again exceed the 10^8 operations limit, so it can also be executed within 1 second!
-// similarly, agar length of input aur kam hogyi, like 10, then in that case toh hum very high time complexity bhi use kr sakte hai! like O(n!) and O(n^6) kyunki isme bhi agar mathematically calculate kre tab bhi 10! will be 36,28,800 operations, which is again less than 10^8 operations limit, means ye bhi 1 sec ke under me execute ho sakta hai, even 10^6 it is still less that 10^8, so yes ye bhi 1 sec ke under me execute ho sakta hai!
+// Agar length of input 10^6 hai toh hum table ke according thori high TC like O(nlogn) use kr sakte hai kyunki again mathematically it will perform 10^6 * 6 operations and which is again possible with in 1 second!
+// Then if length of input gets even less, like 400, then in that case, hum thori aur high time complexity bhi use kr sakte hai! like O(n^3) kyunki 400^3 wont be again exceed the 10^8 operations limit, so it can also be executed within 1 second!
+// Similarly, agar length of input aur kam hogyi, like 10, then in that case toh hum very high time complexity bhi use kr sakte hai! like O(n!) and O(n^6) kyunki isme bhi agar mathematically calculate kre tab bhi "10!" will be 36,28,800 operations, which is again less than 10^8 operations limit, means ye bhi 1 sec ke under me execute ho sakta hai, even 10^6 it is still less that 10^8, so yes ye bhi 1 sec ke under me execute ho sakta hai!
 // So yess this is how we avoid TLE!
 
-// Sometimes we are given constraints like, 1 < n <= 10^8, is case me hume aisi time complexities use krni hai jo TLE na occur karaye, toh yes according to table those are O(n) and O(logn)
-// Also, if the values constraints are given like, 1 < arr[i] <= 10^9, then here we can use int as the data type, but suppose if the power gets upto 12 or 13 or above, then we have to use long or long long, becoz int ki range sirf -2^31-1 to 2^31-1 hi ho sakti hai! for signed and for unsigned, 0-(2^32)-1 tak ho sakti hai!
+// Sometimes we are given constraints like, 1 < n <= 10^8, is case me hume aisi time complexities use krni hai jo TLE na occur karaye, toh yes according to table those are O(n) and O(logn)!
+// Also, if the values constraints are given like, 1 < arr[i] <= 10^9, then here we can use int as the data type, but suppose if the power gets upto 12 or 13 or above, then we have to use long or long long, becoz int ki range sirf -2^31 -> 2^31-1 hi ho sakti hai! for signed and for unsigned, 0 -> (2^32)-1 tak ho sakti hai!
 // So yess constraints ko dekh ke we decide the algorithm we should choose and data type we should use!
-// Find the time complexity of the below code, most people will think that it will be O(n) but no! it will be O(1) kyunki bhyi ye loop poora n tak chlaa hi kahaa, ye toh bss 1 pe hi ruk gya becoz of break statement! so yess be mindfull while finding time complexities!
+
+// Interesting case : Find the time complexity of the below code, most people will think that it will be O(n) but no! it will be O(1) kyunki bhyi ye loop poora n tak chlaa hi kahaa, ye toh bss 1 pe hi ruk gya becoz of break statement! so yess be mindfull while finding time complexities!
 // for(int i = 0; i<n; i++) {
 //     if(i==0) {
 //         break;
@@ -36,7 +37,7 @@
 // }
 
 // Sometimes even on applying the 10^8 rule, it still showing TLE, then you may go for some other techniques to reduce the time, and they are like, you can use printf and scanf functions in C++ as they are more optimized than cin and cout!
-// Sometimes what happens is ki hum koi ek aisi value jo baar baar use ho rhi hai usko hum kahin store krlete hai taaki usko baar baar calculate na krne pade and number of operations thore kam hojaye! and isse time bhi thora kam lagega! and this is called space time trade off, ki like thora time bachane ke liye thora space hum zyada use krlete hai! so yess this is another way of avoiding TLE!
+// Sometimes what happens is ki hum koi ek aisi value jo baar baar use ho rhi hai usko hum kahin store krlete hai taaki usko baar baar calculate na krne pade and number of operations thore kam hojaye! and isse time bhi thora kam lagega! and this is called space-time trade off, ki like thora time bachane ke liye thora space hum zyada use krlete hai! so yess this is another way of avoiding TLE!
 // But sometimes even doing all of this still you get the TLE, then in that case you need to change your approach of solving the problem! you need to think some more optimized solution!
 
 // Now...
@@ -50,16 +51,22 @@
 
 // ---------------------------------------------------------- LECTURE 12 - Binary Search --------------------------------------------------------------------------------------------------------->
 // So till now we have studied Linear Search, where we use to iterate at every index of the array and find our key value, and isme worst case me time complexity O(n) hoti jab hum n comparisons krte hai for that key value. So this we have studied!
-// Now lets dive into Binary Search!
-// Firstly binary search is applicable over only Monotonic Function, means only those functions which are entirely increasing or entirely decreasing! means binary search sirf sorted functions pr hi lgta hai! ab vo functions array ho ya vector ya kuch aur!
-// Now how to do Binary Search :
-// Suppose we have an array of 5 size (sorted in ascending order), now what we will do is, we will find the mid element, and then we will match that mid value with our key element, if it matches the key element then we will return the index! otherwise agar key > mid se, then we will go on the right side of the array,
-// otherwise on the left, and then we will again find the mid element and then again will compare with the mid, then again if key matches with the element of the array then we will return the index, otherwise we will again see is key > element, if yes or no, according to it we will proceed! and if the key is not found in the array, then we will return -1.
-// Now suppose an array = [1,2,3,4,5] (odd no. of elements) and key we want to find is 5
-// On applying binary search, we will see that, mid = (start + end)/2, so it will come mid = (0+4)/2 = 2, so now mid = 2. now we will compare the mid with key and here key(5) > mid(2) so we will go on the right side! so now we will update our start (while going on right, kyunki end toh pehle se hi end pr hai, pr start pehle 0 pr tha pr ab usko mid se aage laana hoga toh we will update start), so we will do start = mid + 1, and now again we will find a new mid of the new half array and again will do the same operations until we find our key element!
-// Also, here doing mid = (start+end)/2, is not a very optimized way to do it! kyunki agar maanlo start index ki jo value hai that is 2^31-1 and end ki bhi jo value hai that is also 2^31-1 and on adding them it will exceed the int range! so we will apply some maths here, like we will write mid = (start + ((end-start)/2)) taaki values range ke andar hi rahe! but although pehle vaale formule me bhi values half hojayegi even tho agar start and end dono 2^31-1 rahe toh maybe fark nhi padna chahiye, but okay maybe becoz kuch test cases pass naa ho isliye love babbar told to do this! So okay lets do this optimization!
-// Here's the explaination of why we use the start + (end-start)/2 formulae for mid and not the (start + end)/2, it is to deal with the overflow of value of start and end indexes! ki kahin ye int ke range se bahar na chale jaye! aisa kaise hoga? toh aisa tab ho sakta hai jab maanlo humara array bhott large hai! ki like iska jo end ka index hai vo int ki max value ke aas paas hai! and now chalo humara start initially toh 0 pr rahega! but jaise jaise hum binary search krenge and maanlo agar humara start update ho ho ke uski value badhti hi jaa rhi hai! (kyunki key element bhot right side me hai toh hume start ko right side me aur shift krte jaana hoga and right side me shift krne ka mtlb ki start ki value ko badhate rehna!)
+// Now lets dive into Binary Search! Firstly binary search is applicable over only Monotonic Function, means only those functions which are entirely increasing or entirely decreasing! means binary search sirf sorted functions pr hi lgta hai! ab vo functions array ho ya vector ya kuch aur!
+
+// Binary Search Algorithm : Start with a sorted array and a key element to find. Example : array = [1, 2, 3, 4, 5], key = 5.
+//                         : Intiallize pointers, start = 0 & end = size-1
+//                         : Mid Calculation, mid = (start + end) / 2. And Compare array[mid] with key
+//                         : Comparision with Mid : If array[mid] == key : Return mid (index found)
+//                                                : If key > array[mid] : Search the right side, update start = mid + 1
+//                                                : If key < array[mid] : Search the left side, update end = mid - 1
+//                         : Repeat : Continue until start > end. If the key is not found, return -1.
+// Note : Here doing mid = (start+end)/2, is not a very optimized way to do it! kyunki agar maanlo start index ki jo value hai that is 2^31-1 and end ki bhi jo value hai that is also 2^31-1 and on adding them it will exceed the int range! so we will apply some maths here, like we will write mid = (start + ((end-start)/2)) taaki values range ke andar hi rahe!
+//      : As we can see even tho in the earlier formula, the (start + end)/2 were going to be halved, but still we do not prefer that, because the intermediate step (addition) breaks the computation.
+
+// Explaination to use "mid = start + (end-start)/2" and not "mid = (start + end) / 2" :
+// It is to deal with the overflow of value of start and end indexes! ki kahin ye int ke range se bahar na chale jaye! aisa kaise hoga? toh aisa tab ho sakta hai jab maanlo humara array bhott large hai! ki like iska jo end ka index hai vo int ki max value ke aas paas hai! and now chalo humara start initially toh 0 pr rahega! but jaise jaise hum binary search krenge and maanlo agar humara start update ho ho ke uski value badhti hi jaa rhi hai! (kyunki key element bhot right side me hai toh hume start ko right side me aur shift krte jaana hoga and right side me shift krne ka mtlb ki start ki value ko badhate rehna!)
 // toh agar koi aisa time aagya jab start ki value bhi bhot badi hogyi hai! uss condition me agar hum (start+end)/2 use krenge toh mid out of int range chalaa jayega! and it will cause overflow! so to prevent this we use the optimized approach! ab aisa toh nhi krenge ki chhoti array size ke liye purana formula use kro and badi arrays ke liye optimized vaala! hume cheeze dynamically sochni chahiye kyunki situations can change anytime! like in case of vectors! usme kisi ne agar size ek baar bhot kam daaldi and ek baar bhot zyada! toh ab baar baar change thori krenge mid ke calculation ko! So that is why! 
+
 // Now lets Implement Binary Search :
 #include<iostream>
 using namespace std;
@@ -93,10 +100,10 @@ int main() {
     cout<<"Index of 15 is "<<evenIndex<<endl;
 } // here we have statically made an array, and then found the element, we can also go for getting the array as input from the user, but okay usme sirf ek array hi input karwaana hai baaki sab toh same hi hoga!
 
-// Now lets talk about its complexity!
-// Look we know that Linear Search ke case me agar 1000 elements hai toh worst case me 1000 comparisons krne pad sakte hai! and its time complexity becomes O(n)!
-// but in Binary Search, agar 1000 elements ka array ho bhi, now lets calculate kitne padenge, we know that harr iteration me size of the array half ho jaa rha hai so, if size is 1000 then, 1000 -> 500 -> 250 -> 125 -> 62 -> 31 -> 15 -> 7 -> 3 -> 1 -> 0, So means in BS we need to do only 10 comparisons as compared to LS where we need to do 1000 comparisons! So this is the benefit of BS!
-// Now Time Complexity is O(logn), now ye kaise aayi, that is, Pehle n size tha array ka, then n/2 hua, then n/4 hua, then n/8 hua, then n/16 hua, then krte krte kam hote gya, so we can say is n/(2^k) rate se size kam ho rha hai! mtlb ki n/(2^k) comparisons hone ke baad iterations khatam hogyi mtlb ki iski length hogi 1, kyunki last me toh ek hi index bachega! so n/(2^k) = 1, and from here we will get k = logn, where is k is no. of comparisons done! So that is how we got TC = logn.
+// TC of Binary Search Algorithm : 
+// Look we know that in Linear Search if there are 1000 elements, then in the worst case we may need to do 1000 comparisons! and due to which TC will be O(n)!
+// But in Binary Search, If we have an array of 1000 elements, then in every iteration the size of the array becomes half! Hence, if size is 1000 then, 1000 -> 500 -> 250 -> 125 -> 62 -> 31 -> 15 -> 7 -> 3 -> 1 -> 0, So means in BS we need to do only 10 comparisons as compared to LS where we need to do 1000 comparisons! So this is the benefit of BS!
+// Now Time Complexity is O(logn) : Through maths, you can youtube or google it! even can check in my copy notes!
 
 // ---------------------------------------------------------- LECTURE 13 & 14 - Binary Search Interview Questions! --------------------------------------------------------------------------------------------------------->
 // Codestudio Question 1 : Find the first and last position of an element in a sorted array!
@@ -148,13 +155,12 @@ int lastOccurence(int arr[], int size, int key) {
 }
 
 int main() {
-    int arr1[5] = {1,2,3,3,5};
-    cout<<"The first occurence of 3 is at index "<<firstOccurence(arr1, 5, 3)<<endl;
-    cout<<"The last occurence of 3 is at index "<<lastOccurence(arr1, 5, 3)<<endl;
+    int arr1[5] = {1,2,2,2,4};
+    cout<<"The first occurence of 3 is at index "<<firstOccurence(arr1, 5, 2)<<endl;
+    cout<<"The last occurence of 3 is at index "<<lastOccurence(arr1, 5, 2)<<endl;
 }
 // Another variation of the above question is find the total number of occurence! We will write the same code just with an add on to it and that is that (last occurence ka index - first occurence ka index) + 1.
-// For that just write :
-// Total number of occurences of 3 : cout<<"Total number of occurence of 3 : "<<(lastOccurence(arr1, 5, 3)-firstOccurence(arr1, 5, 3))+1<<endl;
+// For that just write : Total number of occurences of 3 : cout<<"Total number of occurence of 3 : "<<(lastOccurence(arr1, 5, 3)-firstOccurence(arr1, 5, 3))+1<<endl;
 
 // Leetcode Question 1 : Find peak in a mountain array! here mountain array means like the array will be like {1,2,3,4,3,2,1} here the peak is 4. so similarly you have to find it!
 // My Solution : Approach is that ki compare krte gye harr step me, as you can see in the code!
@@ -303,8 +309,8 @@ int main() {
     cout<<"The index of the peak element of the arr1 is : "<<multiplePeak(arr1, 20)<<endl;
 }
 
-// Pivot Element : We will understand a pivot element in terms of Sorted and Rotated array! So Suppose we have sorted array (and yahaa pr sorted ka mtlb sirf ascending order me sort hona hota hai, and now we rotate it from one of its index, like example suppose you have a sorted array, [1,2,3,7,9] now we rotate it from index 3 and now the sorted and rotated array will be, [7,9,1,2,3].
-// Now the pivot element is that element jahaa se ye array rotate hogya, like here that pivot element can be 1 or 9, kyunki kuch log bolenge ki ye 7 se rotate hua and kuch log bolenge ki ye 1 se rotate hua! but in our understanding, hum maan ke chalenge ki here the smallest element is the pivot element and here that is 1, now isko hum apne hisaab se largest element ke liye bhi nikal sakte hai!
+// Pivot Element : We will understand a pivot element in terms of Sorted and Rotated array! So Suppose we have sorted array (and yahaa pr sorted ka mtlb sirf ascending order me sort hona hota hai), and now we rotate it from one of its index, like example suppose you have a sorted array, [1,2,3,7,9] now we rotate it from index 3 and now the sorted and rotated array will be [7,9,1,2,3].
+// Now the pivot element is that element jahaa se ye array rotate hogya, like here that pivot element can be 1 or 9, kyunki kuch log bolenge ki ye 9 se rotate hua and kuch log bolenge ki ye 1 se rotate hua! but in our understanding, hum maan ke chalenge ki here the smallest element is the pivot element and here that is 1, now isko hum apne hisaab se largest element ke liye bhi nikal sakte hai!
 // Now the question is ab ye kaise nikale? So now, what we will do is... and abhi hum pivot element binary search ke thru nikalenge so, binary search sirf monotonic behaviour and functions pr hi lgta hai and in this case [7,9,1,2,3] isme [7,9] is monotonic and [1,2,3] is monotonic in nature, so now, as we know that the sorted and rotated array is divided into two monotonic sub-arrays, so now we will find mid first and then iss mid pr hum kuch aisi condition lgayenge taaki hum pivot element tak pohoch paaye!
 // Now see, suppose an array, [5,6,7,8,9,1,2] isme hume pivot element nikalna hai, now, the first condition which can help us finding the pivot element is, arr[mid] >= arr[0] isse kya hoga ki hum kis side of the array me hai, like agar hum arr[mid] >= arr[0] krte hai then we will see that, we will arrive in the first portion of the array which is [5,6,7,8,9] and then we will do s = mid+1 isse hume ye ptaa chal gya ki chalo humara pivot element yahaa toh nhi hai kyunki idhar ke left side vaale saare elements increasing order me hai left to right kyunki arr[mid] >= arr[0], now we did s = mid+1 now our new s is 9 and now we are left with [9,1,2] here s = 9, e = 2 and mid jo update hua hoga mid = s+(e-s)/2 ke formula se that will be 1, so now again we will check the conditions!
 // arr[mid] >= arr[0], but here we will see that arr[0] = 5 which is not smaller that arr[mid] which is 1, so ye condition to false hogyi! now the we will check the next condition, which is a else condition which is (arr[mid] < arr[0]) and here, this condition is true, so we will update end = mid, yahaa end ko mid-1 isliye nhi kiya kyunki vrna ek mid element jo ki pivot element ho sakta tha vo skip ho jaata! isliye we kept end = mid. and now hume kaise pta chalega ki yhi pivot element hai, vo aise ki hum s<e vaali condition lgaa denge taaki s = e na ho paye, and means poori array traverse ho chuki hai and sirf yhi ek element bacha hai which will be our pivot element!
@@ -316,7 +322,7 @@ int main() {
 using namespace std;
 
 int findPivot(int arr[], int n) {
-    int s = 0; int e = n-1;
+    int s = 0; int e = n-1; 
     int mid = s +(e-s)/2;
     while(s<e) {
         if(arr[mid]>=arr[0]) {
@@ -399,15 +405,17 @@ int main() {
 }
 
 // Leetcode Question 3 : Finding Square root using Binary Search!
-// Approach : Maanlo koi bhi number hai x, toh uska square root jo bhi hoga vo 0 to x ke beech me hi lie krega! so means humare paas jo search space hai jisme hume x ka square root search krna hai that from 0 to x and 0 to x me saare increasing order me hi numbers honge, means they will be monotonic hence, we can apply Binary search into this!
-// Now ab vo kaise, jaise maanlo 36 koi number ha jiska hume square root nikalna hai and now what we will do is, as from the above line we can say that our search space will be from 0 to 36, means it can be anyy number between 0-36, so now, we will use Binary Search!
-// Pehle mid nikalenge, mid = n/2 and in this case it will be 18, now we will calculate 18*18 and will check ki kya ye badaa hai and we know it is bigger than 36 so ab 18 se right me jaane ka toh koi fayeda nhi hai! kyunki unn sab numbers ke square bada hi hoga 36 se, so we wil go on left! and make end = mid-1, now, we got the search space of 0-17,
-// now again we will find the mid and this time it will be 8 and now again we will see that 8*8 is > 36, means hume abhi aur left me jaana hoga, so again we will do end = mid-1, now we will be at 0-7, now we will again find mid and this time it will be 3 and now 3*3 is < 36 so now we will store this ans, kyunki chalo ye chhota toh hai usse, mtlb kya ptaa ek chance ban jaaye ki yhi ans ho,
-// kyunki kya pta iske aage kuch decimals points ho answer ke liye (this we will get in the next part), but point is agar mid*mid < 36 hojaye then hum mid ho pehle toh save krlete hai and then start ko update krte hai start = mid+1 means, now we are at 4-7 now we will again find mid which will be 5 ((4+7)/2) and now we can see that again 5*5 is < 36 so again we will update our stored answer to 5 and then we will update the start value to mid+1 and this time it will be 6-7 and now mid will be 6 and here we will see 6*6 = 36 toh jahaa pr aake equal hojayega vo mid ki value hum print krdenge!
-// So in short, if mid*mid > x -> Then end = mid-1
-// then if mid*mid < x -> ans = mid, start = mid+1
-// and lastly, if mid*mid == x -> then return mid.
-// Lets code it!
+// Approach : Suppose we want to find the square root of a number X, hence, we know that its square root will lie somewhere between 0 to X! Also this range will be monotonic increasing! Hence we can apply Binary Search!
+// Steps : We are looking for the square root of a number X (Lets say 36). Hence, the search space is from 0 to x, so the range is [0, x].
+//       : Binary Search Process : Set the start pointer to 0 and the end pointer to X.
+//                               : Calculate mid = (start + end) / 2.
+//                               : Check if mid * mid == x : If yes, return mid as the square root.
+//                               : If mid * mid > x, it means we need to search for smaller numbers, so we set end = mid - 1.
+//                               : If mid * mid < x, it means we need to search for larger numbers, so we save mid as the potential answer and set start = mid + 1.
+//                               : Repeat these steps until start exceeds end.
+//       : Final Answer : The largest value of mid that satisfies mid * mid < x will be saved in ans.
+
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -478,11 +486,14 @@ int main() {
     cout<<mySqrt(n);
 } // Now this is the very optimized solution to find the square root, kyunki we have did it in O(logn) complexity!
 
-// Leetcode Question 3 : lets find the remaining decimal vaala part of the above question! means the floating part of the square root!
-// Approach : Lets take an example number 37, So what we will do is that hume integer value of the square root to nikalni aati hai na, toh bss hum pehle vo nikal lenge and in this case that will be 6, and then usme pehle 0.1 add krdenge and then compare krenge ki kya ye 37 ke equal hai? like 6.1*6.1 = 37? if no and it is less than 37,
-// then we will add another 0.1 into 6.1 and now it will be 6.2 and then 6.2*6.2 ab isko compare krenge! and aise krte jayenge jab tak iska square 37 ke upar nhi chlaa jaata, jab chlaa jaaye then hum isme 0.01 add krna shuru krenge (to get more accurate square root) and then will keep doing it until its square exceeds 37,
-// and once it exceeds fir agar hume aur accurate value chahiye then hum isme 0.001 add krna shuru krenge! and then finally jab firse three decimal places tak ki value bhi 37 ko exceed krne lage then hum ruk jayenge (agar hume aur zyada accurate value nhi chahiye toh, but generally itna kaafi hota hai!) and then usse just pehle jo value thi jahaa square 37 se kam aa rha tha usko print krdenge!
-// Lets code it...
+// Leetcode Question 3 : Follow Up of above question! Find the remaining decimal of the square root! means the floating part of the square root!
+// Steps : First, find the integer part of the square root of n using binary search or a simple square root method. For example, if the number is 37, the integer part of the square root would be 6.
+//       : Start adding 0.1 to the result and calculate the square. Compare the square with the target number n. If the square is less than n, add another 0.1 and continue checking.
+//       : Once the square exceeds the target n, start refining the result by adding smaller values (like 0.01) to get more accurate results. Repeat the process until the square exceeds n at the third decimal place or another desired level of accuracy.
+//       : Once the value's square exceeds n at the desired decimal place (e.g., three decimal places), stop and return the last value where the square was less than or equal to n.
+// Hence, This method allows you to find the square root with a precise decimal value by progressively adding smaller values (like 0.1, 0.01, 0.001) and checking the square against n at each step.
+
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -543,8 +554,8 @@ void rotate(vector<int>& nums, int k) {
 } // So this was the method for rotating towards right! if you want to rotate the array towards left, you can just follow the steps in reverse order!
 
 int main() {
-    vector<int> nums = {1, 2, 3, 4, 5, 6, 7};
-    int k = 3;
+    vector<int> nums = {1, 2, 3, 4, 5};
+    int k = 2;
     rotate(nums, k);
     cout << "Rotated array: ";
     for (int num : nums) {
@@ -732,19 +743,38 @@ int main() {
 
 
 // ---------------------------------------------------------- LECTURE 16 - Sorting Algorithm : Selection Sort! --------------------------------------------------------------------------------------------------------->
-// This is a sorting algorithm which is used to sort an array in ascending order!
-// Now what is actually selection sort!
-// So what we are actually doing is ek element ko hold kiya! and then remaining array me jitne bhi elements hai unn sabko ek ek krke compare kiya and jab bhi koi smaller element milta hai hum uska index store krdete hai and then apni iteration continue rakhte hai agar firse koi aur more smaller milta hai uska index store krlete hai purana vaale ko update krke and this is how we basically move forward and completely sort the array ek ek krke, isme hum do loops use krte hai, ek first element ko hold krke rakhne ke liye and ek uske remaining array me iterations krke uss first element se swap compare krne ke liye! and then jab inner loop poora execute hojaata hai then hum jo final index save kiya hai sabse chhote element ka uss remaining array ka usko swap krdete hai first element se!
-// So in short, first element ko min index naam se hold kiya! and then remaining array me se sabse chhota element find kiya, jo uss remaining array me bhi chhota ho and jo uss first element se bhi chhota ho! and then usko swap krdiya with the first element!
-// For example, suppose an array 1 7 9 2 3 0, now its size is 6 now agar hum first 1 ko hold krle and then remaining me se sabse chhote element ko usse compare kraa kra ke swap krte jaye toh how many steps it will take...
-// 1 | 7 9 2 3 0 -> 0 is the smallest element in the remaining array so we will save its index and when the j vaala loop khatam hoga tab 0 aur 1 ko swap krdenge!
-// 0 7 | 9 2 3 1 -> now in this case, 0 is already sorted and i = 1 and j = 2 now remaining array ke saare element ko i = 2 se compare krenge and jo chhota element hoga uska index save krenge jaise 7 se chhota 2 hai toh pehle iska index save kiya then ab check kiya ki kya 2 se chota koi hai? so yes 1 hai ab firse iska index save kiya, now 1 se chhota remaining array me koi nhi hai toh bss isko swap krdiya!
-// 0 1 9 | 2 3 7 -> Did the same thing as above!
-// 0 1 2 9 | 3 7 -> Did the same thing as above!
-// 0 1 2 3 9 | 7 -> Did the same thing as above!
-// 0 1 2 3 7 9 | -> Did the same thing as above!
-// And hence after 5 steps our array is sorted totally! means hume agar 6 size ka array hai toh 5 baar comparisons krne honge! jo i vaala loop hai vo end tak nhi jayega vo sirf n-2 tak jayega kyunki n-1 tak toh j jayega compare krne ke liye!
-// Let see how we will code this!
+// Selection Sort repeatedly finds the smallest element in the unsorted part of the array and places it at the beginning.
+// Steps : Start with the first element, treat it as the smallest (minIndex).
+//       : Compare it with all other elements in the unsorted part of the array.
+//       : If a smaller element is found, update minIndex to its position.
+//       : After finishing the inner loop, swap the first element with the element at minIndex.
+//       : Repeat for the next position until the entire array is sorted.
+
+// Example : Given Array : 1 7 9 2 3 0 and Size : 6
+//         : Steps : Start with the first element (i=0), hold it as the smallest (minIndex).
+//                 : Compare this element with the rest of the array (j=i+1 to n-1), and find the smallest element in the unsorted part.
+//                 : Intermediate Steps : Step 1 : Array : 1 | 7 9 2 3 0
+//                                               : Compare 1 with 7, 9, 2, 3, 0.
+//                                               : Smallest = 0. Save its index and swap 1 and 0.
+//                                               : Result : 0 7 | 9 2 3 1.
+//                                      : Step 2 : Array : 0 7 | 9 2 3 1
+//                                               : Compare 7 with 9, 2, 3, 1.
+//                                               : Smallest = 1. Save its index and swap 7 and 1.
+//                                               : Result : 0 1 9 | 2 3 7.
+//                                      : Step 3 : Array: 0 1 9 | 2 3 7
+//                                               : Compare 9 with 2, 3, 7.
+//                                               : Smallest = 2. Save its index and swap 9 and 2.
+//                                               : Result: 0 1 2 9 | 3 7.
+//                                      : Step 4 : Array: 0 1 2 9 | 3 7
+//                                               : Compare 9 with 3, 7.
+//                                               : Smallest = 3. Save its index and swap 9 and 3.
+//                                               : Result: 0 1 2 3 9 | 7.
+//                                      : Step 2 : Array: 0 1 2 3 9 | 7
+//                                               : Compare 9 with 7.
+//                                               : Smallest = 7. Save its index and swap 9 and 7.
+//                                               : Result: 0 1 2 3 7 9 |.
+
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -777,23 +807,21 @@ int main() {
     }
     selectionSort(arr1, size);
 }
-// Space Complexity! : It is constant here! kya humne koi extra space liya hai sort krne ke liye? NO, humne sirf kuch variables banaye hai sort krne ke liye! but koi extra space nhi liya sort krne ke liye! Hence space complexity is here is O(1) which is constant space complexity!
-// Time Complexity! : Here we can see that andar vaala loop n-1 time chal rha hai and outer loop n-2 times, and they are nested loop so the time complexity will be (n-1)*(n-2) and hence the answer will be (n^2)! hence the time complexity will be, O(n^2)!
+// Time Complexity : Here we can see that andar vaala loop n-1 time chal rha hai and outer loop n-2 times, and they are nested loop so the time complexity will be (n-1)*(n-2) and hence the answer will be (n^2)! hence the time complexity will be, O(n^2)!
+// Space Complexity : It is constant here! kya humne koi extra space liya hai sort krne ke liye? NO, humne sirf kuch variables banaye hai sort krne ke liye! but koi extra space nhi liya sort krne ke liye! Hence space complexity is here is O(1) which is constant space complexity!
 
 // Best Case Time Complexity : Best case is that the array is already sorted! but fir bhi hum comparisons toh krenge hi! hence in the best case bhi the time complexity will be O(n^2)!
 // Worst Case Time Complexity : Worst Case me jab array ekdum hi ulta ho! uss case me bhi hum saare comparisons krenge hi, toh uss time bhi time complexity will be O(n^2)!
 // So in selection sort the Best case TC and Worst case TC are same!
-
 // Use Case of Selection Sort! : We can use this algorithm when the array/vector/list size is small!
+
 // Stable Algorithms : Imagine you have a list of things, and some of those things have the same value or "key". A stable algorithm will sort the list in a way that if two things have the same value, the one that appeared first in the original list will still be first in the sorted list.
 // UnStable Algorithms : On the other hand, an unstable algorithm doesn't guarantee that order. If two things have the same value, their order might get swapped in the sorted list.
-
 // Let's say you have a list of students with their scores. Some students might have the same score. If you use a stable sorting algorithm and two students have the same score, the one who took the test first stays ahead in the sorted list. If you use an unstable sorting algorithm, the order of students with the same score might get mixed up in the sorted list.
 // Now for selection sort, it is an unstable sorting algorithm!
 
 // ---------------------------------------------------------- LECTURE 17 - Sorting Algorithm : Bubble Sort! --------------------------------------------------------------------------------------------------------->
-// Bubble Sort : So kya hota hai ki hum array ke harr adjacent element ko aapas me compare krke agar right vaala element chota hai left vaale se toh swap krdete hai, ya agar right vaala element badaa hai left vaale se toh uss step ko ignore krke aage badh jaate hai!
-// So bss hum vahi krenge!
+// Bubble Sort : So kya hota hai ki hum array ke harr adjacent element ko aapas me compare krke agar right vaala element chota hai left vaale se toh swap krdete hai, ya agar right vaala element badaa hai left vaale se toh uss step ko ignore krke aage badh jaate hai! So bss hum vahi krenge!
 // Suppose an array : 10 1 7 6 14 9
 // Round 1 :
 // 10<->1 7 6 14 9 : right element is < left element, so we will swap the two elements.
@@ -859,8 +887,6 @@ int main() {
     }
     bubbleSort(arr1, size);
 }
-// Time Complexity : Here we can see that do loops chal rhe hai ek jo n-1 tak chal rha hai and ek jo n-i-1 tak chal rha hai! and the two loops are nested, so we multiple the the two, and hence the TC will be, O(n^2)!
-// Space Complexity : Again yahaa humne koi extra space nhi liya hai comparison ya sorting ke liye and jo bhi space liya hai vo sirf variable declare krne ke liye, so means here the space complexity is, O(1). means it has a constant space complexity!
 
 // Best case Time Complexity : For this we know if the array is already sorted, then means koi element swap hi nhi hua! means agar kabhi array ko sort krte time koi bhi element swap nhi hua! means ki vo array already sorted hai! so hum yahaa thora code optimize krenge, like in the best case we know koi element swap nhi hua, toh chalo iss cheez ko bhi add krte hai code me! taaki hum apni best case TC ko thora kam kr sake, vrna agar bina swaps ko check kiye krenge then our time complexity will be O(n^2)! but agar hum iss swaps ko check krlete hai then our TC can be reduced!
 #include<iostream>
@@ -899,18 +925,19 @@ int main() {
     }
     bubbleSort(arr1, size);
 }
-// Hence in this case our best case time complexity will be O(n), kyunki sirf ek baar loop iterate kiya and usme ek bhi swap nhi hua means array already sorted hai! So aise humne apna code optimize krliya hai and TC bhi kam krli hai from O(n^2) -> O(n)!
-// Worst Case Time Complexity : The worst case will be when the array is reversed! then uss case me toh TC O(n^2) hi rahegi!
+// Time Complexity : Here, we have two loops, one iterated "n-1" times and another "n-i-1" times! and both are nested! means the TC : O(n^2).
+//                 : Best Case TC : During checking swapped elements, the TC : O(n)! And this will be achieved when the array is already sorted!
+//                 : Worst Case TC : The worst case will be when the array is reversed! Then TC : O(n^2).
+// Space Complexity : Here we did'nt took any extra space, only declared some variables, hence, SC : O(1).
 
-// Bubble Sort is a stable Sorting Algorithm!
-// Now there is a term "in-place" sorting algorithms, what happens in this is that ki ye vo tarah ke sorting algorithms hote hai jinme koi extra space required nhi hoti, ye vahi ka vahi sort krdete hai swap and all krke, but koi extra space nhi lete!
-// A formal definition of In-Place Sorting Algorithms is : In computer science, "in-place sorting" refers to a sorting algorithm or method that uses a constant amount of extra memory space to rearrange elements within the data structure being sorted. In other words, the sorting process does not require additional memory proportional to the size of the input data.
-// In-place sorting is desirable for situations where memory usage is a critical factor, and there is a need to minimize the use of additional memory. Algorithms that operate in-place modify the input data structure directly, without requiring additional arrays or data structures to store temporary values during the sorting process.
-// Common in-place sorting algorithms include :
-// 1) Bubble Sort : It compares and swaps adjacent elements in the array, moving the largest element to its correct position in each pass.
-// 2) Selection Sort : It repeatedly selects the minimum (or maximum) element from the unsorted portion of the array and swaps it with the first unsorted element.
-// 3) Insertion Sort : It builds the sorted array one element at a time by repeatedly taking elements from the unsorted part and inserting them into their correct position in the sorted part.
-// 4) Heap Sort : It uses a binary heap data structure to repeatedly extract the minimum (or maximum) element and rebuild the heap until the entire array is sorted.
+// Bubble Sort is a stable Sorting Algorithm, because it preserves the relative order of elements with equal values.
+// Introduction to In-Place Sorting Algorithms : In computer science, "in-place sorting" refers to a sorting algorithm or method that uses a constant amount of extra memory space to rearrange elements within the data structure being sorted. In other words, the sorting process does not require additional memory proportional to the size of the input data.
+//                                             : In-place sorting is desirable for situations where memory usage is a critical factor, and there is a need to minimize the use of additional memory. Algorithms that operate in-place modify the input data structure directly, without requiring additional arrays or data structures to store temporary values during the sorting process.
+
+// Common in-place sorting algorithms include : Bubble Sort : It compares and swaps adjacent elements in the array, moving the largest element to its correct position in each pass.
+//                                            : Selection Sort : It repeatedly selects the minimum (or maximum) element from the unsorted portion of the array and swaps it with the first unsorted element.
+//                                            : Insertion Sort : It builds the sorted array one element at a time by repeatedly taking elements from the unsorted part and inserting them into their correct position in the sorted part.
+//                                            : Heap Sort : It uses a binary heap data structure to repeatedly extract the minimum (or maximum) element and rebuild the heap until the entire array is sorted.
 // While in-place sorting algorithms are memory-efficient, they may not be the most time-efficient for large datasets. Other sorting algorithms that use additional memory, such as Merge Sort and QuickSort, can be more time-efficient in certain scenarios but are not considered in-place algorithms. The choice of sorting algorithm depends on the specific requirements of the application and the constraints on memory usage.
 
 // ---------------------------------------------------------- LECTURE 18 - Sorting Algorithm : Insertion Sort! --------------------------------------------------------------------------------------------------------->
@@ -941,9 +968,8 @@ int main() {
 
 // Round 6 : Now 7th element, which is 11, and 11>1, 11>2, 11>4, 11>7, 11>8, 11>10 means we will keep it at last! Hence the final sorted array will be...
 // 1 2 4 7 8 10 11
-// Array is sorted!
+// Array is sorted! and we can see ki 7 size ka array tha toh 6 rounds chale hai! means here agar size n hua toh n-1 rounds chalenge!
 
-// We can see ki 7 size ka array tha toh 6 rounds chale hai! means here agar size n hua toh n-1 rounds chalenge!
 // Lets code this logic now...
 #include<iostream>
 using namespace std;
@@ -971,19 +997,6 @@ int insertionSort1(int arr[], int n) {
     }
     printArray(arr, n);
 } // In this approach of insertion sort we have used shifting the greater value on the right and so on...
-// But lets try swapping...
-
-// But this is not traditional insertion sort!
-void insertionSort2(int* arr, int n) {
-    for(int i = 0; i<n; i++) {
-        int j = i;
-        while(j>0 && arr[j-1] > arr[j]) {
-            swap(arr[j-1], arr[j]);
-            j--;
-        }
-    }
-    printArray(arr,n);
-} // This is a more easy to understand approach for insertion sort! hum bss ek element ko pick kr rhe hai and usko uske pehle vaale se compare kr rhe hai agar uske pehle vaala usse badaa hai toh bss swap kr de rhe hai! and tab tak swap krte jaa rhe hai jab tak uske pehle vaala element usse chhota na hojaye!
 
 int main() {
     int size;
@@ -998,8 +1011,8 @@ int main() {
     insertionSort2(arr1, size);
 }
 // Some characteristics of this algorithms are : It is very Adaptable, It is a stable Algorithm and yes it works well when size of the array is small! or the array is partially sorted tab zyada achi performance aati hai!
-// Space Complexity : It is constant, kyunki hum koi extra space use nhi kr rhe! jitna space hai utne me hi hum sort kr rhe hai!
 // Time Complexity : Here it will be O(n^2), kyunki again becoz of the same reason as of above!
+// Space Complexity : It is constant, kyunki hum koi extra space use nhi kr rhe! jitna space hai utne me hi hum sort kr rhe hai!
 
 // Now, Best Case and Worst Case :
 // Best Case TC : O(n), ye tab hoga when the array will be already sorted! Tab kya hoga ki like, 1 2 3 4 5, isme kya hoga ki hum harr round me sirf ek comparison kr rhe honge, like 1 ko humara smallest element maana, then 2 ko compare kiya and 2>1 so usko aage lgaa diya, then 3 ko 2 se compare kiya and 3>2 toh isko bhi uske aage lgaa diya, aise sabko aise ek ke aage ek lgaa diya toh baar baar harr element se compare krne ki zarurat nhi padi! so its TC is O(n) in the best case!
@@ -1008,7 +1021,7 @@ int main() {
 // ---------------------------------------------------------- LECTURE 19 - C++ STL (Standard Template Library) --------------------------------------------------------------------------------------------------------->
 // STL is like a short way of using some of the functionlaties jinko hum entirely code krte hai! like, jaise koi binary search hogyi uske liye abhi tak hum poora code likh rhe the pr using STL hum simple ek line add krke hi binary serch ki saari functionlaties include kr sakte hai!
 // C++ STL do tarah ke hote hai, ek toh hota hai Containers (which are used to store data) and ek hota hai algorithms (which are used to apply algorithms).
-// So lets first start with containers : They are : Arrays, Vectors, Deque, Queue, Priority Queue, Lists, Stack, Sets, Maps
+// So lets first start with containers : They are : Arrays, Vectors, Deque, Queue, Priority Queue, Lists, Stack, Sets, Maps!
 // 1) Arrays :
 #include<iostream>
 #include<array> // To implement arrays using STL we include this library!
@@ -1673,7 +1686,9 @@ int main() {
 }
 
 // CodeStudio Question : Move Zeroes, move all the zeroes to the right! in an array!, we can solve this question like move all the non zeroes to the left
-// Approach : We will use two pointers and ek ko rakhenge 0 (i) (jo non-zero value denote kr rha hoga) pr and ek ko uske aage 1 pr and then jo 1 pr hai (j) usko aage badhaate jayenge and compare krte jayenge agar j pr jo value hai vo non zero hai toh usko i se swap krdenge jisse non zero elements left side chale jayenge and aise hi poore array me traverse krke hum poore array ke saare zeroes ko right side me shift krdenge!
+// Approach : Two Pointers : Use two pointers, i and j. Pointer i will track the position for the next non-zero element, and j will iterate through the array.
+//          : Start both i and j from the beginning of the array. If the element at j is non-zero, swap it with the element at i (if i and j are not the same) and increment i. Continue this process while j is less than the size of the array.
+//          : By the time j finishes traversing the array, all non-zero elements will be shifted to the left side, and all zeroes will be at the right side.
 #include<iostream>
 using namespace std;
 
