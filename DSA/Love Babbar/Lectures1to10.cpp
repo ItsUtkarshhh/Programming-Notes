@@ -2974,6 +2974,12 @@ int main() {
 // It is again a user defined data type! bss ye thora syntactically and use case wise alag hai struct and union se! like isme hum integer values ko kuch strings ki help se define krre hai! yes you heard it right! kuch "integer" value ko "string" se represent krte hai, naa ki string ko integer value se!
 // An enum, short for "enumeration," is a special data type in many programming languages that allows you to define a set of named values, which are typically used to represent a collection of related constants. Enums provide a way to group and name a set of related values, making code more readable, maintainable, and less error-prone.
 // Like aisa kabhi kabhi hota hai na jaise hume koi ek particular cheez ko integer ke jagah string se define kr paate taaki thori confusion and readability badhti code ki! toh bss vhi ki unn integers ko hi string ki help se define krte hai!
+// Use cases of Enums : Representing Fixed Options or States (Like that days of a week example)
+//                    : Increasing Code Readability
+//                    : Preventing Invalid Values, Example : "enum Gender {Male, Female};" Hence, here only two valid genders are there!
+//                    : Simplifying Switch Statements
+//                    : Replacing Magic Numbers, Enums eliminate the use of "magic numbers" by giving meaningful names to constants, improving maintainability. Example : "enum HTTPStatusCode { OK = 200, NotFound = 404, InternalServerError = 500 };"
+//                    : and some more...
 // Lets understand this with code...
 #include<stdio.h>
 
@@ -3059,8 +3065,31 @@ int main() {
     cin>>a>>b;
     c = a + b;
     cout<<"The sum of two numbers :"<<c<<endl; 
-    cout<<"Value of global C :"<<::c; //Here we used scope resolution operator to access the c outside the main function, as "scope" resolution operator is the name itself enough to understand.
+    cout<<"Value of global C :"<<::c; // Here we used scope resolution operator to access the c outside the main function, as "scope" resolution operator is the name itself enough to understand.
     return 0;
+}
+
+// Finding average!
+#include<iostream>
+using namespace std;
+
+double average(int* arr, int n) {
+    int sum = 0;
+    for(int i = 0; i<n; i++) {
+        sum += arr[i];
+    }
+    return static_cast<double>(sum)/n; // Here, static_cast is a C++ type casting operator used for safe and well-defined type conversions.
+    // It is preferred over C-style casts ((double)sum) because : It is more explicit and type-safe. And, It helps catch unintended or unsafe casts during compilation.
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    cout<<average(arr,n);
 }
 
 #include<iostream>
@@ -3088,8 +3117,8 @@ int main() {
 using namespace std;
 
 int main() {
-    float x = 34.4f; // "f" or "F" is used to specify float number//
-    long double y = 34.4l; // "l" or "L" is used to specify long double number//
+    float x = 34.4f; // "f" or "F" is used to specify float number
+    long double y = 34.4l; // "l" or "L" is used to specify long double number
 
     cout<<"the size of 34.4 is :"<<sizeof(34.4)<<endl;
     cout<<"the size of 34.4f is :"<<sizeof(34.4f)<<endl;
@@ -3104,9 +3133,9 @@ using namespace std;
 
 int main() {
     int a = 65;
-    int& b = a; // Refrence variable b, here the memory location where 5 is stored with the name 'a' similary here we added another name for the memory location where 65 is stored
-    cout<<"Value of a :"<<a<<endl;
-    cout<<"value of b :"<<b<<endl;
+    int& b = a; // Refrence variable b, here the memory location where 5 is stored with the name 'a' similary here we added another name for the memory location where 65 is stored!
+    cout<<"Value of a : "<<a<<endl;
+    cout<<"value of b : "<<b<<endl;
     return 0;
 }
 
@@ -3152,7 +3181,7 @@ int main() {
    return 0; 
 }
 
-// Constants in C++ : In C++, constants are values that do not change during the execution of a program. They are useful for defining fixed values that have semantic meaning within your code. There are several ways to define constants in C++:
+// Constants in C++ : In C++, constants are values that do not change during the execution of a program. They are useful for defining fixed values that have semantic meaning within your code. There are several ways to define constants in C++ :
 //                  : Constants can be defined using 4 keywords, 1) "Const" 2) "Constexpr" 3) "Enum" 4) "#define".
 //                  : Const : The const keyword is used to declare constants. A constant variable must be initialized at the time of its declaration.
 //                  : Constexpr : The constexpr keyword is used to define constants that can be evaluated at compile time. This is more powerful than const because it guarantees that the value is a compile-time constant.
@@ -3167,7 +3196,7 @@ int main() {
     const int a = 65;
     cout<<"Before changing value : "<<a<<endl;
     // a = 45; // Here you will get an error because "a" is a constant.
-    cout<<"Before changing value : "<<a<<endl; // Here after writting "const" before "int a", now we can't change the value because of the constant keyword.
+    cout<<"After changing value : "<<a<<endl; // Here after writting "const" before "int a", now we can't change the value because of the constant keyword.
     return 0;
 }
 
