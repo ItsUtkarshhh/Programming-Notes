@@ -1,9 +1,8 @@
 // ---------------------------------------------------------- LECTURE 21 - LeetCode/CodeStudio Questions --------------------------------------------------------------------------------------------------------->
 // Question : Rotating an Array!
-// Approach : Suppose an array = {1,2,3,4} ab agar hume isko 2 place se rotate krna hai toh mtlb ki hume harr element ko do aage badha dena hai! so what we need to do is...jaise with the given example of the array...the resultant array will be, {3,4,1,2} this will be our rotated array! So ab hum ye cheez code me kaise kre..
-// We have studied about the modulus operator! so, jaise kisi bhi number ka modulus lete hai toh uske one's place ka digit mil jaata hai!
-// So what we will do is like, jaise array jo given hai ki {1,2,3,4} isme n=4 and jo elements ke index ki range is from 0-3 means 0-(n-1), so now, agar hume rotate krna hai array ko toh what we will do is, jaise 4 hai vo abhi n-1 index pr hai and agar vo do place aage jayega toh hypothetically vo n+1 pr aajayega, and when we will do the (n+1)%n we will get 1 and then we will place this 4 at index 1, similarly...
-// 3 abhi n-2 pr hai, and agar isko 2 place aage badhayenge toh ye n pr ajayega hypothetically but now when we will do the n%n we will get 0 so hum 3 ko 0th index pr daaldenge! and aise hum rotate krenge!
+// Approach : Understanding Rotation: Rotating an array n places means shifting each element forward by n positions. If the array is {1, 2, 3, 4} and we rotate it 2 places, the result is {3, 4, 1, 2}.
+//          : Modulus Operation : The modulus operator helps in wrapping indices around the array bounds. For example : If an element is at index i, its new position after rotating k places is calculated as (i + k) % n, where n is the size of the array.
+//          : 
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -40,17 +39,15 @@ int main() {
     }
     cout<<endl;
     rotate(v1, k);
-}
-// Isme humne temp vaala array isliye create kiya kyunki uske bina krte toh nums me hi copy hote chale jaata array, if you want to understand this try a dry run, you will get it!
+} // Isme humne temp vaala array isliye create kiya kyunki uske bina krte toh nums me hi copy hote chale jaata array, if you want to understand this try a dry run, you will get it!
 
 // Question 2 : Check if an array is sorted and rotated or not!
-// We have done questions with similar logic previously you can go and learn from there!
-// For reference, here is the logic below :
+// We have done questions with similar logic previously you can go and learn from there! For reference, here is the logic below :
 // Steps : 1) Pivot Point Dhundhna: Pivot wo point hai jahan pe ek element apne next element se bada hota hai. Ye wo jagah hai jahan array rotate kiya gaya hai.
 //       : 2) Do Segments ka Sorted Hona: Pivot point ke baad aur uske pehle wale do segments check karo ki wo sorted hain.
 //       : 3) Boundary Condition: Array ke last element aur first element ko check karo. agar last element first element se badaa hai toh array sorted hai rotated nhi!
 // Iss given order me hi code krna hai! to check that the array is sorted and rotated or not!
-// lets code :
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -102,10 +99,50 @@ int main() {
     return 0;
 }
 
-// Question 3 : Add 2 arrays!
-// Hum aise add krenge ki ek block of array me values sirf 0-9 hongi and carry next block me rakhenge! jaise ek normal addition hota hai!
-// Approach : Add hum humesha peeche se krte hai toh hum loop chalayenge peeche se! now it will contain 3 cases, first where like 1234 + 6 isme 4 and 6 toh add hojayenge and baaki sab bach jayenge, then one is 6 + 1234 isme bhi same cheez hogi bss in reverse way! then there is 1234 + 1234 isme same sab numbers add honge and in the end me ek carry bach jayega! and then vo bhi final sum me add hojayega!
-// Now how we will code it, pehli baat toh hum numbers ko add krenge and then unke sum ka ones place hum sum%10 se nikalenge then carry hum sum/10 se nikalenge! and then thats how we will code it! also considering all the 3 scenarios!
+// Unique Approach :
+#include <iostream>
+using namespace std;
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+bool isSortednRotated(int arr[], int n) {
+    if (n <= 1) return false; // Single element or empty array can't be sorted and rotated.
+    
+    int countBreaks = 0
+    for (int i = 0; i < n; i++) { // Check the number of places where the array "breaks" sorting order.
+        if (arr[i] > arr[(i + 1) % n]) { // Use modulus to handle wrap-around.
+            countBreaks++;
+        }
+    }
+    return countBreaks == 1; // If the array breaks sorting order exactly once, it's sorted and rotated.
+}
+
+int main() {
+    int n;
+    cin >> n;
+    int arr[100];
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    cout << (isSortednRotated(arr, n) ? "True" : "False") << endl;
+} // This approach can also be used when we need to check whether the array is sorted or not! when if the countBreaks == 0, means the array is sorted but not rotated!
+
+// Question 3 : Addition of 2 Arrays, When adding two arrays, you are essentially adding two numbers digit by digit, just like normal mathematical addition. There are two ways to handle the result :
+// First : Return the Final Sum as a Number, where Add all digits starting from the end (units place) and calculate the total sum. and Simply return the sum as a single number.
+// Second : Return the Result as an Array, where Add the digits starting from the end (units place), storing each digit in reverse order in a new array. and At the end, reverse the array to get the final result in correct order.
+// Approach : Start from the End : Addition begins with the last digits (units place) of both arrays.
+//          : Case 1 : Arrays of Different Lengths (Ex : 1234 + 6 or 6 + 1234)
+//                   : Add digits of both arrays while they overlap. And add remaining digits of the longer array with the carry.
+//          : Case 2 : Arrays of Equal Lengths (e.g., 1234 + 1234)
+//                   : Add corresponding digits, managing the carry after each addition.
+//          : Handle Carry : Compute : Digit to store : sum % 10 (ones place of the sum). And Carry to forward : sum / 10 (tens place of the sum).
+//          : Store Result : Store each computed digit in reverse order. If returning as an array, reverse the result at the end.
+
 // Normal Solution : More easy to understand
 #include<iostream>
 #include<vector>
@@ -206,8 +243,7 @@ vector<int> findArraySum(vector<int>& a, int n, vector<int>& b, int m) {
         int val2 = (j >= 0) ? b[j] : 0;
         int sum = val1 + val2 + carry;   
         carry = sum / 10;
-        int onesPlace = sum % 10;
-        ans.push_back(onesPlace);
+        ans.push_back(sum % 10);
         if (i >= 0) i--;
         if (j >= 0) j--;
     }
@@ -235,33 +271,25 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 22 - Character Arrays and Strings --------------------------------------------------------------------------------------------------------->
-// Character Arrays and Strings are often used interchangebly!
-// But the thing is, C language me, hum ek toh character arrays bnaate hai! and ek C-type-string bnaate hai! jisme se normal character arrays me hum simply array of character store krlete hai! but in C-type-strings me we add a null character at the end of the character array to make it a C-type-string and so that we can also all the functions of strings in C!
-// C-Type Strings Functions like :
-// strlen(str) : Finds the length of the C-type-string!
-// strcmp(str1,str2) : compares the two strings and return that which string is smaller and which is larger! (if string contains alphabets, then the comparison is based on ASCII values
-// strcat(str1,str2) : Concatenates two strings!
-// strcpy(newStr,oldStr) : copies old string to new string!
-// strrev(str) : It is used to reverse the strings! 
-// Whereas in C++, ek character arrays toh hote hi hai jinko hum chahe toh normal character arrays ki tarah bhi use kr sakte hai ya unke end me null character daal ke strings ki tarah bhi use kr sakte hai! and then ek strings ke liye alag se header file bhi hoti hai and C++ me string ek data type ki tarah use kiya jaa sakta hai isliye character arrays ka use krke strings bnaane ki koi need nhi hai C++ me! but chaahe toh kr sakte hai!
-// Null charcacter strings me bhi hota hai and character arrays jinko hum strings ki tarah use krna chah rhe hai unme bhi hota hai! bss difference is, strings me hume explicitly show nhi krna padta null character! vo automatically handle ho jaata hai, but in case of character arrays hume null character daalna padta hai! tab jaake vo ek C-string kehlaa sakta hai! and agar null character nhi daalenge toh vo bss ek simple sa array of character ban jayega that is it!
+// In C, there are two ways to handle strings :
+// Character Arrays : A simple array of characters without any special handling for string operations. It can store individual characters, but if you want to use it as a string, you need to manually add a null character ('\0') at the end to mark the end of the string.
+// C-Type Strings : These are character arrays with a null character ('\0') at the end. This is important because it allows you to use string functions like strlen(str), strcmp(str1,str2), strcat(str1,str2), strcpy(newStr,oldStr) and strrev(str) etc. which require the null character to know where the string ends. To use these methods you need to include a "string.h" library!
+//                : In C, a character array is simply an array that holds individual characters. It does not automatically recognize itself as a string unless a null-terminator ('\0') is explicitly added at the end. For example:
+//                : In C, the size of a character array must be sufficient to hold all the characters plus the null terminator. If you forget to include the null terminator, functions designed to work with strings will behave incorrectly. means It is also important to remember that the null character takes up space in the array. So, when you define an array with 5 characters, you need to allocate space for the null terminator as well, which means an array of 6 elements.
+//                : String Literals in C : When you initialize a string in C using a string literal, the compiler automatically adds the null terminator for you.
 
-// Above we discussed all the major part of it for quick, now we start with basics!
-// Strings are like 1-D character arrays! kyunki bhale hi string ko hum " " me likhe ya character arrays ke end me null character daal ke banaye, memory me store vo null character ke saath hi honge!
-// Strings me array ki tarah hi values store rehti hai bss difference is that ki yahaa sirf characters store hoti hai!
-// Strings are intiallized like char ch[10]; this will be character array (string) of length 10, and isme input lene ke liye we write cin>>ch; that's it, there is one difference and that is ki yahaa pr jab humara input khatam hota hai toh last input ke next vaale block me ek null character (\0) store ho jaata hai which denotes the termination of the character array! and its ASCII value is 0!
-// Vaise hi jab input lene ke liye cout krenge tab bhi jahaa pr null character aayega vahaa pr execution ruk jayega! so suppose there is a character array like, a\0ba\0c\0, isme kya hoga ki jaise hi a ke baad cout ko \0 dikhega vhi pr execution ruk jayega and the final output will be "a" only!
-// Here we have used word character array and strings very interchangebly! but there are pretty different! like, Character array ek aisi array hoti hai jo characters ko store karti hai. Ye C-style strings kehlaati hain (agar last me null character daala gya toh) + Character array ke last me ek special character \0 (null terminator) hota hai jo string ke end ko indicate karta hai... and on the other side, string C++ Standard Library me defined ek class hai jo dynamic array of characters ko manage karta hai. + string me null terminator automatically handle hota hai. Aapko manually set karne ki zarurat nahi hoti.
-// Character array ko manually manage karna padta hai. Aapko pata hona chahiye ki array kitni badi hai aur null terminator ko include karna padta hai. but string apni memory ko khud manage karta hai. Agar string badi hoti hai to memory automatically adjust hoti hai.
-// Character arrays me string handling functions jaise strlen, strcpy, strcat ka use karte hain. Yeh functions <cstring> header file me milte hain. and string class me kai useful functions aur operators hote hain jaise length(), substr(), find(), + operator for concatenation, etc.
+// In C++, you can use character arrays similarly to C, but C++ also provides the string type, which handles strings more conveniently. You don't need to explicitly add a null character when using the string type. However, you can still use character arrays as strings if needed, but it's not necessary as string in C++ is more flexible.
 
-// char[] (Character Array): Mutable, stores a sequence of characters including a null terminator.
-// char* (Character Pointer): Points to a sequence of characters; can point to modifiable or read-only memory.
-// const char* (Constant Character Pointer): Points to a read-only sequence of characters; used for string literals and ensuring immutability.
-// std::string: C++ Standard Library class; dynamic size, safe and convenient for string operations.
-// Double Quotes: Used for string literals (array of characters).
-// Single Quotes: Used for single characters.
-// Null Character ('\0'): Indicates the end of a C-style string.
+// Note : Buffer Overflow : When using C-style strings, be careful about buffer overflow. If you copy or concatenate strings without checking the size of the array, you may accidentally overwrite memory, leading to bugs or crashes.
+//                        : Example : char str[10]; strcpy(str, "Hello, world!"); Buffer overflow : "Hello, world!" is too large
+
+// char[] (Character Array) : Mutable : It stores a sequence of characters, with the size defined at compile time. It includes a null terminator (\0) to mark the end of the string, ensuring the string functions properly when processed.
+// char* (Character Pointer) : A pointer to a sequence of characters in memory. It can point to modifiable or read-only memory, depending on where it points. Can be used to traverse a string or manage memory dynamically.
+// const char* (Constant Character Pointer) : A pointer to a read-only sequence of characters. Commonly used for string literals (like "Hello"), ensuring that the contents of the string cannot be modified accidentally.
+// std::string (C++ Standard Library) : A class in the C++ Standard Library for handling strings. Dynamic size : Memory is managed automatically as the string grows or shrinks. Offers built-in functions (like length(), substr(), find()) and operators (like + for concatenation) for easier and safer string manipulation. No need to manually handle memory or null terminators.
+// Double Quotes (" ") : Used to represent string literals in C/C++ and many other languages. A string literal is an array of characters ending with the null terminator (\0). Example : "Hello".
+// Single Quotes (' ') : Used to represent single characters (not strings) in C/C++. Example : 'A', which is a single character, not a string.
+// Null Character ('\0') : A special character used to indicate the end of a C-style string. Marks where a string terminates in memory, ensuring functions like strlen() know where the string ends. Every C-style string ends with this character, but it's invisible and not part of the visible content.
 
 // Lets understand further thru code...
 #include<iostream>
@@ -353,12 +381,13 @@ int main() {
 }
 
 // Question 3 : Check for a palindrome
-// Like kisi ek string ko reverse krne pr bhi vhi same string generate ho rhi hai toh that string will be called a palindrome!
-// Here we can solve this question with two different approaches! and they are...
-// App 1 : Ek string hai humaare paas, usko reverse kro and then uss reverse string ko kisi aur variable me store kro and then dono strings ko compare kro and if they are same then they will be a palindrome! otherwise not! but isme ek main problem ye hai ki isme hum ek extra space le rhe hai! and due to which the space complexity will increase!
-// App 2 : Uss string ke end to end characters ko compare kro end to end and agar saare characters same mil rhe hai toh mtlb ki it will be a palindrome! but yahaa ek cheez aur hoga ki it will be case sensitive! means ye A and a ko alag alag maan ke chalega! so for example agar humne Noon likha toh isko ye palindrome nhi maanega kyunki Noon ka reverse nooN hoga, so we need to keep it in mind! But yahaa hum ek cheez kr sakte hai and that ki upper case ko lower case me convert krke palindrome check kr sakte hai! agar hume case sensitivity se mtlb nhi hai!
-// Lets try both the approaches! one by one!
-// Approach 1 :
+// Approach 1 (Reverse and Compare) : Reverse the string and store the reversed string in a separate variable. Compare the original string with the reversed one. If both are the same, it's a palindrome; otherwise, it's not.
+//                                  : Drawback : This approach uses extra space for storing the reversed string, resulting in higher space complexity.
+// Approach 2 (End-to-End Comparison) : Compare characters from both ends of the string. If all corresponding characters match, it's a palindrome.
+//                                    : Case Sensitivity: By default, it will be case-sensitive, meaning 'A' and 'a' will be treated as different characters. For example, "Noon" won't be considered a palindrome because "Noon" reversed is "nooN".
+//                                    : Solution for Case Sensitivity : If case doesn't matter, convert both the string and its reverse to either lowercase or uppercase before comparing.
+//                                    : Drawback : This approach uses extra space for storing the reversed string, resulting in higher space complexity.
+// Approach 1 (Reverse and Compare) :
 #include<iostream>
 #include<cstring>
 using namespace std;
@@ -393,10 +422,9 @@ int main() {
         cout << "The string is not a palindrome." << endl;
     }
     return 0;
-}
-// But yes as we have discussed we have a problem with this approach ki yahaa pr ek extra space le rha hai s1_reversed! so we will move forward with another method!
+} // But yes as we have discussed we have a problem with this approach ki yahaa pr ek extra space le rha hai s1_reversed! so we will move forward with another method!
 
-// Approach 2 :
+// Approach 1 (Reverse and Compare) :
 #include<iostream>
 #include<cstring>
 using namespace std;
@@ -427,8 +455,8 @@ int main() {
     else {
         cout<<"Its not a palindrome!";
     }
-}
-// But still as discussed above there is still a problem and that is about the case sensitivity! so for that we will add one more function to it to convert all the UPPERCASE alphabets to lowercase! and the logic will be like, suppose we have a upper case character ch and we want to convert it into lower case so what we will do is, we will write ch - 'A' + 'a', isse kya hoga jaise, suppose koi upper case character hai B toh B - A + a will be be 'b', how? kyunki B - A will give 1 and then a me 1 jab add hoga toh vo b ban jayega! Now we will code it!
+} // But still as discussed above there is still a problem and that is about the case sensitivity! so for that we will add one more function to it to convert all the UPPERCASE alphabets to lowercase! and the logic will be like, suppose we have a upper case character ch and we want to convert it into lower case so what we will do is, we will write ch - 'A' + 'a', isse kya hoga jaise, suppose koi upper case character hai B toh B - A + a will be be 'b', how? kyunki B - A will give 1 and then a me 1 jab add hoga toh vo b ban jayega! Now we will code it!
+
 // A little modifications in the approach 2 :
 #include<iostream>
 #include<cstring>
@@ -472,8 +500,7 @@ int main() {
     else {
         cout<<"Its not a palindrome!";
     }
-}
-// In the above code, the checkPalindrome vaala function Noon ko palindrome nhi maanega kyunki isme N and n are considered different! but after those case sensitivity modifications in the checkPalindrome2 function, now the Noon will be considered palindrome kyunki ab N and n are same for that function!
+} // In the above code, the checkPalindrome vaala function Noon ko palindrome nhi maanega kyunki isme N and n are considered different! but after those case sensitivity modifications in the checkPalindrome2 function, now the Noon will be considered palindrome kyunki ab N and n are same for that function!
 
 // What are strings! They are character arrays only! but in cpp we have a keyword also for the strings!
 #include<iostream>
@@ -491,66 +518,6 @@ int main() {
 
 // Question 4 : Check for a valid palindrome!
 // Approach : First we will remove all the faaltu ke characters, then saare characters ko lowercase me convert krenge and then finally we will check that is it a palindrome or not! and jaise jaise hum faaltu characters remove krte jayenge vaise vaise hum unn valid characters ko hum naye string me push krte jayenge!
-#include<iostream>
-#include<cstring>
-using namespace std;
-
-bool valid(char ch) {
-    if((ch >= 'a' && ch <= 'z' ) || (ch >= 'A' && ch <= 'Z' ) || (ch >= '0' && ch <= '9' )) {
-        return 1;
-    }
-    return 0;
-}
-
-char tolowercase(char ch) {
-    if((ch >= 'a' && ch <= 'z' ) || (ch >= '0' && ch <= '9' )) {
-        return ch;
-    }
-    else {
-        return ch - 'A' + 'a';
-    }
-}
-
-bool checkPalindrome(string a) {
-    int s = 0;
-    int e = a.length() - 1;
-    while(s<=e) {
-        if(a[s] != a[e]) {
-            return false;
-        }
-        else {
-            s++;
-            e--;
-        }
-    }
-    return true;
-}
-
-bool isPalindrome(string s) {
-    // Faltu character hataa do
-    string temp = "";
-    for(int j = 0; j<s.length(); j++) {
-        if(valid(s[j])) {
-            temp.push_back(s[j]);
-        }
-    }
-
-    // Now lets convert all of them into a lowercase
-    for(int j = 0; j<temp.length(); j++) {
-        temp[j] = tolowercase(temp[j]);
-    }
-
-    return checkPalindrome(temp);
-}
-
-int main() {
-    string s1 = "utkr@5$rktu"; // For this it will return 1, means its true that this is palidrome!
-    string s2 = "utkr@5$rjhce"; // And for this it will return 0, means its false that it is a palindrome!
-    cout<<isPalindrome(s1);
-    cout<<isPalindrome(s2);
-}
-
-// My Approach (Better Approach) : TC and SC are same, its just more readable and reduces unneccesary operations...
 #include<iostream>
 using namespace std;
 
@@ -677,7 +644,7 @@ int main() {
     string str;
     getline(cin, str, '7'); // This function does the same as of the cin.getline function as in character arrays! here also we can use delimiter the only thing is that here the parameters are a little different!
     cout<<str;
-} // Now there are some inbuilt functions in strings! and they are like : strcmp(), strlen() and strcpy().
+}
 
 // Question 6 : You have a line of text and you have to replace all the spaces with the @40
 #include<iostream>
@@ -709,9 +676,12 @@ int main() {
 }
 
 // Question 7 : Remove all the occurences of a sub string in a parent string!
-// So like suppose we have a string which is daabcbaabcbc now we want to remove a substring abc from the main string!
-// so what we will do is first we will remove the abc when it appears the first time while traversing the string! so from da"abc"baabcbc "abc" will be removed and the final string will be dabaabcbc,
-// now we will remove it again! daba"abc"bc, now we will remove it again and the new string generated is dababc now again we will remove abc from the string and now we will remove dab"abc" and now the final string will be dab! so hence this will be our final string!
+// Aim : The task is to remove all occurrences of a given substring (abc) from a parent string repeatedly until no such substring remains.
+// Steps : Start with the parent string (daabcbaabcbc).
+//       : Remove the first occurrence of abc as you traverse the string : da"abc"baabcbc → dabaabcbc
+//       : Repeat the process : daba"abc"bc → dababc
+//                            : dab"abc" → dab
+//       : The final string, after all removals, is dab.
 // Now we will code the logic!
 #include<iostream>
 #include<string>
@@ -820,6 +790,7 @@ string removeDuplicates(string s) {
         // Check if the string is empty after erasing
         if (s.empty()) {
             break;
+            // return s // You can also write this... and this becomes more safe becoz, By using return s, you exit the function directly with the result, so there's no risk of unnecessary operations. But okay its upto you, what you want to choose, both are fine!
         }
     }
     return s;

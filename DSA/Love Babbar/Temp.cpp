@@ -1,30 +1,35 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
-void printArray(int arr[], int n) {
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
-}
-
-void moveZeroes(int arr[], int n) {
+string removeDuplicates(string str) {
     int i = 0;
-    for(int j = 0; j<n; j++) {
-        if(arr[j]!=0) {
-            swap(arr[j],arr[i]);
+    while(i<str.length()) {
+        if(str[i] == str[i+1]) {
+            str.erase(i,2);
+            if(i > 0) {
+                i--
+            }
+        }
+        else {
             i++;
         }
+        if(str.empty()) {
+            break;
+        }
     }
-    printArray(arr,n);
+    return str;
 }
 
 int main() {
-    int n;
-    cin>>n;
-    int arr1[100];
-    for(int i = 0; i<n; i++) {
-        cin>>arr1[i];
-    }
-    moveZeroes(arr1,n);
+    string str;
+    string substr;
+    cout<<"Enter your string : ";
+    cin>>str;
+    cout<<"String 1 : "<<str<<endl;
+
+    cout<<"Enter your sub-string : ";
+    cin>>substr;
+    cout<<"String 2 : "<<substr<<endl;
+    cout<<permutation(str,substr);
 }

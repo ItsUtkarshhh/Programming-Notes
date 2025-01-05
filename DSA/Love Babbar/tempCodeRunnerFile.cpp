@@ -1,30 +1,23 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
-void printArray(int arr[], int n) {
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
+string removeSubstr(string str, string substr) {
+    while(str.length() != 0 && str.find(substr) < str.length()) {
+        str.erase(str.find(substr), substr.length());
     }
-    cout<<endl;
-}
-
-void moveZeroes(int arr[], int n) {
-    int i = 0;
-    for(int j = 0; j<n; j++) {
-        if(arr[j]!=0) {
-            swap(arr[j],arr[i]);
-            i++;
-        }
-    }
-    printArray(arr,n);
-}
+    return str;
+} 
 
 int main() {
-    int n;
-    cin>>n;
-    int arr1[100];
-    for(int i = 0; i<n; i++) {
-        cin>>arr1[i];
-    }
-    moveZeroes(arr1,n);
+    string str;
+    string substr;
+    cout<<"Enter your string : ";
+    cin>>str;
+    cout<<"String 1 : "<<str<<endl;
+
+    cout<<"Enter your sub-string : ";
+    cin>>substr;
+    cout<<"String 2 : "<<substr<<endl;
+    cout<<removeSubstr(str,substr);
 }
