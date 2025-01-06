@@ -2,7 +2,6 @@
 // Question : Rotating an Array!
 // Approach : Understanding Rotation: Rotating an array n places means shifting each element forward by n positions. If the array is {1, 2, 3, 4} and we rotate it 2 places, the result is {3, 4, 1, 2}.
 //          : Modulus Operation : The modulus operator helps in wrapping indices around the array bounds. For example : If an element is at index i, its new position after rotating k places is calculated as (i + k) % n, where n is the size of the array.
-//          : 
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -769,7 +768,7 @@ int main() {
     cout<<checkInclusion(s1, s2);
 }
 
-// Question 9 : Removing all adjacent duplicates! Actual question number 1047 on LeetCode! Solve this on you own!
+// Question 9 : Removing all adjacent duplicates! Actual question number 1047 on LeetCode! Solve this on your own!
 // Solution :
 #include <iostream>
 #include <string>
@@ -847,25 +846,38 @@ int main() {
     }
 }
 
-// Lets mark the end of all understanding related to character arrays and strings!
-// Character array : It is just the arrays of characters! ek "character array" sirf vhi hoga jisme pehli baat toh characters ka array ho + usme NULL Termination na ho!
-// String : String is a type of character array! but aise hi nhi! string multiple way se bnaa sakte hai! pehla toh yhi ki character array bnao iss type se ki usme last me '\0' lgaa do! then it will be a string! another way is ki double quotes me likhdo poora word jisko string bnani hai! like char arr[] = "Utkarsh"; iss case me NULL character khud hi handle ho jayega! then another is use the string keyword but ye C++ me hota hai C me nhi! toh C me strings create krne ke liye hum character array ka sahara lete hai! using the NULL character!
-// So bss yhi main difference hai C and C++ me character arrays and strings ko lekar! ki C me string keyword hota nhi hai isliye usme character arrays me NULL Charcater include krke strings bnaate hai! and agar sirf character array chahiye toh NULL character add nhi krte! whereas in C++ jo C ke methods hai vo toh use kr hi sakte hai saath saath String keyword ka bhi use kr sakte hai!
+// Note 1 : If you write something like this, char* canChange = "Hello World"; and updates canChange to canChange = "Hello"; then it will have no issue! because This is valid because canChange is a pointer. It stores the address of the string literal "Hello World". You can reassign the pointer canChange to point to another string literal (Ex: "Hello"). 
+//        : String literals are stored in read-only memory in most compilers. Modifying the content of the string literal via the pointer (*canChange) is undefined behavior. The pointer canChange points to the memory location where the string literal "Hello World" is stored. This memory is read-only.
+//        : If you attempt to modify the string literal directly through the pointer, it will have some undefined behaviour!
+//        : Why is it undefined behaviour : The behavior depends on the compiler and system. Some compilers protect the memory where string literals are stored to prevent accidental modification. Other compilers might not, but modifying string literals is never guaranteed to work correctly.
+//        : Safe alternatives : If you need a modifiable string, you should declare it as an array, char canChange[] = "Hello World"; It Creates a copy in writable memory, canChange[0] = 'h'; This is valid
+//        : Why does it happen : Its an optimization choice! Storing string literals in read-only memory saves space since multiple instances of the same string literal can share the same memory.
 
-// Another thing is, like if we write something like this, char* canChange = "Hello World"; and then update the value to canChange = "Hello"; isme koi dikkat nhi hoti C/C++ me! but if you do this char canChange[] = "Hello World"; and then update it to, canChange[] = "Hello"; then in that case, it will show error in both C/C++ becoz This syntax is incorrect in C/C++. In C/C++, you cannot assign to an array directly after initialization using the assignment operator.
-// C me gaps ko bhi input lene ke liye scanf use nhi kr sakte strings ke case me, toh gaps ke saath value print hone ke liye we use fgets(str,n,file) and puts(str) operations, in fgets() the file is stdin.
-// Ek gets(str) function bhi hota hi but usko use nhi krte kyunki that is not very safe to use!
+// Note 2 : If you write something like this, char canChange[] = "Hello World"; canChange[] = "Hello"; It shows Error! This is invalid because canChange[] is an array. When you write char canChange[] = "Hello World";, the array is initialized with the string's contents, and its size is fixed (in this case, 12 including the null character \0).\
+//        : You cannot reassign the entire array using = after initialization.
+//        : char canChange[] = "Hello World"; canChange[0] = 'H'; Works, modifies individual elements. strcpy(canChange, "Hello"); Works, modifies the content using a function like strcpy.
+
+// Input/Output methods with Spaces in C Strings : Using scanf : char str[100]; scanf("%s", str); Input: "Hello World" and Output in str: "Hello" (scanf stops at the first space)
+//                                               : Using fgets : char str[100]; fgets(str, 100, stdin); Input: "Hello World" and Output in str: "Hello World" (including spaces, up to a newline or size limit)
+//                                                             : scanf cannot read strings with spaces; use fgets() for input with spaces. 
+//                                                             : Reads the entire line, including spaces, until a newline (\n) or the specified character limit (n). Appends a null character (\0) at the end.
+//                                                             : If you press Enter, the newline (\n) is stored in the string. To remove it : str[strcspn(str, "\n")] = '\0'; Removes '\n' safely
+//                                               : Using puts : puts outputs a string with a newline added at the end. char str[] = "Hello World"; puts(str); Outputs: Hello World\n... So as you can see puts is adding another extra \n at the end of the string!
+//Hence, to get a proper input/output of strings with spaces in C, one should use fgets for input and printf for output!
+
+// Note 3 : gets() is unsafe and should not be used because it does not check for buffer overflow, which can cause security vulnerabilities. For safer alternatives use fgets()!
+//        : It has been deprecated in C99 and removed in C11.
 
 // ---------------------------------------------------------- LECTURE 23 - 2D Arrays --------------------------------------------------------------------------------------------------------->
-// Suppose hume koi matrix bnana hai jisme hume 3 rows and 3 columns chahiye! so what we want is 9 memory spaces! so hum kya sochenge ki lets create 3 arrays one below the other and kaam hojayega!
-// But ye cheez ek limit tak sahi thi as uske baad jab number of rows and columns badhenge tab hum itni saari arrays thori baanane baithenge! like agar 1000 rows and columns chahiye mtlb its not feasible to create 1000 arrays, so to solve this problem we will create 2D arrays!
-// There syntax will be int arr[row][column];
-// But memory me 2D arrays kaise store hota hai? its not like ki matrix ke pattern me store hota hai, hota toh ye store linearly hi hai, bss elements ko access krne ke liye hum ek formula ya rule lgaa dete hai, taaki jab jis element ki baat kre tab vhi element mile!
-// Isko hum visuallize matrix ke form me kr sakte hai pr memory me store ye linearly hi hota hai!
+// To create a matrix with n rows and m columns, you would initially think of making n separate arrays. However, this approach becomes impractical for large matrices like 1000x1000. Instead, we use 2D arrays.
+// Syntax of 2D array : int arr[rows][columns];
+// Memory Storage of 2D Arrays : Although 2D arrays are visualized as grids, they are stored linearly in memory. Elements are placed in contiguous memory locations, row by row (in row-major order).
+// Mapping 2D Indices to Linear Memory : Memory index = (column_count * row_index) + column_index
+//                                     : Example : To access the element at arr[1][2] (2nd row, 3rd column) in a 3x3 matrix : Memory index = 3 * 1 + 2 = 5 (6th element in linear memory, as indexing starts from 0).
 
-// we use this formula : column*(i+j) to map the visuallization with the actual linear store of the 2D array in the memory!
-// Iss formula ke according hi ye dono aapas me map hote hai!
-// To ye mathematically mapping vaala kaam dono ka aapas me already backend pr yhi logic se map ho rhe hai...so now we need to study how to create it in code!
+// Note : Arrays in C/C++ are static, meaning their size must be known at compile time. For dynamic-sized matrices, use dynamic memory allocation with pointers.
+//      : Dynamic 2D arrays in C++ : int** arr = new int*[rows]; for (int i = 0; i < rows; i++) { arr[i] = new int[columns]; }
+//      : Always deallocate dynamic arrays to avoid memory leaks.
 
 // Creating 2D array! int arr[row][column];
 // Taking input! cin>>arr[i][j];
@@ -906,11 +918,9 @@ int main() {
 #include<iostream>
 using namespace std;
 
-bool isPresent(int arr[][4], int target, int m, int n) {
-    // In the above function declaration we need to specify the column size, because the compiler needs to know the size of each row in order to correctly access elements within the array.
-    // Unlike with a 1D array, where you can omit the size parameter in the function parameter list because the size information is retained from the array itself, in the case of a 2D array, the size of the columns is not implicitly known to the function when you pass the array.
-    // If you were to omit the column size, the compiler wouldn't know how many elements to skip when moving from one row to the next.
-    // In this function, arr[][3] specifies a 2D array where each row has 4 columns. You need to specify the number of columns (in this case, "4" because the compiler needs this information to calculate the memory offset correctly when accessing elements within the array.
+// When passing a 2D array to a function, the column size must be specified. This is because, unlike a 1D array where the size is implicit, the compiler needs to know the number of columns to correctly calculate memory offsets and access elements.
+// Without the column size, the compiler would not know how many elements to skip when moving from one row to the next in memory. For example, when defining a 2D array like arr[][3], the column size must be included in the function signature to ensure proper access to the array elements.
+bool isPresent(int arr[][4], int target /*, int m, int n */) {
     for(int i = 0; i<3; i++) {
         for(int j = 0; j<4; j++) {
             if(arr[i][j] == target) {
@@ -920,7 +930,7 @@ bool isPresent(int arr[][4], int target, int m, int n) {
     }
     return 0;
 
-    // Aise bhi likh sakte hai!
+    // Alternative...
     // for(m = 0; m<3; m++) {
     //     for(n = 0; n<4; n++) {
     //         if(arr[m][n] == target) {
@@ -973,8 +983,7 @@ int main() {
     }
 
     rowSum(arr, 3, 4);
-}
-// Above example was for row wise sum, column wise krna ho toh bss function me jaake i and j ko interchange krdo!
+} // Above example was for row wise sum, column wise krna ho toh bss function me jaake i and j ko interchange krdo!
 
 // Question : Find the largest rowsum and which row has it!
 #include<iostream>
@@ -1040,10 +1049,8 @@ int main() {
         }
     }
     wavePrint(arr, 3, 4);
-}
-// and hence the above code will print the 2D array in waveform!
+} // and hence the above code will print the 2D array in waveform!
 // Time Complexity : Isme hum upar se neeche and neeche se upar jaa rhe hai, mtlb hum harr element ko ek baar traverse kr rhe hai! means total number of element jo humne traverse kiya that is n*m means, the time complexity will be O(nm)!
-
 
 // Question : Spiral Print! Here hume saare elements circular order me print krne hai! like pehle poori row, then poora column, then again poori row in reverse order and so on... Question 54 at LeetCode!
 // Approach : Hum pehle starting row print krenge then ending column print krenge then ending row print krenge then starting column print krenge!... jab bhi koi row ya column print hojaye then hum starting ya ending row ya column ko update krdenge! isme duplicates handle hojayenge!
@@ -1053,8 +1060,8 @@ using namespace std;
 
 vector<int> spiralOrder(vector<vector<int>>& matrix) {
     vector<int> ans;
-    int row = matrix.size();
-    int col = matrix[0].size();
+    int row = matrix.size(); // It return row size!
+    int col = matrix[0].size(); // it returns col size!
 
     int count = 0;
     int total = row*col;
@@ -1099,27 +1106,23 @@ vector<int> spiralOrder(vector<vector<int>>& matrix) {
 
 int main() {
     vector<vector<int>> arr1 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    // To take input in vector, you can write like this... vector<vector<int>> arr(row, vector<int>(col));
     vector<int> spiral = spiralOrder(arr1);
     cout << "Spiral order of the matrix: ";
     for(int i = 0; i < spiral.size(); i++) {
         cout << spiral[i] << " ";
     }
-    cout << endl;   
-}
-// Time Complexity will be O(n*m) and it can't be decreased further!
+    cout << endl;
+} // Time Complexity will be O(n*m) and it can't be decreased further!
 
 // Binary search in 2D arrays!
-// It is more or less similar to linear binary search! the only difference here will be finding the mid element! yahaa hum start, end mid index sab vaise hi nikalenge jaise linear me nikalte the!
-// As in the end jo ye matrix hai 2D vaala ye memory me store toh linear form me hi hota hai, and ye sorted hi hota hai mostly... agar sorted nhi hai toh vo alag baat hai usko then sort krke fir binary search lagayenge! but here we will talk about applying binary search in sorted 2D array!
-// So now, pehle hum iss 2D matrix ko linear visuallize krke start, end and mid nikalenge!...
-// start = 0
-// end = row*col - 1
-// mid = start + (end-start)/2
-// now mid ka kya kya rules hota hai like... agar mid element == target element ke then return the mid, agar mid>target then we go on the left side of the array, and then agar mid<target then we go on the right side of the array!
-// But the thing is mid element kaise nikalenge, mid index toh nikal liya, ab mid element kaise nikale kyunki yahaa toh uske liye hume row and index uss mid index ka specify krna hoga, yahaa linear vaali baat nhi hai na ki sirf mid nikal ke vhi index ki jagah daal diya, here we need to map that mid element ka jo humne index nikala hai start + (end-start)/2 se, isko hum row and column se map krna hoga ki ye ye jo mid aaya isse matrix ka konsa element map ho rha hai!
-// And now if we try to map it, so it will be like, row = mid/(length of the row or number of columns).. make sense? kyunki mid jo bhi aaya toh usko agar kisi bhi ek row ke length (which will be equal to number of columns) se divide krdenge toh hume ye pta chal jayega ki vo mid element kis row se belong krta hai! and then for column we will find the remainder of the same division!
-// hence, mid element ka (row = mid/number of col) and mid element ka column will be equal to (col = mid%number of col)! 
-// Now lets code...
+// Binary search in a 2D array is similar to binary search in a 1D array, with the key difference being how we calculate the mid element. 2D array structure: Even though it's a 2D matrix, it is stored linearly in memory (row-major order). If the array is sorted, we can apply binary search.
+// Steps : Initialize start, end, and mid : start = 0, end = row * col - 1 (total number of elements - 1), mid = start + (end - start) / 2
+//       : Accessing the mid element : To map the linear mid index back to a 2D matrix element, Row : "row = mid / number of columns" and Column : "col = mid % number of columns"!
+//       : Binary search logic : If the mid element is equal to the target, return the mid.
+//                             : If the mid element is greater than the target, search in the left half.
+//                             : If the mid element is less than the target, search in the right half.
+// Implementation!
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -1186,12 +1189,12 @@ int main() {
 // Question : Count the number of primes! Leetcode question : 204
 // Isme hum upar vaala approach use nhi kr sakte kyunki uski TC bhot khrab ajayegi, as becoz isme har n ke liye n number of comparisions kr rhe honge! hence iski TC n^2 ajayegi! which will be very bad! so isliye we need to use some other approach!
 // And for that we will introduce another method which will be called "Sieve of Eratosthenes"!
-// So what this method says...
-// So what we know is that prime numbers sirf apne table me aa sakte hai and sirf 1 se divisible ho sakte hai! and kisi aur se nhi!
-// So what we will do is... suppose we have n = 40 and now we will write all the counting upto 40 for better understanding!
-// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 38 39 40...
-// Now, first we will do the comparison with all the number which are less than n and we will start our loop with 2 kyunki 1 se toh sab divisible honge hi!, and now we will mark all the numbers from 1-40 prime... pehle sabko prime maanlo! then, humari first iteration hogi 2 se, ab 2 toh prime number hai so humne usko prime mark krdiya! and then jo bhi numbers 2 ki table me aa rhe hai usko humne non-prime mark krdiya! then we moved to 3 now 3 is prime so jo bhi numbers 3 ki table me aa rhe hai unko non-prime mark krdiya! so humne same we moved to 5 as humne 4 ko cut krdiya, and 5 is a prime so 5 ki table me aane vaale saare numbers ko humne non-prie marks krdiya and same with 7 11 13 17 19 23 29 31 37...
-// and then lastly we counted all of them... and we got the answer!
+// Method says : Start by assuming that all numbers up to n are prime. Then, iteratively mark multiples of each prime number as non-prime.
+// Steps : Initialization : Assume all numbers from 2 to n are prime.
+//       : Start from 2 : Mark multiples of 2 (i.e., 4, 6, 8, etc.) as non-prime.
+//       : Move to next unmarked number (which is prime) : For example, 3 and mark its multiples (i.e., 6, 9, 12, etc.) as non-prime.
+//       : Repeat for each successive number (5, 7, 11, etc.), marking all multiples as non-prime. Final Result: After processing all numbers, the remaining unmarked numbers are primes.
+// Benefits : Efficiency : Instead of checking each number individually, we mark the multiples of primes as non-prime, which reduces the number of comparisons and results in a time complexity of O(n log log n), much better than a brute force approach.
 // lets code it!
 #include<iostream>
 #include<vector>
@@ -1201,10 +1204,10 @@ int countPrime(int n) {
     int count = 0;
     vector<bool> prime(n+1, true);
     prime[0] = prime[1] = false;
-    for(int i = 2; i<n; i++) {
+    for(int i = 2; i<=n; i++) {
         if(prime[i]) {
             count++;
-            for(int j = 2*i; j<n; j=j+i) {
+            for(int j = 2*i; j<=n; j=j+i) {
                 prime[j] = 0;
             }
         }
@@ -1217,45 +1220,9 @@ int main() {
     cin>>n;
     cout<<countPrime(n);
 }
-// Time Complexity : isme humne harr iteration pr n/i number of comparisons kiye hai, like pehle n/2 then n/3 then n/5 and so on...
+// Time Complexity : Isme humne harr iteration pr n/i number of comparisons kiye hai, like pehle n/2 then n/3 then n/5 and so on...
 // So on adding all of them by taking n common... n(1/2 + 1/3 + 1/5 + 1/7 + ....) it will give... n*(log(logn))...
 // So our time complexity will be "O(n*log(log(n)))"
-
-// GCD/HCF : Do numbers ka GCD/HCF vo hota hai jo unn dono ka koi aisa highest common factor jo dono ko divide krta ho!
-// Ye hum aise nikalte the... suppose the 2 numbers are 24 and 72, then iske common factors nikalenge pehle...
-// 24 = 2 x 2 x 2 x 3
-// 72 = 2 x 2 x 2 x 3 x 3
-// Hence here 2 x 2 x 2 x 3 is common, hence it is the GCD/HCF!
-// GCD(a,b) = GCD(a-b,b) or GCD(a%b,b)
-// Suppose we have to find the GCD of GCD(72,24) => GCD(48,24) => GCD(24,24) => GCD(0,24) hence here 24 is the GCD, means in layman terms, jab GCD me koi ek a ya b 0 hojaye then jo dusra vaala hoga usko hum GCD maan lenge!
-// Lets code it...
-#include<iostream>
-using namespace std;
-
-int GCD(int a, int b) {
-    if(a == 0) {
-        return b;
-    }
-    if(b == 0) {
-        return a;
-    }
-    while(a!= b) {
-        if(a>b) {
-            a = a-b;
-        }
-        if(b>a) {
-            b = b-a;
-        }
-    }
-    return a;
-}
-
-int main() {
-    int a,b;
-    cin>>a>>b;
-    cout<<GCD(a,b);
-}
-// Another mathematical relation we can keep in mind is : GCD(a,b) * LCM(a,b) = a*b
 
 // Modulo Arithematic!
 // 1) (a+b)%m = a%m + b%m
@@ -1263,37 +1230,77 @@ int main() {
 // 3) a%m * b%m = (a*b)%m
 
 // Fast Exponentiation!
-// Some lectures back we have calculated a power of a number thru the approach like... we need to find the value of a^b so we let int res = 1; then humne ek for loop ko b times iterate kraa ke res = res*a kiya tha! isme TC humari aa rhi thi O(b) kyunki loop ko b times iterate karaya!
-// Now we will try to reduce the TC here using Fast Exponentiation!
-// Approach : if we have a^b we can write it as (a^(b/2))^2 if b is even and ((a^(b/2))^2)*a if b is odd
+// Fast Exponentiation is a method to calculate powers of a number efficiently, significantly reducing the time complexity compared to the straightforward approach of multiplying the base repeatedly.
+// Normal Approach : To calculate a^b we multiply a by itself b times, a^b = a*a*a*a*a.... b times! and which creates the TC = O(b)
+// Fast Exponentiation : The idea is to reduce the number of multiplications by breaking the problem into smaller parts using the properties of exponents. This can achieve a time complexity of O(logb).
 
-// Question : Find the value of (x^n)%m isme hume x,n,m diya hua hai...here agar humne pehle vaali appproach follow kri toh TC kaafi badh jayega, so here we will use Fast Exponentiation! as becoz isme humari TC O(logn) ayegi!
-// lets code this approach!
+// How does Fast Exponentiation work?
+// The core idea behind fast exponentiation is to break down the power problem into smaller sub-problems and take advantage of properties of exponents.
+// Key Property of Exponents : a^2n = (a^n)2, If the exponent is even, we square the result of the smaller exponent
+//                           : a^2n+! = (a^2n)*a, If the exponent is odd, we square the result of the smaller exponent and multiply it by the base
+
+// Algorithm : Start with an initial result res = 1.
+//           : While the exponent b>0 : If b is even, square the base a and halve b
+//                                    : If b is odd, multiple the result by a, then square the base a and halve b
+//           : return the result!
+
+// The most basic Fast Exponentiation!
 #include<iostream>
 using namespace std;
 
-int moduloExponentiation(int x, int n, int m) {
+int moduloExponentiation(int x, int n) {
     int res = 1;
     while(n>0) {
         if(n&1) {
-            res = ((1LL * (res) * (x)%m)%m);
+            res = res * x;
         }
-        x = (1LL * (x)%m * (x)%m)%m;
+        x = x*x;
         n = n>>1;
     }
     return res;
 }
 
 int main() {
-    int x1, m1, n1;
-    cin>>x1>>m1>>n1;
-    cout<<moduloExponentiation(x1,n1,m1);
-} // Upar me modulo use krne ka yhi kaaran hai ki, jo output ya jo value hai vo ek particular range me rahe! and vo range kya hai? if we let modulo be "m", then range will be, from 1 -> m-1.
-// Modulo ki kuch properties me se ek ye bhi property hoti hai ki, agar hum chahte hai ki kisi product ka modulo krna, jaise iss case me where we were trying to do, (x^n)%m, iss case me agar hum modulo ko distribute krna chahte hai toh vo aise hoga ki pehle toh jitni baar n hai utni baar modulo hoga uss x ka m se! but then inn sabko multiple krke jo ans ayega usko bhi firse modulo krna padega m se!
-// Means, (x^5)%m = ( (x%m) * (x%m) * (x%m) * (x%m) * (x%m) ) % m -> This is the right way of distributing modulo in multiplication!
-// To check this, you can try with the example of (5^5)%3.
-// Toh bss humne yhi logic apply kiya hai upar vaale solution me! ki multiplication me modulo ko distribute krne ke liye!
-// Modulo ka basically kaam hota hai output ko ek range me rakhne ke liye taaki overflow na hojaye final answer! bss vhi cheez humne upar vaale code me ek question ke form me kri hai!
+    int x1,n1;
+    cin>>x1>>n1;
+    cout<<moduloExponentiation(x1,n1);
+}
+// This is a form of fast exponentiation, but it's not the most optimal version. Let's break down the key points and how you could optimize it further.
+// The function moduloExponentiation(int x, int n) implements exponentiation by squaring, which is a technique to calculate x^n more efficiently than performing n multiplications!
+// In the loop : If n is odd (n & 1), we multiply the current result res by x.
+//             : Then we square x and halve n by right shifting it (n = n >> 1).
+// What's Missing? Your code calculates x^n, but there's no modulo operation in your current code. In many situations, especially for large numbers, you would need to compute the result modulo a number m to prevent overflow and keep the result manageable.
+// Key Optimization : In modular arithmetic, especially with large numbers, it’s common to compute x^n mod m (instead just x^n)
+//                  : The reason for using modulo at each step is to keep the result within the bounds of the modulo which is 1->m-1 and avoid overflow. Without modulo, your results could become too large.
+//                  : Avoiding overflow : To handle large values properly, you'd usually use the long long data type to avoid overflow, especially when dealing with numbers as large as 10^n or more!
+//                  : Efficiency : The current code does exponentiation by squaring, which is already logarithmic in time complexity (that is : O(logn)). which is a great improvement over the naive O(n) approach.
+
+// Modulo operation (% m) : We now take the result modulo m at every step to prevent overflow and ensure that the values are kept within manageable limits.
+//                        : 1LL (long long) : This ensures that the intermediate multiplication does not overflow 32-bit integers.
+// The logic in the code is correct for fast exponentiation (exponentiation by squaring), but adding the modulo operation is important for handling large numbers.
+
+// Optimized solution! and along with a question!
+// Question : Find the value of (x^n)%m isme hume x,n,m diya hua hai...here agar humne pehle vaali appproach follow kri toh TC kaafi badh jayega, so here we will use Fast Exponentiation! as becoz isme humari TC O(logn) ayegi!
+#include<iostream>
+using namespace std;
+
+int moduloExponentiation(int x, int n, int m) {
+    int res = 1;
+    while (n > 0) {
+        if (n & 1) {
+            res = (1LL * res * x) % m;  // Multiply and take modulo
+        }
+        x = (1LL * x * x) % m;  // Square the base and take modulo
+        n = n >> 1;  // Divide exponent by 2
+    }
+    return res;
+}
+
+int main() {
+    int x1, n1, m1;
+    cin >> x1 >> n1 >> m1;
+    cout << moduloExponentiation(x1, n1, m1);
+}
 
 // ---------------------------------------------------------- LECTURE 25 - Pointers in C++ Part-1 --------------------------------------------------------------------------------------------------------->
 // Basic logic of pointers you already know very well, if confused maybe see the vdos again or refer the C notes!
@@ -1321,7 +1328,6 @@ int main() {
     // int *ptr2 = NULL;
     cout<<*ptr2<<endl; // It will give output as "Segmentation Fault" kyunki yahaa pr hum ek NULL pointer ki value nikalne ka try kr rhe hai! or maybe not always sometimes it shows a very undefined behaviour or the program may crash! also maybe it can show no visible effect or any other unexpected behaviour! but it is not neccessary that it will always lead to segmentation fault!
 } // This is it for this lecture, most of the topics and logic are already covered in C lectures notes or you may again visit the lecture here!
-
 
 // ---------------------------------------------------------- LECTURE 26 - Pointers in C++ Part-2 --------------------------------------------------------------------------------------------------------->
 // Suppose we have created an array int arr[10]; and now in memory there will be 10 int size memory blocks will form and the array name here it is arr will be pointing towards the first memory block of the array!
@@ -1402,7 +1408,7 @@ int main() {
     // arr = arr + 1; // This will show error as it cannot be done!
     cout<<arr<<endl;
 
-    // Meanwhile this wont show error, this is all becoz of the C++ implementation of array name and a regular pointer! pointers are made to move, whereas the array name is made a constant pointer at the first element! that is why it cannot be changed!
+    // Meanwhile this wont show error, this is all becoz of the C++ implementation of array name and a regular pointer is different! pointers are made to move, whereas the array name is made a constant pointer at the first element! that is why it cannot be changed!
     int a = 6;
     int* ptr = &a;
     ptr = ptr+1;
@@ -1418,8 +1424,14 @@ int main() {
     char ch[6] = "abcde"; // Here hume iska size 6 krna hoga, kyunki character arrays me ek last me null character hota hai and uske liye bhi space chahiye hoti hai! so that is why we have made it 6!
     cout<<arr<<endl; // Isme toh as we know ki address of the first location of the array print hojayega!
     cout<<ch<<endl; // Isme hum expect krenge ki first location of the char array ka address print ho pr vo nhi hoga, balki vo char array as it is print hojayega!
-    // This is becoz of the cout's implementation in C++
+    
+    char ch1[6] = {'a','b','c','d','e','\0'};
+    cout<<ch1<<endl; // Here, we have made the ch1 a string using a \0, so now printing it will print all the characters in th string until it encounters \0. 
 
+    char ch2[5] = {'a','b','c','d','e'};
+    cout<<ch2<<endl; // Here, it is a normal character array! but even then just using the variable name of the character array it is printing all the characters, but apart from that it exceeds and continues printing some garbage values after "abcde" until it encounters a \0!
+    // This all is becoz of the cout's implementation in C++ for character arrays and strings!
+ 
     // Even if agar hum ye tareeka soche address of the first location of the char array print krne ka tab bhi kuch nhi hoga! kyunki C++ me cout ki implementation hi different hai!
     char *c = &ch[0];
     cout<<c<<endl; // Iss case me bhi ye poora string hi print krdega, kyunki c++ me cout ka implementation hi different way se hai! yahaa pr jab bhi cout ko null character dikh jayega tab hi ye print krna band krdega!
@@ -1427,7 +1439,7 @@ int main() {
     char temp = 'a';
     char *p = &temp;
     cout<<p<<endl; // Iss case me ye iss time abcde print kr rha hai jisme se "bcde" are some random garbage values! aur aisa isliye hua kyunki isko a ke baad null character seedha bcde ke baad mila!
-    // Iss case me ye "p" ye wierd behaviour isliye dikha rha hai kyunki ye ek char type ka pointer hai! agar int type ka hota toh simply address print hojata! but yahaa kyunki ye ek char type ka pointer hai isliye yahaa ye NULL character dhundega and jab tak nhi milta tab tak print krta rahega!
+    // Iss case me ye "p" ye weird behaviour isliye dikha rha hai kyunki ye ek char type ka pointer hai! agar int type ka hota toh simply address print hojata! but yahaa kyunki ye ek char type ka pointer hai isliye yahaa ye NULL character dhundega and jab tak nhi milta tab tak print krta rahega!
 }
 // Now lets see the difference between, char ch[6] = "abcde"; and char *c = "abcde";
 // In the first case kya hoga ki pehle ek temporary memory banegi usme abcde jaake store hoga with null character in the end! and then ek ch naam se memory create hogi and vahaa pr ye temp vaali memory copy hojayegi!
@@ -1470,8 +1482,7 @@ int main() {
     cout<<"Before : "<<*p<<endl;
     update(p);
     cout<<"After : "<<*p<<endl;
-}
-// Is case me value update hogyi! aisa isliye kyunki jab pehle humne *p print kiya toh jo uss time value thi *p vo print hogyi! but iss baar jab humne update function call maara tab seedha jaake p pe jo address stored hai uspe jo value hai vhi change hogyi! and in this case vo value hi from the root update hogyi and that is why After me updated value print hui!
+} // Is case me value update hogyi! aisa isliye kyunki jab pehle humne *p print kiya toh jo uss time value thi *p vo print hogyi! but iss baar jab humne update function call maara tab seedha jaake p pe jo address stored hai uspe jo value hai vhi change hogyi! and in this case vo value hi from the root update hogyi and that is why After me updated value print hui!
 
 // Pointers with arrays and functions!
 #include<iostream>
@@ -1621,6 +1632,7 @@ int main() {
 
     char arr4[] = "abcde"; // C/C++ me string ke case me compiler khud hi char array ka size samajh leta hai null character ki help se! aur yahaa humne double quotes use kiya hai jo strings ki notation hoti hai toh automatically ek null character last me lag jaata hai jahaa se size calculate hojaata hai!
     char* p3 = &arr4[0];
+    cout<<(void*)arr4<<endl; // If you want to print the address of the first element or any element of the character array or string in C/C++ then just use this (void*)!
     cout<<p3<<endl; // Here we know char arrays ke case me cout behaves differently so yahaa poori string print hojayegi!
     
     cout<<endl;
@@ -1630,6 +1642,10 @@ int main() {
     p4++;
     cout<<p4<<endl; // Isme bcde print hojayega kyunki first index se humne increment krdiya hai!
 }
+
+// Hence, Note : By default, cout prints character arrays as strings. If you directly pass a character array or string literal to cout, it will print the contents of the array rather than its address.
+//             : To explicitly print the address, we need to cast the pointer to void*. This tells cout that we want to print the memory location (pointer) instead of the string contents.
+//             : Ofcourse there are ways like, using &ch[0] and all... but yes (void*) is overall solution to it!
 
 // ---------------------------------------------------------- LECTURE 28 - Reference Variable and Static vs Dynamic Memory --------------------------------------------------------------------------------------------------------->
 // Similar to that we have different names for a same person!
@@ -1682,6 +1698,7 @@ int& func1(int n) {
     return ref;
 } // Doing this does not make sense! kyunki dekha jaaye toh humne ek function ke scope me hi ek variable create kiya num and then uska hi ek reference variable create kiya so uss ref variable ka bhi scope function ke scope tak hi hai! so isko return kraane ka koi sense nhi hai kyunki ye dono hi variables are local variables so inn dono ka existence iss scope tak hi hai uske baad they will be dead, so what are we returning? thats why this is not right to do!
 // Also kyunki ek baar vo function end hua toh vo saare local variables and jo function ka stack frame tha execution ka vo vo sab destroy ho jayega, toh means function ke baad kisi bhi local cheez ka koi existence nhi goa, toh what are we returning? that is why it does not make sense! and here this reference variable has a name called "dangling reference variable"!
+// If you really want to return a reference variable, then firstly the the variable which you are refering to, should be "static" as because static variable dont vanish even when the function exits!
 
 int* func2(int n) {
     int* ptr = &n;
@@ -1725,6 +1742,8 @@ int main() {
         cin>>arr[i];
     }
     cout<<"Sum of elements of the array : "<<getSum(arr, n); // Another variation if we want, we can also try (arr+2, n-2) isse hum jo bhi array input krenge jitne bhi size ka uske 2nd index se sum hona shuru hoga naa ki first index se and similarly we can do more things!
+    
+    delete[] arr; // Dont forget to also free the used memory after program execution!
 } // So this is how we have allocated dynamic memory!
 // lets calculate memory kitni jaa rhi hai static and dynamic me! agar hum normally aise likhte int arr[50]; isme 50*4 = 200 bytes of memory use ho rhi thi... agar hum iss hi ko dynamically kre toh int *arr = new int[50]; isme 50*4 + 4 (My compiler is of 32 bits isliye size of pointer is 4 bytes otherwise it can also be 8 bytes!) = 204 bytes are being used! here it is more than the static memory!
 
@@ -1814,7 +1833,7 @@ int main() {
         }
         cout<<endl;
     }
-} // that is how 2D array is created using dynamic memory allocation and printing it! for same number of rows and columns
+} // That is how 2D array is created using dynamic memory allocation and printing it! for same number of rows and columns
 // lets do it once also for different row and column size!
 #include<iostream>
 using namespace std;
@@ -1981,7 +2000,7 @@ int main() {
 }
 
 // Global Variables!!
-// They are used when we want to share some variables between functions! Ye sharing variable vaal kaam hum ref variable se bhi kr sakte hai, kyunki agar int main me koi variable hai usko hum chahte hai ki usko multiple functions access kr sake toh vo toh hum ref variable se bhi kr sakte hai sab func me int main vaale variable ka ref pass krke! but also ek tareeka hai variable share krne ka and that is global variable bnaa ke! usme bhi memory block ek hi hota hai and multiple functions access kr paate hai!
+// They are used when we want to share some variables between functions! Ye sharing variable vaala kaam hum ref variable se bhi kr sakte hai, kyunki agar int main me koi variable hai usko hum chahte hai ki usko multiple functions access kr sake toh vo toh hum ref variable se bhi kr sakte hai sab func me int main vaale variable ka ref pass krke! but also ek tareeka hai variable share krne ka and that is global variable bnaa ke! usme bhi memory block ek hi hota hai and multiple functions access kr paate hai!
 #include<iostream>
 using namespace std;
 
@@ -2058,8 +2077,8 @@ int main() {
 // Jaise define me pta hai hume ki agar koi change krega bhi toh vo sirf define me macro ki value me hi change krega toh usko toh baad me undo kiya jaa sakta hai! but agar kisi ne global variable me koi change krdiya within the program me kahin bhi, toh uss change ko dhundna mushkil hojayega! jabki we know define ke thru macro bnaa ke value use krne pr vo program me kahin bhi aur update nhi ho sakta except the define itself, but global variables intiallize krne ke baad bhi program me kahin bhi change ya update kiye jaa sakte hai!
 
 // Inline Functions!
-// The thing is jab hum koi program likhte hai, toh uss poore program ki ek stack banti hai as we have talked earlier! and sabse pehle uss stack me int main function aata hai and then int main ke jo variable hote hai vo apni apni memory space lelete hai! then int main me koi function call ho rhi hoti hai toh pehle vo function hoti hai then vahaa se return me jo bhi response aata hai (and isme processing lgti hai!) another thing is  ek function call me jo variable hote hai function defintion me unki copy ban jaati hai and iske kaaran aur memory use ho rhi hai!
-// ab optimize krna hai hume code ko toh function call krna hataa bhi nhi sakte kyunki usse readility badhti hai code ki, toh kya kre? ki sab cheeze settle hojaye!
+// The thing is jab hum koi program likhte hai, toh uss poore program ki ek stack banti hai as we have talked earlier! and sabse pehle uss stack me int main function aata hai and then int main ke jo variable hote hai vo apni apni memory space lelete hai! then int main me koi function call ho rhi hoti hai toh pehle vo function hoti hai then vahaa se return me jo bhi response aata hai (and isme processing lgti hai!) another thing is ek function call me jo variable hote hai function defintion me unki copy ban jaati hai and iske kaaran aur memory use ho rhi hai!
+// Ab optimize krna hai hume code ko toh function call krna hataa bhi nhi sakte kyunki usse readility badhti hai code ki, toh kya kre? ki sab cheeze settle hojaye!
 // lets see...
 #include<iostream>
 using namespace std;
@@ -2075,8 +2094,7 @@ int main() {
     // }
     // iss cheez ko hum ek line me bhi likh sakte hai jisse readabilitybadhegi code ki... using ternary operator!
     ans = (a>b) ? a : b; // ye ek line me aagya and isse readibilty badh gyi!
-}
-// but suppose now ab ye same cheez baar baar likhi ho agar! like...
+} // but suppose now ab ye same cheez baar baar likhi ho agar! like...
 
 #include<iostream>
 using namespace std;
@@ -2165,7 +2183,30 @@ int main() {
     // Ab now what we want is maanlo kabhi humne agar start parameter dene ka mann nhi kiya, toh hum chahte hai by default jo printArr function hai vo array ko starting se print krde by default! so for that hum function ke defintion me int start = 0; likh denge jisse ye start ek default argument bangya! means agar koi parameter pass nhi krenge start ke liye toh automatically the start ko 0 value assign hojayegi!
     printArr(arr, size); // Iss case me array start to end poora print hojayega!
     printArr(arr, size, 3); // Iss case me array 3 index se print hojayega end tak!
-}
-// but remember default arguments sirf right to left hi bante hai, mtlb pehle sabse right vaala argument banega uske baad hi koi left vaala argument default ban sakta hai, mtlb ki agar aisa hota, printArr(int arr[], int size, int start, int end), toh pehle end ko default banaate then start ko and so on...agar size ko default banana hai toh pehle start and end ko default hona zaruri hai!
+} // But remember default arguments sirf right to left hi bante hai, mtlb pehle sabse right vaala argument banega uske baad hi koi left vaala argument default ban sakta hai, mtlb ki agar aisa hota, printArr(int arr[], int size, int start, int end), toh pehle end ko default banaate then start ko and so on...agar size ko default banana hai toh pehle start and end ko default hona zaruri hai!
 
 // ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->
+// Question 1 : Rotating an Array!
+// Question 2 : Check if an array is sorted and rotated or not!
+// Question 3 : Addition of 2 Arrays
+
+// Question 4 : Find the length of the character array!
+// Question 5 : Reverse a string
+// Question 6 : Check for a palindrome
+// Question 7 : Find the maximum occuring characters in a string!
+// Question 8 : You have a line of text and you have to replace all the spaces with the @40
+// Question 9 : Remove all the occurences of a sub string in a parent string!
+// Question 10 : Permutation in string!
+// Question 11 : Removing all adjacent duplicates! Actual question number 1047 on LeetCode!
+// Question 12 : String Compression! Ques number 443 on Leetcode
+
+// Question 13 : Linear Search in 2D Array!
+// Question 14 : Row sum! printing sum of all the rows in the 2D array!
+// Question 15 : Find the largest rowsum and which row has it!
+// Question 16 : Wave Print Problem
+// Question 17 : Spiral Print Problem!
+// Question 18 : Binary Search in 2D arrays!
+
+// Question 19 : Check prime!
+// Question 20 : Count primes in a range! (Sieve of Eratosthenes)
+// Question 21 : Fast Exponentitation!
