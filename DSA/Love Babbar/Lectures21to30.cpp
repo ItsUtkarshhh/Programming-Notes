@@ -1284,7 +1284,7 @@ int main() {
 #include<iostream>
 using namespace std;
 
-int moduloExponentiation(int x, int n, int m) {
+int moduloExponentiation2(int x, int n, int m) {
     int res = 1;
     while (n > 0) {
         if (n & 1) {
@@ -1299,7 +1299,7 @@ int moduloExponentiation(int x, int n, int m) {
 int main() {
     int x1, n1, m1;
     cin >> x1 >> n1 >> m1;
-    cout << moduloExponentiation(x1, n1, m1);
+    cout << moduloExponentiation2(x1, n1, m1);
 }
 
 // ---------------------------------------------------------- LECTURE 25 - Pointers in C++ Part-1 --------------------------------------------------------------------------------------------------------->

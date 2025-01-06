@@ -769,7 +769,7 @@ int main() {
 //                                               : Compare 9 with 3, 7.
 //                                               : Smallest = 3. Save its index and swap 9 and 3.
 //                                               : Result: 0 1 2 3 9 | 7.
-//                                      : Step 2 : Array: 0 1 2 3 9 | 7
+//                                      : Step 5 : Array: 0 1 2 3 9 | 7
 //                                               : Compare 9 with 7.
 //                                               : Smallest = 7. Save its index and swap 9 and 7.
 //                                               : Result: 0 1 2 3 7 9 |.
@@ -814,6 +814,14 @@ int main() {
 // Worst Case Time Complexity : Worst Case me jab array ekdum hi ulta ho! uss case me bhi hum saare comparisons krenge hi, toh uss time bhi time complexity will be O(n^2)!
 // So in selection sort the Best case TC and Worst case TC are same!
 // Use Case of Selection Sort! : We can use this algorithm when the array/vector/list size is small!
+
+// Case Study for Selection Sort: Let's take two examples: 0 7 9 3 2 1 and 6 5 4 3 2 1.
+// Example 1: 0 7 9 3 2 1, If you dry run Selection Sort, the outer loop iterates 5 times, and after that, the array becomes fully sorted.
+// Example 2: 6 5 4 3 2 1, If you dry run Selection Sort here, the outer loop still iterates 5 times. However, the array becomes sorted by the 4th iteration. Despite this, Selection Sort continues to perform its 5th iteration unnecessarily.
+// Limitation of Selection Sort : Selection Sort does not check whether the array is already sorted in-between its iterations.
+//                              : Even if the array gets sorted earlier, the algorithm will complete all its iterations as defined by the outer loop.
+// This is why Selection Sort always has a time complexity of O(n^2), irrespective of whether the input is sorted, reverse sorted, or random. Its best-case and worst-case time complexities are the same because it does not adapt to the state of the array during execution.
+// You can add checks after every iteration inside the algorithm, which can improve its Time Complexity!
 
 // Stable Algorithms : Imagine you have a list of things, and some of those things have the same value or "key". A stable algorithm will sort the list in a way that if two things have the same value, the one that appeared first in the original list will still be first in the sorted list.
 // UnStable Algorithms : On the other hand, an unstable algorithm doesn't guarantee that order. If two things have the same value, their order might get swapped in the sorted list.
