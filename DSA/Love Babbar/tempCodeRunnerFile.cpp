@@ -1,55 +1,37 @@
 #include<iostream>
+#include<vector>
+#include<string>
 using namespace std;
 
-int partition(int* arr, int s, int e) {
-    int pivot = arr[s];
-    int count = 0;
-    for(int i = s+1; i<=e; i++) {
-        if(arr[i] <= pivot) {
-            count++;
+void solve(string str, int index, string output, vector<string> &ans) {
+    if(index >= str.length()) {
+        if(output.length() > 0) {
+            ans.push_back(output);
         }
-    }
-
-    int pivotIndex = s + count;
-    swap(arr[pivotIndex],arr[s]);
-
-    int i = s;
-    int j = e;
-
-    while(i<pivotIndex && j>pivotIndex) {
-        while(arr[i] <= pivot) {
-            i++;
-        }
-        while(arr[j] > pivot) {
-            j--;
-        }
-        if(i < pivotIndex && j > pivotIndex) {
-            swap(arr[i++],arr[j--]);
-        }
-    }
-    return pivotIndex;
-}
-
-void quickSort(int* arr, int s, int e) {
-    if(s>=e) {
         return;
     }
-    int p = partition(arr, s, e);
-    quickSort(arr,s,p-1);
-    quickSort(arr,p+1,e);
+
+    solve(str,index+1,output,ans);
+
+    output.push_back(str[index]);
+    solve(str,index+1,output,ans);
+}
+
+vector<string> subsequences(string str) {
+    vector<string> ans;
+    string output;
+    int index = 0;
+    solve(str, index, output, ans);
+    return ans;
 }
 
 int main() {
-    int n;
-    cin>>n;
-    int* arr1 = new int[n];
-    for(int i = 0; i<n; i++) {
-        cin>>arr1[i];
-    }
-    int s = 0;
-    int e = n-1;
-    quickSort(arr1,s,e);
-    for(int i = 0; i<n; i++) {
-        cout<<arr1[i]<<" ";
+    string str;
+    cout<<"Enter your string : ";
+    cin>>str;
+
+    vector<string> result = subsequences(str);
+    for(const auto &subsequence : result) {
+        cout<<subsequence<<" ";
     }
 }

@@ -576,14 +576,12 @@ int main() {
     cout << endl;
     return 0;
 }
-// So overall Quick Sort Algorithm does two things : Partition and Recursion... partition provides the pivot index jiske help se recursion call hoti hai and uss recursion call me firse partition function call hota and this thing continues jab tak saare elements sort na hojaye! or should say jab tak base case reach na hojaye! and then we can print the output from the int main!
 // Quick sort is an in-place sorting technique, meaning it doesn't require additional memory proportional to the size of the input. It achieves this by sorting elements within the original array itself, using swapping operations to reorder elements as needed. This characteristic makes it memory-efficient, particularly for large datasets, compared to algorithms like merge sort which may require additional memory for temporary arrays.
 // However, regarding stability, quick sort is not inherently stable. A sorting algorithm is considered stable if it preserves the relative order of equal elements in the sorted output as they appeared in the original input. In quick sort, the partitioning step does not ensure stability. Equal elements might not necessarily maintain their original order after the sorting process. This instability arises because quick sort relies on comparison-based partitioning and swapping operations, which may interchange elements without considering their original order.
-// Stabilty ke baare me we have studied earlier also so refer that or use chatGPT to better understand it...in short is that if like there are 2 elements in the array 3 and 3, then after the sorting operations the first 3 should be before the second 3 and if this happens then the algo is considered stable otherwise not stable! overall identical elements ka original order preserve nhi rehta hai sorting ke baad!
-// That said, variations of quick sort, such as three-way quick sort or dual-pivot quick sort, can be modified to maintain stability. These variations introduce additional checks and adjustments during the partitioning process to preserve the order of equal elements. However, the basic form of quick sort itself is not stable.
+// Stabilty ke baare me we have studied earlier also so refer that or use chatGPT to better understand it! // That said, variations of quick sort, such as three-way quick sort or dual-pivot quick sort, can be modified to maintain stability. These variations introduce additional checks and adjustments during the partitioning process to preserve the order of equal elements. However, the basic form of quick sort itself is not stable.
 
-// For arrays Quick Sort is prefered more than Merge Sort!
-// For linkedlists Merge Sort is prefered over Quick Sort!
+// For Arrays Quick Sort is prefered more than Merge Sort!
+// For Linkedlists Merge Sort is prefered over Quick Sort!
 
 // Space Complexity : O(n) in Worst Case & O(logn) in Best Case!
 // Time Complexity : O(nlogn) in average and Best Case & O(n^2) in Worst Case!
@@ -598,12 +596,17 @@ int main() {
 // Radixsort : Sorting large sets of integers or strings (especially when the range of numbers or the length of strings is small and known in advance).
 
 // ---------------------------------------------------------- LECTURE 37 - Recursion Day-7 : Subsets and Subsequence --------------------------------------------------------------------------------------------------------->
-// Question 1 : Given an array of unique elements, return all possible subsets (the power set)... leetcode question 78 : Subsets
-// Approach : Now suppose there is an array {1,2,3} now iska powerset hoga... {{},{1},{2},{3},{1,2},{2,3},{1,3},{1,2,3}}
-// So to solve this we will consider our original array, an output array and a pointer which will be used to iterate on the original array!
-// Now ab isko solve kaise krenge, so we will take a pointer which will be pointing at the index = 0 of the array and now we have to decide to whehther include it to the output array or not! agar include krna hoga toh we will push it in the output array! otherwise we will move to the next iteration!
-// To imagine it better re watch the lecture from Youtube!
-// Now lets code...
+// Question : Leetcode question 78
+// Problem Statement : You are given an array of distinct integers. You need to return all the possible subsets (the power set). For example, for the array {1, 2, 3}, the output should be : [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]
+// Approach : To solve this problem, one effective way is to use Backtracking or Recursive Exploration. Here's how we can approach it :
+// Steps : Start with an empty subset : The power set always includes the empty subset []. So, we start by considering the empty set as the first subset.
+//       : Iterate over each element : For each element in the array, we have a choice : Include the current element in the subset. OR Exclude the current element from the subset.
+//                                   : In each step, we recursively explore both options: include the element and exclude the element, and then go to the next element.
+//       : Recursive Exploration : We use a recursive function that keeps track of the current subset and the position (or index) in the array. At each step, we decide whether to include or exclude the element at that index.
+//                               : For each recursive call, the subset either includes the element or it does not.
+//       : Backtracking : After exploring the possibility of including an element, we backtrack by removing the element (if it was added) and proceed to explore the next possibility (exclude it and move to the next element).
+
+// Implementation!
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -632,11 +635,8 @@ vector<vector<int>> subsets(vector<int> &nums) {
 }
 
 int main() {
-    // Input vector
     vector<int> nums = {1, 2, 3};
-
-    // Generating subsets
-    vector<vector<int>> result = subsets(nums);
+    vector<vector<int>> result = subsets(nums); // Generating subsets
 
     // Printing subsets
     cout << "Subsets:\n";
@@ -645,35 +645,40 @@ int main() {
         for (int i = 0; i < subset.size(); ++i) {
             cout << subset[i];
             if (i < subset.size() - 1)
-                cout << ", ";
+                cout << ",";
         }
-        cout << "]\n";
+        cout << "] ";
     }
     return 0;
-}
-// Overall we have created subsets of the given array and we have used above approach as mention before the code... if any more trouble in imagining the approach then just refer to the lecture on youtube!
+} // Overall we have created subsets of the given array and we have used above approach as mention before the code... if any more trouble in imagining the approach then just refer to the lecture on youtube!
 
-// Question 2 : Subsequences of a string! maanlo you have a string abc, then you have to find the number of subsequences it can have, like for this case the subsequences are... "a" "b" "c" "ab" "bc" "ac" " "... so it can have 7 subsequences
-// To solve this problem we will follow the same approach as of the subsets one... they both are same questions bss ek arrays ke upar hai and ek string ke upar!
-// So vhi krna hai include and exclude and string given hogi and ek output string me hum include ya exclude krte rahenge and then final output string print krdenge!
+// Question 2 : Subsequences of a string!
+// Problem Statement : Given a string (Example : "abc"), find all possible subsequences. A subsequence is any sequence derived from the original string by deleting some or no characters without changing the order.
+// Approach : Use recursion with two choices at each step for every character : Include the current character in the output string. AND Exclude the current character from the output string.
+//          : Maintain an index pointer to track the current position in the string.
+//          : Use an output string to build the subsequences.
+//          : Algorithm : Base Case : If the index reaches the end of the string, print or store the current output string.
+//                      : Recursive Steps : Call the function after including the current character.
+//                                        : Call the function after excluding the current character.
+//          : Output : For a string of length n, the total number of subsequences is 2^n (including the empty subsequence, its upto us whether we want to include that empty string or not in our answer!).
 #include <iostream>
 #include <vector>
 using namespace std;
 
 void solve(vector<string>& ans, string str, string output, int i) {
-    // base case
     if (i >= str.length()) {
-        if (output.length() > 0)
+        if (output.length() > 0) { // So that, empty string does not become a sub-sequence!
             ans.push_back(output);
+        }
         return;
     }
 
-    // exclude
-    solve(ans, str, output, i + 1);
-    // include
+    solve(ans, str, output, i + 1); // Excluding
+
     output.push_back(str[i]);
-    solve(ans, str, output, i + 1);
+    solve(ans, str, output, i + 1); // Including
 }
+// Note : Arrays in function call passes as pass by reference, but vectors by default passes as pass by value, until we don't use "&" sign in the function definition! That's why here also we are required to use "&" sign along with "ans" vector but not with string/arrays like "str" and "output"!
 
 vector<string> subsequences(string str) {
     vector<string> ans;
@@ -691,10 +696,10 @@ int main() {
     }
     return 0;
 }
-// const : Indicates that each subseq element is constant and cannot be modified within the loop.
-// auto : Allows the compiler to automatically deduce the type of each element. In this case, it will deduce the type of subseq to match the type of elements stored in the result vector.
-// & : Indicates that subseq is a reference to each element in result, meaning it doesn't make a copy of each element, improving efficiency.
-// : result : Specifies the range over which the loop will iterate. In this case, it's the vector result.
+// Note : const : Indicates that each subseq element is constant and cannot be modified within the loop.
+//      : auto : Allows the compiler to automatically deduce the type of each element. In this case, it will deduce the type of subseq to match the type of elements stored in the result vector.
+//      : & : Indicates that subseq is a reference to each element in result, meaning it doesn't make a copy of each element, improving efficiency.
+//      : ": result" : Specifies the range over which the loop will iterate. In this case, it's the vector result.
 
 
 // ---------------------------------------------------------- LECTURE 38 - Recursion Day-8 : Phone Keypad Problem --------------------------------------------------------------------------------------------------------->
