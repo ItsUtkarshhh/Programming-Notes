@@ -1,8 +1,8 @@
 // ---------------------------------------------------------- LECTURE 31 - Recursion Day-1 --------------------------------------------------------------------------------------------------------->
 // Recursion : When a function calls itself!
 // In other words, Jab kisi badi problem ka solution, depend krta hai uss hi type ki choti problems pr!
-// In recursion we have base cases!
-// Suppose a problem of factorial, 5! = 5 * 4! and 4! = 4 * 3! and 3! = 3 * 2! and 2! = 2 * 1! and 1! = 1 * 0, after this we need to stop! isme we can see ek relation dikh rha hoga, and that is "f(n) = n * f(n-1)" and this is called recurrence relation! and in this we have a base case! and that is when n = 0, we need to stop! so 0 is the base case!
+// In recursion we have base cases! Like, Suppose a problem of factorial, 5! = 5 * 4! and 4! = 4 * 3! and 3! = 3 * 2! and 2! = 2 * 1! and 1! = 1 * 0, after this we need to stop! isme we can see ek relation dikh rha hoga, and that is "f(n) = n * f(n-1)" and this is called recurrence relation! and in this we have a base case! and that is when n = 0, we need to stop! so 0 is the base case!
+
 // lets code the factorial using recursion!
 #include <iostream>
 using namespace std;
@@ -21,11 +21,11 @@ int main() {
     cin >> n;
     cout << factorial(n);
 } // So we get that recursion krne ke liye ek base case pta hona chahiye! and recurrence relation ptaa hona chahiye!
-// Agar base case nhi daalenge toh like agar factorial(6) humne nikalna chaha toh pehle 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 -> -1 -> -2 -> -3 and it will go on until stack overflow na hojaye and which will result in segmentation fault!
-// And that is why base case is important!
+// Agar base case nhi daalenge toh like agar factorial(6) humne nikalna chaha toh pehle 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 -> -1 -> -2 -> -3 and it will go on until stack overflow na hojaye and which will result in segmentation fault! And that is why base case is important!
 
 // Now apart from base condition and recurrence relation, there is another component of recursion and that is processing (this is optional but rest two are mandatory!), like any updation or printing we are doing while doing recursion...
 // If the flow of recursion is like this... "Base case -> Processing -> Recurrence Relation" this is called Tail Recursion and if the flow is like this... "Base case ->  Recurrence Relation -> Processing" then this is called Head Recursion!
+
 // Solving power of 2 using recursion (2^n)...
 #include <iostream>
 using namespace std;
@@ -153,39 +153,57 @@ int main()
     cin >> n;
     cout << countDistinctWaysToClimbStairs(n);
 } // Why this works : If nstairs < 0: There are no ways to climb negative steps, so return 0. If nstairs == 0: There is exactly one way to stay at the ground level without taking any steps, so return 1.
-// For any other number of steps nstairs, the number of ways to climb the stairs is the sum of : The number of ways to climb nstairs - 1 steps (taking one step from nstairs - 1 to nstairs). & The number of ways to climb nstairs - 2 steps (taking two steps from nstairs - 2 to nstairs).
-// Each step can be reached either by taking a single step from the previous step or by taking two steps from two steps below. This means every combination of steps to reach nstairs is the sum of the combinations to reach nstairs - 1 and nstairs - 2.
-// By breaking down the problem into smaller subproblems (i.e., nstairs - 1 and nstairs - 2), and summing their solutions, the function builds up the solution for nstairs.
-// This code can be more optimized through Dynamic Programming, but that we will study very later!
+//                  : For any other number of steps nstairs, the number of ways to climb the stairs is the sum of : The number of ways to climb nstairs - 1 steps (taking one step from nstairs - 1 to nstairs). & The number of ways to climb nstairs - 2 steps (taking two steps from nstairs - 2 to nstairs).
+//                  : Each step can be reached either by taking a single step from the previous step or by taking two steps from two steps below. This means every combination of steps to reach nstairs is the sum of the combinations to reach nstairs - 1 and nstairs - 2.
+//                  : By breaking down the problem into smaller subproblems (i.e., nstairs - 1 and nstairs - 2), and summing their solutions, the function builds up the solution for nstairs.
+//                  : This code can be more optimized through Dynamic Programming, but that we will study very later!
 
 // Question 3 : Say Digits, here if you get the input 412 you have to print four one two!
 // Approach : Pehle hum ek array bnaa ke usme saare digits ko map karaa lenge! and then individual digits nikalne ke liye hum n%10 krenge and then number chhota krne ke liye we will do n/10, lets code now!
 #include <iostream>
 using namespace std;
 
-void sayDigit(int n, string arr[])
-{
-    // Base Case
-    if (n == 0)
-    {
+void sayDigit(int n, string arr[]) {
+    if (n == 0) {
         return;
     }
-    // Processing
     int digit = n % 10;
     n = n / 10;
-
-    // Recursive call
     sayDigit(n, arr);
     cout << arr[digit] << " ";
 }
 
-int main()
-{
+int main() {
     string arr[10] = {"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
     int n;
     cin >> n;
     sayDigit(n, arr);
 } // Draw the recursion tree and function stack, it will clear the concept more!
+
+// Using Vector<string>
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+void sayDigits(int n, vector<string> number) {
+    if(n == 0) {
+        return;
+    }
+    sayDigits(n/10, number);
+    int digit = n%10;
+    cout<<number[digit]<<" ";
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<string> num = {"Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine"};
+    sayDigits(n,num);
+}
+
+// Note : For this specific problem (mapping digits to words from 0 to 9), the static array version is better due to its simplicity and efficiency.
+//      : If the program needs to handle more dynamic scenarios, like localization (e.g., mapping digits to words in multiple languages), the vector<string> version would be the preferred choice.
 
 // ---------------------------------------------------------- LECTURE 33 - Recursion Day-3 : Recursion and Binary Search --------------------------------------------------------------------------------------------------------->
 // We will implement binary search using Recursion, we have done it with loops, but lets do it with recursion!
@@ -195,47 +213,50 @@ int main()
 #include <iostream>
 using namespace std;
 
-bool isSorted(int arr[], int size)
-{
-    if (size == 0 || size == 1)
-    { // Base case humne ye bnaa diya!
+bool isSorted(int arr[], int size) {
+    if (size == 0 || size == 1) {
         return true;
     }
-    if (arr[0] > arr[1])
-    {
+    if (arr[0] > arr[1]) {
         return false;
     }
-    else
-    {
+    else {
         return isSorted(arr + 1, size - 1); // Isse humne pehle ke do indexes check krne ke baad baaki saare array ko check krne ke liye recursion use krliya!
     }
 }
 
-int main()
-{
+// This approach is better! but nevertheless, both are efficient, just some minor ups and downs!
+bool isSorted2(int arr[], int n) {
+    if(n == 0 || n == 1) {
+        return true;
+    }
+    if(arr[n-2] > arr[n-1]) {
+        return false;
+    }
+    return isSorted(arr,n-1);
+}
+
+int main() {
     int arr[5] = {3, 2, 5, 4, 1};
     int size = 5;
     cout << isSorted(arr, size);
+    cout << isSorted2(arr, size);
 }
 
 // Question 2 : Find the sum of all the elements of an array! using recursion!
 #include <iostream>
 using namespace std;
 
-int findSum(int arr[], int size)
-{
-    if (size == 0)
-    { // This is the base case!
+int findSum(int arr[], int size) {
+    if (size == 0) {
         return 0;
     }
-    else
-    {
+    else {
         return arr[size - 1] + findSum(arr, size - 1); // Here we have used recursion
     }
 }
 
-int main()
-{
+int main() {
     int arr[5] = {2, 3, 4, 5, 1};
     int size = 5;
     cout << findSum(arr, size);
@@ -245,62 +266,59 @@ int main()
 #include <iostream>
 using namespace std;
 
-bool findElement(int arr[], int size, int target)
-{
-    if (size == 0)
-    {
+bool findElement(int arr[], int size, int target) {
+    if (size == 0) {
         return false;
     }
-    if (arr[0] == target)
-    {
+    if (arr[0] == target) {
         return true;
     }
-    else
-    {
+    else {
         return findElement(arr + 1, size - 1, target); // So hum kya kr rhe hai ki harr baar 0th index ke element ko check krke function call me ek index aage se elements ko pass kr de rhe hai! taaki saare elements check ho sake,
         // and ek time aisa ayega jab saare elemenst check hojayenge and size = 0 hojayega and that is where our base condition will help to stop the recursion!
     }
 }
 
-int main()
-{
+// This is also a good and better approach, but both are efficient!
+int findElement2(int arr[], int n, int key) {
+    if(n == 0) {
+        return -1;
+    }
+    if (key == arr[n-1]) {
+        return n-1;
+    }
+    return findElement2(arr,n-1,key);
+}
+
+int main() {
     int arr[5] = {1, 2, 3, 4, 5};
     int size = 5;
     int target = 5;
     cout << findElement(arr, size, target);
+    cout << findElement2(arr, size, target);
 }
 
 // Now lets implement binary search using recursion!
 #include <iostream>
 using namespace std;
 
-bool binarySearch(int arr[], int s, int e, int key)
-{
-    // Base case!
-    // If element not found
-    if (s > e)
-    {
+bool binarySearch(int arr[], int s, int e, int key) {
+    if (s > e) { // Base case, if element not found!
         return false;
     }
     int mid = s + (e - s) / 2;
-    // If element found
-    if (arr[mid] == key)
-    {
+    if (arr[mid] == key) {
         return true;
     }
-    // Recursion call for changing the state space!
-    if (arr[mid] > key)
-    {
+    if (arr[mid] > key) {
         return binarySearch(arr, s, mid - 1, key);
     }
-    else
-    {
+    else {
         return binarySearch(arr, mid + 1, e, key); // We did the same thing jo hum pehle loops ki help se krte the bss iss baar Recursion ka use kiya hai!
     }
 }
 
-int main()
-{
+int main() {
     int arr[5] = {1, 2, 3, 4, 5};
     int size = 5;
     int start = 0;
@@ -315,10 +333,8 @@ int main()
 #include <string>
 using namespace std;
 
-void reverseString(string &s1, int s, int e)
-{ // Isme agar s1 ko refernce nhi krenge toh jo bhi changes honge string me vo sirf iss function ke andar andar ho jayenge, toh int main me unn changes ko laane ke liye we need to reference it!
-    if (s > e)
-    {
+void reverseString(string &s1, int s, int e) { // Isme agar s1 ko refernce nhi krenge toh jo bhi changes honge string me vo sirf iss function ke andar andar ho jayenge, toh int main me unn changes ko laane ke liye we need to reference it!
+    if (s > e) {
         return;
     }
     swap(s1[s], s1[e]);
@@ -327,8 +343,7 @@ void reverseString(string &s1, int s, int e)
     reverseString(s1, s, e); // We used the same approach, ki ek case humne handle krliya and baaki sabke liye recursive call krdiya!
 }
 
-int main()
-{
+int main() {
     string s1 = "Utkarsh";
     int s = 0;
     int e = s1.length() - 1;
@@ -341,70 +356,52 @@ int main()
 #include <string>
 using namespace std;
 
-bool checkPalindrome(string s1, int i, int j)
-{
-    if (i > j)
-    {
+bool checkPalindrome(string s1, int i, int j) {
+    if (i > j) {
         return true; // Here we mean by saying that agar poori string traverse hoke i>j hojaye mtlb ki kahin pr palindrome hone ki condition false nhi hui, toh mtlb ki haa ye palindrome hai toh iss case me true return krdo!
     }
-    if (s1[i] != s1[j])
-    {
+    if (s1[i] != s1[j]) {
         return false; // One case we handled!
     }
-    else
-    {
+    else {
         return checkPalindrome(s1, i + 1, j - 1); // rest will be handled by recursion!
     }
 }
 
-int main()
-{
+int main() {
     string s1 = "babbab";
-    if (checkPalindrome(s1, 0, s1.length() - 1))
-    {
+    if (checkPalindrome(s1, 0, s1.length() - 1)) {
         cout << "Its a palindrome!";
     }
-    else
-    {
+    else {
         cout << "Its not a palindrome";
     }
 }
 
 // Question 3 : Calculating power using Recursion! here we will use the fast exponentiation method to calculate it!
-// lets see how... suppose we have a^b and b is even, then we will do -> a^b = a^(b/2) * a^(b/2)
-// and if b is odd, then we will do -> a^b = a * (a^(b/2) * a^(b/2))...now we will use recursion to solve it... lets now code it...
-// So like for example maanlo agar hume 2^1024 ki value nikalni hoti, toh hum pehle 2^1024 ke liye (2^512)^2 nikalte then iske liye hum (2^256)^2 nikalte then iske liye (2^128)^2 -> (2^64)^2 -> (2^32)^2 -> (2^16)^2 -> (2^16)^2 -> (2^8)^2 -> (2^4)^2 -> (2^2)^2 -> (2^1)^2... so in from this method humne 11 times me answer nikal liya, but agar proper loops ko use krte toh 1024 times me answer aata kyunki vahaa iterations hoti yahaa hum recursively answer itna optimize kr sakte hai!
+// Approach : If we have a^b and b is even, then we will do -> a^b = a^(b/2) * a^(b/2) and if b is odd, then we will do -> a^b = a * (a^(b/2) * a^(b/2))
+//          : Example : To calculate 2^1024 efficiently the Exponentiation by Squaring method reduces the steps to log(1024) + 1 = 11, instead of 1024 iterations in a loop. By halving the exponent and squaring the result recursively, this method achieves O(logn) time complexity, making it much faster than naive O(n) approach!
+// now we will use recursion to solve it... lets now code it...
 #include <iostream>
 using namespace std;
 
-int power(int a, int b)
-{
-    // Base case
-    if (b == 0)
-    {
+int power(int a, int b) {
+    if (b == 0) {
         return 1;
     }
-    if (b == 1)
-    {
+    if (b == 1) {
         return a;
     }
-
-    // calculated and stored it in the ans
     int ans = power(a, b / 2);
-
-    // checked for b is odd or even, so yes again we did the same thing ki ek case ke liye solve krliya and then baaki ke liye recursive call krdiya!
-    if (b % 2 == 0)
-    {
+    if (b % 2 == 0) {
         return ans * ans;
     }
-    else
-    {
+    else {
         return a * ans * ans;
     }
 }
 
-int main()
-{
+int main() {
     int a, b;
     cin >> a >> b;
     cout << power(a, b);
@@ -414,51 +411,39 @@ int main()
 #include <iostream>
 using namespace std;
 
-void bubbleSort(int arr[], int size)
-{
-    // Base Case
-    if (size == 0 || size == 1)
-    {
+void bubbleSort(int arr[], int size) {
+    if (size == 0 || size == 1) {
         return;
     }
-    // Solved for one case
-    for (int i = 0; i < size; i++)
-    {
-        if (arr[i] > arr[i + 1])
-        {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] > arr[i + 1]) {
             swap(arr[i], arr[i + 1]);
         }
     }
-    // Rest will be handled by recursion
     bubbleSort(arr, size - 1);
 }
 
-int main()
-{
+int main() {
     int arr[5] = {4, 3, 4, 2, 1};
     int size = 5;
     bubbleSort(arr, size);
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
         cout << arr[i];
     }
 }
 
 // ---------------------------------------------------------- LECTURE 35 - Recursion Day-5 : Merge Sort using Recursion --------------------------------------------------------------------------------------------------------->
-// It is the fastest storing algorithm we have studied till now!
-// Now lets see how it works! : Suppose you have an array in the input [38,27,43,3,9,82,10]...
-// Now what we will do is we will find the mid using mid = (s+e)/2 or s + (e-s)/2... and then we will keep dividing the array into single blocks!
-// Lets see... first we have calculated mid which came out to be, mid = (s+e)/2 and we got 3 now we have divided the array into 2 parts which are [38,27,43,3] & [9,82,10] then similary we will continuing doing it...
-// [38,27,43,3,9,82,10] mid = 3 -> [38,27,43,3] mid = 1 & [9,82,10] mid = 1 -> [38,27] mid = 0 & [43,3] mid = 0 & [9,82] mid = 0 & [10] -> [38] & [27] & [43] & [3] & [9] & [82] & [10]
-// Now once we reach this stage, now we will sort and combine all of them, and this will go like... [27,38] & [3,43] & [9,82] & [10] then... [3,27,38,43] & [9,10,82] then... [3,9,10,27,38,43,82] and that is how it get sorted!
+// Merge Sort Algorithm!
+// Approach : It follows, divide and conquer strategy to sort an Array!
+// Steps : Dividing the Array : Start with the full array and find the midpoint using mid = s + (e-s)/2, to prevent overflow. Divide the array into two parts, repeating this step recursively until each part contains only one element.
+//       : Merging and Sorting : Once the array is divided into individual elements, the merging process starts. Each pair of adjacent elements is merged and sorted. This continues until all the sub-arrays are merged back into a single sorted array.
+//       : Thus, the array is recursively divided into smaller sub-arrays and then merged back together in sorted order. Merge Sort has a time complexity of O(nlogn) and is efficient for large datasets.
 #include <iostream>
 using namespace std;
 
 // Here we are merging two arrays!
-// The merge two arrays we have studies earlier so refer that lecture to understand it better
-void merge(int *arr, int s, int e)
-{
-
+void merge(int *arr, int s, int e) {
+    // Actually creating different arrays for all the individual terms of the array!
     int mid = s + (e - s) / 2;
 
     int len1 = mid - s + 1;
@@ -469,41 +454,34 @@ void merge(int *arr, int s, int e)
 
     // copy values
     int mainArrayIndex = s;
-    for (int i = 0; i < len1; i++)
-    {
+    for (int i = 0; i < len1; i++) {
         first[i] = arr[mainArrayIndex++];
     }
 
     mainArrayIndex = mid + 1;
-    for (int i = 0; i < len2; i++)
-    {
+    for (int i = 0; i < len2; i++) {
         second[i] = arr[mainArrayIndex++];
     }
 
-    // merge 2 sorted arrays
+    // Starting to merge and sort the individual terms!
     int index1 = 0;
     int index2 = 0;
     mainArrayIndex = s;
 
-    while (index1 < len1 && index2 < len2)
-    {
-        if (first[index1] < second[index2])
-        {
+    while (index1 < len1 && index2 < len2) {
+        if (first[index1] < second[index2]) {
             arr[mainArrayIndex++] = first[index1++];
         }
-        else
-        {
+        else {
             arr[mainArrayIndex++] = second[index2++];
         }
     }
 
-    while (index1 < len1)
-    {
+    while (index1 < len1) {
         arr[mainArrayIndex++] = first[index1++];
     }
 
-    while (index2 < len2)
-    {
+    while (index2 < len2) {
         arr[mainArrayIndex++] = second[index2++];
     }
 
@@ -513,35 +491,22 @@ void merge(int *arr, int s, int e)
 }
 
 // Here we are doing the recursive calls!
-void mergeSort(int *arr, int s, int e)
-{
-
-    // base case
-    if (s >= e)
-    {
+void mergeSort(int *arr, int s, int e) {
+    if (s >= e) {
         return;
     }
-
     int mid = s + (e - s) / 2;
-
-    // left part sort karna h
-    mergeSort(arr, s, mid);
-
-    // right part sort karna h
-    mergeSort(arr, mid + 1, e);
-
-    // merge
-    merge(arr, s, e);
+    mergeSort(arr, s, mid); // Dividing left part theoritically!
+    mergeSort(arr, mid + 1, e); // Dividing right part theoritically!
+    merge(arr, s, e); // Merge
 }
 
-int main()
-{
+int main() {
     int arr[15] = {3, 7, 0, 1, 5, 8, 3, 2, 34, 66, 87, 23, 12, 12, 12};
     int n = 15;
     mergeSort(arr, 0, n - 1);
 
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
@@ -550,82 +515,62 @@ int main()
 // Space Complexity : O(n) kyunki yaha humne array ko do parts me divide kiya, so overall O(n) hi ayegi!
 // Practice and Solve : Inversion Count Problem from GFG, its asked in interviews!
 // Time Complexity : O(nlogn)
-// Merge sort achieves a time complexity of O(nlogn) due to its divide-and-conquer strategy. Divide: In the divide step, the array is divided into two halves recursively until each sub-array contains only one element. This takes O(logn) time because the array is halved in each recursive call.
+// Merge sort achieves a time complexity of O(nlogn) due to its divide-and-conquer strategy. Divide : In the divide step, the array is divided into two halves recursively until each sub-array contains only one element. This takes O(logn) time because the array is halved in each recursive call.
 // Conquer: In the conquer step, the merge operation takes place. This involves merging the sub-arrays in sorted order. Merging two sorted arrays of n/2 elements each takes O(n) time.
 // This makes merge sort one of the most efficient comparison-based sorting algorithms for large data sets. Its O(nlogn) time complexity holds both in the average and worst-case scenarios.
 
 // ---------------------------------------------------------- LECTURE 36 - Recursion Day-6 : Quick Sort using Recursion --------------------------------------------------------------------------------------------------------->
-// Lets understand the logic... so we have an array... now hum pehle iska sabse first element lete hai and then check krte hai ki kya poore array me isse chhote jitne bhi elements hai unko count krliya and uss count ke hisaab se iss first element ko uske sahi index pr bhejdete hai!
-// And now ab yahaa se hum partition krdete hai array ki, like jiss element ko humne uske sahi index pr bheja uske right side me jitne bhi elements hai vo sab uss element se bade hone chahiye and left ke saare chhote hone chahiye!
-// Now we have done our one job the rest we will apply recursion to do the same in the right and left side of the partition!
-// Lets see with an example, suppose you have array : [3,1,4,5,2]... now here the first element is 3 and there are 2 elements less than 3 so we will put 3 at the index = s + count, means here the s = 0 and count = 2 so the 3 will be swapped with the element at index 2 which is 4, so our new array will be...[4,1,3,5,2]...
-// Now we will make 3 as the pivot element and now we will use two pointer approach i and j, using them hum ye jo condition thi na ki pivot element ke right side saare elements bade hone chahiye and left side saare chhote hone chahiye! usko hum ab iss 2 pointer approach se achieve krenge!
-// So now... i will point at 4 and j will point at 2... now we will compare both the elements with the pivot element and if i > pivot element && j < smaller than pivot element, we will swap! and then ye baaki elements ke saath bhi krenge and then we will get the final array...[2,1,3,5,4] and this will called our First Pass!
-// So now humne itna solve krliya and now baaki hum ab recursion ke thru solve krlenge!
-// Also remember this for dry run and understanding purposes ki partition ka mtlb ye nhi ki humne array ko kaata hai ya aisa kuch, its just that ki humne apna range of elements ko cater krna change krliya, so the indexes vaisi hi rahengi jaisi pehle thi!
+// Quick Sort Algorithm!
+// Approach : QuickSort is a divide-and-conquer sorting algorithm that selects a pivot, partitions the array around it, and recursively sorts the subarrays. It typically has an average time complexity of O(n log n).
+// Steps : Pivot Selection and Placement : We start by selecting the first element as the pivot. We then count how many elements in the array are smaller than the pivot. Using this count, we place the pivot at its correct position in the array, that is at the index s + count.
+//       : Partitioning the Array : After placing the pivot at its correct index, we partition the array using the two-pointer approach. One pointer starts from the left (looking for elements larger than the pivot) and the other from the right (looking for elements smaller than the pivot). If the left pointer finds a larger element and the right pointer finds a smaller one, we swap them.
+//       : Recursion : After partitioning, we recursively apply the same process to the left and right subarrays around the pivot until the whole array is sorted.
+//       : Key Insight : The partitioning step doesn't "cut" the array; it just reorders the elements around the pivot. The recursive calls handle the subarrays on the left and right of the pivot.
 // Now lets code...
 #include <iostream>
 using namespace std;
 
-int partition(int arr[], int s, int e)
-{
+int partition(int arr[], int s, int e) {
     int pivot = arr[s];
     int cnt = 0;
-    for (int i = s + 1; i <= e; i++)
-    {
-        if (arr[i] <= pivot)
-        {
+    for (int i = s + 1; i <= e; i++) {
+        if (arr[i] <= pivot) {
             cnt++;
         }
     }
-    // place pivot at right position
-    int pivotIndex = s + cnt;
+    int pivotIndex = s + cnt; // Place pivot at right position
     swap(arr[pivotIndex], arr[s]);
 
-    // left and right wala part sambhal lete hai
+    // Sorting Left and Right sub arrays!
     int i = s, j = e;
 
-    while (i < pivotIndex && j > pivotIndex)
-    {
-        while (arr[i] <= pivot)
-        {
+    while (i < pivotIndex && j > pivotIndex) {
+        while (arr[i] <= pivot) {
             i++;
         }
-        while (arr[j] > pivot)
-        {
+        while (arr[j] > pivot) {
             j--;
         }
-        if (i < pivotIndex && j > pivotIndex)
-        {
+        if (i < pivotIndex && j > pivotIndex) {
             swap(arr[i++], arr[j--]);
         }
     }
     return pivotIndex;
 }
-// 4 1 3 5 2
 
 // So yahaa toh humne recursion call krdiye! ki jo cheez humne partition function me kri hai pivot element ke saath original array me vhi same cheez tum baaki saari jo sub arrays banegi unn sab me krdo thru recursion!
-void quickSort(int arr[], int s, int e)
-{
-    // base case
-    if (s >= e)
-        return;
-    // partition karenge
-    int p = partition(arr, s, e); // Here p means pivot index
-    // left part sort karo
-    quickSort(arr, s, p - 1);
-    // right wala part sort karo
-    quickSort(arr, p + 1, e);
+void quickSort(int arr[], int s, int e) {
+    if (s >= e) return;
+    int p = partition(arr, s, e); // For partitioning and sorting!
+    quickSort(arr, s, p - 1); // Sorting Left sub array!
+    quickSort(arr, p + 1, e); // Sorting Right sub array!
 }
 
-int main()
-{
+int main() {
     int arr[5] = {3, 1, 4, 5, 2};
     int n = 5;
     quickSort(arr, 0, n - 1);
-
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
@@ -642,6 +587,15 @@ int main()
 
 // Space Complexity : O(n) in Worst Case & O(logn) in Best Case!
 // Time Complexity : O(nlogn) in average and Best Case & O(n^2) in Worst Case!
+
+// Note : In MergeSort and QuickSort, the functions like merge() in MergeSort and partition() in QuickSort are the ones implementing the core logic of sorting. The mergeSort() and quickSort() functions themselves serve as the entry points for the recursion and manage the division of the array or subarray into smaller parts.
+
+// Its is one of those fastest sorting algorithms! Other fastest sorting algorithms are : Timsort, Quicksort, Mergesort, Heapsort & Radixsort!
+// Timsort : It is the default sorting algorithm for many programming languages (including Python and Java) because it optimizes both the time and space complexity. It is particularly efficient on partially sorted data.
+// Quicksort : General-purpose sorting for large datasets where average-case performance matters. Quick Sort is often faster than Merge Sort in practice due to better cache performance.
+// Mergesort : Sorting linked lists or when stable sorting is required (i.e., maintaining the order of equal elements).
+// Heapsort : When you need a guaranteed O(nlogn) time complexity and don’t mind extra space for the heap.
+// Radixsort : Sorting large sets of integers or strings (especially when the range of numbers or the length of strings is small and known in advance).
 
 // ---------------------------------------------------------- LECTURE 37 - Recursion Day-7 : Subsets and Subsequence --------------------------------------------------------------------------------------------------------->
 // Question 1 : Given an array of unique elements, return all possible subsets (the power set)... leetcode question 78 : Subsets

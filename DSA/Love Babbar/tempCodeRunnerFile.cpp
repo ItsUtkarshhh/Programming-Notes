@@ -1,42 +1,55 @@
 #include<iostream>
-#include<string>
-#include<vector>
 using namespace std;
 
-void printVector(vector<string> v) {
-    for(int i = 0; i<v.size(); i++) {
-        cout<<v[i]<<" ";
+int partition(int* arr, int s, int e) {
+    int pivot = arr[s];
+    int count = 0;
+    for(int i = s+1; i<=e; i++) {
+        if(arr[i] <= pivot) {
+            count++;
+        }
     }
-    cout<<endl;
+
+    int pivotIndex = s + count;
+    swap(arr[pivotIndex],arr[s]);
+
+    int i = s;
+    int j = e;
+
+    while(i<pivotIndex && j>pivotIndex) {
+        while(arr[i] <= pivot) {
+            i++;
+        }
+        while(arr[j] > pivot) {
+            j--;
+        }
+        if(i < pivotIndex && j > pivotIndex) {
+            swap(arr[i++],arr[j--]);
+        }
+    }
+    return pivotIndex;
 }
 
-void compress(vector<string> v) {
-    int i = 0;
-    vector<string> ans;
-    while(i<v.size()) {
-        int j = i+1;
-        if(j<v.size() && v[i] == v[j]) {
-            j++;
-        }
-        int count = j-i;
-        ans.push_back(v[i]);
-        if(count > 1) {
-            string cnt = to_string(count);
-            for(char ch : cnt) {
-                ans.push_back(string(1,ch));
-            }
-        }
-        i = j;
+void quickSort(int* arr, int s, int e) {
+    if(s>=e) {
+        return;
     }
-    printVector(ans);
+    int p = partition(arr, s, e);
+    quickSort(arr,s,p-1);
+    quickSort(arr,p+1,e);
 }
 
 int main() {
     int n;
     cin>>n;
-    vector<string> v1(n);
+    int* arr1 = new int[n];
     for(int i = 0; i<n; i++) {
-        cin>>v1[i];
+        cin>>arr1[i];
     }
-    compress(v1);
+    int s = 0;
+    int e = n-1;
+    quickSort(arr1,s,e);
+    for(int i = 0; i<n; i++) {
+        cout<<arr1[i]<<" ";
+    }
 }
