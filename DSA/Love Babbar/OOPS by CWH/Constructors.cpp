@@ -325,6 +325,3 @@ int main() {
     Number z3 = z; // Here copy constructor will be invoked! as becoz here the z3 is created in the same line and the value is assigned in the same line!
     z3.display(); // Here we are printing the value of z3 after the copy constructor is invoked! In the above line we were just checking whether the copy constructor is invoked or not and it is invoked! and now we are printing the value!
 }
-
-
-
