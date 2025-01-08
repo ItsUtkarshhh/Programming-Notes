@@ -22,23 +22,18 @@
 // Practice to find TC and SC it is important!
 
 // ---------------------------------------------------------- LECTURE 42 - OOPS Part 1 --------------------------------------------------------------------------------------------------------->
-// What is it? It is that type of programming technique where things revolve around objects
-// What are objects, objects has some properties, or state and has a behaviour! through OOPS we try to include real world objects into our program! taaki humare code ka real world application badh jaye!
-// Now suppose in a game we have an entity as Hero, now that hero is an objects, kyunki a Hero has properties like it has a Name, Health, Level and etc... also it shows certain behaviours like Attack(), Defence() and similar etc... so this is the implication of OOPS!
+// A programming paradigm where everything revolves around objects, integrating real-world objects into the program to increase real-world application.
+// Objects : Have properties (state) and behaviors (functions). Example : A game hero with properties like Name, Health, Level, and behaviors like Attack() and Defend().
+// Classes : A user-defined data type. Defines the blueprint or template for objects. And an object is an instance of a class. Example : int a; -> a is a variable of type int. Hero Ramesh; -> Ramesh is an object of type Hero.
 
-// Classes and Objects
-// Class : It is a user-defined data type!
-// Objects : Instance of a class!
-// So aise samajhlo ki jab hum koi int a; ko use krke ek variable and uska ek data type bnaate hai, similarly in OOPS we write Hero Ramesh, jisme Hero ek class hai jisse hum Ramesh naam ke object ka data type define kr rhe hai, mtlb ki Ramesh jo hai vo ek Hero type ka entity hai!
 // So you can say that Class is the Data Type and Object is like the Variable!
 // Lets code...
 #include<iostream>
 using namespace std;
 
 class Hero {
-    // iss class ki help se jo bhi objects hum banayenge ye unki properties hongi! for now its only health!
     int health;
-};
+}; // iss class ki help se jo bhi objects hum banayenge ye unki properties hongi! for now its only health!
 
 int main() {
     Hero Utkarsh; // So what we did here is we made an Object (instance of class Hero) Utkarsh jo Hero type ka hai!
@@ -59,9 +54,9 @@ class Hero {
 
 int main() {
     Hero Utkarsh;
-    // cout<<"Utkarsh's health is : "<<Utkarsh.Health<<endl;
-    // cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl;
-    // They will give errors becoz right now they are private data members! we need to make them public to access them.. but lets first study the Access Modifiers in OOPS
+    cout<<"Utkarsh's health is : "<<Utkarsh.Health<<endl;
+    cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl;
+    // They will throw errors becoz right now they are private data members! we need to make them public to access them.. but lets first study the Access Modifiers in OOPS!
 }
 
 // Access Modifiers!
@@ -71,27 +66,25 @@ int main() {
 using namespace std;
 
 class Hero {
-    private : // by default vaise bhi private hi rehte hai!
-    int Health;
+    private :
+        int Health; // Private member (not accessible outside the class)
     public :
-    int Age;
-};
+        int Age; // Public member (accessible outside the class)
+}; // Any data member or member function, created privately cannot be accessed outside of it!
 
 int main() {
     Hero Utkarsh;
-    // cout<<"Utkarsh's health is : "<<Utkarsh.Health<<endl;
-    cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl; // Age se pehle public likhne se age class ke bahar bhi accessible hogya but health abhi bhi private hi hai kyunki public neeche likha hua hai uske! by default saare private hote hai!
+    // cout<<"Utkarsh's health is : "<<Utkarsh.Health<<endl; // It will throw error
+    cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl; // It won't throw error, but will print garbage value as it is not initiallized!
 }
-// Even agar hum koi function bhi bnaa dete hai class ke andar toh usko bhi hum private ya public ya protected bnaa sakte hai, jo private hoga vo sirf class ke andar hi access kiya jaa sakta hoga, public class ke bahar bhi access kiya jaa sakta hoga!
 
-// Now suppose hum chahte hai ki kuch data members ko private rakhte hai but still hum unko access krna chahte hai int main me, toh for that we use Getter and Setter functions!
-// These functions are created withing the public scope and can be accessed using "." operator!
+// Now if you have private data members, but you still want to access it! In that case you can make Getter and Setter Function! These functions are created withing the public scope and can be accessed using "." operator!
 #include<iostream>
 using namespace std;
 
 class Hero {
     private :
-    int Health; // Now as health is private toh ab health ko directly access nhi kr sakte! so we need to create getter and setter functions for it in the public scope of the class, so lets do it!
+    int Health; // Now as health is private toh ab health ko directly access nhi kr sakte! so we need to create getter and setter functions for it in the public scope of the class!
     public :
     int Age;
     int Level;
@@ -105,19 +98,18 @@ class Hero {
     int sethealth(int h) {
         Health = h;
     }
-    // Iss case me hume getter & setter functions sirf Health ke liye chahiye! kyunki sirf vhi ek private data member hai and baaki toh public hai toh unko hum aise hi access kr sakte hai!
-};
+}; // Getter Setter functions are only created for private data members, so that we can access them! not for public data members, as they are already accessible outside the class!
 
 int main() {
     Hero Utkarsh;
     Utkarsh.sethealth(100); // Even tho health is a private member we are able to set the value of Health using the setter function!
-    cout<<"Utkarsh's health is : "<<Utkarsh.getHealth()<<endl; // Printed the value of Health using the getter function we have created inside the class
+    cout<<"Utkarsh's health is : "<<Utkarsh.getHealth()<<endl; // Printed the value of Health using the getter function we have created inside the class!
     
     Utkarsh.Age = 21;
     cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl;
 
     // Lets calculate size of the data members...
-    cout<<"Size of Utkarsh : "<<sizeof(Utkarsh)<<endl; // this is showing the size : 16 jabki dekha jaye toh 13 aani chahiye, kyunki Health + Level + Age = 12, and then Name is of one byte so it should be 13, but answer is 16 aisa kyu? so aisa isliye beoz of Padding and Greedy alignment!
+    cout<<"Size of Utkarsh : "<<sizeof(Utkarsh)<<endl; // Output : 16, jabki dekha jaye toh 13 aani chahiye, kyunki Health + Level + Age = 12, and then Name is of one byte so it should be 13, but answer is 16 aisa kyu? so aisa isliye beoz of Padding and Greedy alignment!
     // Padding : Padding involves inserting empty bytes between the members of a structure or class to ensure that each member is properly aligned in memory. The goal of padding is to ensure that each data member starts at an address that's a multiple of its size, which can improve memory access performance, especially on architectures that require aligned memory accesses.
     // Alignment : Alignment refers to the requirement that data types should start at particular memory addresses. For example, many architectures require that int variables start at memory addresses that are multiples of 4 (for 32-bit integers) or 8 (for 64-bit integers). Similarly, char variables can usually start at any address. Alignment can be influenced by the size of the data type. For example, if an int requires 4-byte alignment, and a char requires 1-byte alignment, the compiler may insert padding bytes between the members of a structure to ensure proper alignment.
     // Greedy Alignment : Greedy alignment is a strategy used by some compilers to minimize padding. In greedy alignment, the compiler tries to align each member of a structure or class to the largest alignment requirement of any member in the structure. This strategy helps reduce padding by minimizing the number of empty bytes inserted between members.
@@ -156,7 +148,7 @@ int main() {
 
 
     // Dynamically Created Object!
-    Hero *Utkarsh2 = new Hero; // Jaise normally krte the vaise hi yahaa bhi kr rhe hai! isse heap me ek mere compiler ke according 4 byte ki memory allocate hogyi hogi jisme Utkarsh naam ke ek pointer ka address store hoga! and agar mera compiler 64 bits ka hota toh 8 bytes ki memory heap me allocate hoti! abhi 32 bits ka hai isliye bss 4 bytes ke memory hi allocate hoti hai heap me!
+    Hero *Utkarsh2 = new Hero; // Allocates memory dynamically on the heap. Utkarsh2 is a pointer storing the address of the allocated memory. 32-bit Compiler : Allocates 4 bytes of memory on the heap. 64-bit Compiler : Allocates 8 bytes of memory on the heap.
     (*Utkarsh2).Level = 69;
     (*Utkarsh2).sethealth(100);
     cout<<"Level : "<<(*Utkarsh2).Level<<endl;
@@ -167,10 +159,11 @@ int main() {
     cout<<"Health : "<<Utkarsh2->getHealth()<<endl;
 }
 
-// Now the thing is jab bhi koi object create hota hai tab ek constructor call hota hai sabse pehle and that is ObjectName.Class() kuch iss type ka constructor call hojaata hai automatically isko we call Default Constructor!
-// These constructors work behind the scene zaruri nhi ki hum inko class me banaye but if banana chahte hai toh bnaa bhi sakte hai!
-// Now ye jo constructors hote hai inka koi return type nhi hota! and koi input parameter nhi hota!
 // Default Constructor! 
+// A special method that is automatically called when an object is created. Called as ObjectName.Class() internally.
+// Key Points : Default Constructor : No return type and No input parameters.
+//            : Works behind the scenes even if not explicitly defined in the class.
+// You can also define your own default constructor in the class if needed!
 #include<iostream>
 using namespace std;
 
@@ -204,7 +197,8 @@ int main() {
     Hero *Utkarsh1 = new Hero; // Dono hi case me same constructor call hoga! kyunki class toh same hi hai dono objects ka!
     // Hero *Utkarsh2 = new Hero(); // Aise bhi likh sakte hai
 }
-// Also agar ek baar default constructor bnaa diya toh usko hataoge toh ab error show krega kyunki jo compiler vaala tha vo khatam ho chuka hai once you have created your own constructor, so you have to keep it now!
+// Note : If you define a constructor (default or parameterized) : The compiler-generated default constructor (implicit constructor) is no longer provided.
+//      : If you later remove your custom constructor and try to create an object without explicitly defining a constructor again, it will result in an error because the compiler doesn't auto-generate the default constructor anymore.
 
 // Parameterized Constructor! and "This" keyword!
 #include<iostream>
@@ -230,7 +224,7 @@ class Hero {
         // "this" ka bss yhi kaam hai ki confusion khatam krna ki konsa name kiska hai... hum chahe toh different names bhi use kr sakte hai but just telling ki agar same names use krna chahte hai toh ye "this" operator use kr sakte hai...
         // Overall "this" is a pointer which stores the address of the current object!
         // Current Object : When you create instances of a class, each instance is an object with its own set of data members and member functions. When you call a member function on an object, that object becomes the "current object" within the context of that function call.
-    } // yahaa iss this -> Health ki help se hum bss ye kehna chah rhe hai ki jaise maanlo current object hai Utkarsh and usne iss constructor ko call kiya toh curent object Utkarsh ban gya hai toh ab jab iss constructor ke paas jab request ayegi tab ye aise hoga ki This Utkarsh ki Health ke andar jo paramter me di gyi value hai vo daal do!
+    } // Yahaa iss this -> Health ki help se hum bss ye kehna chah rhe hai ki jaise maanlo current object hai Utkarsh and usne iss constructor ko call kiya toh curent object Utkarsh ban gya hai toh ab jab iss constructor ke paas jab request ayegi tab ye aise hoga ki This Utkarsh ki Health ke andar jo paramter me di gyi value hai vo daal do!
     
     Hero() {
         cout<<"Constructor Called!"<<endl;
@@ -245,7 +239,7 @@ class Hero {
     int sethealth(int h) {
         Health = h;
     }
-}; // Here it was the explaination of this and parameterized constructor! lets code it properly!
+};
 
 #include<iostream>
 using namespace std;
@@ -281,17 +275,20 @@ class Hero1 {
 int main() {
     Hero1 Utkarsh(100); // This object will call the paramterized constructor!
     cout<<"Address of Utkarsh : "<<&Utkarsh<<endl; // <- this and "cout<<"Address of this : "<<this<<endl;" both are giving the same output!
+
     Hero1 Utkarsh2; // This object will call the default constructor! Thing is agar tumne koi default object bnaya hua hai and tumne agar pehle se compiler vaale constructor ko hataa ke apna koi constructor nhi banaya toh koi error nhi aayega! but agar tumne ek baar apna default constructor banaa diya! toh vo pehle vaala default constructor toh hatt gya hai! and ab jab bhi tum koi default object banaoge and then tum agar Default constructor hataate ho tab error show krega!
     // Pehle toh chalo theek tha default object banao ya naa banao, compiler ka default ka constructor sambhal le rha tha! but jaise hi tumne koi default constructor bnaa diya and tumhara koi default object bnaa hua hai... and ab agar tum vo default constructor hataoge tab error show krega!
     // means default constructor ko default object ke hone ya naa hone se fark nhi padta but default object ke liye ek default constructor hona zaruri hai!
 } // Passing multiple paramters in parameterized constructor is also possible, we can use "this" for both the parameters also jo pass hue hai uss constructor me! 
 
 // Copy Constructor!
-// This constructor is used to copy objects!.. ek compiler ka khud ka copy constructor hota hai! agar hum apna explicitly create nhi krte hai toh vo default me jo ek compiler ka copy constructor rakhaa hua hai bg me vhi call hojaata hai jab bhi hum objects copy krne ka try krte hai!
-// A copy constructor is a member function that initializes an object using another object of the same class. In simple terms, a constructor which creates an object by initializing it with an object of the same class, which has been created previously is known as a copy constructor.
-// Copy constructor is used to initialize the members of a newly created object by copying the members of an already existing object.
-// The copy constructor can be defined explicitly by the programmer. If the programmer does not define the copy constructor, the compiler does it for us.
-// Toh chalo abhi we are defining our own copy constructor and using it to copy one object to another!
+// Purpose : Used to copy objects by initializing a new object with the data of an existing object of the same class.
+// Key Points : A compiler-provided copy constructor exists by default and is automatically used if you don’t define one explicitly.
+//            : It initializes the new object by copying the members of the existing object.
+// Definition : Default Copy Constructor: Automatically provided by the compiler if not explicitly defined.
+//            : Custom Copy Constructor: Defined by the programmer to control the copy process.
+// Usage : Custom Copy Constructor : Defined by the programmer to control the copy process.
+//       : Default Copy Constructor : Automatically provided by the compiler if not explicitly defined.
 #include<iostream>
 using namespace std;
 
@@ -383,7 +380,7 @@ int main() {
     // So this is called shallow copy!...toh jo humara default copy constructor hota hai vo ek shallow copy constructor hota hai!
     // Lets understand aisa kyu hua!
     // Jab humne name me Utkarsh store kiya toh, "Utkarsh/0" store hua memory me, and then humne class me jo name banaya vo ek pointer ki help se banaya and and vo name hi as a data member humne dono objects me daale hai, toh jo dono objects bane hai unme 4 data members ke liye space bani hui hai jaise name, health, age, level... ab jo name vaali space hai usme toh name variable ka address stored hai na! and jab copy bhi hua object toh name ka address bhi copy hui!
-    // isliye jab humne name ki value me koi bhi change kiya toh vo change dono objects me reflect hua!
+    // Isliye jab humne name ki value me koi bhi change kiya toh vo change dono objects me reflect hua!
 }
 
 // Ab agar ye cheez hone se rokni hai toh usko hum deep copy kehte hai! and hume apne copy constructor ko deep copy banana tha!
@@ -506,11 +503,14 @@ int main() {
     hero1.getterFunc(); // Output of hero1 will be the output of hero2 kyunki hero2 ki values humne saari hero1 me copy krdi hai!
 }
 
-// Destructors : To de-allocate memory! it frees the memory jab object ka life span khatam hone vaala hota hai!
-// Class create hote hi ye bhi create hojaata hai...
-// Like suppose jaise upar vaale examples ke case me jo jo objects create hue hai vo sab jaise hi int main ka scope khatam hone vaala hoga usse pehle destructors call hojaate hai and vo memory ko free kr dete hai!
-// Same as class name, no return type and no input parameter!
-// Ye already class create krte hi ban jaate hai but agar chahte hai toh khud ke destructor bhi bnaa sakte hai!
+// Destructors!
+// Purpose : Used to deallocate memory and clean up resources when an object's lifetime ends.
+// Key Points : Automatically called when the object goes out of scope or is explicitly deleted.
+//            : No return type and no input parameters.
+//            : Same name as the class, prefixed with a ~ (Example : ~ClassName).
+// Default Behavior : A default destructor is automatically created by the compiler if not explicitly defined.
+// Custom Destructors : Programmers can define their own destructors for custom cleanup operations.
+// Example Usage : In cases like the above examples, destructors are called automatically when the main scope ends, freeing memory.
 // lets see an example...
 #include<iostream>
 using namespace std;
@@ -537,13 +537,18 @@ int main() {
     Hero4 Utkarsh;
 
     // Object created dynamically!
-    Hero4 *Utkarsh1 = new Hero4;
-    // Here we will notice one thing that static objects ke liye constructor automatically call hojaata hai but dynamic ke liye hume alag se manually krna padta hai for that we need to do it manually!
+    Hero4 *Utkarsh1 = new Hero4; // Here we will notice one thing that static objects ke liye constructor automatically call hojaata hai but dynamic ke liye hume alag se manually krna padta hai for that we need to do it manually!
     delete Utkarsh1; // This is to call the destructor for the dynamically created object
     // Kyunki agar ye nhi likhte toh static vaale ke liye ek baar constructor call hua and ek baar destructor, but dynamically ke case me sirf ek baar constructor call hua, destructor ko call krne ke liye we need to write delete object_name; taaki destructor bhi call hojaye!
 }
 
-// Static Keyword :
+// Static Keyword!
+// Purpose : Used for data members or methods that are shared across all objects of a class.
+// Key Points : Shared Across the Class : A static data member is common to all objects of the class.
+//            : Example : In a game, timeToComplete is the same for all Hero or Enemy objects.
+// Single Memory Allocation : Memory for static members is allocated only once, shared by all objects.
+// Initialization Outside the Class : [datatype] [ClassName]::[StaticDataMember] = [Value];
+// Access Without Objects : Static members can be accessed using the class name (e.g., ClassName::StaticMember).
 #include<iostream>
 using namespace std;
 
@@ -553,20 +558,20 @@ class Hero5 {
 
     public :
     int health;
-    static int timeToComplete; // This keyword is used for those data members jo poore class ke liye same rehne vaale hai, jaise maanlo ek game hai usme time to complete kisi bhi object enemy ya hero ke liye same hi hone vaala hai! toh aise data members ke liye hum static keyword use krte hai! to initiallize them we write this outside the class, [datatype of static data member] [Class Name] :: [Static Data member name] = [Value]
+    static int timeToComplete;
 
     // Constructor :
     Hero5() {
         cout<<"Constructor Called!"<<endl;
     }
 
+    // Destructor :
     ~Hero5() {
         cout<<"Destructor Called!"<<endl;
     }
 };
 
-int Hero5 :: timeToComplete = 5; // So here we have initialized it!
-// Now ab isko access krne ke liye hume kisi object ki zarurat nhi hoti hai!
+int Hero5 :: timeToComplete = 5; // Initialization, and we don't need objects to access static data members!
 
 int main() {
     cout<<Hero5::timeToComplete<<endl; // It will print 5
@@ -580,9 +585,14 @@ int main() {
     cout<<h2.timeToComplete<<endl; // Krne ko aise bhi kr skte hai but this is not recommended! kyunki ye kisi object ko belong hi krta ye class ko belong krta hai!
 }
 
-// Static Functions : Same as static data members, this is also for the class not for the objects... objects bhi access kr sakte hai but hoti hai ye mainly class ke liye hai!
-// Isme koi this keyword nhi hota kyunki this keyword ka kaam hi hai current object ko point krna pr yahaa toh object hi nhi hai isliye ye kisi kaam ka nhi static functions me!
-// And static functions sirf static data members ko hi access kr sakte hai!
+// Static Functions!
+// Purpose : Functions that belong to the class rather than any specific object. Can be called using the class name (Example : ClassName::StaticFunction) or through objects.
+// Key Points : Independent of Objects : Static functions are primarily for the class, not tied to any particular object.
+//            : No this Keyword : this is used to refer to the current object, but since static functions don't work on a specific object, this is not available.
+// Access Rules : Can only access static data members of the class.
+// Advantages : Used for tasks that are independent of any object instance (Example : utility functions, counters, shared calculations).
+//            : Saves memory, as they don’t require object creation to be called.
+// Example Use Case : A static function like getGameTime() can return the game timer value, which is shared across all players or entities.
 #include<iostream>
 using namespace std;
 
@@ -592,7 +602,7 @@ class Hero5 {
 
     public :
     int health;
-    static int timeToComplete; // This keyword is used for those data members jo poore class ke liye same rehne vaale hai, jaise maanlo ek game hai usme time to complete kisi bhi object enemy ya hero ke liye same hi hone vaala hai! toh aise datam members ke liye hum static keyword use krte hai! to initiallize them we write this outisde the class, [datatype of static data member] [Class Name] :: [Static Data member name] = [Value]
+    static int timeToComplete;
 
     static int func() {
         // cout<<this->age<<endl; // this will throw error, kyunki naa toh yahaa this ka koi kaam aur naa hi age ka kyunki vo koi static data member nhi hai!
@@ -605,6 +615,7 @@ class Hero5 {
         cout<<"Constructor Called!"<<endl;
     }
 
+    // Destructor :
     ~Hero5() {
         cout<<"Destructor Called!"<<endl;
     }
@@ -614,23 +625,26 @@ int Hero5 :: timeToComplete = 5;
 
 int main() {
     cout<<Hero5::timeToComplete<<endl;
-    cout<<Hero5::func()<<endl;
-    // Both will print 5
+    cout<<Hero5::func()<<endl; // Both will print 5
 }
 
 // ---------------------------------------------------------- LECTURE 43 - OOPS Part 2 --------------------------------------------------------------------------------------------------------->
 // OOPS has 4 pillars : Encapsulation, Inheritence, Polymorphism and Data Abstraction!
-// Encapsulation : Encapsulation is combining all the data members and functions in one single entity which we called class!
-// Ek Dawai ki capsule me kaafi saari dawai ki goliyan hoti hai toh bss vaisa hi maanlo, ki vo dawai ki goliyan Data Members and Functions hai...and uss dawai ki capsule ko hi hum class bolte hai!
+// Encapsulation : Encapsulation is the concept of bundling or grouping all the data (variables) and functions (methods) that operate on the data into a single unit, which is called a class.
+//               : Analogy : Think of a capsule (encapsulation) that stores medicine (data) and you can only take it (access the data) in a controlled manner (through methods/functions). This way, the data is protected and can only be changed in a certain way.
+// Key Points : Data and Functions Together : In a class, the data members (variables) and functions (methods) are combined together.
+//            : Access Control : You can control how the data is accessed or modified by using access specifiers like private, protected, and public.
+//            : Purpose : It protects the data from outside interference and misuse, ensuring data security and integrity.
 
-// Fully Encapsulated Class : Where all of its Data Members are set Private! and can be accessed within the class only! Class ke Functions/Methods public ho sakte hai, but Data Members agar saare Private ho toh tab usko fully encapsulated kehte hai!
-// In short Encapsulation is called Data Hiding, dont confuse it with Data Abstraction as Data Abstraction is Implementation Hiding!
+// Fully Encapsulated Class : A fully encapsulated class is one where all the data members are private, and access to them is only possible through public methods (getters and setters). This ensures complete control over how the data is accessed or modified.
+// Note : In short Encapsulation is called Data Hiding, dont confuse it with Data Abstraction as Data Abstraction is Implementation Hiding!
 
 // Advantages : Data Hiding ke kaaran Security badh jaati hai!
 //            : If we want we can make our class Read-only vo aise ki hum koi setter naa banaye toh koi bhi usko change nhi kr payega! isliye the class which will be having only getter will be a Read-only class!
 //            : Increases Code Reusability
 //            : Encasulation helps in unit testing!
-// Lets see an example and how we implement encapsulation, its nothing like big task...jo abhi tak hum krte aa rhe the vo encapsulation tha!
+
+// Implementation, What we were doing till now was encapsulation already!
 #include<iostream>
 #include<cstring> // for strcpy
 using namespace std;
@@ -641,7 +655,7 @@ class Student{
     int age;
     int marks;
 
-    // Student() { // Don create constructor in private kyunki object creation ke time ye call hota hai toh private hone ke kaaran ye call hi nhi ho payega, isliye isko ya kisi bhi function humesha public rakhna chahiye!
+    // Student() { // Don't create constructor in private kyunki object creation ke time ye call hota hai toh private hone ke kaaran ye call hi nhi ho payega, isliye isko ya kisi bhi function humesha public rakhna chahiye!
     //     cout<<"Constructor called!";
     //     Name = new char[100];
     // }
@@ -665,7 +679,7 @@ class Student{
         cout<<"Age : "<<age<<" ";
         cout<<"marks : "<<marks<<" ";
     }
-};
+}; // This is a Fully Encapsulated Class!
 
 int main() {
     Student Utkarsh;
@@ -673,10 +687,11 @@ int main() {
     Utkarsh.setterfunc1(name,21,95);
     Utkarsh.getterfunc1();
 }
-// Overall this is all encapsulation only, jo bhi abhi tak lecture 42 me kr rhe the vo sab encapsulation hi hai! and iss example me ye jo class thi ye ek fully encapsulated class thi!
 
-// Inheritance! : Jab kisi ek class ki koi property koi aur class inherit krleti hai toh usko hum inheritance kehte hai!
-// Lets understand it with code...
+// Inheritance : Inheritance is when one class inherits the properties and behaviors (methods) of another class. It allows a class to reuse code from another class, making it easier to create and maintain.
+//             : Extended Functionalities : The child class can also add its own properties or methods or override parent class methods to customize behavior.
+
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -699,7 +714,7 @@ class Human {
     }
 };
 
-class Male : public Human { // here this is the syntax to inherit one class from other, [class child_class_name : access_modifiers parent_class_name] jo class inherit krti hai that is child and jahaa se inherit krti hai that is parent!
+class Male : public Human { // Here this is the syntax to inherit one class from other, [class child_class_name : access_modifiers parent_class_name] jo class inherit krti hai that is child and jahaa se inherit krti hai that is parent!
     public :
     int salary;
 
@@ -709,27 +724,34 @@ class Male : public Human { // here this is the syntax to inherit one class from
     void getterFunc2() {
         cout<<"Salary : "<<salary<<endl;
     }
-
 };
 
 int main() {
-    // Human H1; // Is object ke liye toh parent class ke saare data members use honge but ye class child class ke data members access nhi kr payega
+    Human H1; // Is object ke liye toh parent class ke saare data members use honge but ye class child class ke data members access nhi kr payega!
     Male Utkarsh;
+
+    // Manually setting Parent classes attributes for Child class object!
     // Utkarsh.age = 21;
     // Utkarsh.height = 170;
     // Utkarsh.weight = 70;
 
+    // Manually setting Child class attributes for Child class object!
     // Utkarsh.salary = 5000000;
-    // Ye cheeze upar vaali hum setter function se bhi set kr sakte hai...
+
+    // Doing the same above thing, using Parent and Child Class's Getter() and Setter()!
     Utkarsh.setterFunc1(170,70,21);
     Utkarsh.setterFunc2(5000000);
 
     Utkarsh.getterFunc1();
     Utkarsh.getterFunc2();
 }
-// Now what happened is, ki humare pass classes thi do ek Human jo ek parent class thi and Male jo ek child class thi... ab dono classes ke apne apne data members and member function the... jab hum male me Human ko inherit karwaya toh Human ki jitni bhi properties thi vo sab inherit hogyi child class ke liye! and now child class ka koi bhi object parent class ke kisi bhi data members ya member function ko use kr sakta hai!
+// Note : When a child class (e.g., Male) inherits from a parent class (e.g., Human), the child class automatically gets all the public properties (data members) and methods (functions) of the parent class.
+// What Happens : The child class can access the parent class's members (both data and functions).
+//              : The child class can also add its own members or modify inherited methods.
+// Key Point : The child class can use the parent class's functionality without redefining it, allowing for code reuse.
+// Note : Public members are inherited, while private members are not, unless accessed through public functions (getters/setters).
 
-// In the above case our mode of inheritance was public and jin data members ko acess kr rhe the vo bhi public hi the isliye koi dikkat nhi aayi!
+// In the above case, since we used public mode of inheritance and the data members being accessed were also public. Hence, there was no issue.
 // But there will be some complications agar base class ke data members ka access modifier private ya protected hua toh...
 // so for that remember this table...
 // Access Modifier of base class     |       Mode of inheritance
@@ -744,15 +766,20 @@ int main() {
 //      Private                                     Protected       ->       Not Possible
 // Private data member of any class cannot be inherited!
 
-// What is Protected Access Modifier? So basically it is more or less similar to Private, it can be access within the class, the only difference is ki jab aap inheritence use kroge tab ye protected data member child class bhi access kr sakta hai! but private ke case me aisa nhi hai! This is the only difference!
-// Ab baaki toh we know ki hum private public ya protected teeno ko hi member functions bnaa ke access kr sakte hai and then unn member functions ko use kr krke hum objects ke saath use kr sakte hai! jo abhi tak krte bhi aye hai!
+// Protected Access Modifier : The protected access modifier is like private, meaning the data members are accessible only within the class. However, the difference is that child classes can also access protected members, whereas they cannot access private members.
+// Summary : Private : Only accessible inside the class.
+//         : Protected : Accessible inside the class and by child classes (through inheritance).
+//         : Public : Accessible everywhere.
 
-// Tyoes of Inheritance!
-// Simple | Multiple | Multi-Level | Hierarchial | Hybrid Inheritances!
+// Types of Inheritance!
+// Simple Inheritance : A single child class inherits from a single parent class.
+// Multiple Inheritance : A single child class inherits from multiple parent classes.
+// Multi-Level Inheritance : A child class inherits from a parent class, and then another class inherits from that child class (creating a chain).
+// Hierarchial Inheritance : Multiple child classes inherit from a single parent class.
+// Hybrid Inheritance : A combination of two or more types of inheritance (like multiple and multi-level inheritance together).
 
-// Single Inheritance : Jab koi ek class dusre class ke properties ko inherit krle! Like class B ne class A ki properties ko inherit krliya! then it is Single Inheritance!
-// Above example of Human and Male is of Single Inheritance!
-// Lets see example :
+// Single Inheritance!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -777,10 +804,10 @@ int main() {
     Dog d1;
     d1.speak();
     d1.speakDog();
-} // So here we have used single inheritance!
+} // Hence, Single Inheritance!
 
-// Multi-Level Inheritance : Jab E class D class ko inherit kre and D class C class ko and C class B class ko and B class A class ko!
-// Lets see example...
+// Multi-Level Inheritance!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -813,11 +840,11 @@ int main() {
     GS1.speak();
     GS1.speakDog();
     GS1.Color();
-    // Here we can see the German Shephard class can access all the higher level classes becoz due to inheritance between its higher level class it got functionalities of all the highesr level classes
+    // Here we can see the German Shephard class can access all the higher level classes becoz due to inheritance between its higher level class it got functionalities of all the highesr level classes!
 }
 
-// Multiple Inheritance : When a class inherits more than 1 classes! Like suppose there is class C and it is inheriting 2 classes A and B, this is multiple inheritance!
-// Lets see example...
+// Multiple Inheritance!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -849,12 +876,12 @@ int main() {
     Mix m1;
     m1.speak();
     m1.cantSpeak();
-} // So here this is example of Multiple Inheritance...
-// Now thing is yahaa ye sab code likhne me thore error aa rhe hai kabhi kabhi isliye names of variable and function and class change krna pad rha hai kyunki yahaa pr ab bhot saari classes ban gyi hai and sabka scope poore code me hai! toh isliye vo thora understand krna revision ke time!
-// Uss errors ko handle krne ke liye hi yahaa functions classes and data members ke names change krna pad rha hai!
+}
+// Note : Now thing is yahaa ye sab code likhne me thore error aa rhe hai kabhi kabhi isliye names of variable and function and class change krna pad rha hai kyunki yahaa pr ab bhot saari classes ban gyi hai and sabka scope poore code me hai! toh isliye vo thora understand krna revision ke time!
+//      : Uss errors ko handle krne ke liye hi yahaa functions classes and data members ke names change krna pad rha hai!
 
-// Hierarchial Inheritance : Here ek base class hota hai uski properties more than one classes inherit kr rhe hote hai! Multiple ke case me ek class ek se zyada ki properties inherit kr rha tha yahaa just opposite!
-// Lets see...
+// Hierarchial Inheritance!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -897,8 +924,8 @@ int main() {
     obj3.func3(); // Calling its own function
 }
 
-// Hybrid Inheritance : Combination of more than one type of inheritance!
-// lets see...                                                                                                                                                                                                                                                                                                                                                    
+// Hybrid Inheritance!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -953,9 +980,9 @@ int main() {
     g1.funcG();
 } // So here we can see there are different types of inheritance are perfoming at once, so it is called Hybrid Inheritance!
 
-// Inheritance Ambiguity : Jab do classes ko kisi child ke dwara inherit kiya jaata hai and unn dono base classes me kisi member function ya data member ka name same hai and ab jab child class uss funtion ya data member ko use krne ka try krega toh compiler will get confuse ki konsa function ki baat ho rhi!
-// So to solve this ambiguity we use "::" scope resolution operator!
-// Lets see...
+// Inheritance Ambiguity : When a child class inherits from two parent classes and both parent classes have a member function or data member with the same name, the compiler gets confused about which one to use when the child class tries to access it.
+// To resolve this confusion, we use the :: (scope resolution operator) to specify which parent class's function or data member the child should use
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -986,17 +1013,24 @@ int main() {
     j1.H::func();
     j1.I::func();
     j1.J::func();
-    j1.func(); // Agar sirf ye likhoge toh J class ka func() vaala function call hojayega, this is method over riding which we are about to study in runtime polymorphism
-} // Ambiguity Resolved! using scope resolution operator!
+    j1.func(); // Agar sirf ye likhoge toh J class ka func() vaala function call hojayega, this is method over riding which we are about to study in runtime polymorphism!
+} // Ambiguity Resolved using scope resolution operator!
 
-// Now the thing is OOPS are used a lot in industries!! but jo abhi hum padh rhe hai ye bhot hi basic level ki OOPS hai, other wise OOPS jo actual use hoti hai usme aur isme zameen aasman ka antar hai!
+// The OOPS concepts we study at a basic level are just the foundational principles. While these concepts (like classes, objects, inheritance, encapsulation, etc.) are the building blocks, the way OOP is applied in the industry can be much more complex and sophisticated.
+// While basic OOP gives you the necessary understanding, industry-level OOP is much more complex, structured, and focuses on scalability, maintainability, and efficiency. It involves not just syntax but a deeper understanding of architecture and system design principles.
 
-// Polymorphism! : When one particular thing can have mutltiple forms! like a father can be a father for you but can also be son for his father, a husband for your mom, a brother for his sister and in a similar way!
-// There are two type of Polymorphism! : Compile-Time Polymorphism and Runtime Polymorphism!
+// Polymorphism!
+// Formal Definition : Polymorphism means "many forms". It is when one thing can take multiple forms based on the context.
+// When one particular thing can have mutltiple forms! like a father can be a father for you but can also be son for his father, a husband for your mom, a brother for his sister and in a similar way in programming, one function or object can behave differently based on the situation.!
+// There are two type of Polymorphism : Compile-Time Polymorphism and Runtime Polymorphism!
 
-// Compile time Polymorphism : Isme konsa function kab call hona hai vo decide kiya jaata hai at the compile time! means, it is achieved through function overloading and operator overloading. In compile-time polymorphism, the decision about which function or operator to call is made during the compile-time, based on the types of arguments or operands involved. The compiler resolves the method or function call at compile-time.
-// It is also called Static Polymorphism!
-// Lets see...
+// Compile Time Polymorphism : In compile-time polymorphism, the decision about which function or operator to call is made during compilation based on the types of arguments or operands.
+// Achieved Through : Function Overloading : Same function name but different parameters.
+//                  : Operator Overloading : Changing how operators work for user-defined data types.
+// The method or function call is resolved by the compiler before the program runs, which is why it's also called static polymorphism.
+
+// Compile Time Polymorphism using Function Overloading!
+// Example :
 #include<iostream>
 using namespace std;
 
@@ -1032,15 +1066,14 @@ int main() {
     k1.sayHello("Paresh",21); // height and weight nhi daala fir bhi work krega! this is becoz of default arguments!
 } // So this is Function overloading in compile time polymorphism, ki yahaa ek hi function ke multiple forms exists! and compile time me hi decide ho rha hai arguments ka type and number dekh ke hi decide ho rha hai ki konsa function call hona hai!
 
-// Operator overloading : Jaise we know + jo operator hai vo addition toh krta hi hai string ke case me concat bhi krta hai but hum chah rhe hai ki hum apne liye Hello bhi bulwaye jab bhi + operator call ho, logically it wont make sense, but just telling ki we want it to do this!
-// Lets see...
-// Chalo hum chahte hai ki + operator se - karwaye! logically it wont make sense but we are just using the operator overloading!
+// Compile Time Polymorphism using Operator Overloading!
+// Example :
 #include<iostream>
 using namespace std;
 
 class L {
     public :
-    int a, b;
+    int a;
 
     void operator+ (L &obj) {
         int value1 = this->a;
@@ -1049,9 +1082,9 @@ class L {
     }
 
     void operator() () {
-        cout<<"Inside the bracket function! "<<this->a<<endl; // Mtlb ki jab bhi bracket call ho, tab ye cout print krdena and jis obj ne call kiya ye uski a ki value print krdena!
-    }
-};
+        cout<<"Inside the bracket function! "<<this->a<<endl; // Overloaded "()", so that the object which calls it, due to overloading, it will print the "a" value of that object! 
+}
+}; // To demonstrate operator overloading, we are making "+" operator to do "-" (subtraction)!
 
 int main() {
     L obj1, obj2;
@@ -1059,23 +1092,22 @@ int main() {
     obj2.a = 12;
 
     obj1 + obj2;
-    // + is a binary operator hai toh uske liye ye matter krta hai ki right left me konsa operand hai
-    // toh humne yahaa obj1 ko left operand bnaa diya and obj2 ko right... now ab jo + ke case me jo operand right me hota hai vo as a input pass hota hai operator overloading me and jo left me hota hai vo current object hota hai ,mtlb ki uss object ke liye humari function call hui hoti hai!
+    // + is a binary operator hai toh uske liye ye matter krta hai ki right left me konsa operand hai, toh humne yahaa obj1 ko left operand bnaa diya and obj2 ko right... now ab jo + ke case me jo operand right me hota hai vo as a input pass hota hai operator overloading me and jo left me hota hai vo current object hota hai, mtlb ki uss object ke liye humari function call hui hoti hai!
     // means jab obj1 + obj2 likha humne, toh ye hua ki obj1 ne function call ki toh is kaaran se value1 me this->a jo likha hai vo usme obj1 ki value store ho rhi hai becoz we have used "this" and this points to the current object and current object is obj1 kyunki vo left me likha hua hai!... and value2 me jo obj.a likha hua vo obj2 ki baat ho rhi hai kyunki vo right me likha tha and isliye vo as paramter pass hua tha function call me! isliye value2 me obj2 ki value gyi!
     // Toh ab jab bhi + operator call hoga tab uske right and left operands ko dekh ke function call hoga and uske hisaab se - hojayega! 
 
     obj1(); // Obj1 ne call kiya bracket ko toh output me Inside the bracket function! print hoga and saath saath obj1 ki a value print hojayegi which is 5!
 }
 
-// There are some operators which cannot be overloaded! and they are... "::", "*", ".", "?:"
+// Note : There are some operators which cannot be overloaded! and they are... "::", "*", ".", "?:"
 
-// Runtime Polymorphism : also known as dynamic polymorphism, is achieved through method overriding using inheritance and virtual functions. In runtime polymorphism, the decision about which function to call is made during the runtime, based on the type of object being referred to.
-// Lets see...
-// When we have different class suppose A and B and we are inheriting properties of A into B means A is base and B is child and they both have a function with same name func() and func() in A says cout<<"Hello" and func() in B says cout<<"Hi", toh hua kya hai ki ek class ne dusre class ko inherit krne ke baad same name ke function ko dusri tarah se implement krdiya!
-// This is called Function Overriding or Method Overriding!
-// There are some rules... 1) Method of parent and child class should have same names 2) Also both methods in both the classes should have same number of parameters 3) Method overriding is possible thru inheritance only!
-// Means Runtime Polymorphism depends on Inheritance!
-
+// Runtime Polymorphism : It allows a function to behave differently based on the type of object it is working with, even when the function is called in the same way.
+//                      : The decision about which function to call is made during runtime (when the program is running), based on the actual object type.
+//                      : It is done through method overriding (using inheritance) and virtual functions.
+// Function Overriding : When a child class defines a function with the same name and same parameters as a function in the parent class, this is called method overriding.
+//                     : The child class provides its own implementation of the function, which replaces the parent class’s version.
+// Rules : Same function name in both parent and child classes. Same number of parameters in both functions. Possible only through inheritance (parent-child relationship).
+// Example : If class A has func() printing "Hello" and class B (which inherits from A) has func() printing "Hi", this is overriding the function from class A in class B.
 #include<iostream>
 using namespace std;
 
@@ -1088,7 +1120,7 @@ class M {
 
 class N : public M {
     public :
-    void display() { // Here you have done method overiding... agar tum ye function nhi banate toh M vaala hi display function call hojaata kyunki N ne M ko inherit kr rakha hai, pr kyunki humne iss class ke liye N ki khud hi implementation daal di hai display() ki isliye agar N ka object bnaa ke function call krenge toh "Inside N class" print hoga...
+    void display() { // Here you have done method overiding... agar tum ye function nhi banate toh M vaala hi display function call hojaata kyunki N ne M ko inherit kr rakha hai, pr kyunki humne iss class ke liye N ki khud ki implementation daal di hai display() ki isliye agar N ka object bnaa ke function call krenge toh "Inside N class" print hoga...
         cout<<"Inside N class"<<endl;
     }
 };
@@ -1096,13 +1128,21 @@ class N : public M {
 int main() {
     N obj1;
     obj1.display(); // Here it will print N class's implementation of display()... but if you want to specify ki which display function you want to call then in that case you use scope resolution operator!
-    obj1.M::display(); // It will print according to the implementation of display function of M class
+    obj1.M::display(); // It will print according to the implementation of display function of M class!
 }
-// Iska use is that ki agar humare paas ek base function hai uske 10 methods hai and then ek sub class hai usko uss base class ke 8 methods as it is use krne hai bss 2 jo uske methods hai unke iss sub class ko khud ke implementation use krne hai then we use this method over riding!
+// Usage : If a base class has 10 methods, and a subclass needs to use 8 methods as they are but wants to implement its own version for 2 methods, we use method overriding.
+//       : This allows the subclass to override only the required methods while inheriting others from the base class without changes.
 
-// Data Abstraction : It is called Implementation Hiding! jo essential cheeze hai vo dikhao baaki mtt dikhao jo hume dekhne ki zarurat nhi hai!
-// Data Abstraction can be achieved using Private Public Protected access specifiers!
-// Advantages : Only you can change to your data and no one else can! it makes application more secure by not allowing anyone else to see the background details! increase the reusability of the table! Avoid duplication of data!
+// Data Abstraction!
+// Purpose : Data abstraction is the concept of hiding unnecessary details from the user and showing only the essential information. In simple words, it's like giving a "brief view" of the object or data, and hiding the complexity.
+//         : It is also called Implementation Hiding because you hide the internal workings of an object (like its data and methods) and only provide access to what’s needed.
+// Key Points : What is Hidden : You hide the implementation details (e.g., internal data and how it works) and expose only the important functionality or data that is necessary for the user to interact with.
+//            : How is it Achieved : Access Modifiers like private, protected, and public are used to control which parts of the class are accessible to the outside world.
+//                                 : Private : Hides data members and methods so they cannot be accessed directly from outside the class.
+//                                 : Protected : Allows derived classes to access certain members while keeping them hidden from other parts of the program.
+//                                 : Public : Exposes only the necessary parts that users can interact with.
+// Advantages of Data Abstraction : Security, Simplification, Reduced Complexity, Encapsulation, Reusability, Maintaining and Updating!
+//                                : Error Prevention : By hiding internal data and providing controlled access (through functions), you reduce the risk of unwanted changes or incorrect usage, as users can't directly modify the internal state of the object.
 
 // ---------------------------------------------------------- LECTURE 44 - Linked Lists and Its Types --------------------------------------------------------------------------------------------------------->
 // Linked Lists Basics : Linked List is a data structure made up of nodes, where each node contains some data and the address of the next node

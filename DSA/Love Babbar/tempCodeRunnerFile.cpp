@@ -1,37 +1,15 @@
 #include<iostream>
-#include<vector>
-#include<string>
 using namespace std;
 
-void solve(string str, int index, string output, vector<string> &ans) {
-    if(index >= str.length()) {
-        if(output.length() > 0) {
-            ans.push_back(output);
-        }
-        return;
-    }
-
-    solve(str,index+1,output,ans);
-
-    output.push_back(str[index]);
-    solve(str,index+1,output,ans);
-}
-
-vector<string> subsequences(string str) {
-    vector<string> ans;
-    string output;
-    int index = 0;
-    solve(str, index, output, ans);
-    return ans;
-}
+class Hero {
+    private :
+        int Health; // Private member (not accessible outside the class)
+    public :
+        int Age; // Public member (accessible outside the class)
+};
 
 int main() {
-    string str;
-    cout<<"Enter your string : ";
-    cin>>str;
-
-    vector<string> result = subsequences(str);
-    for(const auto &subsequence : result) {
-        cout<<subsequence<<" ";
-    }
+    Hero Utkarsh;
+    // cout<<"Utkarsh's health is : "<<Utkarsh.Health<<endl; // It will throw error
+    cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl; // It won't throw erroor, but will print garbage value as it is not initiallized!
 }
