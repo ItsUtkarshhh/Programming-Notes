@@ -703,19 +703,22 @@ int main() {
 
 
 // ---------------------------------------------------------- LECTURE 38 - Recursion Day-8 : Phone Keypad Problem --------------------------------------------------------------------------------------------------------->
-// Question : Leetcode question : 17...
-// So basically what we have to do is... phone keypad me jo numbers hote hai unke corresponding kuch alphabets hote hai jaise 2 ke corresponding abc, 3 -> def and similarly...
-// Now user can type any number between 2-9 and now you have to fund the numbers of combinations possible that these numbers could represent!
-// Approach : It will mostly similar to the above two questions! so we will again follow the inclusive and exclusive technique and we will have na input array and we will push values into an output array!
-// for more clear visualizationa and recursion tree rewatch the lecture on youtube!
-// Lets code...
+// Question : Phone Keypad Problem, Leetcode Question 17
+// Problem Statement : Each number from 2 to 9 on a phone keypad corresponds to certain letters : 2 - abc, 3 - def, 4 - ghi, 5 - jkl, 6 - mno, 7 - pqr, 8 - stu, 9 - vwxz.
+//                   : When the user enters a number (or multiple numbers), we need to find out how many different letter combinations these numbers can represent based on the mapping.
+// Approach : This problem is similar to previous ones you've worked on, where the solution involves generating all combinations. We'll use recursion and backtracking (which is often used in problems like this).
+//          : Inclusive-Exclusive Technique: This technique is helpful in counting combinations where we include and exclude certain options based on conditions.
+//          : Plan : We will create a recursive function that goes through each number, looks up its corresponding letters, and then recursively tries all combinations.
+//                 : For example, if the input is 23, the function will : Pick 'a' from 2 and combine it with each letter from 3 ('d', 'e', 'f').
+//                                                                      : Then, it will do the same for 'b' and 'c' from 2.
+
+// Implementation!
 #include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
 
-void solve(string digit, string output, int index, vector<string>& ans, string mapping[] ) {
-    
+void solve(string digit, string output, int index, vector<string>& ans, string mapping[]) {
     //base case
     if(index >= digit.length()) {
         ans.push_back(output);
@@ -740,7 +743,7 @@ vector<string> letterCombinations(string digits) {
     }
     string output;
     int index = 0;
-    string mapping[10] = {"", "", "abc", "def", "ghi", "jkl","mno","pqrs","tuv","wxyz"};
+    string mapping[10] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
     solve(digits, output, index, ans, mapping);
     return ans;
 }

@@ -18,7 +18,7 @@
 // Fibonacci Series : O(n)
 
 // With that... try to find TC and SC of all the previous algorithms that have been done in all these Day1 - Day11 of recursion! using the suitable methods!
-// Also visit CodeStudio and read and understand and solve the articles nd questions! and you can visit it thru the link of below the lecture on yt!
+// Also visit CodeStudio and read and understand and solve the articles and questions! and you can visit it thru the link of below the lecture on yt!
 // Practice to find TC and SC it is important!
 
 // ---------------------------------------------------------- LECTURE 42 - OOPS Part 1 --------------------------------------------------------------------------------------------------------->
