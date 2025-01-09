@@ -115,6 +115,44 @@ int main() {
     // Greedy Alignment : Greedy alignment is a strategy used by some compilers to minimize padding. In greedy alignment, the compiler tries to align each member of a structure or class to the largest alignment requirement of any member in the structure. This strategy helps reduce padding by minimizing the number of empty bytes inserted between members.
 }
 
+// We can also define class methods outside the class! But we just need to first declare it inside!
+#include<iostream>
+using namespace std;
+
+class Student1 {
+    private :
+    int a,b,c;
+    public :
+    int d,e;
+    void scan(int a, int b, int c);
+    void print() {
+        cout<<"Value of a : "<<a<<endl;
+        cout<<"Value of b : "<<b<<endl;
+        cout<<"Value of c : "<<c<<endl;
+        cout<<"Value of d : "<<d<<endl;
+        cout<<"Value of e : "<<e<<endl;
+    }
+};
+
+void Student1 :: scan(int a, int b, int c) {
+    // cin>>this->a>>this->b>>this->c; // To take input from the user!
+    // Some obvious considerations : Remove the paramsters, as the method will no longer depend on parameters being passed to it. Instead, it will prompt the user for input directly!
+    //                             : You may want to do anyone of the two way of assigning values to a, b, c.
+    this->a = a;
+    this->b = b;
+    this->c = c;
+}
+
+int main() {
+    Student1 Utkarsh;
+    // Utkarsh.a = 6559; // Will throw error, as "a" is private here. Hence, cannot be accessed directly!
+    Utkarsh.scan(6, 6, 3);
+    Utkarsh.d = 65;
+    Utkarsh.e = 59;
+    Utkarsh.print();
+    return 0;
+}
+
 // Static and Dynamic Allocation!
 #include<iostream>
 using namespace std;
@@ -200,6 +238,30 @@ int main() {
 // Note : If you define a constructor (default or parameterized) : The compiler-generated default constructor (implicit constructor) is no longer provided.
 //      : If you later remove your custom constructor and try to create an object without explicitly defining a constructor again, it will result in an error because the compiler doesn't auto-generate the default constructor anymore.
 
+// Example (Creating constructor outside the class)!
+#include<iostream>
+using namespace std;
+
+class complex {
+    int a,b;
+    public :
+    complex(); // Declaration of constructor.
+    void printNumber() {
+        cout<<"Your number is : "<<a<<"i + "<<b<<"j"<<endl;
+    }
+};
+
+complex :: complex() { // Defintion of constructor, it doesn't have a return type.
+    a = 5;
+    b = 10;
+}
+
+int main() {
+    complex c;
+    c.printNumber();
+    return 0;
+} // Similarly you can do for parameterized constructor!
+
 // Parameterized Constructor! and "This" keyword!
 #include<iostream>
 using namespace std;
@@ -284,7 +346,8 @@ int main() {
 // Copy Constructor!
 // Purpose : Used to copy objects by initializing a new object with the data of an existing object of the same class.
 // Key Points : A compiler-provided copy constructor exists by default and is automatically used if you don’t define one explicitly.
-//            : It initializes the new object by copying the members of the existing object.
+//            : It initializes the new object by copying the data members of the existing object.
+//            : Member functions are not copied in either assignment or copy construction. Functions (methods) are part of the class definition and are shared across all objects of the class. So, they don't need to be copied, they already belong to the class.
 // Definition : Default Copy Constructor: Automatically provided by the compiler if not explicitly defined.
 //            : Custom Copy Constructor: Defined by the programmer to control the copy process.
 // Usage : Custom Copy Constructor : Defined by the programmer to control the copy process.
@@ -451,7 +514,7 @@ int main() {
     // So from this example both deep and shallow copy constructors are clear!
 }
 
-// Use of Copy Assignment operator! : Agar do object create ho chuki hai and dono me se kisi ek ko dusre me copy krna hai tab we use this operator, copy constructor me kya tha ki ek object create ho chuki hai dusra object bss create hua hai but initiallize nhi and hume pehle vaali ko dusre me copy krna hai then we use that, but here dono initialize ho rakhe hai and humne bss ek ko dusre me copy krna hai!
+// Use of Copy Assignment operator : Agar do object create ho chuki hai and dono me se kisi ek ko dusre me copy krna hai tab we use this operator, copy constructor me kya tha ki ek object create ho chuki hai dusra object bss create hua hai but initiallize nhi and hume pehle vaali ko dusre me copy krna hai then we use that, but here dono initialize ho rakhe hai and humne bss ek ko dusre me copy krna hai!
 #include<iostream>
 #include<string>
 #include<cstring>
@@ -503,6 +566,60 @@ int main() {
     hero1.getterFunc(); // Output of hero1 will be the output of hero2 kyunki hero2 ki values humne saari hero1 me copy krdi hai!
 }
 
+// Example (copying using assignment operator)
+#include<iostream>
+using namespace std;
+
+class Number {
+    int a;
+    public :
+    Number() {
+        a = 0;
+    }
+
+    Number(int num) {
+        a = num;
+    }
+
+    Number(Number &obj) {
+        cout<<"This is a copy constructor!!!!"<<endl;
+        a = obj.a; // First we have to make this constructor and pass the reference of an object
+    }
+
+    void display() {
+        cout<<"The number for this object is "<<a<<endl;
+    }
+};
+
+int main() {
+    Number x,y,z(50),z2;
+    x.display(); // Here we have printed the value of x, which is 0
+    y.display(); // Here we have printed the value of y, which is 0
+    z.display(); // Here we have printed the value of z, which is 50
+    // If we don't give any value uptill here it will print garbage value, but we assign some values to x and y in the default constructor we have made then it will result in printing those default values!
+
+    // But now lets understand the copy constructor! There are three ways of copying one object to another! Through "copy constructor", "assignment operator" and using "copy constructor + assignment operator"!
+    // Using Copy Constructor! - Calling Copy Constructor Explicitly!
+    Number x1(x); // Here x1 is a variable of Number type and we have passed the reference of x in it!
+    x1.display();
+
+    Number y1(y); // Here y1 is a variable of Number type and we have passed the refrence of y in it!
+    y1.display();
+
+    Number z1(z); // Here z1 is a variable of Number type and we have passed the refrence of z in it!
+    z1.display();
+
+    // Using Assignment Operator! - It won't invoke copy constructor, it will just copy the data members value to the new already declared object!
+    z2 = z; // z2 has already been created as an object. When you use the assignment operator (=), the copy constructor is not invoked. Instead, the assignment operator is used to copy the value of z to z2.
+    z2.display(); // The data members (variables) of object z will be copied to z2. So, the values of z.a, z.health, etc., will be assigned to the corresponding members of z2. This copying happens at the variable level, not at the function level.
+
+    // Using Copy constructor + Assignment operator! - Calling Copy Constructor Implicitly!
+    Number z3 = z; // z3 is being created and initialized with the value of z in the same line. This is treated as an initialization, not an assignment. Even though the syntax looks like an assignment, this is actually copy initialization, which involves calling the copy constructor to initialize z3 with z.
+    z3.display();
+    // A new object (z3) is created, and values from z are copied into z3. This invokes the copy constructor. Just like the assignment operator, the data members of z are copied to z3. This includes any variables like a, health, etc.
+    // But what if remove the copy constructor? Will it show error and the answer is NO, because the compiler supplies its own copy constructor when no copy constructor is found!, But still we make one on our own!
+}
+
 // Destructors!
 // Purpose : Used to deallocate memory and clean up resources when an object's lifetime ends.
 // Key Points : Automatically called when the object goes out of scope or is explicitly deleted.
@@ -545,10 +662,40 @@ int main() {
 // Static Keyword!
 // Purpose : Used for data members or methods that are shared across all objects of a class.
 // Key Points : Shared Across the Class : A static data member is common to all objects of the class.
+//            : If we do not initiallize it, it will contain 0 initially!
 //            : Example : In a game, timeToComplete is the same for all Hero or Enemy objects.
 // Single Memory Allocation : Memory for static members is allocated only once, shared by all objects.
 // Initialization Outside the Class : [datatype] [ClassName]::[StaticDataMember] = [Value];
 // Access Without Objects : Static members can be accessed using the class name (e.g., ClassName::StaticMember).
+
+// Basic Understanding Example :
+#include<iostream>
+using namespace std;
+
+void counter() {
+    // static int count; // This will automatically initialize `count` to 0 (default for static variables). And it will incremented as the loop goes on!
+    static int count = 0; // This explicitly initializes `count` to 0 (same as the default behavior). But still the static key words behaviour makes it retain its previous value! Hence, it behaves the same as above!
+    cout << count++ << endl;
+}
+
+int main() {
+    // counter(); // First it will print 0.
+    // counter(); // Then it will print 1 because first 0 is stored in the count and then it will got increamented.
+    // counter(); // Then it will print 2 as because the second output 1 got stored in the static count variable.
+    // counter(); // and similarly...
+    // counter(); // and similarly...
+
+    for(int i = 0; i < 5; i++) {
+        counter();
+    }
+    return 0;
+}
+// Note : During the first function call, the static variable count is initialized to 0 (since you specified = 0), and its value is stored in memory.
+//      : After the first call, the static variable does not get re-initialized. The value of count remains in memory. Every time the function is called afterward, the previous value of count is used (because it's retained), and it gets incremented by 1.
+//      : The static variable lives in a special area of memory known as the data segment (not the stack), which is why it persists across function calls.
+//      : Whereas, if there would be some normal variable, then that would have initiallized again and again! and would have printed 0 eveytime!
+
+// Practical Example :
 #include<iostream>
 using namespace std;
 
@@ -626,6 +773,314 @@ int Hero5 :: timeToComplete = 5;
 int main() {
     cout<<Hero5::timeToComplete<<endl;
     cout<<Hero5::func()<<endl; // Both will print 5
+}
+
+// Another Example :
+#include<iostream>
+using  namespace std;
+
+class employee {
+    private :
+    int id;
+    static int count; // Static data member to count the number of employee.
+
+    public :
+    void set_data() {
+        cout<<"Enter the ID of the employee : ";
+        cin>>id;
+        count++;
+    }
+    void get_data() {
+        cout<<"The ID of the employee is "<<id<<" and this is employee number "<<count<<endl;
+    }
+    static void getCount() {
+        // cout<<id; // Will throw an error becoz "id" is not a static data member so it can't be access in static member function.
+        cout<<"Value of the count is : "<<count<<endl;
+    }
+};
+
+int employee :: count = 100; // Static data member is initialized from here, and not from the class. and if we don't initialize it, it will self-initialize with 0.
+
+int main() {
+    employee Utkarsh, Palak, Preyansh;
+    Utkarsh.set_data();
+    Utkarsh.get_data();
+    employee :: getCount(); // Static member function don't need an object to get called, it can be initialized with just the name of the class. and Static member function can use or access only the static data member or functions.
+
+    Palak.set_data();
+    Palak.get_data();
+    employee :: getCount();
+
+    Preyansh.set_data();
+    Preyansh.get_data();
+    employee :: getCount();
+} // Without static keyword it won't increament the count becoz a normal data member is valid only till end of the block whereas a static data member will be valid for the entire program.
+// Final Crux : Static Variables/Data Members and Static Member Functions are primarly associated with classes! but they can also be used aprt from classes!
+
+// Array of Objects!
+#include"iostream"
+using namespace std;
+
+class Employee {
+    private :
+    int id;
+    int salary;
+
+    public :
+    void setID() {
+        salary = 2,00,00,000;
+        cout<<"Enter the ID of the employee is : "<<endl;
+        cin>>id;
+    }
+    void getID() {
+        cout<<"The ID of this employee is : "<<id<<endl;
+    }
+};
+
+int main() {
+    // One way to call the functions of the class is to make different objects and call them indivisually. another way is to make an array of object and then apply loop.
+    Employee Hawkins_Lab[5];
+    for(int i = 0; i < 5; i++) {
+        Hawkins_Lab[i].setID();
+        Hawkins_Lab[i].getID();
+    }
+    return 0;
+}
+
+// Friend Function : A friend function is a special function that is not a member of a class but has access to the private and protected members of that class. In other words, it can access and modify the private data of a class, which is typically not allowed for regular functions outside the class.
+// Key Points : Not in the scope of the class.
+//            : Since it is not in the scope of the class, it cannot be called from the object of that class. c1.sum_of_complex() == Invalid
+//            : Can be invoked without the help of any object.
+//            : Usually contains the objects as arguments.
+//            : This friend function can be declared inside private section or in the public section of the class.
+//            : It cannot access the members directly by the names and need objects_name.member_name to access any member.
+
+// Example 1 : Simplest one to understand Friend Function!
+#include<iostream>
+using namespace std;
+
+class Y; // Here we have to tell the compiler that there will be class named Y.
+
+class X {
+    int data;
+    public :
+    void setValue(int value) {
+        data = value;
+    }
+    friend void addValue(X, Y); // Declaration that addValue is a friend function of class X.
+};
+
+class Y {
+    int data; // This data private member is not same as the previously in class A. We can also give it some other name.
+    public :
+    void setValue(int value) {
+        data = value;
+    }
+    friend void addValue(X, Y); // Declaration that addValue is a friend function of class Y.
+};
+
+void addValue(X o1, Y o2) { // Here, this addValue was a friend function, that is why it was able to access the dprivate ata members of X & Y. 
+    cout<<"Sum of the two values of two classes : "<<(o1.data + o2.data);
+}
+
+int main() {
+    X a1;
+    a1.setValue(5);
+    Y b1;
+    b1.setValue(5);
+    addValue(a1, b1);
+}
+
+// Example 2 : Simplest one to understand Friend Function!
+#include<iostream>
+using namespace std;
+
+class complex {
+    int a,b;
+    public :
+    int setNumber(int n1, int n2) {
+        a = n1;
+        b = n2;
+    }
+    // Below line means that non-member - sum_of_complex function is allowed to do anything with private data members.
+    friend complex sum_of_complex(complex o1, complex o2); // Here in the class we declared the complex sum_of_complex as the friend function of the class complex.
+
+    int print() {
+        cout<<"The complex number is : "<<a<<"i + "<<b<<"j"<<endl;
+    }
+};
+
+complex sum_of_complex(complex o1, complex o2) { // Here we made a function of the type complex, which was not a member function of the class also but using this we are trying to access the private data members and that we can't do...so here we will make it a friend function of the class complex and using which we can access the private data members of the class.
+    complex o3;                                  // So a friend function is not a member function of the class, but it can still access the private data members using the keyword "friend".
+    o3.setNumber((o1.a + o2.a), (o1.b + o2.b));
+    return o3;
+}
+
+int main() {
+    complex c1, c2, sum;
+    c1.setNumber(2,3);
+    c1.print();
+
+    c2.setNumber(3,2);
+    c2.print();
+
+    // sum.sum_of_complex(); // We can't call the sum_of_complex function using the class object because it's not a data member.
+    sum = sum_of_complex(c1,c2);     
+    sum.print();
+    return 0;
+}
+
+// Working Examples of Classes and Objects!
+// Question 1 : Check if a number is Binary or not!
+#include<iostream>
+#include<string>
+using namespace std;
+
+class binary {
+    private :
+    string s;
+    // chk_binary(); If we make this function private, then we can't call it in the main() function. and if we will try to call it will show error, becoz of private member function. And can only used by members of the class.
+    // So basically hum krte kya hai ki hum humesha Data members ko private rakhte hai! and member functions ko humesha public taaki hum unn member functions ki help se private ya public data members ko access kr paye!
+    public :
+    void read_binary();
+    void chk_binary();
+    void ones_compliment();
+    void display();
+};
+
+void binary :: read_binary() {
+   cout<<"Enter the binary number : ";
+   cin>>s; 
+}
+
+void binary :: chk_binary() {
+    for (int i = 0; i < s.length(); i++) {
+        if (s.at(i) != '0' && s.at(i) != '1') { // Use "at()" to access characters safely
+            cout << "Incorrect binary format. Please enter a valid binary number." << endl;
+            exit(0); // Exit the program if the binary format is invalid
+        }
+    }
+}
+
+void binary :: ones_compliment() {
+    chk_binary(); // If we just call the chk_binary() function inside this function, we don't need to call it in the main() function. and this is called "Nesting of member function" where we called a member function inside another member function.
+    for (int i = 0; i < s.length(); i++) {
+        if (s.at(i) == '1') {
+            s.at(i) = '0';
+        }
+        else {
+            s.at(i) = '1';
+        }
+    }
+}
+
+void binary :: display() {
+    cout << "Binary number: " << s << endl;
+}
+
+int main() {
+    binary b;
+    b.read_binary();
+    // b.chk_binary(); // Iski need nhi hai kyunki already call hogya hai ones compliment function me!
+    b.display(); // If we call this function before one_compliments() function it won't do ones compliment...so we have to call that function after the call of ones_compliment function.
+    b.ones_compliment();
+    b.display();
+    return 0;
+}
+
+// Question 2 : Simple and Compound Interest!
+#include<iostream>
+using namespace std;
+
+class BankDeposit {
+    int principal;
+    int years;
+    float interest;
+    float ReturnValue;
+    public :
+    BankDeposit() {}
+    BankDeposit(int p, int y, float r);
+    BankDeposit(int p, int y, int r);
+    void show();
+};
+
+BankDeposit :: BankDeposit(int p, int y, float r) {
+    principal = p;
+    years = y;
+    interest = r;
+    ReturnValue = principal;
+    for(int i=0; i<y; i++) {
+        ReturnValue = ReturnValue * (1+interest); // Here we will put the interest rate in decimals and that "1+interest" ss becoz that interest will add up to the principal after the first year!
+    }
+}
+
+BankDeposit :: BankDeposit(int p, int y, int r) {
+    principal = p;
+    years = y;
+    interest = float(r)/100;
+    ReturnValue = principal;
+    for(int i=0; i<y; i++) {
+        ReturnValue = ReturnValue * (1+interest); // Here we will put the interest rate in integer and that "1+interest" is becoz that interest will add up to the principal after the first year! and here we have converted that interest rate from integer to float, but input will be in integer, and later on we have converted it in float and divided by hundred to added 1 and then we have multiplied it with return value which already stored principal value!
+    }
+}
+
+void BankDeposit :: show() {
+    cout<<"Principal Amount is : "<<principal<<". Return Value after "<<years<<" years is "<<ReturnValue<<endl; //This is a print function for the Return Value!
+}
+
+
+int main() {
+    BankDeposit bd1, bd2, bd3;
+    int p,y;
+    float r;
+    int R;
+
+    cout<<"Enter the value of p, y and r : "<<endl;  // For Interest rate in Decimals!
+    cin>>p>>y>>r;
+    bd1 = BankDeposit(p,y,r);
+    bd1.show();
+
+    cout<<"Enter the value of p, y and R : "<<endl; // For Interest rate in Integer!
+    cin>>p>>y>>R;
+    bd2 = BankDeposit(p,y,R);
+    bd2.show();
+
+    bd3.show();
+}
+
+// Question 3 : Adding Complex Numbers
+#include<iostream>
+using namespace std;
+
+class complex {
+    private :
+    int a;
+    int b;
+    public :
+    void setData(int v1, int v2) {
+        a = v1;
+        b = v2;
+    }
+    void setDataBySum(complex o1, complex o2) {
+        a = o1.a + o2.a;
+        b = o1.b + o2.b;
+    }
+    void print() {
+        cout<<"The sum of the complex number is "<<a<<"i + "<<b<<"j"<<endl;
+    }
+};
+
+int main() {
+    complex c1, c2, c3;
+    c1.setData(1,2);
+    c1.print();   
+
+    c2.setData(4,5);
+    c2.print();
+
+    c3.setDataBySum(c1,c2);
+    c3.print();
+    return 0;
 }
 
 // ---------------------------------------------------------- LECTURE 43 - OOPS Part 2 --------------------------------------------------------------------------------------------------------->
@@ -1019,6 +1474,56 @@ int main() {
 // The OOPS concepts we study at a basic level are just the foundational principles. While these concepts (like classes, objects, inheritance, encapsulation, etc.) are the building blocks, the way OOP is applied in the industry can be much more complex and sophisticated.
 // While basic OOP gives you the necessary understanding, industry-level OOP is much more complex, structured, and focuses on scalability, maintainability, and efficiency. It involves not just syntax but a deeper understanding of architecture and system design principles.
 
+// Case Study 1 :
+#include<iostream>
+using namespace std;
+
+class Employee {
+    public :
+    int id;
+    float salary;
+    Employee(int inpId) {
+        id = inpId;
+        salary = 34.0;
+    }
+    Employee() {} // We added this to avoid errors while creating an object of Programmer class!
+};
+
+class Programmer : Employee { // Here default visibilty mode is private!
+    public :
+    Programmer(int inpId) {
+        id = inpId;
+    }
+    int languageCode = 5;
+    void getdata() { // Here we can print the id of the prorammer object using getdata function!
+        cout<<id<<endl;
+    }
+};
+
+int main() {
+    Employee Utkarsh(1), Palak(2); // These objects will call the Base Class's parameterized constructor! with IDs 1 & 2.
+    // Employee Utkarsh, Palak; // These objects will call the Base Class's default constructor!
+    cout<<Utkarsh.salary<<endl;
+    cout<<Palak.salary<<endl;
+
+    // Now, Lets create Derived Class!
+    Programmer Utkarsh2(3); // But till here it will also show error becoz when we will create the object utkarsh and give it the ID 2 then a object of the class programme will be created, but then as the Programmer class is the derived class of the class Employee so it will try to call a default constructor of the employee class which is not present till now! so we will add a default constructor of the Employee class! and hence all the errors will be removed!
+    cout<<Utkarsh2.languageCode<<endl; // It wwill print 5 simply!
+    Utkarsh2.getdata(); //Here we can print the id of the prorammer object using getdata function!
+    // cout<<Utkarsh2.id<<endl; //Here it wont print the value of id of the object as becoz id ios a private inherited from the employee class! 
+    return 0;
+}
+
+// Understanding : A default constructor is a constructor that can be called without any arguments. If no constructors are provided, the compiler automatically provides a default constructor. If you define a parameterized constructor in a class and don't define a default constructor, the compiler won't provide the default constructor.
+//               : A parameterized constructor takes arguments when you create an object of the class, allowing for initialization with specific values.
+//               : When you create an object of the derived class, the constructor of the base class is always called first. This is an important part of object creation because the base class needs to be initialized before the derived class can be initialized.
+//               : If the base class doesn't have a default constructor and you're trying to create an object of the derived class without arguments, you'll get a compilation error unless the base class constructor is explicitly called.
+
+// Why derived class and base class both have their parameterized contructors for object creation, then why dervied class objects need a base class default constructors for object creation?
+// Answer : The base class constructor will be called before the derived class constructor to initialize the base class part of the object.
+//        : If the derived class does not explicitly specify which constructor to call in the base class, the compiler will try to call the default constructor of the base class. That's why it is showing error!
+//        : For a derived class object creation, somethings are very important! They are : Derived class default constructor! Derived class paramaterized constructor! (If any) Base class default constructor! Base class paramaterized constructor! (If any)
+
 // Polymorphism!
 // Formal Definition : Polymorphism means "many forms". It is when one thing can take multiple forms based on the context.
 // When one particular thing can have mutltiple forms! like a father can be a father for you but can also be son for his father, a husband for your mom, a brother for his sister and in a similar way in programming, one function or object can behave differently based on the situation.!
@@ -1143,6 +1648,28 @@ int main() {
 //                                 : Public : Exposes only the necessary parts that users can interact with.
 // Advantages of Data Abstraction : Security, Simplification, Reduced Complexity, Encapsulation, Reusability, Maintaining and Updating!
 //                                : Error Prevention : By hiding internal data and providing controlled access (through functions), you reduce the risk of unwanted changes or incorrect usage, as users can't directly modify the internal state of the object.
+
+// Why Classes over Structures?
+// Lack of Encapsulation : Structures are primarily designed to store data, not behavior. They don’t combine data (attributes) and functionality (methods) in one place as effectively as classes do.
+//                       : In a structure, you can’t define methods to operate on the data easily in some languages (like C). You’ll need to write separate functions, which are harder to manage and not tied to the data they work on.
+
+// No Access Control : In structures, everything is typically public by default (e.g., in C or C++). Structures can have private, public, and protected members just like classes. This means you can technically achieve access control in structures too.
+//                   : But still, the default access modifier is Public, and if you forget to explicitly specify private, your structure’s members will remain public. This can lead to unintentional exposure of data. Classes are safer by default, as you need to explicitly make members public.
+
+// No Inheritance : Structures generally do not support inheritance, which is a core feature of object-oriented programming (OOP).
+//                : Without inheritance, you can’t reuse code efficiently or create relationships between objects, leading to duplication.
+
+// No Polymorphism : Structures don’t support features like polymorphism (e.g., virtual functions in C++). This makes it impossible to write flexible and dynamic code where the same method can behave differently in different contexts.
+//                 : Polymorphism is critical for building scalable and maintainable applications. Without it, your code becomes rigid and harder to extend.
+
+// No Constructors and Destructors : Structures don’t support constructors and destructors (in some languages like C), which are essential for object lifecycle management.
+//                                 : You’ll need to write manual initialization and cleanup code, which increases the chance of bugs and makes your code less efficient.
+
+// Limited Dynamic Features : Structures lack support for advanced OOP features like dynamic memory allocation and virtual functions (e.g., in C++). Classes are more flexible and powerful when working with complex scenarios.
+//                          : Without these features, you can’t handle dynamic or real-world problems efficiently.
+
+// Not Suited for Modern Programming : Structures were designed for procedural programming (e.g., C). They don’t align well with modern object-oriented programming principles, which focus on modularity, abstraction, and reusability.
+//                                   : You miss out on modern best practices and features that make coding more efficient and scalable.
 
 // ---------------------------------------------------------- LECTURE 44 - Linked Lists and Its Types --------------------------------------------------------------------------------------------------------->
 // Linked Lists Basics : Linked List is a data structure made up of nodes, where each node contains some data and the address of the next node

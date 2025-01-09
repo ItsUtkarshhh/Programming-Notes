@@ -1,18 +1,3 @@
-// INHERITANCE!!!!!!!!!!!!
-// Reusability is one of the main feature of oops! In C++ we can reuse the class and add additional features to it, as reusing the class saves the time and money, reusing already tested and debugged class will save alot of effort in developing and debugging the same thing again!
-// The concept of reusability in C++ is supported using inheritance!
-// We can reuse the properties of existing class by inheriting from it!
-// The existing class is called the base class!
-// The new class which is inherited is called as a derived class!
-// Reusing classes saves time and money!
-
-// There are different types of Inheritance in C++! : Single Inheritance, Multiple Inheritance, Multi-level Inheritance, Hierarchial Inheritance, Hybrid Inheritance.
-// Single Inheritance : Where derived class is derived from only one base class!
-// Multiple Inheritance : Where derived class is derived from more than one base class!
-// Hierarchial Inheritance : Where more than one derived classes are derived from one base class!
-// Multi-Level Inheritance : Where derived class is derived from another derived class and that derived class is derived from one base class!
-// Hybrid Inheritance : Where it is a combination of Multiple Inheritance and Multi-Level Inheritance.
-
 #include<iostream>
 using namespace std;
 
