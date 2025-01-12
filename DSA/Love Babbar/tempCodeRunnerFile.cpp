@@ -1,39 +1,46 @@
 #include<iostream>
 using namespace std;
 
-class Employee {
-    public :
-    int id;
-    float salary;
-    Employee(int inpId) {
-        id = inpId;
-        salary = 34.0;
+// Class A represents an object that contains an integer 'a'.
+class A {
+    int a; // Member variable to store the value.
+    public:
+    
+    // Member function setdata, which uses the 'this' pointer and reference variables.
+    A& setdata(int a) { 
+        // Here, we are using a reference to avoid creating a copy of 'a' when passing to the function.
+        // This allows the function to modify the original value instead of a copy.
+        this->a = a; // Assign the passed value 'a' to the member variable 'a' using the 'this' pointer.
+        cout << "Address of returned obj is: " << this << endl; // Printing the address of the object that called this function.
+        return *this; // Return the object itself using the 'this' pointer (dereferencing it). This allows method chaining in main().
     }
-    // Employee() {} // We added this to avoid errors while creating an object of Programmer class!
-};
 
-class Programmer : Employee { // Here default visibilty mode is private!
-    public :
-    Programmer() {}
-    Programmer(int inpId) {
-        id = inpId;
-    }
-    int languageCode = 5;
-    void getdata() { // Here we can print the id of the prorammer object using getdata function!
-        cout<<id<<endl;
+    void getdata() {
+        cout << "The value of a is " << a << endl;
     }
 };
 
 int main() {
-    Employee Utkarsh(1), Palak(2); // These objects will call the Base Class's parameterized constructor! with IDs 1 & 2.
-    // Employee Utkarsh, Palak; // These objects will call the Base Class's default constructor!
-    cout<<Utkarsh.salary<<endl;
-    cout<<Palak.salary<<endl;
-
-    // Now, Lets create Derived Class!
-    Programmer Utkarsh2(3); // But till here it will also show error becoz when we will create the object utkarsh and give it the ID 2 then a object of the class programme will be created, but then as the Programmer class is the derived class of the class Employee so it will try to call a default constructor of the employee class which is not present till now! so we will add a default constructor of the Employee class! and hence all the errors will be removed!
-    cout<<Utkarsh2.languageCode<<endl; // It wwill print 5 simply!
-    Utkarsh2.getdata(); //Here we can print the id of the prorammer object using getdata function!
-    // cout<<Utkarsh2.id<<endl; //Here it wont print the value of id of the object as becoz id ios a private inherited from the employee class! 
+    int x = 5; // Local variable with value 5.
+    
+    // Dynamically creating an object of class A using the 'new' keyword.
+    A *a = new A; // Object 'a' is dynamically created and pointer is assigned to it.
+    cout << "Address stored in pointer: " << a << endl; // Printing the address of the dynamically allocated object.
+    
+    // Creating a reference variable 'z' and calling the setdata function on the object created using pointer 'a'.
+    // The setdata function returns a reference to the object itself, which is stored in 'z'.
+    A &z = (*a).setdata(x); // Passing the value 'x' to setdata and assigning the returned reference to 'z'.
+    
+    // Displaying the value of 'a' using reference variable 'z'.
+    z.getdata(); // The object 'z' is referring to the same object as 'a'.
+    
+    // Printing the address of the object referred to by 'z'.
+    cout << "Address of object jo humein mila is: " << &z << endl;
+    
+    // Printing the address stored in pointer 'a', which should be the same as the address of 'z'.
+    cout << "Address stored in pointer: " << a << endl;
+    
+    // All addresses should be the same because 'z' is just another name (reference) for the same object.
+    
     return 0;
 }

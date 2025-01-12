@@ -184,7 +184,6 @@ int main() {
     cout<<"Level : "<<Utkarsh1.Level<<endl;
     cout<<"Health : "<<Utkarsh1.getHealth()<<endl;
 
-
     // Dynamically Created Object!
     Hero *Utkarsh2 = new Hero; // Allocates memory dynamically on the heap. Utkarsh2 is a pointer storing the address of the allocated memory. 32-bit Compiler : Allocates 4 bytes of memory on the heap. 64-bit Compiler : Allocates 8 bytes of memory on the heap.
     (*Utkarsh2).Level = 69;
@@ -197,7 +196,7 @@ int main() {
     cout<<"Health : "<<Utkarsh2->getHealth()<<endl;
 }
 
-// Default Constructor! 
+// Default Constructor!
 // A special method that is automatically called when an object is created. Called as ObjectName.Class() internally.
 // Key Points : Default Constructor : No return type and No input parameters.
 //            : Works behind the scenes even if not explicitly defined in the class.
@@ -280,18 +279,14 @@ class Hero {
     // }
 
     Hero(int Health) {
-        this -> Health = Health; // So agar kabhi parameterized constructor me jo paramter hum pass kr rhe hai and jiss data member ka use kr rhe hai dono ka name same hai toh in that case we use "this" keyword taaki ye btaa sake ki konsa variable object ka hai and konsa ek paramter hai!
-        // so writing this we can see "this" keyword is used on the "Health" on left side of assignment operator which tells that left vaala object ka data member hai and right vaala paramter hai!
-
-        // "this" ka bss yhi kaam hai ki confusion khatam krna ki konsa name kiska hai... hum chahe toh different names bhi use kr sakte hai but just telling ki agar same names use krna chahte hai toh ye "this" operator use kr sakte hai...
-        // Overall "this" is a pointer which stores the address of the current object!
-        // Current Object : When you create instances of a class, each instance is an object with its own set of data members and member functions. When you call a member function on an object, that object becomes the "current object" within the context of that function call.
-    } // Yahaa iss this -> Health ki help se hum bss ye kehna chah rhe hai ki jaise maanlo current object hai Utkarsh and usne iss constructor ko call kiya toh curent object Utkarsh ban gya hai toh ab jab iss constructor ke paas jab request ayegi tab ye aise hoga ki This Utkarsh ki Health ke andar jo paramter me di gyi value hai vo daal do!
-    
+        this -> Health = Health; // Resolves ambiguity : Left side is the object's data member, right side is the parameter.
+        // "this" eliminates confusion when parameter and data member have the same name. If names are different, "this" is not required.
+        // "this" is a pointer storing the address of the current object.
+        // Current object : The object that invokes the function or constructor. Example : If the current object is "Utkarsh", this constructor assigns the parameter value to "Utkarsh's" Health.
+    }
     Hero() {
         cout<<"Constructor Called!"<<endl;
     }
-    
     void print() {
         cout<<Level<<endl;
     }
@@ -319,7 +314,6 @@ class Hero1 {
         cout<<"Address of this : "<<this<<endl;
         this -> Health = Health;
     }
-
     Hero1() {
         cout<<"Constructor Called!"<<endl;
     }
@@ -336,12 +330,15 @@ class Hero1 {
 
 int main() {
     Hero1 Utkarsh(100); // This object will call the paramterized constructor!
-    cout<<"Address of Utkarsh : "<<&Utkarsh<<endl; // <- this and "cout<<"Address of this : "<<this<<endl;" both are giving the same output!
+    cout<<"Address of Utkarsh : "<<&Utkarsh<<endl; // Also "cout<<"Address of this : "<<this<<endl;" both are giving the same output!
 
-    Hero1 Utkarsh2; // This object will call the default constructor! Thing is agar tumne koi default object bnaya hua hai and tumne agar pehle se compiler vaale constructor ko hataa ke apna koi constructor nhi banaya toh koi error nhi aayega! but agar tumne ek baar apna default constructor banaa diya! toh vo pehle vaala default constructor toh hatt gya hai! and ab jab bhi tum koi default object banaoge and then tum agar Default constructor hataate ho tab error show krega!
-    // Pehle toh chalo theek tha default object banao ya naa banao, compiler ka default ka constructor sambhal le rha tha! but jaise hi tumne koi default constructor bnaa diya and tumhara koi default object bnaa hua hai... and ab agar tum vo default constructor hataoge tab error show krega!
-    // means default constructor ko default object ke hone ya naa hone se fark nhi padta but default object ke liye ek default constructor hona zaruri hai!
-} // Passing multiple paramters in parameterized constructor is also possible, we can use "this" for both the parameters also jo pass hue hai uss constructor me! 
+    Hero1 Utkarsh2; // Creates an object using the default constructor.
+    // Note : If you have not defined any constructor, the compiler provides a default constructor automatically.
+    //      : However, if you explicitly define a constructor (parameterized or default), the compiler's default constructor is removed.
+    //      : So, if you have a default object and remove the default constructor (after defining it), it will result in a compilation error because the default constructor is required for creating default objects.
+
+    // Multiple parameters in the parameterized constructor : You can pass multiple parameters to a parameterized constructor. In such cases, "this" can be used to distinguish between parameters and member variables for each parameter.
+}
 
 // Copy Constructor!
 // Purpose : Used to copy objects by initializing a new object with the data of an existing object of the same class.
@@ -1482,57 +1479,432 @@ class Employee {
     public :
     int id;
     float salary;
-    Employee(int inpId) {
+    Employee() {} // Default Constructor!
+    Employee(int inpId) { // Parameterized Constructor!
         id = inpId;
         salary = 34.0;
     }
-    Employee() {} // We added this to avoid errors while creating an object of Programmer class!
 };
 
-class Programmer : Employee { // Here default visibilty mode is private!
+class Programmer : Employee {
     public :
-    Programmer(int inpId) {
+    int languageCode = 5;
+    Programmer(int inpId) { // Parameterized Constructor!
         id = inpId;
     }
-    int languageCode = 5;
-    void getdata() { // Here we can print the id of the prorammer object using getdata function!
+    void getdata() {
         cout<<id<<endl;
     }
 };
 
 int main() {
-    Employee Utkarsh(1), Palak(2); // These objects will call the Base Class's parameterized constructor! with IDs 1 & 2.
-    // Employee Utkarsh, Palak; // These objects will call the Base Class's default constructor!
+    // Base class objects creation!
+    Employee Utkarsh(1), Palak(2);
     cout<<Utkarsh.salary<<endl;
     cout<<Palak.salary<<endl;
 
-    // Now, Lets create Derived Class!
-    Programmer Utkarsh2(3); // But till here it will also show error becoz when we will create the object utkarsh and give it the ID 2 then a object of the class programme will be created, but then as the Programmer class is the derived class of the class Employee so it will try to call a default constructor of the employee class which is not present till now! so we will add a default constructor of the Employee class! and hence all the errors will be removed!
-    cout<<Utkarsh2.languageCode<<endl; // It wwill print 5 simply!
-    Utkarsh2.getdata(); //Here we can print the id of the prorammer object using getdata function!
-    // cout<<Utkarsh2.id<<endl; //Here it wont print the value of id of the object as becoz id ios a private inherited from the employee class! 
+    // Derived class objects creation!
+    Programmer Utkarsh2(3);
+    cout<<Utkarsh2.languageCode<<endl;
+    Utkarsh2.getdata();
+    // Utkarsh2.salary = 22; // Cannot access this, as the Programmer class is privately inherited! hence, then base class public data members are now the private data members of the derived class!
+    // cout<<Utkarsh2.salary<<endl;
+    // cout<<Utkarsh2.id<<endl;
+    return 0;
+}
+// Code Understanding (Important Concept Clarity)!
+// Base class "Employee", has two attributes id, salary and one Parameterized constructor! and a Default constructor!
+// Derived class "Programmer", has one attribute languageCode and one Parameterized constructor! and one class method getdata().
+// Derived class privately inherits the Base class! Hence, all the base class public attributes and methods become private attributes and methods for the derived class!
+// Lets now discuss how constructors participate in Inheritance, After all, its all about how a derived class inherits base class and its attributes, methods and constructors! We have already discussed about attributes and methods.
+// How constructors participate in Inheritance, Constructors do not get inherited in C++ when a derived class is created from a base class. However, the base class constructors can be called within the derived class, either explicitly or implicitly.
+// Why constructors do not get inherit : Constructors are special member functions that are used to initialize objects. Since the derived class might need to initialize its own specific members (which are not in the base class), the derived class must have its own constructor. The base class constructor is not inherited, but the derived class can still use it to initialize the base class part of the object.
+// In Inheritance, there should always be a base class default constructor! Because, during the derived class object initialisation, base class default constructor needs to be called to initialise the base class part of the derived class objects!
+// For inheritance to work smoothly, if the base class has only a parameterized constructor and no default constructor, the derived class must explicitly call the base class's constructor in the initializer list.
+// If the base class has a default constructor, it is automatically called when a derived class object is created, unless the derived class explicitly calls another constructor of the base class.
+
+// Example 1 (Simple Public Inheritance Example) :
+// Single Inheritance!
+#include<iostream>
+using namespace std;
+
+class Base {
+    int data1; // This data1 can not be inherited as it is a private member of the base class!
+    public :
+        int data2;
+        void setdata();
+        int getdata1();
+        int getdata2();
+};
+
+void Base :: setdata() { // Here we defined the setdata function of the base class! ye default set kr rhe hai data1 and 2 ko!
+    data1 = 10;
+    data2 = 20;
+}
+
+int Base :: getdata1() { // Here we defined the getdata1 function of the base class!
+    return data1;
+}
+
+int Base :: getdata2() { // Here we defined the getdata2 function of the base class!
+    return data2;
+}
+
+class Derived : public Base { // Class is being derived publically hence all of the public data members of the base class are derived publiclally for the derived class also!
+    int data3;
+    public :
+        void process();
+        void display();
+};
+
+void Derived :: process() { // Defining the data members of the derived class, data1 ke liye getdata1() mwthod use krna padega kyunki data1 ek private memeber hai bhale hi hum Base class inherit ki hai Derived class me pr data1 ek private member tha base class ka isliye vo inherit nhi hua so usko use krne ke liye hume getdata1() method use krna padega!
+    data3 = data2*getdata1();
+}
+
+void Derived :: display() { // Defining the data members of the derived class
+    cout<<"Value of data 1 is : "<<getdata1()<<endl;
+    cout<<"Value of data 2 is : "<<data2<<endl;
+    cout<<"Value of data 3 is : "<<data3<<endl;
+}
+
+int main() {
+    Derived der;
+    der.setdata(); // Here we can use the setdata() getdata() methods of the base class with the objects of the derived class, as becoz we have inherited the the base class hence means we can use all of its public data members! 
+    der.process();
+    der.display();
     return 0;
 }
 
-// Understanding : A default constructor is a constructor that can be called without any arguments. If no constructors are provided, the compiler automatically provides a default constructor. If you define a parameterized constructor in a class and don't define a default constructor, the compiler won't provide the default constructor.
-//               : A parameterized constructor takes arguments when you create an object of the class, allowing for initialization with specific values.
-//               : When you create an object of the derived class, the constructor of the base class is always called first. This is an important part of object creation because the base class needs to be initialized before the derived class can be initialized.
-//               : If the base class doesn't have a default constructor and you're trying to create an object of the derived class without arguments, you'll get a compilation error unless the base class constructor is explicitly called.
+// Example 2 (Simple Private Inheritance Example) :
+#include<iostream>
+using namespace std;
 
-// Why derived class and base class both have their parameterized contructors for object creation, then why dervied class objects need a base class default constructors for object creation?
-// Answer : The base class constructor will be called before the derived class constructor to initialize the base class part of the object.
-//        : If the derived class does not explicitly specify which constructor to call in the base class, the compiler will try to call the default constructor of the base class. That's why it is showing error!
-//        : For a derived class object creation, somethings are very important! They are : Derived class default constructor! Derived class paramaterized constructor! (If any) Base class default constructor! Base class paramaterized constructor! (If any)
+class Base {
+    int data1;
+    public :
+        int data2;
+        void setdata();
+        int getdata1();
+        int getdata2();
+};
+
+void Base :: setdata(void) {
+    data1 = 10;
+    data2 = 20;
+}
+
+int Base :: getdata1() {
+    return data1;
+}
+
+int Base :: getdata2() {
+    return data2;
+}
+
+class Derived : private Base {
+    int data3;
+    public :
+        void process();
+        void display();
+
+};
+
+void Derived :: process() {
+    setdata(); // We added the setdata function here as the process is the member function of the Derived class and hence it can internally access the private data member! 
+    data3 = data2*getdata1();
+}
+
+void Derived :: display() {
+    cout<<"Value of data 1 is : "<<getdata1()<<endl;
+    cout<<"Value of data 2 is : "<<data2<<endl; // Here, we can also use getdata2();
+    cout<<"Value of data 3 is : "<<data3<<endl;
+}
+
+int main() {
+    Derived der;
+    // der.setdata(); // Here becoz setData() is inherited privately, hence it becomes private data member of the derived class as well now, hence cannot be accessed by objects! But to use it, as process() is a public method of derived class, and as methods or attributes inside a class has accessed to its private data members, so we have included the setData() method inside the Derived class! Same we have done in display() method calling getdata2().
+    der.process();
+    der.display();
+    return 0;
+}
+
+// Ambiguity Resolution in Inheritance!
+#include<iostream>
+using namespace std;
+
+class Base1 {
+    public :
+    void greet() {
+        cout<<"How are you"<<endl;
+    }
+};
+
+class Base2 {
+    public :
+    void greet() {
+        cout<<"Kaise ho?"<<endl;
+    }
+};
+
+class Derived : public Base1, public Base2  {
+    int a;
+    public :
+    void greet() {
+        Base1 :: greet(); // this is the statement we are using here to resolve ambiguity!
+    }
+    // void greet() { // Isme koi ambiguity nhi ayegi!
+    //     cout<<"Whats upp??"<<endl;
+    // }
+}
+
+int main() {
+    Base1 Base1obj;
+    Base2 Base2obj;
+    Base1obj.greet();
+    Base2obj.greet();
+    
+    Derived DerivedObj1;
+    DerivedObj1.greet(); // After solving the ambiguity, it will call the greet function of the Base1 class! hence Ambiguity Resolved!
+    return 0;
+}
+
+// Example : Here this is no Ambiguity!
+#include<iostream>
+using namespace std;
+
+class Base {
+    public :
+    void greet() {
+        cout<<"Hello World"<<endl; // Greet function of the base class!
+    }
+};
+
+class Derived : public Base {
+    public :
+    void greet() {
+        cout<<"Learning OOPS in C++"<<endl; // Greet function of derived class!
+    }
+};
+
+int main() {
+    Derived Obj1;
+    Obj1.greet(); // Which greet() method will be called will depend on the object which is calling it!
+    return 0;
+}
+
+// Virtual Base Class!
+// Concept : In a scenario where you have a base class A with a variable a, and it is inherited by two derived classes B and C, both B and C will have their own copies of a. Now, if both B and C are inherited into another class D, the variable a will be inherited twice—once from B and once from C. This results in ambiguity, as the compiler wouldn't know which copy of a to use.
+//         : To solve this issue, you can declare A as a virtual base class. This ensures that a is inherited only once, even though B and C inherit from A. This way, D will only have a single instance of a.
+#include<iostream>
+using namespace std;
+
+class Student {
+    protected :
+    int roll_number; // Protected Data Attribute!
+    public :
+    void set_roll_number(int a) {
+        roll_number = a;
+    }
+    void print_roll_number() {
+        cout<<"Roll number of the candidate is : "<<roll_number<<endl;
+    }
+};
+
+class Academics : virtual public Student {
+    protected :
+    int maths, physics;
+    public :
+    void set_marks(float m1, float m2) {
+        maths = m1;
+        physics = m2;
+    }
+    void print_marks() {
+        cout<<"Candidate's marks in Maths is : "<<maths<<" and Physics is : "<<physics<<endl;
+    }
+}; // In virtual inheritance, the class that is going to be inherited by multiple classes should be declared as a virtual base class. This ensures that the members and functions from that base class are inherited only once, even if multiple intermediate derived classes inherit from it.
+
+class Sports : virtual public Student {
+    protected :
+    int score;
+    public :
+    void set_score(int sc) {
+        score = sc;
+    }
+    void print_score() {
+        cout<<"Score of the candidate is : "<<score<<endl;
+    }
+}; // Same resoning as of the above Academics class
+
+class Result : public Academics, public Sports {
+    protected :
+    int total;
+    public :
+    void display() {
+        total = maths + physics + score;
+        print_roll_number();
+        print_marks();
+        print_score();
+        cout<<"Total score of the candidate is : "<<total<<endl;
+    }
+};
+
+int main() {
+    Result Utkarsh;
+    Utkarsh.set_roll_number(65);
+    Utkarsh.set_marks(95.7, 96.5);
+    Utkarsh.set_score(9);
+    Utkarsh.display();
+    return 0;
+}
+
+// Constructors in Derived Class!
+// In the case of multiple inheritance, when an object of the derived class is created, the constructor of the base classes is called first, followed by the constructor of the derived class.
+// The order of constructor calls follows the order of inheritance :
+// Base class constructors are called first, starting with the one that appears first in the inheritance list.
+// After the base class constructors, the constructor of the derived class is called.
+// For example, in a scenario where classes A, B, and C have been inherited in a multiple inheritance pattern (A -> B -> C), the constructors will be called in the order: A's constructor, B's constructor, then C's constructor.
+// This is different from method calls, where the method of the class where the object is created will be executed. The constructor, however, is responsible for creating the object and initializing the class, and the base class constructors are always called before the derived class constructor.
+
+// Constructors Behaviour : Default Constructor : When all classes in the inheritance chain have default constructors, the constructors are called in the order of inheritance. For example, in a scenario of A -> B -> C, the constructors are called in the order: A(), then B(), and then C().
+//                        : Parameterized Constructor : If a base class has a parameterized constructor, then the derived class must pass the appropriate arguments to the base class constructor.
+//                                                    : The derived class constructor will pass arguments to the base class constructor in the following format : Derived-Constructor(arg1, arg2, ...) : Base-Constructor(arg1, arg2, ...) {
+//                                                                                                                                                                  Derived class constructor body
+//                                                                                                                                                                }
+//                        : Special Case of Virtual Base Class : If a class has a virtual base class, its constructor is called before any non-virtual base class constructors. And if there are multiple virtual base classes, their constructors are invoked in the order in which they are declared.
+//                                                             : Non-virtual base class constructors are executed after the virtual base class constructor and before the derived class constructor.
+
+// Example :
+// Case 1 (Regular inheritance) : class B : public A {
+//                                      // Constructor order: A() -> B()
+//                                }
+
+// Case 2 (Multiple Inheritance) : class A : public B, public C {
+//                                      // Constructor order: B() -> C() -> A()
+//                                 }
+
+// Case 3 (Virtual base class) : class A : public B, virtual public C {
+//                                      // Constructor order: C() -> B() -> A() (since C is a virtual base class)
+//                               }
+
+// Initiallization List!
+// Intialization list is nothing but a way we can assign value to the data members of the class for example :
+#include<iostream>
+using namespace std;
+/*
+Syntax for intialisation list in constructor is :
+Constructor (argument-list) : initiallization section {
+    [ constructor body ]
+}
+*/
+// Example to use intiallization Section or intiallization list!
+class Base {
+    int a;
+    int b;
+    public :
+    // Some variation in intiallization section :
+    // Base(int i, int j) : a(i), b(i+j) -> This will work, and the output will be a = 6 and b = 10
+    // Base(int i, int j) : a(i), b(2 * j) -> This will work, and the output will be a = 6 and b = 8
+    // Base(int i, int j) : a(i), b(2 * a) -> This will work, and the output will be a = 6 and b = 12
+    // Base(int i, int j) : b(i), b(j) -> This won't work, as becoz in class, a is declared first and then b, so a should be initiallise first then b!
+    Base(int i, int j) : a(i), b(j) { // Here in this line, humne a and b ko constructor ki body me initiallize krne ke bajaye, constructor ke saath saath initiallization section me hi initiallize krdiya!
+        cout<<"Constructor is executed"<<endl;
+        cout<<"Value of a is : "<<a<<endl;
+        cout<<"Value of b is : "<<b<<endl;
+    }
+};
+
+int main() {
+    Base B(6,4);
+    return 0;
+}
+
+// Example 2 :
+#include <iostream>
+using namespace std;
+
+class Example {
+    const int a; // const member
+    int& b; // reference member
+    int x;
+    int y;
+public:
+    // Constructor with initialization list
+    Example(int i, int j, int& ref) : a(i), b(ref), x(i+j), y(x*2) { // Either we can assign separate values to each attribute inside the constructor's body! or we can just create this list!
+        cout << "Constructor is executed" << endl;
+        cout << "Value of a is: " << a << endl;
+        cout << "Value of b is: " << b << endl;
+        cout << "Value of x is: " << x << endl;
+        cout << "Value of y is: " << y << endl;
+    }
+};
+
+int main() {
+    int value = 10;
+    Example ex(6, 4, value); // here we have just passed the values for i, j and ref, and then baaki list ki initiallization me daaldi humne vahaa se calculate hoke unn unn data members me value assign hojayegi ek line me!
+}
+
+// Example 3 :
+#include<iostream>
+using namespace std;
+
+class Base1 {
+    int Base1_data1;
+    int Base1_data2;
+    public:
+    Base1(int i, int j) {
+        Base1_data1 = i;
+        Base1_data2 = j;
+        cout<<"Base 1 constructor is called"<<endl;
+    }
+    void PrintData1() {
+        cout<<"Value of Base 1 data1 and data2 is : "<<Base1_data1<<" and "<<Base1_data2<<endl;
+    }
+}; // Here we have declared one base class and added its constructor which takes a data i and the it has a print method!
+
+class Base2 {
+    int Base2_data1;
+    public:
+    Base2(int i) {
+        Base2_data1 = i;
+        cout<<"Base 2 constructor is called"<<endl;
+    }
+    void PrintData2() {
+        cout<<"Value of Base 2 data1 is : "<<Base2_data1<<endl;
+    }
+}; // Here we have declared another base class and added its constructor which takes a data i and the it has a print method!
+
+class Derived : public Base1, public Base2 {
+    int derived1;
+    int derived2;
+    public:
+    Derived(int a, int b, int c, int d) : Base1(c,d), Base2(d) { // This is the syntax to define a constructor of the derive class if base class have there own constructors!
+        derived1 = a;
+        derived2 = b;
+        cout<<"Derived class constructor is called"<<endl; // These statements are just to show the order of execution of constructors!
+    }
+    void PrintDataDerived() {
+        cout<<"Value of derived1 : "<<derived1<<endl;
+        cout<<"Value of derived2 : "<<derived2<<endl;
+    }
+};
+
+int main() {
+    Derived Utkarsh(1, 2, 3, 4);
+    Utkarsh.PrintData1();
+    Utkarsh.PrintData2();
+    Utkarsh.PrintDataDerived();
+    return 0;
+}
 
 // Polymorphism!
 // Formal Definition : Polymorphism means "many forms". It is when one thing can take multiple forms based on the context.
-// When one particular thing can have mutltiple forms! like a father can be a father for you but can also be son for his father, a husband for your mom, a brother for his sister and in a similar way in programming, one function or object can behave differently based on the situation.!
-// There are two type of Polymorphism : Compile-Time Polymorphism and Runtime Polymorphism!
+//                   : When one particular thing can have mutltiple forms! like a father can be a father for you but can also be son for his father, a husband for your mom, a brother for his sister and in a similar way in programming, one function or object can behave differently based on the situation.!
+//                   : There are two type of Polymorphism : Compile-Time Polymorphism and Runtime Polymorphism!
 
 // Compile Time Polymorphism : In compile-time polymorphism, the decision about which function or operator to call is made during compilation based on the types of arguments or operands.
-// Achieved Through : Function Overloading : Same function name but different parameters.
-//                  : Operator Overloading : Changing how operators work for user-defined data types.
-// The method or function call is resolved by the compiler before the program runs, which is why it's also called static polymorphism.
+//                           : Achieved Through : Function Overloading : Same function name but different parameters.
+//                                              : Operator Overloading : Changing how operators work for user-defined data types.
+//                           : The method or function call is resolved by the compiler before the program runs, which is why it's also called static polymorphism.
 
 // Compile Time Polymorphism using Function Overloading!
 // Example :
@@ -1588,7 +1960,7 @@ class L {
 
     void operator() () {
         cout<<"Inside the bracket function! "<<this->a<<endl; // Overloaded "()", so that the object which calls it, due to overloading, it will print the "a" value of that object! 
-}
+    }
 }; // To demonstrate operator overloading, we are making "+" operator to do "-" (subtraction)!
 
 int main() {
@@ -1608,7 +1980,8 @@ int main() {
 
 // Runtime Polymorphism : It allows a function to behave differently based on the type of object it is working with, even when the function is called in the same way.
 //                      : The decision about which function to call is made during runtime (when the program is running), based on the actual object type.
-//                      : It is done through method overriding (using inheritance) and virtual functions.
+//                      : It is done through Function/Method overriding (using inheritance) and virtual functions.
+
 // Function Overriding : When a child class defines a function with the same name and same parameters as a function in the parent class, this is called method overriding.
 //                     : The child class provides its own implementation of the function, which replaces the parent class’s version.
 // Rules : Same function name in both parent and child classes. Same number of parameters in both functions. Possible only through inheritance (parent-child relationship).
@@ -1637,6 +2010,57 @@ int main() {
 }
 // Usage : If a base class has 10 methods, and a subclass needs to use 8 methods as they are but wants to implement its own version for 2 methods, we use method overriding.
 //       : This allows the subclass to override only the required methods while inheriting others from the base class without changes.
+
+// Example : Demonstrating Compile & Runtime Polymorphism using Base and Derived class pointers!
+// This code is designed to illustrate polymorphism, specifically the difference between compile-time polymorphism and runtime polymorphism in C++ using pointers to base and derived classes. It demonstrates how the behavior of a program changes depending on the type of pointer (base or derived) used to call functions and access variables.
+#include<iostream>
+using namespace std;
+
+class Base { // Contains an integer variable var_base and a method display() that prints the value of var_base.
+    public :
+    int var_base;
+    void display() {
+        cout<<"Displaying Base class variable var_base : "<<var_base<<endl;
+    }
+};
+
+class Derived : public Base { // Inherits from Base and adds a new member var_derived. It overrides the display() method to include var_derived.
+    public :
+    int var_derived;
+    void display() {
+        cout<<"Displaying Base class variable var_base : "<<var_base<<endl;
+        cout<<"Displaying Derived class variable var_derived : "<<var_derived<<endl;
+    }
+};
+
+int main() {
+    Base Obj_base;
+    Derived Obj_derived;
+
+    // A Base class pointer (base_class_pointer) is used to point to a Derived class object (Obj_derived).
+    // Even though the pointer points to a Derived object, it can only access members of the Base class because it is of type Base*.
+    Base* base_class_pointer;
+    base_class_pointer = &Obj_derived;
+    
+    // var_base is set to 34 using the Base pointer.
+    // When calling display(), the Base class version of display() is executed because the type of the pointer (Base*) determines which function to call (compile-time decision).
+    base_class_pointer->var_base = 34;
+    base_class_pointer->display();
+
+    // A Derived class pointer (derived_class_pointer) is used to point to a Derived class object (Obj_derived).
+    Derived* derived_class_pointer;
+    derived_class_pointer = &Obj_derived;
+
+    // Both var_base and var_derived are set using the Derived class pointer.
+    // When calling display(), the Derived class version of display() is executed. This prints both var_base and var_derived.
+    derived_class_pointer->var_derived = 400;
+    derived_class_pointer->var_base = 300;
+    derived_class_pointer->display();
+
+    // derived_class_pointer = &Obj_base;
+    // derived_class_pointer->var_base = 10;
+    // derived_class_pointer->display();
+}
 
 // Data Abstraction!
 // Purpose : Data abstraction is the concept of hiding unnecessary details from the user and showing only the essential information. In simple words, it's like giving a "brief view" of the object or data, and hiding the complexity.
@@ -1670,6 +2094,227 @@ int main() {
 
 // Not Suited for Modern Programming : Structures were designed for procedural programming (e.g., C). They don’t align well with modern object-oriented programming principles, which focus on modularity, abstraction, and reusability.
 //                                   : You miss out on modern best practices and features that make coding more efficient and scalable.
+
+// Some miscellaneous examples (CWH) :
+// Example 1 : Pointers to objects and arrows in CPP!
+#include<iostream>
+using namespace std;
+
+class Complex {
+    int real, imaginary;
+    public :
+    void setdata(int a, int b) {
+        real = a;
+        imaginary = b;
+    }
+
+    void getdata() {
+        cout<<"The value of the real part is : "<<real<<endl;
+        cout<<"The value of the imaginary part is : "<<imaginary<<endl;
+    }
+};
+
+int main() {
+    // Creating objects normally (Stack allocation)
+    Complex c1;
+    c1.setdata(1,5);
+    c1.getdata();
+    
+    // In the above code, we used the standard way to create objects and call member functions of the class.
+    // Now, let's use pointers to call member functions of the class using the arrow operator.
+
+    // Statically creating objects using pointers (Stack allocation with pointers)
+    Complex* ptr = &c1; // Storing the address of the object 'c1' in the pointer 'ptr'. Now, we can access and modify the object 'c1' using the pointer 'ptr' and the dereferencing (*) operator.
+    (*ptr).setdata(1,5);
+    (*ptr).getdata(); // Accessing and calling the setdata/getdata method using the dereference operator
+
+    // Dynamically creating objects using the new operator (Heap allocation)
+    Complex* ptr2 = new Complex; // The pointer 'ptr2' will hold the address of the dynamically allocated Complex object.
+    (*ptr2).setdata(1,5);
+    (*ptr2).getdata(); // Accessing and calling the setdata/getdata method using dereference operator on dynamically created object
+
+    // Accessing methods using the Arrow (->) Operator (Pointer to object)
+    Complex c2; // Creating an object of Complex class statically (on the stack)
+    Complex* ptr3 = &c2; // Pointer 'ptr3' stores the address of object 'c2'
+
+    // The arrow operator (->) is used to access member functions when dealing with pointers.
+    ptr3->setdata(1,5); // Setting the values of real and imaginary parts using the arrow operator.
+    ptr3->getdata(); // Displaying the real and imaginary parts using the arrow operator.
+    return 0;
+}
+// Summary : Objects can be created statically (on the stack) or dynamically (on the heap).
+//         : The arrow operator (->) is used when dealing with pointers to objects. 
+//         : The dereference operator (*) can be used to access members of the object when using a pointer to the object.
+
+// Example 2 : Array of objects using pointers!
+#include<iostream>
+using namespace std;
+
+class ShopItem {
+    int id;
+    float price;
+    public :
+    void setData(int a, float b) {
+        id = a;
+        price = b;
+    }
+    void getData() {
+        cout << "Id of the item is: " << id << endl;
+        cout << "Price of the item is: " << price << endl;
+    }
+};
+
+int main() {
+    int size = 3; // Define the size of the array
+    // Dynamically create an array of ShopItem objects
+    ShopItem* ptr = new ShopItem[size];
+    int p;
+    float q;
+
+    // Create a temporary pointer to hold the base address of the dynamically created array
+    ShopItem* ptrTemp = ptr;
+
+    // Loop to input data (id and price) for each ShopItem object
+    for (int i = 0; i < size; i++) {
+        cout << "Enter the id and price of the item purchased: " << i + 1 << endl; 
+        // 'i+1' is used to display item numbering starting from 1 (not 0)
+        cin >> p >> q;
+        ptr->setData(p, q); // Set the data for the current item
+        ptr++; // Move the pointer to the next object in the array
+    }
+
+    // Loop to display the data (id and price) of each ShopItem object
+    for (int i = 0; i < size; i++) {
+        cout << "Item Number: " << i + 1 << endl;
+        ptrTemp->getData(); // Access the member function using the arrow operator
+        ptrTemp++; // Move the temporary pointer to the next object in the array
+    }
+    return 0;
+}
+// Reason of using 2 pointers here, "ptr" and "ptrTemp"!
+// In the first loop, the pointer ptr increments with each iteration, moving through the dynamically allocated objects. After the loop ends, it points to an invalid memory location (past the last object), which may lead to accessing garbage values.
+// To avoid this, the starting address of the pointer (ptr) is saved in ptrTemp before the first loop ends. Then, ptrTemp is used in the second loop to correctly access and display the data of the objects from the beginning.
+
+// Example 3 : More use of 'this' pointer!
+#include<iostream>
+using namespace std;
+
+class A {
+    int a;
+    public:
+    A setdata(int a) { // In the setdata function, instead of using void, we return the object itself (of type A). This allows us to chain function calls.
+        this-> a = a; // The this pointer is used to distinguish the member variable a from the parameter a. It stores the address of the object being created.
+        return *this; // return *this; returns the current object (pointed to by this) by dereferencing the this pointer. This enables the function to return the object itself.
+    }
+    void getdata() {
+        cout<<"The value of a is "<<a<<endl;
+    }
+};
+
+int main() {
+    A a; // Object created!
+    a.setdata(4).getdata(); // Here, we call setdata(4) and then chain the getdata() function call on the returned object, all in one line. This works because setdata returns the object itself.
+    return 0;
+}
+
+// Example 4 : This code demonstrates the use of reference variables, memory allocation, and passing by reference in C++.
+//           : It highlights the benefits of using references to avoid unnecessary object copies, optimizing memory usage, and explains how the this pointer works in object-oriented programming.
+#include<iostream>
+using namespace std;
+
+class A {
+    int a; // Private member variable
+    public:
+    
+    // setdata returns a reference to the current object (A&). This enables method chaining and avoids object copying
+    A& setdata(int a) { 
+        this->a = a; // Use 'this' pointer to distinguish between parameter 'a' and member variable 'a'
+        cout << "Address of returned obj is: " << this << endl; // Print the object's address
+        return *this; // Return reference to current object by dereferencing 'this'
+    }
+
+    // Simple getter method to display the value of 'a'
+    void getdata() {
+        cout << "The value of a is " << a << endl;
+    }
+};
+
+int main() {
+    int x = 5; // Initialize local variable
+    A *a = new A; // Create object dynamically and store its address in pointer 'a'
+    cout << "Address stored in pointer: " << a << endl;
+    A &z = (*a).setdata(x); // Create reference 'z' that refers to the same object as 'a'. Call setdata through pointer 'a' and store the returned reference
+    z.getdata(); // Access the object through reference 'z'
+    
+    // Print addresses to verify that 'a' and 'z' refer to the same object
+    cout << "Address of object jo humein mila is: " << &z << endl;
+    cout << "Address stored in pointer: " << a << endl;
+    
+    delete a;
+    return 0;
+}
+
+// Example 5 : Similar to Example 4, just a different way!
+#include<iostream>
+using namespace std;
+
+class A {
+    int a;
+    public:
+    A& setdata(int a) { // Return by reference to avoid copies
+        this->a = a;
+        cout << "Address of object (this): " << this << endl;
+        return *this;
+    }
+    
+    void getdata() {
+        cout << "The value of a is " << a << endl;
+        cout << "Address of member variable a: " << &a << endl; // This prints address of member variable
+    }
+};
+
+int main() {
+    A a;
+    a.setdata(5).getdata();
+    // A &z = a.setdata(5); // They both are doing same thing in terms of output! But sometimes method chaining is more better for fluency of the code!
+    cout << "Address of object a: " << &a << endl;
+    
+    A &z = a;  // z is a reference to a
+    cout << "Address of reference z: " << &z << endl;  // Will be same as &a
+    z.getdata();
+    return 0;
+}
+
+// Example 6 : More advance version of Example 4 & 5!
+#include<iostream>
+using namespace std;
+
+class A {
+    int a;
+    public:
+    A & setdata(int &x) { // Both &s prevent copying, & in return type (A setdata) will prevent from creating object copies And & in parameter (int x) will prevent from creating copies of the input value
+        cout << "\nAddress of x in setdata is: " << &x << endl; // Will print same address as x in main since x is passed by reference
+        this->a = x; // Store x's value in member variable a
+        cout << "\nAddress of returned object from setdata is: " << this << endl; // Will print the address of object 'a'
+        return *this; // Return reference to same object
+    }
+
+    void getdata() {
+        // Will print same address as in setdata since we're working with same object
+        cout << "\nAddress of object operated by getdata is: " << this << endl;
+        cout << "Value inside is: " << a << endl;
+    }
+};
+
+int main() {
+    int x = 5;
+    A a;
+    cout << "\nAddress of x in main is: " << &x; // Original x's address
+    cout << "\nAddress of 'a' is: " << &a << endl; // Original object's address
+    a.setdata(x).getdata(); // Chain the calls
+    cout << "\nAddress of 'a' is: " << &a << endl; // Same address again
+    return 0;
+}
 
 // ---------------------------------------------------------- LECTURE 44 - Linked Lists and Its Types --------------------------------------------------------------------------------------------------------->
 // Linked Lists Basics : Linked List is a data structure made up of nodes, where each node contains some data and the address of the next node
@@ -3149,7 +3794,6 @@ int main() {
 // Time Complexity : T(n) + T(n/2); -> T(n) for getlength function ke liye and T(n/2) findmiddlenode vaale function me loop ke liye!
 // So overall humari TC : O(n)...
 // But here we can see that ek baar hum full traversal kr rhe hai and ek baar hum sirf half hi kr rhe hai! so lets see the optimized solution based on this approach...
-
 
 // Optimized Approach : Now suppose you have two person one is fast and another is slow, fast one runs 2 metre in 1 sec and slow one runs 1 metre in 1 sec! Now, jitni agar 5 sec ki race hai usme fast person will cover 10 metres and slow one will cover 5 metres! so we can see ki slow half distance cover krega, toh yahaa hum iss logic ka use krke slow ki help se middle node nikal sakte hai!
 // Now lets see the coding logic...
