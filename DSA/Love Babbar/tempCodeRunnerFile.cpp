@@ -1,46 +1,55 @@
 #include<iostream>
 using namespace std;
 
-// Class A represents an object that contains an integer 'a'.
-class A {
-    int a; // Member variable to store the value.
-    public:
+class Base {
+    int var_base;  // Base class variable
+public:
     
-    // Member function setdata, which uses the 'this' pointer and reference variables.
-    A& setdata(int a) { 
-        // Here, we are using a reference to avoid creating a copy of 'a' when passing to the function.
-        // This allows the function to modify the original value instead of a copy.
-        this->a = a; // Assign the passed value 'a' to the member variable 'a' using the 'this' pointer.
-        cout << "Address of returned obj is: " << this << endl; // Printing the address of the object that called this function.
-        return *this; // Return the object itself using the 'this' pointer (dereferencing it). This allows method chaining in main().
+    virtual void display() { // Display function in the base class (not virtual initially)
+        cout << "1 Displaying Base class variable var_base: " << var_base << endl;
     }
+};
 
-    void getdata() {
-        cout << "The value of a is " << a << endl;
+class Derived : public Base {
+public:
+    int var_derived;  // Derived class variable
+    
+    void display() override { // Override display function in derived class, we don't need to use 'override' keyword to override a base class method, but it is considered good practice if you do it! as it makes you aware with errors if there's any potectial mistakes!
+        cout << "2 Displaying Base class variable var_base: " << var_base << endl;  // Accessing the base class variable
+        cout << "2 Displaying Derived class variable var_derived: " << var_derived << endl;  // Accessing the derived class variable
     }
 };
 
 int main() {
-    int x = 5; // Local variable with value 5.
+    // Creating pointers and objects of Base and Derived classes
+    Base* base_class_pointer; // Pointer of Base class type
+    Base Obj_base; // Base class object
+    Derived Obj_derived; // Derived class object
     
-    // Dynamically creating an object of class A using the 'new' keyword.
-    A *a = new A; // Object 'a' is dynamically created and pointer is assigned to it.
-    cout << "Address stored in pointer: " << a << endl; // Printing the address of the dynamically allocated object.
+    base_class_pointer = &Obj_derived; // Base class pointer pointing to derived class object
+
+    base_class_pointer->var_base = 30; // Assigning a value to the base class variable through the base class pointer
+
+    // Calling the display function via the base class pointer
+    base_class_pointer->display();  // At this point, the virtual function mechanism kicks in
+
+    /* 
+    Explanation:
+    - Initially, if we don't declare the display function as virtual in the base class, the compiler would call the base class version of display(), 
+      even when we use a base class pointer (`base_class_pointer`) pointing to a derived class object. This is known as **static (compile-time) binding**.
+      
+    - However, since we've declared `display()` as a **virtual function** in the base class, the **dynamic (runtime) binding** takes place.
+    - This means that even though `base_class_pointer` is a pointer of type `Base`, the function corresponding to the **actual object type** (which is `Derived`) is called. 
+    - This is an example of **runtime polymorphism** where the function that gets called is determined at runtime based on the **type of object** that the pointer is actually pointing to.
+
+    - When we assign the `base_class_pointer` to point to `Obj_derived`, the `display()` function of the `Derived` class is invoked, even though the pointer is of type `Base`.
     
-    // Creating a reference variable 'z' and calling the setdata function on the object created using pointer 'a'.
-    // The setdata function returns a reference to the object itself, which is stored in 'z'.
-    A &z = (*a).setdata(x); // Passing the value 'x' to setdata and assigning the returned reference to 'z'.
+    - **Important Note:** Since `base_class_pointer` is pointing to a `Base` class object and we can't directly access `var_derived` (a member of `Derived` class) through it, `var_derived` will not be initialized, so it will contain a **garbage value** when printed. The main purpose here was to show that the correct `display()` function (from `Derived`) is called despite using a base class pointer, which is only possible because of the virtual function mechanism.
     
-    // Displaying the value of 'a' using reference variable 'z'.
-    z.getdata(); // The object 'z' is referring to the same object as 'a'.
-    
-    // Printing the address of the object referred to by 'z'.
-    cout << "Address of object jo humein mila is: " << &z << endl;
-    
-    // Printing the address stored in pointer 'a', which should be the same as the address of 'z'.
-    cout << "Address stored in pointer: " << a << endl;
-    
-    // All addresses should be the same because 'z' is just another name (reference) for the same object.
+    - The **binding** (i.e., which `display()` function to call) happens **at runtime**, not at compile-time, due to the use of the `virtual` keyword.
+
+    - The program demonstrates how virtual functions enable **polymorphism** (dynamic binding), allowing derived class functions to be called using base class pointers or references.
+    */
     
     return 0;
 }

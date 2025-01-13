@@ -1206,22 +1206,52 @@ int main() {
 // In the above case, since we used public mode of inheritance and the data members being accessed were also public. Hence, there was no issue.
 // But there will be some complications agar base class ke data members ka access modifier private ya protected hua toh...
 // so for that remember this table...
-// Access Modifier of base class     |       Mode of inheritance
-//      Public                                      Public          ->       Public
-//      Public                                      Private         ->       Private
-//      Public                                      Protected       ->       Protected
-//      Protected                                   Public          ->       Protected
-//      Protected                                   Private         ->       Private
-//      Protected                                   Protected       ->       Protected
-//      Private                                     Public          ->       Not Possible
-//      Private                                     Private         ->       Not Possible
-//      Private                                     Protected       ->       Not Possible
+// A table for mode of Inheritance and Derivation!
+//                     Private Derivation       Public Derivation       Protected Derivation
+// Private Member        Not Inherited             Not Inherited           Not Inherited
+// Public Member         Private                   Public                  Protected
+// Protected Member      Private                   Protected               Protected
 // Private data member of any class cannot be inherited!
 
 // Protected Access Modifier : The protected access modifier is like private, meaning the data members are accessible only within the class. However, the difference is that child classes can also access protected members, whereas they cannot access private members.
 // Summary : Private : Only accessible inside the class.
-//         : Protected : Accessible inside the class and by child classes (through inheritance).
+//         : Protected : Accessible inside the class and by child/derived classes (through inheritance).
 //         : Public : Accessible everywhere.
+
+// Example (Inheritance Mind Puzzle) :
+#include<iostream>
+using namespace std;
+
+class Base {
+    protected:
+        int a;
+    private:
+        int b;
+    public:
+        int c;
+};
+
+class Derived : protected Base {
+    // Here, protected inheritance means the protected members of the base class will be inherited as protected.
+};
+
+int main() {
+    Base d; // Object of the base class
+    Derived e; // Object of the derived class
+
+    // Accessing members of base class
+    // d.a = 3; // 'a' is protected, cannot be accessed directly.
+    // d.b = 3; // 'b' is private, hence not inherited.
+    d.c = 3; // Public members of the base class can be accessed directly.
+
+    // Members inherited by derived class
+    // e.a = 4; // 'a' is inherited as protected, so it cannot be accessed directly in the derived class.
+    // e.b = 5; // 'b' is private, hence not inherited.
+    // e.c = 6; // 'c' is inherited as protected in derived class due to protected inheritance, so cannot be accessed directly.
+
+    cout << d.c; // Will print 3, as 'c' is public in base class and accessible here.
+    return 0;
+}
 
 // Types of Inheritance!
 // Simple Inheritance : A single child class inherits from a single parent class.
@@ -2011,55 +2041,282 @@ int main() {
 // Usage : If a base class has 10 methods, and a subclass needs to use 8 methods as they are but wants to implement its own version for 2 methods, we use method overriding.
 //       : This allows the subclass to override only the required methods while inheriting others from the base class without changes.
 
-// Example : Demonstrating Compile & Runtime Polymorphism using Base and Derived class pointers!
-// This code is designed to illustrate polymorphism, specifically the difference between compile-time polymorphism and runtime polymorphism in C++ using pointers to base and derived classes. It demonstrates how the behavior of a program changes depending on the type of pointer (base or derived) used to call functions and access variables.
+// Example : Demonstrating Runtime Polymorphism using Base and Derived class pointers!
 #include<iostream>
 using namespace std;
 
-class Base { // Contains an integer variable var_base and a method display() that prints the value of var_base.
-    public :
-    int var_base;
-    void display() {
+class Base { // Base class definition - this is our parent class
+    public:
+    int var_base; // Base class member variable
+    
+    void display() { // Base class display function, When called through base class pointer, this version will execute
         cout<<"Displaying Base class variable var_base : "<<var_base<<endl;
     }
 };
 
-class Derived : public Base { // Inherits from Base and adds a new member var_derived. It overrides the display() method to include var_derived.
-    public :
-    int var_derived;
-    void display() {
-        cout<<"Displaying Base class variable var_base : "<<var_base<<endl;
+class Derived : public Base { // Derived class inherits publicly from Base class, This means Derived gets everything public from Base
+    public:
+    int var_derived; // Additional member specific to Derived class
+    
+    void display() { // Derived class overrides base class display function, This version will execute when called through Derived class pointer
+        cout<<"Displaying Base class variable var_base : "<<var_base<<endl; // Can access var_base because it's inherited from Base
         cout<<"Displaying Derived class variable var_derived : "<<var_derived<<endl;
     }
 };
 
 int main() {
-    Base Obj_base;
-    Derived Obj_derived;
+    // Create objects of both classes
+    Base Obj_base; // Creates a Base class object in memory
+    Derived Obj_derived; // Creates a Derived class object (includes Base class part)
 
-    // A Base class pointer (base_class_pointer) is used to point to a Derived class object (Obj_derived).
-    // Even though the pointer points to a Derived object, it can only access members of the Base class because it is of type Base*.
-    Base* base_class_pointer;
-    base_class_pointer = &Obj_derived;
+    Base* base_class_pointer; // Create a Base class pointer
     
-    // var_base is set to 34 using the Base pointer.
-    // When calling display(), the Base class version of display() is executed because the type of the pointer (Base*) determines which function to call (compile-time decision).
-    base_class_pointer->var_base = 34;
-    base_class_pointer->display();
+    base_class_pointer = &Obj_derived; // IMPORTANT: Pointing base class pointer to derived class object!
+    // This is allowed because Derived "is-a" Base (inheritance relationship)
+    
+    base_class_pointer->var_base = 34; // Set value using base class pointer, Can only access Base class members through base_class_pointer
+    
+    base_class_pointer->display(); // Calls Base class display even though pointing to Derived object, This is because pointer type (Base*) determines which function to call
+    
+    // base_class_pointer->var_derived = 100;  // Would cause compilation error, because cannot access derived class members through base class pointer
+    
+    Derived* derived_class_pointer; // Create a Derived class pointer
+    
+    derived_class_pointer = &Obj_derived; // Point it to Derived class object, This gives full access to both Base and Derived members
+    
+    // Can set both Base and Derived class variables
+    derived_class_pointer->var_derived = 400; // Setting Derived class variable
+    derived_class_pointer->var_base = 300; // Setting inherited Base class variable
+    
+    derived_class_pointer->display(); // Calls Derived class display, Shows both variables because Derived's display shows both!
+    
+    // derived_class_pointer = &Obj_base;  // Would cause compilation error, because cannot point Derived pointer to Base object and this is because Base doesn't have all members that Derived has
+    
+    // Memory safety best practice:
+    // Always initialize pointers if not immediately assigning
+    Derived* safe_pointer = nullptr; // Good practice
+    return 0;
+}
+// Final Crux : The main point is about how the SAME function name (display) behaves DIFFERENTLY based on what type of pointer is calling it, and this decision happens during runtime (when program is running).
+// How This Shows Runtime Polymorphism!
+// Same Function, Different Behaviors : Both classes have a display() function.
+//                                    : Same function name behaves differently depending on who's calling it
+//                                    : Just like a "speak" command would make a dog bark and a cat meow
+// Runtime Decision Making : The decision of which display() to call isn't made during compilation
+//                         : It's made while the program is running. Like having a TV remote (pointer) that adapts its behavior based on which TV (object) it's controlling
+// The Big Picture : It's like having a universal interface (Base pointer), That can work with different specific implementations (Derived objects), But maintains type safety and proper behavior, All while making decisions on-the-fly during program execution.
 
-    // A Derived class pointer (derived_class_pointer) is used to point to a Derived class object (Obj_derived).
-    Derived* derived_class_pointer;
-    derived_class_pointer = &Obj_derived;
+// Virtual Functions : Virtual functions are functions that are declared in a base class and are intended to be overridden in a derived class. These functions are used to achieve runtime polymorphism in C++.
+//                   : A virtual function is declared using the virtual keyword in the base class, and it allows the derived class to provide its specific implementation of the function.
+//                   : Without virtual functions, the function call is resolved at compile-time based on the type of the pointer/reference.
+//                   : With virtual functions, the function call is resolved at runtime based on the actual object type being pointed to by the pointer/reference.
+// Example (Using above example only) :
+#include<iostream>
+using namespace std;
 
-    // Both var_base and var_derived are set using the Derived class pointer.
-    // When calling display(), the Derived class version of display() is executed. This prints both var_base and var_derived.
-    derived_class_pointer->var_derived = 400;
-    derived_class_pointer->var_base = 300;
-    derived_class_pointer->display();
+class Base {
+public:
+    int var_base;  // Base class variable
+    
+    virtual void display() { // Display function in the base class (not virtual initially)
+        cout << "1 Displaying Base class variable var_base: " << var_base << endl;
+    }
+};
 
-    // derived_class_pointer = &Obj_base;
-    // derived_class_pointer->var_base = 10;
-    // derived_class_pointer->display();
+class Derived : public Base {
+public:
+    int var_derived;  // Derived class variable
+    
+    void display() override { // Override display function in derived class, we don't need to use 'override' keyword to override a base class method, but it is considered good practice if you do it! as it makes you aware with errors if there's any potectial mistakes!
+        cout << "2 Displaying Base class variable var_base: " << var_base << endl;  // Accessing the base class variable
+        cout << "2 Displaying Derived class variable var_derived: " << var_derived << endl;  // Accessing the derived class variable
+    }
+};
+
+int main() {
+    // Creating pointers and objects of Base and Derived classes
+    Base* base_class_pointer; // Pointer of Base class type
+    Base Obj_base; // Base class object
+    Derived Obj_derived; // Derived class object
+    
+    base_class_pointer = &Obj_derived; // Base class pointer pointing to derived class object
+
+    base_class_pointer->var_base = 30; // Assigning a value to the base class variable through the base class pointer
+
+    // Calling the display function via the base class pointer
+    base_class_pointer->display(); // At this point, the virtual function mechanism kicks in
+    return 0;
+
+    // Explanation : Initially, if we don't declare the display function as virtual in the base class, the compiler would call the base class version of display(), even when we use a base class pointer (`base_class_pointer`) pointing to a derived class object. This is known as static (compile-time) binding.
+    //             : However, since we've declared `display()` as a virtual function in the base class, the dynamic (runtime) binding takes place. This means that even though `base_class_pointer` is a pointer of type `Base`, the function corresponding to the actual object type (which is `Derived`) is called.
+    //             : This is an example of runtime polymorphism where the function that gets called is determined at runtime based on the type of object that the pointer is actually pointing to. When we assign the `base_class_pointer` to point to `Obj_derived`, the `display()` function of the `Derived` class is invoked, even though the pointer is of type `Base`.
+    //             : Important Note : Since `base_class_pointer` is pointing to a `Base` class object and we can't directly access `var_derived` (a member of `Derived` class) through it, `var_derived` will not be initialized, so it will contain a **garbage value** when printed. The main purpose here was to show that the correct `display()` function (from `Derived`) is called despite using a base class pointer, which is only possible because of the virtual function mechanism.
+    //             : The binding (i.e., which `display()` function to call) happens at runtime, not at compile-time, due to the use of the `virtual` keyword. The program demonstrates how virtual functions enable **polymorphism** (dynamic binding), allowing derived class functions to be called using base class pointers or reference.
+}
+// Final Note : The whole point was one is to demonstrate the runtime polymorphism, how it depends on the type of pointer we are using to accessing the methods of base and derived class!
+//            : Concept : We used Virtual function, coz what happened is, in the first example, when we used the base class pointer and pointed it at the derived class object! then using base class pointer to access the display() method, it is calling base class version of display() method! but if you think, at the very basic level, pointer is a special variable which is storing the address of another variable!
+//                      : And here we were doing the same thing! we were using Base class pointer to point at the derived class object! (Base* base_class_pointer = &obj_derived) and on dereferencing it (base_class_pointer->display()) it is calling the base class version of display() method, which if you think is wrong! so thats why we made display() method of base class virtual!
+//            : With using Virtual : Now, when you use base_class_pointer->display(), the program will check the actual object type (Derived in this case) and call the Derived class version of the display() method, because it knows that the pointer is pointing to a Derived object.
+
+// Example 4 :
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+// The protected access modifier allows a class’s members (variables and methods) to be accessible within the class itself, by derived classes (subclasses), but not by objects of the class or outside the class.
+// It's often used when you want to allow derived classes to access and modify the members of the base class, but you want to restrict direct access to those members from outside the class.
+// How its different from Private Access Modifier : Members declared as private are only accessible within the class where they are declared. They are not accessible from any derived classes or from outside the class, even if the class is inherited.
+//                                                : private is used to completely hide members from other classes and derived classes. It ensures that data is protected from modification or direct access by any code outside the class.
+class CWH {
+    protected:
+        string title;
+        float rating;
+    public:
+        CWH (string s, float r) {
+            title = s;
+            rating = r;
+        }
+        virtual void display() {} // Base class display function is declared virtual
+};
+
+class CWHVideo : public CWH {
+    float VideoLength;
+    public:
+        CWHVideo (string s, float r, float vl) : CWH(s, r) {
+            VideoLength = vl;
+        }
+        void display() {  // Derived class display function
+            cout<<"This is an amazing video with title : "<<title<<endl;
+            cout<<"ratings : "<<rating<<" out of 5 stars!"<<endl;
+            cout<<"Length of this video is : "<<VideoLength<<" Minutes!"<<endl;
+        }
+};
+
+class CWHText : public CWH {
+    float words;
+    public :
+        CWHText (string s, float r, int wc) : CWH(s, r) {
+            words = wc;
+        }
+        void display() { // Derived class display function
+            cout<<"This is an amazing text tutorial with title : "<<title<<endl;
+            cout<<"ratings : "<<rating<<" out of 5 stars!"<<endl;
+            cout<<"Words count of the text is : "<<words<<" Words!"<<endl;
+        }
+};
+
+int main() {
+    string title;
+    float rating, vlen;
+    int words;
+
+    // Creating a CWHVideo object
+    title = "C++ Video tutorial!";
+    vlen = 4.56;
+    rating = 4.45;
+    CWHVideo Cvdo(title, rating, vlen); // Object creation with values set through constructor
+
+    // Creating a CWHText object
+    title = "C++ Video tutorial text!";
+    words = 433;
+    rating = 4.15;
+    CWHText Ctext(title, rating, words); // Object creation with values set through constructor
+    
+    // Now, we are demonstrating runtime polymorphism using base class pointers!
+    CWH* CWH_pointer[2]; // Declaring an array of pointers to the base class (CWH)
+    CWH_pointer[0] = &Cvdo;  // Pointing base class pointer to CWHVideo object
+    CWH_pointer[1] = &Ctext; // Pointing base class pointer to CWHText object
+
+    // Calling display() function through base class pointers to invoke derived class functions
+    CWH_pointer[0]->display(); // Calls the display function of CWHVideo
+    CWH_pointer[1]->display(); // Calls the display function of CWHText
+
+    // Here, we're achieving runtime polymorphism by calling the correct derived class function based on the object type the pointer is pointing to.
+    // Because the display function is virtual, it will dynamically call the respective derived class function, even though we're using a base class pointer.
+
+    // Without the virtual keyword, the display function of the base class would have been called, which doesn't display any information.
+    // If you remove the display function from one of the derived classes, the corresponding pointer would call the base class's display function.
+    // If base class display function had some output, it would be printed for the missing derived class function.
+}
+
+// Abstract Base Class & Pure Virtual Functions!
+// Explaination : The code demonstrates the concept of Abstract Base Classes (ABCs) and Pure Virtual Functions in C++. It shows how we can create a base class with a pure virtual function and how this ensures that derived classes must implement their own versions of that function.
+// Key Concepts : Abstract Base Class : An abstract base class is a class that contains at least one pure virtual function.
+//                                    : A pure virtual function is a function declared in the base class but has no implementation (it's set to = 0). This enforces that the derived class must provide its own implementation of the function.
+//                                    : An abstract base class cannot be instantiated directly. It can only serve as a blueprint for derived classes.
+//              : Virtual Function : A virtual function is a function in a base class that can be overridden in a derived class. If a derived class does not override it, the base class's implementation is used.
+//              : Pure Virtual Function : A pure virtual function is a function that is declared in the base class with = 0. It doesn't have any implementation in the base class and forces the derived class to provide an implementation.
+// Example :
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+class CWH {
+    protected:
+        string title; // Title of the content (either video or text)
+        float rating; // Rating for the content
+    public:
+        CWH(string s, float r) { // Constructor to initialize title and rating
+            title = s;
+            rating = r;
+        }
+        
+        virtual void display() = 0; // Pure virtual function : No implementation here in the base class.
+};
+
+class CWHVideo : public CWH {
+    float VideoLength; // Video length in minutes
+    public:
+        CWHVideo(string s, float r, float vl) : CWH(s, r) { // Constructor to initialize title, rating, and video length
+            VideoLength = vl;
+        }
+
+        void display() { // Override the pure virtual function in derived class
+            cout << "This is an amazing video with title: " << title << endl;
+            cout << "Ratings: " << rating << " out of 5 stars!" << endl;
+            cout << "Length of this video is: " << VideoLength << " minutes!" << endl;
+        }
+};
+
+class CWHText : public CWH {
+    float words; // Number of words in the text tutorial
+    public:
+        CWHText(string s, float r, int wc) : CWH(s, r) { // Constructor to initialize title, rating, and word count
+            words = wc;
+        }
+
+        void display() { // Override the pure virtual function in derived class
+            cout << "This is an amazing text tutorial with title: " << title << endl;
+            cout << "Ratings: " << rating << " out of 5 stars!" << endl;
+            cout << "Words count of the text is: " << words << " words!" << endl;
+        }
+};
+
+int main() {
+    string title;
+    float rating, vlen;
+    int words;
+
+    // Creating object for Video
+    title = "C++ Video tutorial!";
+    vlen = 4.56; // Video length in minutes
+    rating = 4.45; // Video rating
+    CWHVideo Cvdo(title, rating, vlen);
+
+    // Creating object for Text
+    title = "C++ Video tutorial text!";
+    words = 433; // Number of words in the text
+    rating = 4.15; // Text rating
+    CWHText Ctext(title, rating, words);
+
+    // Creating array of pointers to Base class (CWH)
+    CWH* CWH_pointer[2];  
+    CWH_pointer[0] = &Cvdo;  // Pointing to Video
+    CWH_pointer[1] = &Ctext; // Pointing to Text
+
+    // Calling display() function through base class pointer
+    CWH_pointer[0]->display();  // Calls the display function of CWHVideo
+    CWH_pointer[1]->display();  // Calls the display function of CWHText
 }
 
 // Data Abstraction!
