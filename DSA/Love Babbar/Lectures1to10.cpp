@@ -1398,12 +1398,8 @@ int main() {
 // Modulus operator does not support float values!
 
 // Leetcode Question 1 : Subtract the product and sum of all the digits of an Integer!
-// Approach : Yahaa hum ek number input kraate hai toh vo number ke harr digit ka product and sum ka subtraction nikalna hai and vo print krna hai,
-// toh approach will be as we know that kisi number ka 10 se modulo lenge toh o milega vo uss number ka one's place ka digit hoga and then uss number ko hum divide krenge,
-// and jo number milega usme se vo one's vaala digit hatt jayega, and then iss new digit ko hum firse iss loop me bhejenge, jisse ye sab firse hoga and tab tak hoga jab tak n 0 na hojaye!
-// For example : 234 isme 234%10 will give 4 we will keep it in line of sum and product, now we will divide the 234 with 10 and now we will get 23, and now we will put this again through the whole loop,
-// as ab 23%10 hoga and we will get 3 and now ab ye 3 pehle vaale 4 se multiply and add hoga and iss value ko store krlenge, and now firse 23 ko 10 se divide krenge and we will get 2 and now firse isko loop me daalenge,
-// and now 2%10 will give 2 and now ab ye sum and product me jaake multiply and add honge and then now 2/10 krenge toh 0 hojayega and ab loop exit hojayega! and we will get the answer!
+// Approach : Start with the input number -> Use modulo 10 to extract the last digit of the number (one's place) and update both sum and product -> Divide the number by 10 to remove the last digit -> Repeat the process until the number becomes 0 -> Finally, subtract the sum from the product to get the result.
+// For example, for the number 234 : Extract digits: 4, 3, 2 -> Calculate sum and product: Sum = 4 + 3 + 2, Product = 4 * 3 * 2 -> Subtract product and sum to get the final answer.
 #include<iostream>
 using namespace std;
 
@@ -1474,8 +1470,8 @@ int main() {
 }
 
 // Leetcode Question 2 : Number of 1 Bits, find the number of 1 bits in the unsigned integer input by the user!
-// Approach : Isko solve krne ke 2 ways ho sakte hai, pehle ki harr number ko decimal to binary me convert kro and then iterate krke check kro harr place pr 1 hai ya nhi and then finally vo count print krdo!
-// Another approach is ki harr inout ko binary me convert krke right shift krke count krlo number of 1's!
+// Approach 1 : Decimal to Binary Approach : Convert the number to binary, iterate through each bit, and count how many times '1' appears.
+// Approach 2 : Right Shift Approach : Continuously right shift the number and check the least significant bit (LSB) to count how many times '1' appears.
 #include<iostream>
 using namespace std;
 
@@ -1761,10 +1757,9 @@ int main() {
         break;
     }
 }
-// In the above 3 examples : 1st one, its an normal switch-case, where each case is ending with a break statement, that if condition matches at that point, and if there's a break statement in that "case" then it will exit switch statement then and there!
-// And in the next 2nd and 3rd examples, until we will not encounter break statement, it wont exit the switch case! and will keep executing the next "case". Hence, we get to know that break statement is a very integral part of switch statement!
-// Default case if optional, but use it when it may happen that none of the cases gets true!
-// Nested loops and Switch cases are inter-convertible!
+// In the first example, the switch-case works normally where each case ends with a break statement, exiting the switch once the condition is matched.
+// In the second and third examples, if a break statement is omitted, the switch continues to the next case and executes its code until a break is encountered. Therefore, the break statement is essential to control the flow within a switch case.
+// The default case is optional but should be used when none of the cases match. Additionally, nested loops and switch cases can be inter-converted.
 
 // Suppose you have a infinite loop of while, and you have a switch statement inside it, so how will you exit both switch statement and while loop providing you can only use break statement onlyy inside of SWITCH statement...
 #include<iostream>
@@ -1790,16 +1785,12 @@ int main() {
         }
     }
 }
-// Here what happened is that agar hum break use krenge toh yahaa ek infinite loop ban jayega jisme sirf "First Case" print hoga! so, even if in this infinite loop we want to print only particular cases, then we need to use exit() statement!
-// As exit not just pull you out of a loop, it pull you out of the entire program! That's why using exit() statement, we managed to handle the infinite loop!
-// exit() statement : In C++, the exit() function is used to terminate a program. It is defined in the <cstdlib> header. When exit() is called, it performs some cleanup tasks and terminates the program. You can also specify an exit status code as an argument to exit().
-// Keep in mind that, similar to the Python exit() function, using exit() in C++ should be done with caution. In more complex programs, you might want to use return statements from the main() function or throw exceptions to handle program termination more gracefully.
-// If you're working with a specific function or a block of code within a program, you might prefer to use return to exit from that function or block, rather than calling exit().
+// Using a break in the loop can cause an infinite loop where only the "First Case" is printed repeatedly.
+// To exit such a loop and terminate the entire program, we use the exit() statement, which is defined in <cstdlib>. The exit() function terminates the program after performing some cleanup tasks.
+// However, it's best to use exit() cautiously, as in complex programs, you might prefer using return or throwing exceptions to handle program termination more gracefully.
 
-// Continue Statement, it is used to skip the next iteration! but continue is not used in Switch case!
-// In C++ (and many other programming languages), the continue statement is not used within a switch statement. The continue statement is typically associated with loop control structures, such as for, while, or do-while loops, and it is used to skip the rest of the current iteration and move on to the next one.
-// In the context of a switch statement, you already have the ability to control the flow using the break statement. When a break statement is encountered inside a case, it exits the switch statement, preventing the execution of subsequent case statements. This behavior is sufficient for controlling the flow within the switch block.
-// Using continue in a switch statement would not make sense, as the purpose of continue is to move to the next iteration of a loop, and switch is not a loop construct. If you need to skip the rest of the current case and move on to the next one, you can achieve that by using break.
+// The continue statement is used to skip the current iteration in loops, but it cannot be used within a switch statement. In a switch, the break statement already controls the flow by exiting the current case.
+// Since continue is meant for loops, it doesn't apply to switch statements. To skip the rest of a case, you can use break.
 
 // Functions :
 // Lets just do one question to understand function!
@@ -2209,7 +2200,6 @@ int main() {
 }
 
 // Leetcode Question 2 : Check whether an array contains any unique element or not! and print that unique element!
-// There are multiple ways to do so...
 // 1st (Optimized solution) :
 #include <iostream>
 #include<climits>
