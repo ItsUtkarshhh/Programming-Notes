@@ -1,42 +1,3 @@
-// Array!
-// Question 1 (GFG) : Reverse an Array!
-#include<iostream>
-using namespace std;
-
-void printArray(int* arr, int n) {
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
-}
-
-void reverseArray(int* arr, int n) {
-    if(n == 0) {
-        cout<<"Empty array!";
-        return;
-    }
-    int s = 0;
-    int e = n-1;
-    while(s<e) {
-        swap(arr[s],arr[e]);
-        s++;
-        e--;
-    }
-    printArray(arr,n);
-}
-
-int main() {
-    int n;
-    cin>>n;
-    int* arr1 = new int[n]();
-    for(int i = 0; i<n; i++) {
-        cin>>arr1[i];
-    }
-    reverseArray(arr1,n);
-    delete[] arr1;
-}
-
-// Question 2 (GFG) : Max/Min Number of an Array!
 #include<iostream>
 #include<climits>
 #include<utility> // For pair
@@ -78,5 +39,3 @@ int main() {
     cout<<"Maximum Value : "<<res.second<<endl;
     delete[] arr1;
 }
-
-// Question 3 (GFG) : Find Kth Largest/Smallest Element of the array!
