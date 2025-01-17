@@ -2580,14 +2580,14 @@ int main() {
 //                              : Memory Management : Dynamically resizing arrays or vectors can lead to memory wastage and inefficient processing.
 
 // How Linked Lists Help : Dynamic Size : Linked Lists can grow and shrink in size at runtime without the need for complex memory management.
-//                       : No Memory Wastage : Only the required memory is used, with no extra space wasted.
+//                       : No Memory Wastage : Only the required memory is used, with no extra space wastage.
 //                       : Easy Insertions/Deletions : Adding or removing elements is straightforward and efficient.
 
 // Linked List Structure : Linked Lists don't require contiguous memory blocks.
 //                       : Nodes are connected through addresses, allowing them to be stored anywhere in memory.
 
 // Singly Linked List Example : Structure : [Value1, Address of next node] -> [Value2, Address of next node] -> [Value3, Address of next node] -> [Value4, Address of next node] -> NULL! Head Node : The first node in the list. Tail Node : The last node in the list.
-// There are three types...Singly, Doubly and Circular!
+// There are three types : Singly, Doubly and Circular!
 // Now lets implement it... we will use classes to implement it... as array jaise hote hai na vaise hi hum yahaa LinkedList ko bhi ek keyword ki tarah banaa denge classes ka use krke... kyunki in the end class toh ek template hi toh bnati hai kisi ek data type ka! toh bss hum vhi krenge Linked List ki implementation ke liye!
 // Now lets see...
 #include<iostream>
@@ -2705,13 +2705,14 @@ int main() {
     print(head);
 }
 
-// Inserting node at any position in the linked list : Head, Tail or Anywhere in between!
-// Approach : Here we have used the insertAtAnyPosition() to insert a particular node at any position! steps followed...
-// If the list is empty (head == NULL): It creates a new node and sets it as the head of the list.
-// If inserting at the head (pos == 1): It calls a helper function insertAtHead3 to add the node at the beginning.
-// For positions other than head : It traverses the list until it reaches the node just before the desired position. If it reaches the end of the list before the position, it adds the new node at the end by calling insertAtTail2. Otherwise, it inserts the new node at the correct position by adjusting pointers: Sets the new node's next to point to the node that was originally at that position. Updates the previous node’s next to point to the new node. 
-// If the new node is the new tail (i.e., newNode->next == NULL): It updates the tail pointer to the new node.
-// Implementing...
+// Insertions of node at Head, tail or Anywhere in between!
+// Empty List : If the list is empty (head == NULL), it creates a new node and makes it the head.
+// Insert at Head : If the position is 1, it calls a helper function insertAtHead3() to add the node at the beginning.
+// Insert at Tail or Middle : Traverses the list to find the node just before the desired position. If it reaches the end before the position, calls insertAtTail2() to add the node at the end.
+//                          : Otherwise, inserts the new node at the position : Points the new node's next to the current node at that position. Updates the previous node’s next to the new node.
+// Update Tail : If the new node becomes the new tail (newNode->next == NULL), updates the tail pointer.
+
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -2811,10 +2812,12 @@ int main() {
     printNode(head);
 }
 
-// Now, Deleting a node from Singly LL!
-// Approach : First we check ki LL empty hai ya nhi, if yes then no deletion possible and return! But if this stands false, then find length of LL and see if the position < 1 || position is > len, if this stands true display an error message! but if bith stands false, the...
-// check if position == 1, then adjust the head node and point it to the next one and then point the prev head to NULL using a local pointer temp and then delete this! but again if pos != 1, then finally, iterate over the position jahaa pr deletion of node krna hai and then in the same manner, uss node ko delete krdo using the delete keyword!
-// And pehle se ek Tail pointer bnaa ke rakho taaki agar iterate krte krte last node pr pohoch gye toh tail bhi update krna hota hai! agar uss position tak pohochte pohchte tail node pr aagye toh uss tail node ko delete krke tail node ko update krna hota hai taaki LL ke head and tail intact rahe!
+// Deletion of Node from Singly LL!
+// Approach : Check for an Empty List : If the linked list is empty, deletion is not possible, so return immediately.
+//          : Validate Position : Calculate the length of the linked list. If the given position is less than 1 or greater than the length, display an error message and exit.
+//          : Delete the Head Node : If the position to delete is 1 : Update the head pointer to the next node. Use a temporary pointer to store the original head, set it to NULL, and delete it.
+//          : Delete a Node at Any Other Position : Traverse to the node just before the desired position for deletion. Adjust pointers to skip the node to be deleted. Use a temporary pointer to store the node to be deleted, set it to NULL, and delete it.
+//          : Update the Tail : Maintain a tail pointer to ensure the last node is updated when the deletion occurs at the end of the list.
 #include<iostream>
 using namespace std;
 
@@ -2963,15 +2966,13 @@ int main() {
     cout<<"The updated linked list is : ";
     printNode(head);
 }
-// A quick summary of what Linked List are and how we have created nodes, inserted at head, tail and then how we have inserted at any position, and then how we have deleted a node! also how we have found the length of the LL!
-// Lets go...
-// Creation of Node : Using class of Node type which contains, and which helps in node creation by alotting two memory spaces one for data and another to store address of next node, but by default is pointing at NULL!
-// Inserting at Head/Tail : Using the function insertAtHead()/insertAtTail() function to insert a node at head, details are mentioned already! Here if we observe, then the insertion of node happens from tail to head, in case of Insertion at head! and head to tail, in case of head to tail! you can use both head and tail as well to handle the insertion, but just manage the insertion and updation of head and tail node properly!
-// Insertion at Any Position : Using the function we can insert at any position, and for this we have two helper function, isert at head/tail(), and through this we can insert at any position of the linked list! Here also you can use head and tail both for insertion, but its on us if we want that or not!
-// Deleting Node (based on position) : Deleting node requires, checking some condition first, like empty list, list with single element, position out of bounds and deletion from any other position including tail! Here also you can use head and tail both for deletion, but its on us if we want that or not!
+// Quick Summary : Creation of Node : Using class of Node type which contains, and which helps in node creation by alotting two memory spaces one for data and another to store address of next node, but by default is pointing at NULL!
+//               : Inserting at Head/Tail : Using the function insertAtHead()/insertAtTail() function to insert a node at head, details are mentioned already! Here if we observe, then the insertion of node happens from tail to head, in case of Insertion at head! and head to tail, in case of head to tail! you can use both head and tail as well to handle the insertion, but just manage the insertion and updation of head and tail node properly!
+//               : Insertion at Any Position : Using the function we can insert at any position, and for this we have two helper function, isert at head/tail(), and through this we can insert at any position of the linked list! Here also you can use head and tail both for insertion, but its on us if we want that or not!
+//               : Deleting Node (based on position) : Deleting node requires, checking some condition first, like empty list, list with single element, position out of bounds and deletion from any other position including tail! Here also you can use head and tail both for deletion, but its on us if we want that or not!
 
 // Doubly LinkedLists : LL which stores address of both the nodes next and prev of it! so it has two pointers, next and prev both!
-// Lets create it with the same logic as of above...
+// Implementation!
 #include<iostream>
 using namespace std;
 
