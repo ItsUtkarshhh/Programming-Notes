@@ -1,44 +1,58 @@
 #include<iostream>
 using namespace std;
 
-void printArray(int* arr, int n) {
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
+class Node {
+    public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
     }
-    cout<<endl;
 }
 
-void bubbleSort(int* arr, int n) {
-    for(int i = 1; i<n; i++) {
-        for(int j = 0; j<n-i; j++) {
-            if(arr[j+1] < arr[j]) {
-                swap(arr[j], arr[j+1]);
-            }
-        }
-    }
-    printArray(arr,n);
+void insertAtHead(Node* &head, int data) {
+    Node* temp = new Node(data);
+    temp->next = head;
+    head = temp;
 }
 
-void selectionSort(int* arr, int n) {
-    for(int i = 0; i<n-1; i++) {
-        int minIndex = i;
-        for(int j = i+1; j<n-1; j++) {
-            if(arr[j] < arr[minIndex]) {
-                minIndex = j;
-            }
-        }
-        swap(arr[i], arr[minIndex]);
+void insertAtTail(Node* &tail, int data) {
+    Node* temp = new Node(data);
+    tail->next = temp;
+    tail = tail->next;
+    temp->next = NULL;
+}
+
+void insertAtAnyPosition(Node* &head, int data, int pos) {
+    if(head == NULL) {
+        Node* newNode = new Node(data);
+        head = newNode;
+        return;
     }
-    printArray(arr,n);
+
+    if(pos == 1) {
+        insertAtHead(head, data);
+        return;
+    }
+
+    Node* tail = head;
+    Node* temp = tail;
+    int count = 1;
+
+    while(count < pos && temp->next != NULL) {
+        temp = temp->next;
+        count++
+    }
+
+    if(temp != NULL) {
+
+    }
 }
 
 int main() {
-    int n;
-    cin>>n;
-    int* arr1 = new int[n]();
-    for(int i = 0; i<n; i++) {
-        cin>>arr1[i];
-    }
-    bubbleSort(arr1,n);
-    selectionSort(arr1,n);
+    Node* n1 = new Node(10);
+    Node* head = n1;
+    Node* tail = n1;
 }

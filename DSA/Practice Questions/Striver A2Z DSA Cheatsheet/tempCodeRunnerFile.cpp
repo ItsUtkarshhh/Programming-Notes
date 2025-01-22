@@ -1,53 +1,35 @@
 #include<iostream>
-#include<string>
 using namespace std;
 
-char lowercase(char ch) {
-    if(ch >= 'A' && ch <= 'Z') {
-        return ch - 'A' + 'a';
-    }
-    return ch;
-}
-
-bool valid(char ch) {
-    if(ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'z') {
-        return true;
-    }
-    return false;
-}
-
-bool Palindrome(string str) {
-    string temp = "";
-    for(int i = 0; i<str.length(); i++) {
-        if(valid(str[i])) {
-            temp.push_back(str[i]);
-        }
-    }
-    for(int i = 0; i<temp.length(); i++) {
-        temp[i] = lowercase(temp[i]);
-    }
-
-    int s = 0;
-    int e = temp.length()-1;
-    while(s<e) {
-        if(temp[s] == temp[e]) {
-            s++;
-            e--;
-        }
-        else {
-            return false;
-        }
-    }
-    return true;
-}
-
 int main() {
-    string str;
-    cin>>str;
-    if(Palindrome(str)) {
-        cout<<"Palindrome!";
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = 1; j<=(2*i)-1; j++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
     }
-    else {
-        cout<<"Not a Palindrome!";
+    for(int i = n; i>=1; i--) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = (2*i)-1; j>=1; j--) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
     }
 }

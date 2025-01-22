@@ -2737,6 +2737,7 @@ void insertAtTail2(Node5* &tail, int data) {
     Node5* temp = new Node5(data);
     tail->next = temp;
     tail = tail->next;
+    temp->next = NULL; // Addition check, so that to avoid potential mis-management like unintended creation of a circular LinkedList!
 }
 
 void insertAtAnyPosition1(Node5* &head, int pos, int data) {
@@ -2860,7 +2861,6 @@ void insertAtAnyPosition2(Node6* &head, int pos, int data) {
         return;
     }
 
-    Node6* tail = head;
     Node6* temp = head;
     int cnt = 1;
 
@@ -2877,10 +2877,6 @@ void insertAtAnyPosition2(Node6* &head, int pos, int data) {
     Node6* newNode = new Node6(data);
     newNode->next = temp->next;
     temp->next = newNode;
-
-    if(newNode->next == NULL) {
-        tail = newNode;
-    }
 }
 
 int getLengthofLL(Node6* &head) {
@@ -2973,72 +2969,68 @@ int main() {
 
 // Doubly LinkedLists : LL which stores address of both the nodes next and prev of it! so it has two pointers, next and prev both!
 // Implementation!
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-// Creation of node basic structure!
-class Node7 {
-    public :
-    int data;
-    Node7* prev;
-    Node7* next;
+class Node7 { // Node class to represent each element in the doubly linked list
+public:
+    int data; // Data stored in the node
+    Node7* prev; // Pointer to the previous node
+    Node7* next; // Pointer to the next node
 
-    Node7 (int data) {
+    Node7(int data) { // Constructor to initialize a new node
         this->data = data;
         this->prev = NULL;
         this->next = NULL;
     }
 };
 
-void printNode(Node7* &head) {
+void printNode(Node7* &head) { // Function to print the elements of the doubly linked list
     Node7* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
-// Finding Length of the LinkedList!
-int getLength(Node7* &head) {
+int getLength(Node7* &head) { // Function to find the length of the doubly linked list
     int len = 0;
     Node7* temp = head;
-    while(temp != NULL) {
+    while (temp != NULL) {
         len++;
         temp = temp->next;
     }
     return len;
 }
 
-// So what happened here is, jaise we know double linkeds are like this [NULL,data1,next node address] <--> [previour node address,data2,next node address] <--> [previour node address,data3,next node address] <--> [previour node address,data4,NULL]
-// So simply, first we checked whether the list is empty or not, if it is empty we made a new node and updated the head pointer to this first node "temp". but if list is not empty, in that case we have just used this newly created node and used its two pointers prev and next to link it with the remaining list!
-void insertAtHeadDLL1(Node7* &head, int data) {
+void insertAtHeadDLL1(Node7* &head, int data) { // Function to insert a node at the head of the doubly linked list
     Node7* temp = new Node7(data);
-    if(head == NULL) {
+    if (head == NULL) { // If the list is empty, update the head with the new node
         head = temp;
         return;
     }
-    temp -> next = head;
-    head -> prev = temp;
+    // Update pointers to insert the new node at the head
+    temp->next = head;
+    head->prev = temp;
     head = temp;
 }
 
-// So here we just inserted the node in the same way as of from head, just here we have used tail for it!
-void insertAtTailDLL1(Node7* &tail, int data) {
+void insertAtTailDLL1(Node7* &tail, int data) { // Function to insert a node at the tail of the doubly linked list
     Node7* temp = new Node7(data);
-    if (tail == NULL) {
+    if (tail == NULL) { // If the list is empty, update the tail with the new node
         tail = temp;
         return;
     }
+    // Update pointers to insert the new node at the tail
     tail->next = temp;
     temp->prev = tail;
     tail = temp;
 }
 
-// You can create this function, using head and tail both, or only head too... that depends on your needs! If you use both head and tail then you can insert from both ends and you dont need to traverse the whole list if in case you want to insert a node at a particular position!
-void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data) {
-    // Case 1: If the list is empty!
-    if(head == NULL) {
+void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data) { // Function to insert a node at any position in the doubly linked list
+    // Case 1: If the list is empty, create the first node
+    if (head == NULL) {
         Node7* newNode = new Node7(data);
         head = newNode;
         tail = newNode;
@@ -3046,8 +3038,8 @@ void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data)
     }
     
     // Case 2: Insert at position 1 (head)
-    if(position == 1) {
-        insertAtHeadDLL1(head, data); // Update head and possibly tail if list was empty
+    if (position == 1) {
+        insertAtHeadDLL1(head, data);
         return;
     }
 
@@ -3055,13 +3047,13 @@ void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data)
     int cnt = 1;
 
     // Traverse to the node just before the desired position
-    while(cnt < position && temp->next != NULL) {
+    while (cnt < position && temp->next != NULL) {
         temp = temp->next;
         cnt++;
     }
 
     // Case 3: If we reached the end of the list, insert at the tail
-    if(temp->next == NULL) {
+    if (temp->next == NULL) {
         insertAtTailDLL1(tail, data);
         return;
     }
@@ -3069,50 +3061,62 @@ void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data)
     // Case 4: Insert in the middle of the list
     Node7* NodetoInsert = new Node7(data);
     NodetoInsert->next = temp->next;
-    if(temp->next != NULL) {
+    if (temp->next != NULL) {
         temp->next->prev = NodetoInsert;
     }
     temp->next = NodetoInsert;
     NodetoInsert->prev = temp;
 }
 
-
-
-int main() {
-    Node7* node1 = new Node7(10);
-    Node7* head = node1;
-    Node7* tail = node1;
+int main() { // Main function to demonstrate the doubly linked list operations
+    Node7* node1 = new Node7(10); // Initialize the first node
+    Node7* head = node1; // Head pointer
+    Node7* tail = node1; // Tail pointer
 
     printNode(head);
-    cout<<"Length : "<<getLength(head)<<endl;
+    cout << "Length: " << getLength(head) << endl;
 
-    insertAtHeadDLL1(head,9);
+    // Insert nodes at the head
+    insertAtHeadDLL1(head, 9);
     printNode(head);
 
-    insertAtHeadDLL1(head,8);
-    insertAtHeadDLL1(head,7);
-    insertAtHeadDLL1(head,6);
-    insertAtHeadDLL1(head,5);
+    insertAtHeadDLL1(head, 8);
+    insertAtHeadDLL1(head, 7);
+    insertAtHeadDLL1(head, 6);
+    insertAtHeadDLL1(head, 5);
     printNode(head);
 
-    insertAtTailDLL1(tail,11);
-    insertAtTailDLL1(tail,12);
-    insertAtTailDLL1(tail,13);
-    insertAtTailDLL1(tail,14);
+    // Insert nodes at the tail
+    insertAtTailDLL1(tail, 11);
+    insertAtTailDLL1(tail, 12);
+    insertAtTailDLL1(tail, 13);
+    insertAtTailDLL1(tail, 14);
     printNode(head);
 
-    insertAtAnyPositionDLL1(head, tail, 3, 100); // Insertin at any randome position
-    printNode(head);
-    
-    insertAtAnyPositionDLL1(head, tail, 1, 101); // Inserting at Head using this function
+    // Insert at specific positions
+    insertAtAnyPositionDLL1(head, tail, 3, 100); // Insert at position 3
     printNode(head);
 
-    cout<<"Head : "<<head->data<<endl;
-    cout<<"Tail : "<<tail->data<<endl;
-    insertAtAnyPositionDLL1(head, tail, getLength(head)+1, 102); // Inserting at Tail using this function, writing this becoz tumko last position pr insert krna hai and agar sirf getlength() use kroge toh mtlb ki tum 12 position opr insert krna chah rhe ho and that will move the last element one node aage and it will insert 102 at second last position, so to insert at tail you need position of the last element + 1.
+    insertAtAnyPositionDLL1(head, tail, 1, 101); // Insert at position 1
     printNode(head);
 
-} // Here we have created a node and inserted at head and tail and at any position of the linkedlist & then printed it, also length of the linkedlists!
+    cout << "Head: " << head->data << endl;
+    cout << "Tail: " << tail->data << endl;
+
+    // Insert at the tail using length-based position
+    insertAtAnyPositionDLL1(head, tail, getLength(head) + 1, 102);
+    printNode(head);
+}
+/*
+Improvements:
+1. Memory Management: Implement a destructor to free allocated memory and avoid memory leaks.
+2. Error Handling: Add boundary checks for invalid positions in the `insertAtAnyPositionDLL1` function.
+3. Optimization: Maintain a separate variable for the length of the list to avoid recalculating it repeatedly.
+4. Code Reusability: Create a generic `insert` function to reduce redundant code in insert operations.
+5. Enhanced Debugging: Add debug messages or logs for better traceability of operations.
+6. Use Smart Pointers: Use C++ smart pointers like `std::shared_ptr` or `std::unique_ptr` for automatic memory management.
+*/
+
 
 // Now lets do some correction.... and that is manlo jaise abhi toh hum pehle se ek node create krte then and then hum uske aage ya peeche se insert krna shuru krte the... maanlo agar vo initial node hi naa vo and hum linkedlist ekdum scratch se banana shuru kre bina uss initial node ke! then we need to do this...
 #include<iostream>
