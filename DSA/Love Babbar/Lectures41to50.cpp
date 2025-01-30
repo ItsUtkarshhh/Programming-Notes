@@ -2586,77 +2586,90 @@ int main() {
 // Linked List Structure : Linked Lists don't require contiguous memory blocks.
 //                       : Nodes are connected through addresses, allowing them to be stored anywhere in memory.
 
-// Singly Linked List Example : Structure : [Value1, Address of next node] -> [Value2, Address of next node] -> [Value3, Address of next node] -> [Value4, Address of next node] -> NULL! Head Node : The first node in the list. Tail Node : The last node in the list.
-// There are three types : Singly, Doubly and Circular!
-// Now lets implement it... we will use classes to implement it... as array jaise hote hai na vaise hi hum yahaa LinkedList ko bhi ek keyword ki tarah banaa denge classes ka use krke... kyunki in the end class toh ek template hi toh bnati hai kisi ek data type ka! toh bss hum vhi krenge Linked List ki implementation ke liye!
-// Now lets see...
+// Summary of Singly Linked List Implementation!
+// Singly Linked List : A Singly Linked List consists of nodes where each node contains Data (The value stored in the node) and Next Pointer (A pointer to the next node in the list, or NULL if it's the last node)
+// Structure : The list is structured as : [Value1, Address of next node] -> [Value2, Address of next node] -> [Value3, Address of next node] -> NULL
+//           : Head (The first node in the list) and Tail (The last node in the list (points to NULL))
+// Linked List Types : Singly Linked List : Nodes point to the next node in the list.
+//                   : Doubly Linked List : Each node has two pointers: one pointing to the next node and another pointing to the previous node.
+//                   : Circular Linked List : The last node points back to the first node, making the list circular.
+// Class-based Implementation : A template class is used to create the linked list node.
+//                            : Node Class : Has two attributes : data (stores the node's value) and next (a pointer to the next node).
+//                                         : A constructor initializes the node with data and sets the next pointer to NULL.
 #include<iostream>
 using namespace std;
 
-// Template created for creation of node!
-class Node {
+class Node { // Node class to represent a single node in the linked list
     public :
-    int data;
-    Node* next;
+    int data; // Stores the data of the node
+    Node* next; // Pointer to the next node
 
-    Node(int data) { // we have made a constructor so that jab bhi koi node ka object create hota hai toh vaise hi uske andar nodes ki properties aajaye! jo iss implementation me likhi hui hai!
-        this-> data = data;
-        this->next = NULL;
-    } // And this keyword is used for obv reasons, taaki hum current object ke data and next pointer ko sambhal sake!
+    Node(int data) { // Constructor to initialize the node with data and set next to NULL
+        this->data = data; // Set the node's data
+        this->next = NULL; // Initialize next pointer to NULL (end of the list)
+    }
 };
 
 int main() {
-    Node* n1 = new Node(10); // Here one node is created dynamically and it is of "Node" type...
-    cout<<n1->data<<endl;
-    cout<<n1->next<<endl;
-} // So here we have created a node n1 which has a value and is pointing at NULL. Now to create a Linked List, we need to insert more nodes before (before the head) and after (after the tail) it!
+    Node* n1 = new Node(10); // Create a new node 'n1' with data 10
 
-// Lets first Insert from the Head!
-// Approach : Just like we have created a node template! similarly we will create more nodes and by default all the next pointer of all the nodes are pointing at NULL. so we will just make that next pointer point at the node which was created before this one. means overall just creating new nodes and storing address of the old nodes in these new node's next pointer!
-// Now lets implement it....
+    // Output the data and the next pointer of the node 'n1'
+    cout << n1->data << endl; // Print the value of the node (10)
+    cout << n1->next << endl; // Print the address of the next node (NULL)
+    // The created node 'n1' has data 10 and is pointing to NULL (end of the list)
+}
+
+// Insertion from the Head!
+// Approach : The approach creates a new node, sets its next pointer to the current head, then updates the head to the new node, effectively building the linked list from tail to head.
+// Implementation!
 #include<iostream>
 using namespace std;
 
+// Node class for linked list node structure
 class Node2 {
     public :
-    int data;
-    Node2* next;
+    int data; // Data to store the value
+    Node2* next; // Pointer to the next node
 
-    Node2(int data) {
+    Node2(int data) { q// Constructor to initialize a node with data and set next to NULL
         this->data = data;
         this->next = NULL;
     }
-}; // This template will just create default nodes (which will just contain a value and a next pointer which will store NULL at this point) whenever we call them using the constructor! so like, we are trying to create LL from tail to head...
+};
 
-void insertAtHead1(Node2* &head, int data) {
-    Node2* temp = new Node2(data);
-    temp->next = head;
-    head = temp;
-} // Now here, what we did is... ab ek first node toh humara create ho chuka hai! so now ab hum ek aur node create krenge jo default hi hoga mtlb usme value toh stored hogi pr vo initially vo bhi NULL ko hi point kr rha hoga...
-// Flow : Ek temp node banai jo abhi default hai, fir uske next ko head pr point kraya and then head ko update krdiya usme temp daalke, taaki vo ab new node ko point kre!
+void insertAtHead1(Node2* &head, int data) { // Function to insert a node at the head (beginning of the list)
+    Node2* temp = new Node2(data); // Create a new node
+    temp->next = head; // Point the new node to the current head
+    head = temp; // Update the head to the new node
+}
 
-void print(Node2* &head) {
+void print(Node2* &head) { // Function to print the linked list
     Node2* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
+    while(temp != NULL) { // Traverse until the end of the list
+        cout << temp->data << " "; // Print node data
+        temp = temp->next; // Move to the next node
     }
-    cout<<endl;
-} // Used temp to iterate through each node! It starts from the head node and iterates through each node using the next pointer until reaching the end of the list (where next is NULL).
+    cout << endl;
+}
 
 int main() {
-    Node2* n1 = new Node2(10);
-    Node2* head = n1;
-    print(head);
+    Node2* n1 = new Node2(10); // Create first node with data 10
+    Node2* head = n1; // Head points to the first node
+    print(head); // Print the list
 
-    insertAtHead1(head,12);
-    print(head);
+    insertAtHead1(head, 12); // Insert a new node with data 12 at the head
+    print(head); // Print the updated list
 
-    insertAtHead1(head,15);
-    print(head);
-} // In short, default nodes created (using the class implementations) ! then we started linking every new node's next pointer at the old node (this is done using the insertAtHead() function!) and through this we have build a linkedlist! and here we are creating it in from tail to head fashion!
+    insertAtHead1(head, 15); // Insert a new node with data 15 at the head
+    print(head); // Print the updated list
+}
 
-// Lets write for Inserting node at tail...
+// Inserting from the Tail!
+// Approach 1 : Use a tail pointer to directly insert the new node at the end in constant time (O(1)).
+// Approach 2 : Traverse the list using a temporary pointer until reaching the last node, then insert the new node. This method avoids using the tail pointer but has a time complexity of O(n) for large lists.
+//            : Advantages : Simpler function signature without the tail pointer.
+//            : Disadvantages : Slower for large lists due to the O(n) traversal time.
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -2665,58 +2678,57 @@ class Node3 {
     int data;
     Node3* next;
 
-    Node3(int data) {
+    Node3(int data) { // Constructor initializes data and sets next pointer to NULL
         this->data = data;
         this->next = NULL;
     }
 };
 
 void insertAtHead2(Node3* &head, int data) {
-    Node3* temp = new Node3(data);
-    temp->next = head;
-    head = temp;
+    Node3* temp = new Node3(data); // Create a new node
+    temp->next = head; // Point the new node's next to the current head
+    head = temp; // Update head to the new node
 } 
 
 void insertAtTail1(Node3* &tail, int data) {
-    Node3* temp = new Node3(data);
-    tail->next = temp;
-    tail = tail->next;
-} // This you can understand ki kya changes hue hai isme... just pointer old node's next pointer at the new node! its just reverse of the inserting at head implementation!
+    Node3* temp = new Node3(data); // Create a new node
+    tail->next = temp; // Attach new node to the end of the list
+    tail = tail->next; // Update tail to point to the new node
+    // Alternatively, you could use 'tail = temp;' for a cleaner approach, both are valid
+}
 
 void print(Node3* &head) {
     Node3* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
+    while(temp != NULL) { // Traverse the list
+        cout << temp->data << " "; // Print node data
+        temp = temp->next; // Move to the next node
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
-    Node3* n1 = new Node3(10);
-    Node3* head = n1;
-    Node3* tail = n1;
-    print(head);
+    Node3* n1 = new Node3(10); // Create the first node
+    Node3* head = n1; // Head points to the first node
+    Node3* tail = n1; // Tail points to the first node as well
+    print(head); // Print the initial list
     
-    insertAtTail1(tail,12);
-    print(head);
+    insertAtTail1(tail,12); // Insert new node with value 12 at the tail
+    print(head); // Print list after insertion
 
-    insertAtTail1(tail,15);
-    print(head);
+    insertAtTail1(tail,15); // Insert new node with value 15 at the tail
+    print(head); // Print list after insertion
 }
 
-// Insertions of node at Head, tail or Anywhere in between!
-// Empty List : If the list is empty (head == NULL), it creates a new node and makes it the head.
-// Insert at Head : If the position is 1, it calls a helper function insertAtHead3() to add the node at the beginning.
-// Insert at Tail or Middle : Traverses the list to find the node just before the desired position. If it reaches the end before the position, calls insertAtTail2() to add the node at the end.
-//                          : Otherwise, inserts the new node at the position : Points the new node's next to the current node at that position. Updates the previous node’s next to the new node.
-// Update Tail : If the new node becomes the new tail (newNode->next == NULL), updates the tail pointer.
-
+// Insertion Anywhere (Head, Tail, or Middle):
+// Empty List : If head is NULL, create a new node and set it as the head.
+// Insert at Head : If position is 1, insert using insertAtHead() function.
+// Insert at Tail/Middle : Traverse to the desired position and insert.
+// Update Tail : If inserted node is at the end (newNode->next == NULL), update tail pointer.
 // Implementation!
 #include<iostream>
 using namespace std;
 
-class Node5 {
+class Node5 { // Node class definition with data and next pointer
     public :
     int data;
     Node5* next;
@@ -2727,98 +2739,94 @@ class Node5 {
     }
 };
 
-void insertAtHead3(Node5* &head, int data) {
+void insertAtHead3(Node5* &head, int data) { // Insert node at head (beginning of the list)
     Node5* temp = new Node5(data);
     temp->next = head;
     head = temp;
 }
 
-void insertAtTail2(Node5* &tail, int data) {
+void insertAtTail2(Node5* &tail, int data) { // Insert node at tail (end of the list)
     Node5* temp = new Node5(data);
     tail->next = temp;
     tail = tail->next;
-    temp->next = NULL; // Addition check, so that to avoid potential mis-management like unintended creation of a circular LinkedList!
+    temp->next = NULL; // Prevents accidental circular LinkedList
 }
 
-void insertAtAnyPosition1(Node5* &head, int pos, int data) {
-    if(head == NULL) {
+void insertAtAnyPosition1(Node5* &head, int pos, int data) { // Insert node at any position in the list
+    if(head == NULL) { // If list is empty
         Node5* newNode = new Node5(data);
         head = newNode;
         return;
     }
 
-    if(pos == 1) {
-        insertAtHead3(head,data);
+    if(pos == 1) { // Insert at head if position is 1
+        insertAtHead3(head, data);
         return;
     }
 
-    Node5* tail = head;
-    Node5* temp = head;
+    Node5* temp = head; // Traverse to the desired position
     int cnt = 1;
-
-    while(cnt < pos && temp->next != NULL) {
+    while(cnt < pos - 1 && temp->next != NULL) {
         temp = temp->next;
         cnt++;
     }
 
-    if(temp->next == NULL) {
-        insertAtTail2(tail,data);
+    if(temp->next == NULL) { // Insert at tail if position is beyond the list length
+        Node6* newNode = new Node6(data);
+        temp->next = newNode;
         return;
     }
 
+    // Insert at the given position
     Node5* newNode = new Node5(data);
     newNode->next = temp->next;
     temp->next = newNode;
 
-    if(newNode->next == NULL) {
+    if(newNode->next == NULL) { // Update tail if the new node is at the end
         tail = newNode;
     }
 }
 
-void printNode(Node5* &head) {
+void printNode(Node5* &head) { // Print all nodes starting from the head
     Node5* temp = head;
     while(temp != NULL) {
-        cout<<temp->data<<" ";
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
+    // Initialize the list with the first node
     Node5* newNode = new Node5(10);
-    
-    // head and tail defined!
     Node5* head = newNode;
     Node5* tail = newNode;
-    
-    insertAtHead3(head,9);
-    insertAtHead3(head,8);
 
-    insertAtTail2(tail,11);
-    insertAtTail2(tail,12);
+    // Insert nodes at the head and tail
+    insertAtHead3(head, 9);
+    insertAtHead3(head, 8);
+    insertAtTail2(tail, 11);
+    insertAtTail2(tail, 12);
 
-    // You can make a function which takes head and tail both for input, but that is not actually required! becoz we mostly consider head only as from where we start linked-list!
-    // insertAtAnyPosition(head,tail,1,7);
-    // insertAtAnyPosition(head,tail,4,20);
-    // insertAtAnyPosition(head,tail,7,30);
+    // Insert nodes at specific positions
+    insertAtAnyPosition1(head, 1, 30);
+    insertAtAnyPosition1(head, 3, 40);
+    insertAtAnyPosition1(head, 4, 50);
 
-    // Now you can use insert at any position function to insert at any position in the Linked list!
-    insertAtAnyPosition1(head,1,30);
-    insertAtAnyPosition1(head,3,40);
-    insertAtAnyPosition1(head,4,50);
+    // Output the head and tail values
+    cout << "Head: " << head->data << endl;
+    cout << "Tail: " << tail->data << endl;
 
-    cout<<"Head : "<<head->data<<endl;
-    cout<<"Tail : "<<tail->data<<endl;
-
+    // Print the entire list
     printNode(head);
 }
 
 // Deletion of Node from Singly LL!
-// Approach : Check for an Empty List : If the linked list is empty, deletion is not possible, so return immediately.
-//          : Validate Position : Calculate the length of the linked list. If the given position is less than 1 or greater than the length, display an error message and exit.
-//          : Delete the Head Node : If the position to delete is 1 : Update the head pointer to the next node. Use a temporary pointer to store the original head, set it to NULL, and delete it.
-//          : Delete a Node at Any Other Position : Traverse to the node just before the desired position for deletion. Adjust pointers to skip the node to be deleted. Use a temporary pointer to store the node to be deleted, set it to NULL, and delete it.
-//          : Update the Tail : Maintain a tail pointer to ensure the last node is updated when the deletion occurs at the end of the list.
+// Empty List Check : If the list is empty, return immediately as deletion is not possible.
+// Position Validation : Ensure the position is valid (within range), otherwise show an error.
+// Delete Head Node : If position is 1, update the head to the next node, delete the original head.
+// Delete Node at Other Positions : Traverse to the node just before the one to be deleted, adjust pointers to skip the node, and delete it.
+// Update Tail : If deleting the last node, update the tail pointer to the previous node.
 #include<iostream>
 using namespace std;
 
@@ -2827,53 +2835,55 @@ class Node6 {
     int data;
     Node6* next;
 
-    Node6(int data) {
+    Node6(int data) { // Constructor initializes data and next pointer
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node6() {
+    ~Node6() { // Destructor prints a message when memory for the node is freed
         cout << "Memory is free for the node with data " << this->data << endl;
     }
 };
 
 void insertAtHead4(Node6* &head, int data) {
-    Node6* temp = new Node6(data);
-    temp->next = head;
-    head = temp;
+    Node6* temp = new Node6(data); // Create a new node
+    temp->next = head; // Point the new node to the current head
+    head = temp; // Update head to point to the new node
 }
 
 void insertAtTail3(Node6* &tail, int data) {
-    Node6* temp = new Node6(data);
-    tail->next = temp;
-    tail = tail->next;
+    Node6* temp = new Node6(data); // Create a new node
+    tail->next = temp; // Point the current tail to the new node
+    tail = tail->next; // Update tail to the new node
 }
 
 void insertAtAnyPosition2(Node6* &head, int pos, int data) {
     if(head == NULL) {
-        Node6* newNode = new Node6(data);
+        Node6* newNode = new Node6(data); // If list is empty, create and set the new node as head
         head = newNode;
         return;
     }
 
-    if(pos == 1) {
-        insertAtHead4(head,data);
+    if(pos == 1) { // Insert at the head
+        insertAtHead4(head, data);
         return;
     }
 
     Node6* temp = head;
     int cnt = 1;
 
-    while(cnt < pos && temp->next != NULL) {
+    while(cnt < pos - 1 && temp->next != NULL) { // Traverse to the node just before the desired position
         temp = temp->next;
         cnt++;
     }
 
-    if(temp->next == NULL) {
-        insertAtTail3(tail,data);
+    if(temp->next == NULL) { // If position is out of bounds, add to the tail
+        Node6* newNode = new Node6(data);
+        temp->next = newNode;
         return;
     }
 
+    // Insert at the desired position
     Node6* newNode = new Node6(data);
     newNode->next = temp->next;
     temp->next = newNode;
@@ -2882,7 +2892,7 @@ void insertAtAnyPosition2(Node6* &head, int pos, int data) {
 int getLengthofLL(Node6* &head) {
     int len = 0;
     Node6* temp = head;
-    while(temp != NULL) {
+    while(temp != NULL) { // Traverse through the list to calculate length
         temp = temp->next;
         len++;
     }
@@ -2895,48 +2905,48 @@ void deleteNode1(Node6* &head, int pos) {
         return;
     }
 
-    int len = getLengthofLL(head);
+    int len = getLengthofLL(head); // Get length of the list
     if(pos < 1 || pos > len) {
         cout<<"Position is out of bounds!";
         return;
     }
 
-    Node6* tail = head; // Tail pointer initiated at head and then iterated towards the end! so to make it actually point at the tail!
+    Node6* tail = head; // Initialize tail pointer at head
     while (tail->next != NULL) {
-        tail = tail->next;
+        tail = tail->next; // Traverse to the last node to update the tail if needed
     }
 
-    if(pos == 1) {
+    if(pos == 1) { // Delete head node
         Node6* temp = head;
         head = head->next;
-        temp->next = NULL; // We are manually setting the curr->next to NULL for this case, means now we will use the destructor with only cleanup process!
+        temp->next = NULL;
         delete temp;
         return;
     }
-    else {
+    else { // Delete node at any other position
         Node6* prev = NULL;
         Node6* curr = head;
         int cnt = 1;
 
-        while(cnt < pos) {
+        while(cnt < pos) { // Traverse to the node at the given position
             prev = curr;
             curr = curr->next;
             cnt++;
         }
 
-        prev->next = curr->next;
+        prev->next = curr->next; // Skip the current node
         if (curr->next == NULL) {
-            tail = prev;
+            tail = prev; // Update tail if the last node is deleted
         }
-        curr->next = NULL; // We are manually setting the curr->next to NULL, means now we will use the destructor with only cleanup process!
-        delete curr;
+        curr->next = NULL;
+        delete curr; // Free memory of the deleted node
     }
 }
 
 void printNode(Node6* &head) {
     Node6* temp = head;
     while(temp != NULL) {
-        cout<<temp->data<<" ";
+        cout<<temp->data<<" "; // Print node data
         temp = temp->next;
     }
     cout<<endl;
@@ -2947,6 +2957,7 @@ int main() {
     Node6* head = node1;
     Node6* tail = node1;
 
+    // Inserting nodes at various positions
     insertAtAnyPosition2(head,2,20);
     insertAtAnyPosition2(head,3,30);
     insertAtAnyPosition2(head,4,40);
@@ -2955,422 +2966,288 @@ int main() {
 
     printNode(head);
 
-    // Calling the delete function for the node with data value 30, its position is 3
-    deleteNode1(head,3);
+    deleteNode1(head, 3); // Deleting the node at position 3 (data value 30)
 
-    // Printing the updated linkedlist...
+    // Print the updated linked list
     cout<<"The updated linked list is : ";
     printNode(head);
 }
-// Quick Summary : Creation of Node : Using class of Node type which contains, and which helps in node creation by alotting two memory spaces one for data and another to store address of next node, but by default is pointing at NULL!
-//               : Inserting at Head/Tail : Using the function insertAtHead()/insertAtTail() function to insert a node at head, details are mentioned already! Here if we observe, then the insertion of node happens from tail to head, in case of Insertion at head! and head to tail, in case of head to tail! you can use both head and tail as well to handle the insertion, but just manage the insertion and updation of head and tail node properly!
-//               : Insertion at Any Position : Using the function we can insert at any position, and for this we have two helper function, isert at head/tail(), and through this we can insert at any position of the linked list! Here also you can use head and tail both for insertion, but its on us if we want that or not!
-//               : Deleting Node (based on position) : Deleting node requires, checking some condition first, like empty list, list with single element, position out of bounds and deletion from any other position including tail! Here also you can use head and tail both for deletion, but its on us if we want that or not!
 
-// Doubly LinkedLists : LL which stores address of both the nodes next and prev of it! so it has two pointers, next and prev both!
+// Doubly Linked List (DLL)!
+// A Doubly Linked List (DLL) is a type of Linked List where each node stores the address of both the next and the previous node. Unlike a Singly Linked List (SLL), where nodes only point to the next node.
+// DLL nodes have two pointers : Next Pointer (next) : Stores the address of the next node in the list.
+//                             : Previous Pointer (prev) : Stores the address of the previous node in the list.
 // Implementation!
-#include <iostream>
-using namespace std;
-
-class Node7 { // Node class to represent each element in the doubly linked list
-public:
-    int data; // Data stored in the node
-    Node7* prev; // Pointer to the previous node
-    Node7* next; // Pointer to the next node
-
-    Node7(int data) { // Constructor to initialize a new node
-        this->data = data;
-        this->prev = NULL;
-        this->next = NULL;
-    }
-};
-
-void printNode(Node7* &head) { // Function to print the elements of the doubly linked list
-    Node7* temp = head;
-    while (temp != NULL) {
-        cout << temp->data << " ";
-        temp = temp->next;
-    }
-    cout << endl;
-}
-
-int getLength(Node7* &head) { // Function to find the length of the doubly linked list
-    int len = 0;
-    Node7* temp = head;
-    while (temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAtHeadDLL1(Node7* &head, int data) { // Function to insert a node at the head of the doubly linked list
-    Node7* temp = new Node7(data);
-    if (head == NULL) { // If the list is empty, update the head with the new node
-        head = temp;
-        return;
-    }
-    // Update pointers to insert the new node at the head
-    temp->next = head;
-    head->prev = temp;
-    head = temp;
-}
-
-void insertAtTailDLL1(Node7* &tail, int data) { // Function to insert a node at the tail of the doubly linked list
-    Node7* temp = new Node7(data);
-    if (tail == NULL) { // If the list is empty, update the tail with the new node
-        tail = temp;
-        return;
-    }
-    // Update pointers to insert the new node at the tail
-    tail->next = temp;
-    temp->prev = tail;
-    tail = temp;
-}
-
-void insertAtAnyPositionDLL1(Node7* &head, Node7* &tail, int position, int data) { // Function to insert a node at any position in the doubly linked list
-    // Case 1: If the list is empty, create the first node
-    if (head == NULL) {
-        Node7* newNode = new Node7(data);
-        head = newNode;
-        tail = newNode;
-        return;
-    }
-    
-    // Case 2: Insert at position 1 (head)
-    if (position == 1) {
-        insertAtHeadDLL1(head, data);
-        return;
-    }
-
-    Node7* temp = head;
-    int cnt = 1;
-
-    // Traverse to the node just before the desired position
-    while (cnt < position && temp->next != NULL) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    // Case 3: If we reached the end of the list, insert at the tail
-    if (temp->next == NULL) {
-        insertAtTailDLL1(tail, data);
-        return;
-    }
-
-    // Case 4: Insert in the middle of the list
-    Node7* NodetoInsert = new Node7(data);
-    NodetoInsert->next = temp->next;
-    if (temp->next != NULL) {
-        temp->next->prev = NodetoInsert;
-    }
-    temp->next = NodetoInsert;
-    NodetoInsert->prev = temp;
-}
-
-int main() { // Main function to demonstrate the doubly linked list operations
-    Node7* node1 = new Node7(10); // Initialize the first node
-    Node7* head = node1; // Head pointer
-    Node7* tail = node1; // Tail pointer
-
-    printNode(head);
-    cout << "Length: " << getLength(head) << endl;
-
-    // Insert nodes at the head
-    insertAtHeadDLL1(head, 9);
-    printNode(head);
-
-    insertAtHeadDLL1(head, 8);
-    insertAtHeadDLL1(head, 7);
-    insertAtHeadDLL1(head, 6);
-    insertAtHeadDLL1(head, 5);
-    printNode(head);
-
-    // Insert nodes at the tail
-    insertAtTailDLL1(tail, 11);
-    insertAtTailDLL1(tail, 12);
-    insertAtTailDLL1(tail, 13);
-    insertAtTailDLL1(tail, 14);
-    printNode(head);
-
-    // Insert at specific positions
-    insertAtAnyPositionDLL1(head, tail, 3, 100); // Insert at position 3
-    printNode(head);
-
-    insertAtAnyPositionDLL1(head, tail, 1, 101); // Insert at position 1
-    printNode(head);
-
-    cout << "Head: " << head->data << endl;
-    cout << "Tail: " << tail->data << endl;
-
-    // Insert at the tail using length-based position
-    insertAtAnyPositionDLL1(head, tail, getLength(head) + 1, 102);
-    printNode(head);
-}
-/*
-Improvements:
-1. Memory Management: Implement a destructor to free allocated memory and avoid memory leaks.
-2. Error Handling: Add boundary checks for invalid positions in the `insertAtAnyPositionDLL1` function.
-3. Optimization: Maintain a separate variable for the length of the list to avoid recalculating it repeatedly.
-4. Code Reusability: Create a generic `insert` function to reduce redundant code in insert operations.
-5. Enhanced Debugging: Add debug messages or logs for better traceability of operations.
-6. Use Smart Pointers: Use C++ smart pointers like `std::shared_ptr` or `std::unique_ptr` for automatic memory management.
-*/
-
-
-// Now lets do some correction.... and that is manlo jaise abhi toh hum pehle se ek node create krte then and then hum uske aage ya peeche se insert krna shuru krte the... maanlo agar vo initial node hi naa vo and hum linkedlist ekdum scratch se banana shuru kre bina uss initial node ke! then we need to do this...
 #include<iostream>
 using namespace std;
 
-class Node8 {
+class Node8 { // Class to define a Node in a Doubly Linked List
     public :
     int data;
     Node8* prev;
     Node8* next;
 
-    Node8 (int data) {
+    Node8 (int data) { // Constructor to initialize a node
         this->data = data;
         this->prev = NULL;
         this->next = NULL;
     }
 };
 
-int getLength(Node8* &head) {
+int getLength(Node8* &head) { // Function to get the length of the Doubly Linked List
     int len = 0;
     Node8* temp = head;
     while(temp != NULL) {
-        len++;
+        len++;  
         temp = temp->next;
     }
     return len;
 }
 
-void insertAtHead(Node8* &head, Node8* &tail, int data) {
+void insertAtHead(Node8* &head, Node8* &tail, int data) { // Insert node at the beginning (head)
     if(head == NULL) {
+        // If list is empty, create a new node and make it both head & tail
         Node8* temp = new Node8(data);
         head = temp;
         tail = temp;
     }
     else {
+        // Create a new node
         Node8* temp = new Node8(data);
-        temp -> next = head;
-        head -> prev = temp;
-        head = temp;
+        temp->next = head; // New node points to current head
+        head->prev = temp; // Current head's previous points to new node
+        head = temp; // Update head to the new node
     }
 }
 
-void insertAtTail(Node8* &head, Node8* &tail, int data) {
+void insertAtTail(Node8* &head, Node8* &tail, int data) { // Insert node at the end (tail)
     if(tail == NULL) {
+        // If list is empty, create a new node and make it both head & tail
         Node8* temp = new Node8(data);
         tail = temp;
         head = temp;
     }
     else {
+        // Create a new node
         Node8* temp = new Node8(data);
-        tail->next = temp;
-        temp->prev = tail;
-        tail = temp;
+        tail->next = temp; // Tail's next points to new node
+        temp->prev = tail; // New node's prev points to tail
+        tail = temp; // Update tail to new node
     }
 }
 
-void insertAtAnyPosition(Node8* &head, Node8* &tail, int position, int data) {
-    // Insert at position 1 which is head
-    if(position == 1) {
-        insertAtHead(head,tail,data);
+void insertAtAnyPosition(Node8* &head, Node8* &tail, int position, int data) { // Insert node at any given position
+    if(head == NULL) { // Case 1: Insert when the list is empty
+        Node8* newNode = new Node8(data);
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    
+    if(position == 1) { // Case 2 : Insert at head
+        insertAtHead(head, tail, data);
         return;
     }
 
     Node8* temp = head;
     int cnt = 1;
 
-    while(cnt < position-1) {
+    while(cnt < position - 1) { // Traverse to the (position - 1)th node
         temp = temp->next;
         cnt++;
     }
 
-    if(temp->next == NULL) {
-        insertAtTail(head,tail,data);
+    if(temp->next == NULL) { // Case 3 : Insert at tail
+        insertAtTail(head, tail, data);
         return;
     }
 
+    // Case 4 : Insert in the middle
     Node8* NodetoInsert = new Node8(data);
-    NodetoInsert->next = temp->next;
-    NodetoInsert->next->prev = NodetoInsert;
-    temp->next = NodetoInsert;
-    NodetoInsert->prev = temp;
+    NodetoInsert->next = temp->next; // Connect new node to next node
+    NodetoInsert->next->prev = NodetoInsert; // Connect next node back to new node
+    temp->next = NodetoInsert; // Connect previous node to new node
+    NodetoInsert->prev = temp; // Connect new node back to previous node
 }
 
-void printNode(Node8* &head) {
+void printNode(Node8* &head) { // Function to print the Doubly Linked List
     Node8* temp = head;
     while(temp != NULL) {
-        cout<<temp->data<<" ";
+        cout<< temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
-    Node8* head = NULL; // At the initial stage there is no node at all!
-    Node8* tail = NULL;
+    Node8* head = NULL; // Initially, the list is empty
+    Node8* tail = NULL;  
 
-    // Now we will start adding nodes into it using the insertAtHead and insertAtTail function or insertAtAnyFunction...
-    insertAtHead(head,tail,10);
+    // Insert elements at the head
+    insertAtHead(head, tail, 10);
     printNode(head);
 
-    insertAtHead(head,tail,9);
-    insertAtHead(head,tail,8);
-    insertAtHead(head,tail,7);
-    insertAtHead(head,tail,6);
-    cout<<"Current Linkedlist is : ";
+    insertAtHead(head, tail, 9);
+    insertAtHead(head, tail, 8);
+    insertAtHead(head, tail, 7);
+    insertAtHead(head, tail, 6);
+    cout << "Current LinkedList: ";
     printNode(head);
 
-    insertAtTail(head,tail,11);
-    insertAtTail(head,tail,12);
-    insertAtTail(head,tail,13);
-    insertAtTail(head,tail,14);
-    cout<<"Current Linkedlist is : ";
+    // Insert elements at the tail
+    insertAtTail(head, tail, 11);
+    insertAtTail(head, tail, 12);
+    insertAtTail(head, tail, 13);
+    insertAtTail(head, tail, 14);
+    cout << "Current LinkedList: ";
     printNode(head);
-} // So here the thing is, yahaa kya hua ki jo head and tail hai vo dono starting me dono NULL ko point kr rhe the and then humne kya kiya ki insert at head function call kiya toh pehle ek node create hua and then jo vo head and tail the jo pehle NULL koi point kr rhe the vo ab uss node1 ko point krne lage!
-// And then humne uss temp ko head and tail me copy krdiya and then next time se jab bhi insertathead ko use krke jab bhi koi node add hua toh uss time else vaali condition kaam kr rhi thi jo head ko update kr rhi thi and tail vaisa ka vaisa node1 ko point kr rha tha!
-// and ye same cheez humne insertattail ke saath bhi krdi! isliye humne tail and head dono hi as a paramter pass krdiye! vrna vaise tail naam se kabhi koi paramter nhi bnaate hai! head se hi saara kaam karaate hai!
-// So if you want to create a insertAtTail function using only head! then in that case, pehle hum head se last pointer tak jayenge loop me iterate karaake! and then hum jaake value/data insert krenge! isme thori time compelxity badh jayegi which will be O(n), but space bachega jo humne tail banane me lagaya tha!
 
-// Now lets move to deleting a node!
-// Approach : Jaise pehle rhi thi same vaisi hi, pehle head ko delete krna seekhte hai, toh jo head hai uska prev toh NULL ko point kr rha hoga and jo uska next hai vo next node ko point kr rha hoga, and jo next node hai uska prev head ko point kr rha hoga, and then humne head update bhi krna hai and then memory bhi free krni hai!
-// So flow will be...
-// temp->next->prev = NULL, then head = temp->next, then temp->next = NULL and then last me memory free krdo destructor call krke using the delete keyword kyunki these nodes are dynamically allocated and they are to be deleted manually!
-// Ab agar head ke alawa koi aur node delete krna hota toh, the flow would be...
-// curr->prev = NULL, then prev->next = curr->next, then curr->next = NULL and then lastly memory free krdena hai!
-// Now lets code it....
+    // Insert at any position (Example : Insert 99 at position 3)
+    insertAtAnyPosition(head, tail, 3, 99);
+    cout << "After inserting 99 at position 3: ";
+    printNode(head);
+
+    return 0;
+}
+// Note : Using both head and tail makes operations faster and avoids unnecessary traversal.
+//      : Using only head reduces space but increases time complexity for tail insertions (O(n)).
+
+// Deletion of Node!
+// Approach : Deleting the Head Node : The head node's prev will point to NULL because it's the first node. The head's next node will have its prev pointer updated to point to the new head.
+//                                   : Update the head to point to the next node. Finally, free the memory of the old head node to prevent memory leaks.
+//          : Deleting a Node Other Than the Head : Set the previous node's next pointer to the current node's next (i.e., skip the node). Set the current node's next pointer to NULL.
+//                                                : Free the memory of the current node after unlinking it from the list.
+// Implementation!
 #include<iostream>
 using namespace std;
 
 class Node9 {
-    public :
-    int data;
-    Node9* prev;
-    Node9* next;
+public:
+    int data; // Data of the node
+    Node9* prev; // Pointer to the previous node
+    Node9* next; // Pointer to the next node
 
-    Node9 (int data) {
+    Node9(int data) { // Constructor to initialize node with data
         this->data = data;
         this->prev = NULL;
         this->next = NULL;
     }
 
-    ~Node9() { // Bina destructor banaye bhi kaam chal jaata! koi dikkat nhi hoti, bss thora cuctomize krne ke liye deletion ko we are using destructor
-        int value = this->data;
-        if(next != NULL) {
-            delete next;
-            next = NULL;
-        }
-        cout<<"Memory free for the node with data value : "<<value<<endl;
+    ~Node9() { // Destructor to free memory (currently just printing, no need to delete next nodes)
+        cout << "Memory freed for the node with data value: " << this->data << endl;
     }
 };
 
-int getLength(Node9* &head) {
+int getLength(Node9* &head) { // Function to get the length of the linked list
     int len = 0;
     Node9* temp = head;
-    while(temp != NULL) {
+    while (temp != NULL) { // Traverse the list and count nodes
         len++;
         temp = temp->next;
     }
     return len;
 }
 
-void insertAtHead(Node9* &head, Node9* &tail, int data) {
-    if(head == NULL) {
-        Node9* temp = new Node9(data);
-        head = temp;
-        tail = temp;
+void insertAtHead(Node9* &head, Node9* &tail, int data) { // Function to insert a node at the head (start) of the linked list
+    if (head == NULL) { // If the list is empty
+        Node9* temp = new Node9(data); // Create a new node
+        head = temp; // Set head to this node
+        tail = temp; // Set tail to this node as well (because it's the only node)
     }
     else {
-        Node9* temp = new Node9(data);
-        temp -> next = head;
-        head -> prev = temp;
-        head = temp;
+        Node9* temp = new Node9(data); // Create a new node
+        temp->next = head; // New node points to the old head
+        head->prev = temp; // Old head points to the new node as its previous node
+        head = temp; // Update head to the new node
     }
 }
 
-void insertAtTail(Node9* &head, Node9* &tail, int data) {
-    if(tail == NULL) {
-        Node9* temp = new Node9(data);
-        tail = temp;
-        head = temp;
+void insertAtTail(Node9* &head, Node9* &tail, int data) { // Function to insert a node at the tail (end) of the linked list
+    if (tail == NULL) { // If the list is empty
+        Node9* temp = new Node9(data); // Create a new node
+        tail = temp; // Set tail to this new node
+        head = temp; // Set head to this new node as well
     }
     else {
-        Node9* temp = new Node9(data);
-        tail->next = temp;
-        temp->prev = tail;
-        tail = temp;
+        Node9* temp = new Node9(data); // Create a new node
+        tail->next = temp; // Tail points to new node
+        temp->prev = tail; // New node points back to tail as previous
+        tail = temp; // Update tail to new node
     }
 }
 
-void insertAtAnyPosition(Node9* &head, Node9* &tail, int position, int data) {
-    // Insert at position 1 which is head
-    if(position == 1) {
-        insertAtHead(head,tail,data);
+void insertAtAnyPosition(Node9* &head, Node9* &tail, int position, int data) { // Function to insert a node at any given position in the linked list
+    if (head == NULL && position == 1) {
+        Node9* newNode = new Node9(data);  // Create the new node
+        head = newNode;  // Set head to the new node
+        tail = newNode;  // Set tail to the new node
+        return;
+    }
+    
+    if (position == 1) { // Insert at position 1 (head)
+        insertAtHead(head, tail, data);
         return;
     }
 
     Node9* temp = head;
     int cnt = 1;
 
-    while(cnt < position-1) {
+    while (cnt < position - 1) { // Traverse to the (position - 1)th node
         temp = temp->next;
         cnt++;
     }
 
-    if(temp->next == NULL) {
-        insertAtTail(head,tail,data);
+    if (temp->next == NULL) { // If we're at the end of the list, insert at tail
+        insertAtTail(head, tail, data);
         return;
     }
 
-    Node9* NodetoInsert = new Node9(data);
-    NodetoInsert->next = temp->next;
-    NodetoInsert->next->prev = NodetoInsert;
-    temp->next = NodetoInsert;
-    NodetoInsert->prev = temp;
+    // Insert in the middle
+    Node9* NodetoInsert = new Node9(data); // Create the new node
+    NodetoInsert->next = temp->next; // New node's next points to the next of temp
+    NodetoInsert->next->prev = NodetoInsert; // Update next node's prev to the new node
+    temp->next = NodetoInsert; // Temp's next points to the new node
+    NodetoInsert->prev = temp; // New node's prev points back to temp
 }
 
-void printNode(Node9* &head) {
+void printNode(Node9* &head) { // Function to print the linked list
     Node9* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
+    while (temp != NULL) {
+        cout << temp->data << " "; // Print node data
+        temp = temp->next; // Move to the next node
     }
-    cout<<endl;
+    cout << endl;
 }
 
-void deleteNode(Node9* &head, int position) {
-    // Deleting the first node...
-    if(position == 1) {
+void deleteNode(Node9* &head, int position) { // Function to delete a node at a given position
+    if (position == 1) { // Deleting the first node (head node)
         Node9* temp = head;
-        temp->next->prev = NULL;
-        head = temp->next;
-        temp->next = NULL;
-        // Ab memory free krdo...
-        delete temp;
+        head = temp->next; // Move head to the next node
+        if (head != NULL) {
+            head->prev = NULL; // Set the prev of new head to NULL
+        }
+        temp->next = NULL; // Disconnect the old head's next pointer
+        delete temp; // Free memory of the deleted node
     }
-
-    // Deleting middle nodes and last node...
-    else {
+    else { // Deleting middle nodes or last node
         Node9* current = head;
-        Node9* prev = NULL;
-
         int cnt = 1;
-        while(cnt < position) {
-            prev = current;
+        while (cnt < position) {
             current = current->next;
             cnt++;
         }
 
-        prev->next = current->next;
-        if(current->next != NULL) { // Checking to avoid null pointer dereference
-            current->next->prev = prev;
+        // Link the previous node to the next node
+        if (current->prev != NULL) {
+            current->prev->next = current->next;
         }
-        current->prev = NULL;
-        current->next = NULL;
-        delete current;
+        if (current->next != NULL) {
+            current->next->prev = current->prev;
+        }
+
+        current->prev = NULL; // Disconnect the current node's prev
+        current->next = NULL; // Disconnect the current node's next
+        delete current; // Free memory of the deleted node
     }
 }
 
@@ -3378,24 +3255,31 @@ int main() {
     Node9* head = NULL;
     Node9* tail = NULL;
 
-    // Now we will start adding nodes into it using the insertAtAnyFunction...
-    insertAtAnyPosition(head,tail,1,101);
-    insertAtAnyPosition(head,tail,2,102);
-    insertAtAnyPosition(head,tail,3,103);
-    insertAtAnyPosition(head,tail,4,104);
-    insertAtAnyPosition(head,tail,5,105);
-    insertAtAnyPosition(head,tail,6,106);
-    cout<<"Current Linkedlist is : ";
+    // Insert some nodes into the linked list using insertAtAnyPosition
+    insertAtAnyPosition(head, tail, 1, 101);  // Insert at position 1
+    insertAtAnyPosition(head, tail, 2, 102);  // Insert at position 2
+    insertAtAnyPosition(head, tail, 3, 103);  // Insert at position 3
+    insertAtAnyPosition(head, tail, 4, 104);  // Insert at position 4
+    insertAtAnyPosition(head, tail, 5, 105);  // Insert at position 5
+    insertAtAnyPosition(head, tail, 6, 106);  // Insert at position 6
+
+    // Print the current linked list
+    cout << "Current Linkedlist is: ";
     printNode(head);
 
-    deleteNode(head,1);
-    printNode(head);
+    // Delete the first node (head)
+    deleteNode(head, 1);
+    printNode(head);  // Print the updated list
 
-    deleteNode(head,4);
-    printNode(head);
+    // Delete the node at position 4
+    deleteNode(head, 4);
+    printNode(head);  // Print the updated list
 
-    deleteNode(head,getLength(head)); // Using the getlength function taaki hum last node ko delete kr sake!
-    printNode(head);
+    // Delete the last node (using length to get the last position)
+    deleteNode(head, getLength(head));
+    printNode(head);  // Print the updated list
+
+    return 0;
 }
 
 // Circular Linkedlist : Ye bhi do type ke hote hai, Singly circular linkedlist! and Doubly circular linkedlist! So overall isme kya hota hai ki in case of singly ki jo last node hota hai uska next linkedlist ke head ko point kr rha hota hai! and in case of double jo last node hota hai uska next linkedlist ke head ko point kr rha hota hai and jo head ka prev hai vo last node ko point kr rha hota hai!
