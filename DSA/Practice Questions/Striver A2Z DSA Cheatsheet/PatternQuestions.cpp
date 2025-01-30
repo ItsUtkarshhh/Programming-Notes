@@ -199,20 +199,133 @@ using namespace std;
 int main() {
     int n;
     cin>>n;
-    int binary = 1;
     for(int i = 1; i<=n; i++) {
         if(i%2 != 0) {
-            binary = 1;
+            int start = 1;
+            for(int j = 1; j<=i; j++) {
+                cout<<start<<" ";
+                start = 1 - start;
+            }
         }
-        else {
-            binary = 0;
-        }
-        for (int j = 1; j<=i; j++) {
-            cout<<binary<<" ";
-            binary = 1 - binary;
+        if(i%2 == 0) {
+            int start = 0;
+            for(int j = 1; j<=i; j++) {
+                cout<<start<<" ";
+                start = 1 - start;
+            }
         }
         cout<<endl;
     }
 }
 
-// Pattern 12 : Print pattern like 1 -> 0 1 -> 1 0 1 -> 0 1 0 1...
+// Pattern 12 : Print a pattern like 1 _ _ _ _ 1 -> 1 2 _ _ 2 1 -> 1 2 3 3 2 1 and similarly!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=i; j++) {
+            cout<<j<<" ";
+        }
+        int space = 2*n - 2*i;
+        while(space) {
+            cout<<" "<<" ";
+            space = space - 1;
+        }
+        for(int j = i; j>=1; j--) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 13 : Print a pattern counting 1 to n.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int count = 1;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=i; j++) {
+            cout<<count<<" ";
+            count++;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 14 : Print a pattern A -> A B -> A B C -> A B C D and so on
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 0; j<i; j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 15 : Print a pattern A B C D E -> A B C D -> A B C -> A B -> A.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 0; j<=(n-i); j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 16 : Print a pattern A A A A A -> B B B B -> C C C -> D D -> E
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<=i; j++) {
+            cout<<char('A'+i)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 17 : Print a pattern pytramid A -> B B -> C C C and so on...
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int space = n-1;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        for(int j = 1; j<=i; j++) {
+            cout<<"*"<<" ";
+        }
+
+        space = n-1;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+        cout<<endl;
+    }
+}
