@@ -33,27 +33,31 @@ int main() {
 }
 // But as we can see hume alag alag values ke liye alag alag functions bnane pad rhe hai average ke liye! also ambiguity bhi generate hojaa rhi hai! so best ki ki hum ek template bnaa le taaki naa hi itne functions bnaane pade and na hi koi ambiguity ho!
 
-// Using Templates for functions!
+// Function Template with Multiple Types : Allows function to handle different data types without rewriting the function.
+//                                       : Uses auto + decltype() for automatic return type deduction.
 #include <iostream>
 using namespace std;
 
+// Template function to find the average of two numbers
 template <typename T1, typename T2>
-auto findAverage(T1 a, T2 b) -> decltype((a + b) / 2.0) { // auto is used here to indicate that the return type will be deduced automatically.
+auto findAverage(T1 a, T2 b) -> decltype((a + b) / 2.0) { 
     return (a + b) / 2.0;
-} // The trailing return type syntax (-> decltype(...)) specifies that the return type of the function is determined by the type of the expression (a + b) / 2.0. This is something new you can understand!
-// decltype((a + b) / 2.0) deduces the type of the expression (a + b) / 2.0, ensuring that the return type is exactly what this expression would yield.
-
-// Ek tarah se mtlb ye samajh lo, ki "auto findAverage(T1 a, T2 b) -> decltype((a + b) / 2.0)" yahaa ye likhne ka mtlb ye hua ki ye jo expression hai (a + b) / 2.0, decltype usko deduce krega and jo bhi return type samajh ayega uss type me auto keyword kaam krega! and uss type ka function ka return type ban jayega!
-// In proper language : When you write auto findAverage(T1 a, T2 b) -> decltype((a + b) / 2.0), it means that the decltype keyword will deduce the return type based on the expression (a + b) / 2.0. The auto keyword is used in conjunction with decltype to automatically determine and use this deduced type as the return type of the function.
-// In short, In other words, decltype((a + b) / 2.0) figures out what the type of (a + b) / 2.0 is, and auto ensures that the function returns a value of this type.
+}
 
 int main() {
-    cout << findAverage(1, 2) << endl;        // Calls findAverage(int, int)
-    cout << findAverage(1, 2.5f) << endl;     // Calls findAverage(int, float)
-    cout << findAverage(1.5f, 2.5f) << endl;  // Calls findAverage(float, float)
+    cout << findAverage(1, 2) << endl; // int, int → returns double
+    cout << findAverage(1, 2.5f) << endl; // int, float → returns float
+    cout << findAverage(1.5f, 2.5f) << endl; // float, float → returns float
     return 0;
 }
-// You can use a more simplistic approach for functional templates, this is just an example jab zyda ambiguity hojaye tab iase krlo! otherwise a more simplistic example for function templates are given below...
+
+// Key Takeaways : Why Templates? : Allows a single function to handle multiple data types without rewriting code.
+//               : Alternative Approach : Instead of `decltype`, you can simply use `auto findAverage(T1 a, T2 b) { return (a + b) / 2.0; }`
+//                                      : This works in most cases, unless ambiguity arises in complex expressions.
+//               : Understanding decltype and auto together : The expression (a + b) / 2.0 determines the return type
+//                                                          : decltype((a + b) / 2.0) ensures the function returns the correct type
+//                                                          : `auto` → Uses that deduced type as the return type.
+//                                                          : This is useful when different types (int, float, double) are involved.
 
 // Another example (Simpler example) :
 #include<iostream>
@@ -150,9 +154,9 @@ void func(T a) {
 }
 
 int main() {
-    func(10);    // Non-template function for int
-    func(10.5);  // Non-template function for double
-    func('A');   // Template function for generic type
+    func(10); // Non-template function for int
+    func(10.5); // Non-template function for double
+    func('A'); // Template function for generic type
     func("C++"); // Template function for generic type
     return 0;
 } // Yahaa bhi vhi hua, jinn function call ke liye exact match tha unko use krliya and jahaa pr exact match nhi tha vahaa template use krliya!

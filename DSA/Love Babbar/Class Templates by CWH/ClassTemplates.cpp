@@ -1,10 +1,20 @@
 // -------------------------------------------------------------- Lecture 63 : Introduction to Templates ------------------------------------------------------------------------------------------------------------------>
-// Templates : In C++, a template is a feature that allows functions and classes to operate with generic types. This enables code reusability and type safety, as the same code can work with different data types without being rewritten for each type. There are two main types of templates: function templates and class templates.
-// Like problem kya ho rhi thi, jiske kaaran hume ye laana pada is, Suppose humne ek class banai "vector" ki and now uss class ke data members hai like, int* arr; int size and so on... ab ye class ko hum use kr sakte hai int type ke vectors class ke objects create krne ke liye! but now, suppose, hume ek vector chahiye float type ka ya char type ka ya kisi aur type ka, toh what we do is, hum vector ki aur dusri classes bnaa lenge jisme int* arr ki jagah float* arr; ya char* arr; hoga!
-// And aise hum different types ke vectors bnaa payenge!
-// But, now ye krne ka ek isse better ye tareeka hai ki, we use templates! templates ek tarah se generalized cheez hai jo different tarah ke classes create kr sakti hai! Jiss tarah se objects ke kya features hai and vo konse features use kr sakta hai vo uski class se define hote hai! vaise hi ek class ke kya features hai and vo konse features use kr sakta hai vo hum uske template se define kr sakte hai!
+// Templates in C++!
+// Templates in C++ allow functions and classes to operate with generic types, enabling code reusability and type safety. This means we can write a single piece of code that works with multiple data types without rewriting it for each type separately.
+// There are two primary types of templates in C++ : Function Templates – Used to create generic functions.
+//                                                 : Class Templates – Used to create generic classes.
 
-// Syntax : Class templates bnaane ke liye sirf itna krna hota hai ki, "template <typename T>" iss line ko add krdo class create krne se pehle and T ki jagah jo data type chahte ho vo likhdo!
+// Why Do We Need Templates?
+// Consider we create a Vector class with the following members : class Vector { int* arr; int size; // Other member functions... };
+// This works well for int type vectors. However, what if we need a vector for float, char, or any other data type? One way is to create separate classes for each data type : class FloatVector { float* arr; int size; }; or class CharVector { char* arr; int size; };
+// This leads to code duplication and makes the program harder to maintain.
+
+// How Templates Solve This Problem?
+// Instead of defining multiple versions of the same class, we can generalize it using templates : template <typename T> class Vector { T* arr; int size; // Other member functions... };
+// Here, T acts as a placeholder for any data type, allowing us to create : Vector<int> for integers, Vector<float> for floating-point numbers, Vector<char> for characters, and so on
+// Thus, templates allow us to define a blueprint for a class, making it adaptable to different data types dynamically, just like a class defines the blueprint for objects!
+
+// Syntax : To create a class template, simply add template <typename T> before the class definition, replacing T with the desired data type!
 // Example :
 #include<iostream>
 using namespace std;
@@ -31,43 +41,61 @@ int main() {
 } // Hence we can see that it can print anything, we just need to change the data type!
 
 // -------------------------------------------------------------- Lecture 64 : Writing First C++ Templates ------------------------------------------------------------------------------------------------------------------>
-// This is normal class where we are finding dot product of two vectors of int type!
+// This program demonstrates how to calculate the dot product of two vectors containing int elements. It uses a normal class (vector) without templates. The key takeaway from this example is the limitation that it only works for int vectors, which will later be solved using templates.
 #include <iostream>
 using namespace std;
- 
-class vector {
+
+class MyVector { // Class to represent a mathematical vector
     public:
-        int *arr;
-        int size;
-        vector(int m) {
-            size = m;
-            arr = new int[size];
-        }
-    int dotProduct(vector &v) {
-        int d=0;
+    int *arr; // Pointer to store array dynamically
+    int size; // Size of the vector
+
+    MyVector(int m) { // Constructor to initialize vector with given size
+        size = m;
+        arr = new int[size]; // Allocating dynamic memory for the array
+    }
+
+    ~MyVector() { // Destructor to release dynamically allocated memory (Prevents Memory Leak)
+        delete[] arr;
+    }
+
+    int dotProduct(MyVector &v) { // Function to compute the dot product of two vectors
+        int d = 0;
         for (int i = 0; i < size; i++) {
-            d+=this->arr[i]*v.arr[i];
+            d += this->arr[i] * v.arr[i]; // Multiply corresponding elements and sum them
         }
         return d;
     }
 };
  
-int main()
-{
-    vector v1(3); // vector 1
+int main() {
+    MyVector v1(3); // Creating first vector of size 3
     v1.arr[0] = 4;
     v1.arr[1] = 3;
     v1.arr[2] = 1;
-    vector v2(3); // vector 2
-    v2.arr[0]=1;
-    v2.arr[1]=0;
-    v2.arr[2]=1;
-    int a = v1.dotProduct(v2);
-    cout<<a<<endl;
-    return 0;
-} // But now if we want to find dot product of float vectors, do we need to write another class for that? no, we will make templates now!
 
-// Vectors using templates!
+    MyVector v2(3); // Creating second vector of size 3
+    v2.arr[0] = 1;
+    v2.arr[1] = 0;
+    v2.arr[2] = 1;
+
+    // Calculating the dot product
+    int a = v1.dotProduct(v2);
+
+    // Output the result
+    cout << "Dot Product: " << a << endl;
+    return 0;
+}
+// Important Points in this Code : Dynamic Memory Allocation : `arr` is allocated dynamically using `new int[size]`, allowing flexible vector sizes.
+//                               : Destructor for Memory Management : `~MyVector()` ensures memory is properly released using `delete[] arr`, preventing memory leaks.
+//                               : Using `this` Pointer : `this->arr[i]` ensures we're accessing the correct object's array.
+//                               : Passing Objects by Reference : `vector &v` prevents unnecessary copying of objects, improving efficiency.
+//                               : Dot Product Calculation : Multiplies corresponding elements of two vectors and sums them up.
+//                               : Limitation of This Code : This only works for `int` type vectors.
+//                                                         : If we want `float` or `double` vectors, we would need to rewrite the class!
+//                                                         : Solution? Use Templates to generalize this class for all data types.
+
+// Using Templates!
 #include <iostream>
 using namespace std;
  
@@ -89,24 +117,26 @@ class vector {
     }
 };
  
-int main()
-{
+int main() {
     vector<float> v1(3); // vector 1 with a float data type
     v1.arr[0] = 1.4;
     v1.arr[1] = 3.3;
     v1.arr[2] = 0.1;
+
     vector<float> v2(3); // vector 2 with a float data type
     v2.arr[0]=0.1;
     v2.arr[1]=1.90;
     v2.arr[2]=4.1;
+
     float a = v1.dotProduct(v2);
     cout<<a<<endl;
     return 0;
 }
 
 // -------------------------------------------------------------- Lecture 65 : Templates with multiple pointers! ------------------------------------------------------------------------------------------------------------------>
-// Now we can also make templates with multiple parameters! like for example suppose hume ek aisa class chahiye jisme hume 2 arrays chahiye ek int type ka and ek float type ka, in that cases hume iski need hai!
-// This is an ordinary example! ki agar do different data types ki value print krni hai toh kaise krenge! abhi ke liye we have taken only int and char!
+// Before Using Templates (Ordinary Class Example)
+// This class can only store and print an `int` and a `char`.
+// Limitation?** What if we need `int-float`, `float-char`, `double-int` combinations? We can't keep making separate classes for each type.
 #include<iostream>
 using namespace std;
 
@@ -114,70 +144,96 @@ class myClass {
     public:
         int data1;
         char data2;
-    void display(){
-        cout<<this->data1<<" "<<this->data2;
-    }
-}; // Chalo theek hai iss class se int and char type ki values print ho jayengi but what about int float, float char and so on... ab harr alag alag ke liye class thori bnayenge, so we will use templates now!
-
-// using templates with multiple parameters (comma separated!) and also there can be more than 2 parameters of the class!
-#include<iostream>
-using namespace std;
-
-template<class T1, class T2>
-class myClass {
-    public:
-        T1 data1;
-        T2 data2;
-        myClass(T1 a,T2 b) {
-            data1 = a;
-            data2 = b;
-        }
     void display() {
-        cout<<this->data1<<" "<<this->data2<<endl;
+        cout << this->data1 << " " << this->data2 << endl;
     }
 };
 
 int main() {
-    myClass<int,float> obj1(1,1.5);
-    obj1.display();
-
-    myClass<int,char> obj2(1,'A');
-    obj2.display();
-
-    myClass<float,char> obj3(1.5,'A');
-    obj3.display();
+    myClass obj;
+    obj.data1 = 10;
+    obj.data2 = 'A';
+    obj.display();
 }
-// Here, we can also go wild, by passing classes name in the T1 and T2, but that will go more complex, but keep that under consideration! but for now let it sink in!
+// Problem : This class is **fixed** for `int` and `char` only.
+//         : What if we need **different** type combinations? We will use Templates!
 
-// -------------------------------------------------------------- Lecture 66 : Templates with default parameters! ------------------------------------------------------------------------------------------------------------------>
-// Jaise functions ke case me default arguments and parameters the, vaise hi yahaa bhi hai!
 #include<iostream>
 using namespace std;
 
-template <typename T1=int, typename T2=float, typename T3=char> // Ye likhne ke baad agar mai int main me class ke objects ko use krte time koi data type specify nhi krunga toh automatically first value ko int, second value ko float and third ko char data type alot hojayega!
+template<class T1, class T2> // Creating a Template Class that supports multiple data types
+class myClass {
+    public:
+    T1 data1;
+    T2 data2;
+
+    myClass(T1 a, T2 b) { // Constructor to initialize values
+        data1 = a;
+        data2 = b;
+    }
+
+    void display() { // Display function to print the data members
+        cout << this->data1 << " " << this->data2 << endl;
+    }
+};
+
+int main() {
+    myClass<int, float> obj1(1, 1.5); // Object with int and float
+    obj1.display(); // Output : 1 1.5
+
+    myClass<int, char> obj2(1, 'A'); // Object with int and char
+    obj2.display(); // Output : 1 A
+
+    myClass<float, char> obj3(1.5, 'A'); // Object with float and char
+    obj3.display(); // Output : 1.5 A
+}
+// Key Takeaways from this Code : Templates with Multiple Parameters : `template<class T1, class T2>` allows using multiple data types.
+//                                                                   : We can pass **any** data types dynamically while creating objects.
+//                              : Code Reusability & Flexibility : `T1` and `T2` act as placeholders for any data types.
+//                                                               : The user defines these data types when creating objects.
+//                              : Objects with Different Type Combinations : `myClass<int, float>` → Works with `int` and `float`
+//                                                                         : `myClass<int, char>` → Works with `int` and `char`
+//                                                                         : `myClass<float, char>` → Works with `float` and `char`
+//                              : Advanced Possibilities : We can **pass class names** as `T1` and `T2` instead of just primitive data types.
+//                                                       : This allows for template-based relationships between classes (Complex but powerful!).
+
+// -------------------------------------------------------------- Lecture 66 : Templates with default parameters! ------------------------------------------------------------------------------------------------------------------>
+// Templates with Default Parameters : Just like functions have default arguments, templates can have default types.
+//                                   : If the user does not specify types while creating objects, these defaults are used.
+#include<iostream>
+using namespace std;
+
+template <typename T1=int, typename T2=float, typename T3=char> // Default types: T1 → int, T2 → float, T3 → char
 class myClass {
     T1 value1;
     T2 value2;
     T3 value3;
-    public :
-    myClass(T1 v1, T2 v2, T3 v3) {
+
+    public:
+    myClass(T1 v1, T2 v2, T3 v3) { // Constructor to initialize values
         value1 = v1;
         value2 = v2;
         value3 = v3;
     }
-    void display() {
-        cout<<"Value of value1 : "<<value1<<endl;
-        cout<<"Value of value2 : "<<value2<<endl;
-        cout<<"Value of value3 : "<<value3<<endl;
+
+    void display() { // Display function
+        cout << "Value of value1: " << value1 << endl;
+        cout << "Value of value2: " << value2 << endl;
+        cout << "Value of value3: " << value3 << endl;
     }
 };
 
 int main() {
-    myClass<> obj1(1,2.5,'A'); // Here humne koi data type specify nhi kiya isliye seedha jo default arguments the vo display hogye!
+    // Using default template types (int, float, char)
+    myClass<> obj1(1, 2.5, 'A'); // No types specified → Uses default types
     obj1.display();
 
-    cout<<endl;
+    cout << endl;
 
-    myClass<float, char, int> obj2(2.5,'A',1);
+    // Using custom template types (float, char, int)
+    myClass<float, char, int> obj2(2.5, 'A', 1); // Overriding default types
     obj2.display();
 }
+// Key Takeaways : Default Template Parameters : `template <typename T1=int, typename T2=float, typename T3=char>` and If no type is provided, defaults are used.
+//               : Overriding Defaults : `myClass<float, char, int>` → Changes the default int-float-char to float-char-int.
+//               : Useful when : You want to provide fallback types for most cases. But also allow users to override them when needed.
