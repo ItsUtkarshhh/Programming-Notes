@@ -109,7 +109,7 @@ class vector {
             arr = new T[size];
         }
     T dotProduct(vector &v){
-        T d=0;
+        T d = 0;
         for (int i = 0; i < size; i++) {
             d+=this->arr[i]*v.arr[i];
         }
@@ -136,7 +136,7 @@ int main() {
 // -------------------------------------------------------------- Lecture 65 : Templates with multiple pointers! ------------------------------------------------------------------------------------------------------------------>
 // Before Using Templates (Ordinary Class Example)
 // This class can only store and print an `int` and a `char`.
-// Limitation?** What if we need `int-float`, `float-char`, `double-int` combinations? We can't keep making separate classes for each type.
+// Limitation? What if we need `int-float`, `float-char`, `double-int` combinations? We can't keep making separate classes for each type.
 #include<iostream>
 using namespace std;
 
@@ -217,9 +217,9 @@ class myClass {
     }
 
     void display() { // Display function
-        cout << "Value of value1: " << value1 << endl;
-        cout << "Value of value2: " << value2 << endl;
-        cout << "Value of value3: " << value3 << endl;
+        cout << "Value of value1 : " << value1 << endl;
+        cout << "Value of value2 : " << value2 << endl;
+        cout << "Value of value3 : " << value3 << endl;
     }
 };
 
@@ -237,3 +237,20 @@ int main() {
 // Key Takeaways : Default Template Parameters : `template <typename T1=int, typename T2=float, typename T3=char>` and If no type is provided, defaults are used.
 //               : Overriding Defaults : `myClass<float, char, int>` → Changes the default int-float-char to float-char-int.
 //               : Useful when : You want to provide fallback types for most cases. But also allow users to override them when needed.
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
+// Why study class templates!
+// Why Study Class Templates : Code Reusability – Write once, use for multiple data types.
+//                           : Type Safety – Prevents errors related to type mismatches.
+//                           : Flexibility – Works for any data type, reducing redundant code.
+//                           : Performance – Since templates are resolved at compile-time, they avoid the overhead of runtime polymorphism.
+//                           : Standard Library Usage – The STL (Standard Template Library) heavily relies on templates (e.g., vector<T>, stack<T>, map<K, V>).
+
+// Use Cases of Class Templates : Generic Data Structures : Instead of writing a separate class for each data type (int, double, string), use templates.
+//                                                        : We can create Generic Stack Implementation, Generic Linked List, Generic Sorting Algorithm (Implemented using Function Templates) and more benefits
+
+// Saves Time & Avoids Code Duplication : No need to write separate functions/classes for int, double, etc.
+// Compile-Time Type Checking : Unlike void* (which allows unsafe casting), templates are type-safe.
+// Faster Execution : Templates generate optimized code at compile-time, avoiding runtime overhead.
+
+// Rest implement, practice and learn!

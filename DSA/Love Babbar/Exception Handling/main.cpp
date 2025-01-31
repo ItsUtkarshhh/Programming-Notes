@@ -168,4 +168,140 @@ int main() {
 //                                       : The catch block catches this specific MyException and calls e.what() to print the error message ("Something went wrong!").
 //                                       : If an exception other than MyException occurs, the second catch block catches it as a generic std::exception.
 
-// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+// --------------------------------------------------------------- Real World Examples of Exception Handling ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+// Just an Example! Don't go deep into it until you have a important/specific reason! Just get a basic understanding and working!
+
+// Implementation 1 : Banking System (Transaction Failure Handling)
+// Scenario : In a banking system, you might have operations like transferring money from one account to another. However, several errors can occur during this transaction, such as insufficient funds, network failures, or invalid account numbers.
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+class BankAccount {
+private:
+    double balance;
+public:
+    BankAccount(double initial_balance) : balance(initial_balance) {}
+
+    void transferFunds(double amount) {
+        if (amount > balance) {
+            throw std::runtime_error("Insufficient funds for transfer.");
+        } else {
+            balance -= amount;
+            std::cout << "Transfer of " << amount << " completed successfully." << std::endl;
+        }
+    }
+};
+
+int main() {
+    BankAccount account(1000.00);  // Account balance is $1000
+
+    try {
+        account.transferFunds(1500.00);  // Attempting to transfer more than available
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;  // Catching the exception for insufficient funds
+    }
+
+    return 0;
+}
+
+
+// Implementation 2 : File Processing System (File Not Found)
+// Scenario : In a file processing system (e.g., for document management), the program might attempt to open a file that doesn't exist, or the user doesn't have the correct permissions to access the file.
+#include <iostream>
+#include <fstream>
+#include <stdexcept>
+
+void readFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        throw std::ios_base::failure("File not found or unable to open the file.");
+    }
+    // Continue processing the file
+}
+
+int main() {
+    try {
+        readFile("document.txt");  // Trying to open a file that may not exist
+    } catch (const std::ios_base::failure& e) {
+        std::cerr << "Error: " << e.what() << std::endl;  // Handling file not found error
+    }
+
+    return 0;
+}
+
+// Implementation 3 : Online Shopping Cart (Invalid Payment Information)
+// Scenario : When processing an online payment, there are several potential issues: the payment might fail due to insufficient funds, incorrect card details, or network issues during the payment processing.
+#include <iostream>
+#include <stdexcept>
+
+class PaymentGateway {
+public:
+    void processPayment(double amount, const std::string& cardDetails) {
+        if (amount <= 0) {
+            throw std::invalid_argument("Amount must be greater than zero.");
+        }
+        if (cardDetails.empty()) {
+            throw std::invalid_argument("Card details are missing.");
+        }
+        // Simulate payment processing
+        std::cout << "Payment of $" << amount << " processed successfully." << std::endl;
+    }
+};
+
+int main() {
+    PaymentGateway gateway;
+
+    try {
+        gateway.processPayment(0, "1234-5678-9876-5432");  // Invalid amount
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Payment Error: " << e.what() << std::endl;  // Handling invalid argument
+    }
+
+    try {
+        gateway.processPayment(100, "");  // Missing card details
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Payment Error: " << e.what() << std::endl;  // Handling missing card details
+    }
+
+    return 0;
+}
+
+// Implementation 4 : Web Server (Network Failure)
+// Scenario : In a web server, while handling incoming HTTP requests, you might face issues like network failures, timeout errors, or bad client requests (e.g., malformed URLs or headers).
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class WebServer {
+public:
+    void processRequest(const std::string& url) {
+        if (url == "/bad-request") {
+            throw runtime_error("Bad Request: Invalid URL format.");
+        } else if (url == "/timeout") {
+            throw runtime_error("Network Timeout: Unable to connect.");
+        }
+    cout << "Processing request for " << url << std::endl;
+    }
+};
+
+int main() {
+    WebServer server;
+
+    try {
+        server.processRequest("/bad-request");  // Malformed URL
+    } catch (const runtime_error& e) {
+        cerr << "Server Error: " << e.what() << std::endl;  // Handling bad request
+    }
+
+    try {
+        server.processRequest("/timeout");  // Network timeout
+    } catch (const runtime_error& e) {
+        cerr << "Server Error: " << e.what() << std::endl;  // Handling timeout error
+    }
+
+    return 0;
+}
+
+// And many more scenarios, where you need exceptional handling!
+// Rest just implement, practice and learn when needed!

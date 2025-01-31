@@ -1,28 +1,33 @@
-#include<iostream>
-#include<string>
-#include<stdexcept>
+#include <iostream>
+#include <stdexcept>
 using namespace std;
 
-class MyException : public exception { // Custom exception class inheriting from std::exception
-    private:
-    string errorMessage; // Member variable to store error message
-
-    public:
-    MyException(const string& msg) : errorMessage(msg) {} // Constructor to initialize errorMessage with a string
-
-    const char* what() const noexcept override { // Overriding the virtual what() method to return custom error message
-        return errorMessage.c_str(); // c_str() returns a pointer to a C-style string (const char*) representing the contents of errorMessage
+class WebServer {
+public:
+    void processRequest(const std::string& url) {
+        if (url == "/bad-request") {
+            throw runtime_error("Bad Request: Invalid URL format.");
+        } else if (url == "/timeout") {
+            throw runtime_error("Network Timeout: Unable to connect.");
+        }
+    cout << "Processing request for " << url << std::endl;
     }
 };
 
 int main() {
+    WebServer server;
+
     try {
-        throw MyException("Something went wrong!"); // Throwing custom exception with a message
+        server.processRequest("/bad-request");  // Malformed URL
+    } catch (const runtime_error& e) {
+        cerr << "Server Error: " << e.what() << std::endl;  // Handling bad request
     }
-    catch (const MyException& e) {
-        cout << "Caught MyException: " << e.what() << endl; // Catching the custom exception and printing the error message
+
+    try {
+        server.processRequest("/timeout");  // Network timeout
+    } catch (const runtime_error& e) {
+        cerr << "Server Error: " << e.what() << std::endl;  // Handling timeout error
     }
-    catch (const std::exception& e) {
-        cout << "Caught exception: " << e.what() << endl; // Catching any other exceptions and printing the generic error message
-    }
+
+    return 0;
 }

@@ -181,3 +181,11 @@ int main() {
     func2('A'); // Second template function called, ofcourse based on exact same rule
     return 0;
 }
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+// The use cases and importance of studying function templates are similar to class templates.
+// The main difference lies in their application: class templates are used to create generic classes for data structures that can handle various data types, promoting code reusability.
+// On the other hand, function templates are used to define generic functions that can work with a variety of data types.
+
+// Rest is all same! Function Templates are easier to implement	and Class Templates are more complex than function templates!
+// Rest implement, practice and learn!
