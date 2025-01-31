@@ -5,20 +5,30 @@ int main() {
     int n;
     cin>>n;
     for(int i = 1; i<=n; i++) {
-        int space = n-1;
-        while(space) {
-            cout<<" "<<" ";
-            space--;
-        }
-
-        for(int j = 1; j<=i; j++) {
+        for(int star = 0; star<=n-i; star++) {
             cout<<"*"<<" ";
         }
 
-        space = n-1;
-        while(space) {
+        for(int space = 1; space<(2*i)-1; space++) {
             cout<<" "<<" ";
-            space--;
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n; i>=1; i--) {
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = (2*i)-1; space>1; space--) {
+            cout<<" "<<" ";
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
         }
         cout<<endl;
     }

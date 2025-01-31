@@ -288,7 +288,7 @@ int main() {
     }
 }
 
-// Pattern 16 : Print a pattern A A A A A -> B B B B -> C C C -> D D -> E
+// Pattern 16 : Print a pattern A -> B B  -> C C C and so on...
 #include<iostream>
 using namespace std;
 
@@ -303,7 +303,7 @@ int main() {
     }
 }
 
-// Pattern 17 : Print a pattern pytramid A -> B B -> C C C and so on...
+// Pattern 17 : Print a pattern pytramid A -> A B A -> A B C B A and so on...
 #include<iostream>
 using namespace std;
 
@@ -311,17 +311,20 @@ int main() {
     int n;
     cin>>n;
     for(int i = 1; i<=n; i++) {
-        int space = n-1;
+        int space = n-i;
         while(space) {
             cout<<" "<<" ";
             space--;
         }
 
-        for(int j = 1; j<=i; j++) {
-            cout<<"*"<<" ";
+        char ch = 'A';
+        for(int j = 1; j<=(2*i)-1; j++) {
+            cout<<ch<<" ";
+            if(j <= i-1) ch++;
+            else ch--;
         }
 
-        space = n-1;
+        space = n-i;
         while(space) {
             cout<<" "<<" ";
             space--;
@@ -329,3 +332,59 @@ int main() {
         cout<<endl;
     }
 }
+
+// Pattern 18 : Print a pattern right angled pytramid E -> D E -> C D E and so on...
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        char ch = 'A'+(n-i);
+        for(int j = 1; j<=i; j++) {
+            cout<<ch<<" ";
+            ch++;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 19 : Print a pattern Anti-diamond!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 1; space<(2*i)-1; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n; i>=1; i--) {
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = (2*i)-1; space>1; space--) {
+            cout<<" "<<" ";
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 20 : Print a butterfly pattern!
