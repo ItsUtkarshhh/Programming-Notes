@@ -1,48 +1,51 @@
+// Doubly Linked List!
 #include<iostream>
 using namespace std;
 
-// Node creation!
 class Node {
     public:
     int data;
-    Node* next;
+    Node* next = NULL;
+    Node* prev = NULL;
 
     Node(int data) {
         this->data = data;
         this->next = NULL;
+        this->prev = NULL;
     }
 
     ~Node() {
-        cout<<"Node deleted with value : "<<this->data<<endl;
+        next = NULL;
+        prev = NULL;
+        cout << "Value of deleted node: " << data << endl;
     }
 };
 
 void insertAtHead(Node* &head, int data) {
-    // Empty List!
-    Node* newNode = new Node(data);
+    Node* temp = new Node(data);
     if(head == NULL) {
-        head = newNode;
+        head = temp;
         return;
     }
-    newNode->next = head;
-    head = newNode;
+    head->prev = temp;
+    temp->next = head;
+    head = temp;
 }
 
-void insertAtTail(Node* &head, Node* &tail, int data) {
-    Node* newNode = new Node(data);
-    // Empty List!
+void insertAtTail(Node* &head ,Node* &tail, int data) {
+    Node* temp = new Node(data);
     if(tail == NULL) {
-        head = tail = newNode;
-        tail->next = NULL;
+        head = tail = temp;
         return;
     }
-    tail->next = newNode;
-    tail = newNode;
+    tail->next = temp;
+    temp->prev = tail;
+    tail = temp;
 }
 
-int getLen(Node* &head) {
-    int len = 0;
+int getLen(Node* head) {
     Node* temp = head;
+    int len = 0;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -50,16 +53,13 @@ int getLen(Node* &head) {
     return len;
 }
 
-void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
-    // Empty List!
+void insertAnywhere(Node* &head, Node* &tail, int data, int pos) {
     if(head == NULL) {
-        Node* newNode = new Node(data);
-        head = newNode;
-        tail = newNode;
+        Node* temp = new Node(data);
+        head = tail = temp;
         return;
     }
 
-    // Insertion at Head!
     if(pos == 1) {
         insertAtHead(head, data);
         return;
@@ -67,78 +67,83 @@ void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
 
     int len = getLen(head);
     if(pos < 1 || pos > len + 1) {
-        cout<<"Invalid position!";
+        cout<<"Invalid Length!";
         return;
     }
 
     Node* temp = head;
     int count = 1;
-
-    // Traversing between nodes where excluding first node and last node!
-    while(count < pos - 1 && temp->next != NULL) {
-        temp = temp->next;
+    while(count < pos - 1) {
         count++;
+        temp = temp->next;
     }
 
-    // Insertion at Tail Node!
-    Node* newNode = new Node(data);
-
     if(temp->next == NULL) {
+        Node* newNode = new Node(data);
+        newNode->prev = temp;
         temp->next = newNode;
         tail = newNode;
         return;
     }
+
+    Node* newNode = new Node(data);
+    newNode->prev = temp;
     newNode->next = temp->next;
+    temp->next->prev = newNode;
     temp->next = newNode;
 }
 
 void deleteNode(Node* &head, Node* &tail, int pos) {
-    // Empty List!
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
 
-    // Validating Position!
     int len = getLen(head);
     if(pos < 1 || pos > len) {
         cout<<"Invalid Position!";
         return;
     }
 
+    // Deleting from Head!
     if(pos == 1) {
         Node* temp = head;
-        head = head->next;
+        head = temp->next;
+        if(head != NULL) {
+            head->prev = NULL;
+        }
+        else {
+            tail = NULL;
+        }
         temp->next = NULL;
         delete temp;
         return;
     }
 
-    Node* prev = NULL;
-    Node* curr = head;
+    Node* temp = head;
     int count = 1;
-
-    while(count < pos) {
-        prev = curr;
-        curr = curr->next;
+    while(count < pos) { // Traversing to a particular node!
         count++;
+        temp = temp->next;
     }
 
-    prev->next = curr->next;
-    if(curr->next == NULL) {
-        tail = prev;
-        delete curr;
-        return; 
+    // Delete from tail!
+    if(temp->next == NULL) {
+        tail = temp->prev;
+        tail->next = NULL;
+        temp->prev = NULL;
+        delete temp;
+        return;
     }
-    curr->next = NULL;
-    delete curr;
+
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    temp->prev = NULL;
+    temp->next = NULL;
+    delete temp;
 }
 
 void printNode(Node* &head) {
-    if (head == NULL) {
-        cout << "Empty List!" << endl;
-        return;
-    }
     Node* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
@@ -152,48 +157,59 @@ int main() {
     Node* head = n1;
     Node* tail = n1;
 
+    cout<<"Current LinkedList : ";
+    printNode(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+
+    cout<<endl;
+
     insertAtHead(head, 5);
     insertAtHead(head, 0);
-    cout<<"Current Linked List : ";
+    insertAtHead(head, -5);
+    insertAtHead(head, -10);
+    cout<<"Current LinkedList : ";
     printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
-    
+
     insertAtTail(head, tail, 15);
     insertAtTail(head, tail, 20);
-    cout<<"Current Linked List : ";
+    insertAtTail(head, tail, 25);
+    insertAtTail(head, tail, 30);
+    cout<<"Current LinkedList : ";
     printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhere(head, tail, 1, -5);
-    insertAnywhere(head, tail, getLen(head)+1, 25);
-    insertAnywhere(head, tail, 3, 1000);
-    insertAnywhere(head, tail, getLen(head)+1, 40);
-    cout<<"Current Linked List : ";
+    insertAnywhere(head, tail, -15,1);
+    insertAnywhere(head, tail, -20,1);
+    insertAnywhere(head, tail, 101,5);
+    insertAnywhere(head, tail, 35, getLen(head) + 1);
+    insertAnywhere(head, tail, 40, getLen(head) + 1);
+    cout<<"Current LinkedList : ";
     printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+
+    cout<<endl;
+
+    deleteNode(head, tail, 5);
+    cout<<"Current LinkedList : ";
+    printNode(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
     deleteNode(head, tail, 1);
-    cout<<"Current Linked List : ";
+    cout<<"Current LinkedList : ";
     printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
-    
-    cout<<endl;
-
-    deleteNode(head, tail, 3);
-    cout<<"Current Linked List : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
     deleteNode(head, tail, getLen(head));
-    cout<<"Current Linked List : ";
+    cout<<"Current LinkedList : ";
     printNode(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 }

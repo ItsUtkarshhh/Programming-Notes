@@ -388,3 +388,124 @@ int main() {
 }
 
 // Pattern 20 : Print a butterfly pattern!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int star = i;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+
+        int space = (2*n) - (2*i);
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        star = i;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+        cout<<endl;
+    }
+    for(int i = 0; i<n; i++) {
+        int star = (n-i)-1;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+
+        int space = 2*i+2;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        star = (n-i)-1;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 21 : Print square stroke patterns!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        if(i == 1) {
+            int stars = n;
+            while(stars) {
+                cout<<"*"<<" ";
+                stars--;
+            }
+        }
+
+        if(i > 1 && i < n) {
+            cout<<"*"<<" ";
+            int spaces = n - 2;
+            while(spaces) {
+                cout<<" "<<" ";
+                spaces--;
+            }
+            cout<<"*"<<" ";
+        }
+
+        if(i == n) {
+            int stars = n;
+            while(stars) {
+                cout<<"*"<<" ";
+                stars--;
+            }
+        }
+        cout<<endl;
+    }
+}
+
+// Better Approach!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=n; j++) {
+            if(i == 1 || i == n || j == 1 || j == n) {
+                cout<<"*"<<" ";
+            }
+            else cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 22 : Print a unique numerical pattern, go to sheet to see the pattern!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<(2*n-1); i++) {
+        for(int j = 0; j<(2*n-1); j++) {
+            int top = i;
+            int left = j;
+            int bottom = (2*n - 2) - i;
+            int right = (2*n - 2) - j;
+            cout<<(n - min(min(top,bottom), min(right,left)))<<" ";
+        }
+        cout<<endl;
+    }
+} // Re-solve this again, after sometime!
