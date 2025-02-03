@@ -1,215 +1,121 @@
-// Doubly Linked List!
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 class Node {
-    public:
+public:
     int data;
-    Node* next = NULL;
-    Node* prev = NULL;
+    Node* next;
 
     Node(int data) {
         this->data = data;
         this->next = NULL;
-        this->prev = NULL;
     }
 
     ~Node() {
-        next = NULL;
-        prev = NULL;
-        cout << "Value of deleted node: " << data << endl;
+        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
-void insertAtHead(Node* &head, int data) {
-    Node* temp = new Node(data);
-    if(head == NULL) {
-        head = temp;
-        return;
-    }
-    head->prev = temp;
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node* &head ,Node* &tail, int data) {
-    Node* temp = new Node(data);
-    if(tail == NULL) {
-        head = tail = temp;
-        return;
-    }
-    tail->next = temp;
-    temp->prev = tail;
-    tail = temp;
-}
-
-int getLen(Node* head) {
-    Node* temp = head;
-    int len = 0;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAnywhere(Node* &head, Node* &tail, int data, int pos) {
-    if(head == NULL) {
-        Node* temp = new Node(data);
-        head = tail = temp;
-        return;
-    }
-
-    if(pos == 1) {
-        insertAtHead(head, data);
-        return;
-    }
-
-    int len = getLen(head);
-    if(pos < 1 || pos > len + 1) {
-        cout<<"Invalid Length!";
-        return;
-    }
-
-    Node* temp = head;
-    int count = 1;
-    while(count < pos - 1) {
-        count++;
-        temp = temp->next;
-    }
-
-    if(temp->next == NULL) {
-        Node* newNode = new Node(data);
-        newNode->prev = temp;
-        temp->next = newNode;
-        tail = newNode;
-        return;
-    }
-
+// Insert a node after the given element
+void insertNode(Node*& tail, int element, int data) {
     Node* newNode = new Node(data);
-    newNode->prev = temp;
-    newNode->next = temp->next;
-    temp->next->prev = newNode;
-    temp->next = newNode;
+
+    // Case 1: Empty List
+    if (tail == NULL) {
+        tail = newNode;
+        newNode->next = newNode;
+        return;
+    }
+
+    // Case 2: Insert after a specific element
+    Node* current = tail;
+    do {
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            if (current == tail) {
+                tail = newNode; // Update tail if inserting after the last node
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail);
+
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode; // Prevent memory leak
 }
 
-void deleteNode(Node* &head, Node* &tail, int pos) {
-    if(head == NULL) {
-        cout<<"Empty List!";
+// Print the list
+void printList(Node* tail) {
+    if (tail == NULL) {
+        cout << "List is empty!" << endl;
         return;
     }
 
-    int len = getLen(head);
-    if(pos < 1 || pos > len) {
-        cout<<"Invalid Position!";
-        return;
-    }
-
-    // Deleting from Head!
-    if(pos == 1) {
-        Node* temp = head;
-        head = temp->next;
-        if(head != NULL) {
-            head->prev = NULL;
-        }
-        else {
-            tail = NULL;
-        }
-        temp->next = NULL;
-        delete temp;
-        return;
-    }
-
-    Node* temp = head;
-    int count = 1;
-    while(count < pos) { // Traversing to a particular node!
-        count++;
-        temp = temp->next;
-    }
-
-    // Delete from tail!
-    if(temp->next == NULL) {
-        tail = temp->prev;
-        tail->next = NULL;
-        temp->prev = NULL;
-        delete temp;
-        return;
-    }
-
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
-    temp->prev = NULL;
-    temp->next = NULL;
-    delete temp;
-}
-
-void printNode(Node* &head) {
-    Node* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
+    Node* current = tail->next;
+    do {
+        cout << current->data << " ";
+        current = current->next;
+    } while (current != tail->next);
+    cout << endl;
 }
 
 int main() {
-    Node* n1 = new Node(10);
-    Node* head = n1;
-    Node* tail = n1;
+    Node* tail = NULL;
 
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, -1, 3);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    
+    cout<<endl;
+
+    insertNode(tail, 3, 5);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAtHead(head, 5);
-    insertAtHead(head, 0);
-    insertAtHead(head, -5);
-    insertAtHead(head, -10);
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 5, 7);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAtTail(head, tail, 15);
-    insertAtTail(head, tail, 20);
-    insertAtTail(head, tail, 25);
-    insertAtTail(head, tail, 30);
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 7, 9);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhere(head, tail, -15,1);
-    insertAnywhere(head, tail, -20,1);
-    insertAnywhere(head, tail, 101,5);
-    insertAnywhere(head, tail, 35, getLen(head) + 1);
-    insertAnywhere(head, tail, 40, getLen(head) + 1);
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 3, 4);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNode(head, tail, 5);
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 9, 10);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNode(head, tail, 1);
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 7, 8);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNode(head, tail, getLen(head));
-    cout<<"Current LinkedList : ";
-    printNode(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
+    insertNode(tail, 10, 2);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+
+    return 0;
 }
