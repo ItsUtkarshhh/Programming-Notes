@@ -1,8 +1,9 @@
-#include <iostream>
+// Implementation! (Position based insertion!)
+#include<iostream>
 using namespace std;
 
-class Node {
-public:
+class Node { // General Node Creation!
+    public:
     int data;
     Node* next;
 
@@ -10,42 +11,67 @@ public:
         this->data = data;
         this->next = NULL;
     }
-
-    ~Node() {
-        cout << "Memory freed for node with value: " << data << endl;
-    }
 };
 
-// Insert a node after the given element
-void insertNode(Node*& tail, int element, int data) {
+int getLen(Node* tail) { // Calculating Length!
+    if(tail == NULL) {
+        cout<<"Empty List!";
+        return 0;
+    }
+    Node* curr = tail->next;
+    int len = 0;
+    do {
+        len++;
+        curr = curr->next;
+    } while (curr != tail->next);
+    return len;
+}
+
+void insertNode(Node* &tail, int pos, int data) {
     Node* newNode = new Node(data);
 
-    // Case 1: Empty List
-    if (tail == NULL) {
+    if(tail == NULL) { // Empty List Condition!
         tail = newNode;
         newNode->next = newNode;
         return;
     }
 
-    // Case 2: Insert after a specific element
-    Node* current = tail;
-    do {
-        if (current->data == element) {
-            newNode->next = current->next;
-            current->next = newNode;
-            if (current == tail) {
-                tail = newNode; // Update tail if inserting after the last node
-            }
-            return;
-        }
-        current = current->next;
-    } while (current != tail);
+    int len = getLen(tail);
+    if(pos < 1 || pos > len + 1) { // Validating Position!
+        cout<<"Invalid Position!";
+        delete newNode;
+        return;
+    }
 
-    cout << "Element " << element << " not found in the list!" << endl;
-    delete newNode; // Prevent memory leak
+    if (pos == 1) { // Insertion at Head!
+        newNode->next = tail->next;
+        tail->next = newNode;
+        if (tail == tail->next) {
+            tail = newNode;
+        }
+        return;
+    }
+
+    if(pos == len + 1) { // Insertion at Tail!
+        newNode->next = tail->next;
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Insert at some position in between!
+    Node* temp = tail->next;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-// Print the list
+
 void printList(Node* tail) {
     if (tail == NULL) {
         cout << "List is empty!" << endl;
@@ -61,61 +87,45 @@ void printList(Node* tail) {
 }
 
 int main() {
-    Node* tail = NULL;
-
-    insertNode(tail, -1, 3);
+    Node* n1 = new Node(10);
+    Node* tail = n1;
+    tail->next = tail; // Making it a circular LL!
     cout<<"Current Linked List : ";
     printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNode(tail, getLen(tail) + 1, 20);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNode(tail, getLen(tail) + 1, 30);
+    cout<<"Current Linked List : ";
+    printList(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
     
-    cout<<endl;
-
-    insertNode(tail, 3, 5);
+    insertNode(tail, getLen(tail) + 1, 40);
     cout<<"Current Linked List : ";
     printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNode(tail, 5, 7);
-    cout<<"Current Linked List : ";
-    printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Tail : "<<tail->data;
 
     cout<<endl;
 
-    insertNode(tail, 7, 9);
+    insertNode(tail, getLen(tail) + 1, 50);
     cout<<"Current Linked List : ";
     printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<"Current Tail : "<<tail->data;
 
     cout<<endl;
 
-    insertNode(tail, 3, 4);
+    insertNode(tail, getLen(tail) + 1, 60);
     cout<<"Current Linked List : ";
     printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNode(tail, 9, 10);
-    cout<<"Current Linked List : ";
-    printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNode(tail, 7, 8);
-    cout<<"Current Linked List : ";
-    printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNode(tail, 10, 2);
-    cout<<"Current Linked List : ";
-    printList(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    return 0;
+    cout<<"Current Tail : "<<tail->data;
 }

@@ -3487,28 +3487,41 @@ int main() {
 //                                                                                                      : If inserting after the last node (tail), update tail = temp.
 //                                     : Handling Doubly Circular Linked List (DCLL) Insertions : In DCLL, we need to update both next and prev pointers : temp->next = current->next; temp->prev = current; current->next->prev = temp; current->next = temp;
 //                                                                                              :  If inserting after tail, update tail = temp.
-// Implementation!
+
+// Insertion in Circular Linked List is based on two factors Position and Elements!
+// Position : Most widely followed approach because positions are fixed and do not change dynamically like values.
+//          : Used in list-based applications (e.g., playlists, circular queues, OS scheduling, etc.).
+//          : Better control over placement—can insert at the beginning, middle, or end easily.
+//          : Limitations : Requires traversing the list up to the (n-1)th node, making it O(n) in worst case.
+//                        : Index-based insertion does not depend on the element values.
+// Elements : Common when elements have unique identifiers (e.g., student IDs, employee IDs, etc.).
+//          : Used when we don't know the position but need to insert relative to a value.
+//          : In case of duplicate values insertion can happen in 4 ways, insertion after 1st occurence (default), insertion after last occurence, insertion after nth occurence and insertion after all (each) occurence.
+//          : Limitations : If there are duplicate values, it inserts after the first occurrence by default.
+//                        : Searching for the value takes O(n) time in the worst case.
+
+// Conclusion : Position based insertion is most common in real-world applications like : Circular queues (used in operating systems, buffering, etc.), Multitasking OS scheduling (Round-Robin scheduling), Data structures like circular lists used in graph traversal (e.g., adjacency lists) and more...
+//            : Value-based insertion is preferred when dealing with unique identifiers or sorted lists where insertion needs to be based on values.
+//            : Here in, we have implemented two insertion methods including one as Position and one as default after first element! rest you can implement at per need!
+
+// Implementation! (Element based insertion!)
 #include <iostream>
 using namespace std;
 
-class Node {
+class NodeCSLL1 {
 public:
     int data;
-    Node* next;
+    NodeCSLL1* next;
 
-    Node(int data) {
+    NodeCSLL1(int data) {
         this->data = data;
         this->next = NULL;
-    }
-
-    ~Node() {
-        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
 // Insert a node after the given element
-void insertNode(Node*& tail, int element, int data) {
-    Node* newNode = new Node(data);
+void insertNodeCSLL1(NodeCSLL1*& tail, int element, int data) {
+    NodeCSLL1* newNode = new NodeCSLL1(data);
 
     // Case 1: Empty List
     if (tail == NULL) {
@@ -3518,7 +3531,7 @@ void insertNode(Node*& tail, int element, int data) {
     }
 
     // Case 2: Insert after a specific element
-    Node* current = tail;
+    NodeCSLL1* current = tail;
     do {
         if (current->data == element) {
             newNode->next = current->next;
@@ -3536,13 +3549,13 @@ void insertNode(Node*& tail, int element, int data) {
 }
 
 // Print the list
-void printList(Node* tail) {
+void printListCSLL1(NodeCSLL1* tail) {
     if (tail == NULL) {
         cout << "List is empty!" << endl;
         return;
     }
 
-    Node* current = tail->next;
+    NodeCSLL1* current = tail->next;
     do {
         cout << current->data << " ";
         current = current->next;
@@ -3551,78 +3564,196 @@ void printList(Node* tail) {
 }
 
 int main() {
-    Node* tail = NULL;
+    NodeCSLL1* tail = NULL;
 
-    insertNode(tail, -1, 3);
+    insertNodeCSLL1(tail, -1, 3);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
     
     cout<<endl;
 
-    insertNode(tail, 3, 5);
+    insertNodeCSLL1(tail, 3, 5);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 5, 7);
+    insertNodeCSLL1(tail, 5, 7);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 7, 9);
+    insertNodeCSLL1(tail, 7, 9);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 3, 4);
+    insertNodeCSLL1(tail, 3, 4);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 9, 10);
+    insertNodeCSLL1(tail, 9, 10);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 7, 8);
+    insertNodeCSLL1(tail, 7, 8);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertNode(tail, 10, 2);
+    insertNodeCSLL1(tail, 10, 2);
     cout<<"Current Linked List : ";
-    printList(tail);
+    printListCSLL1(tail);
     cout<<"Current Tail : "<<tail->data<<endl;
 
     return 0;
 }
-// Insertion in Circular Linked List is based on two factors Position and Elements!
-// Position : Most widely followed approach because positions are fixed and do not change dynamically like values.
-//          : Used in list-based applications (e.g., playlists, circular queues, OS scheduling, etc.).
-//          : Better control over placement—can insert at the beginning, middle, or end easily.
-//          : Limitations : Requires traversing the list up to the (n-1)th node, making it O(n) in worst case.
-//                        : Index-based insertion does not depend on the element values.
-// Elements : Common when elements have unique identifiers (e.g., student IDs, employee IDs, etc.).
-//          : Used when we don't know the position but need to insert relative to a value.
-//          : In case of duplicate values insertion can happen in 4 ways, insertion after 1st occurence (default), insertion after last occurence, insertion after nth occurence and insertion after all (each) occurence.
-//          : Limitations : If there are duplicate values, it inserts after the first occurrence by default.
-//                        : Searching for the value takes O(n) time in the worst case.
 
-// Conclusion : Position based insertion is most common in real-world applications like : Circular queues (used in operating systems, buffering, etc.), Multitasking OS scheduling (Round-Robin scheduling), Data structures like circular lists used in graph traversal (e.g., adjacency lists) and more...
-//            : Value-based insertion is preferred when dealing with unique identifiers or sorted lists where insertion needs to be based on values.
+// Implementation! (Position based insertion!)
+#include<iostream>
+using namespace std;
+
+class NodeCSLL2 { // General Node Creation!
+    public:
+    int data;
+    NodeCSLL2* next;
+
+    NodeCSLL2(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+int getLenCSLL2(NodeCSLL2* tail) { // Calculating Length!
+    if(tail == NULL) {
+        cout<<"Empty List!";
+        return 0;
+    }
+    NodeCSLL2* curr = tail->next;
+    int len = 0;
+    do {
+        len++;
+        curr = curr->next;
+    } while (curr != tail->next);
+    return len;
+}
+
+void insertNodeCSLL2(NodeCSLL2* &tail, int pos, int data) {
+    NodeCSLL2* newNode = new NodeCSLL2(data);
+
+    if(tail == NULL) { // Empty List Condition!
+        tail = newNode;
+        newNode->next = newNode;
+        return;
+    }
+
+    int len = getLenCSLL2(tail);
+    if(pos < 1 || pos > len + 1) { // Validating Position!
+        cout<<"Invalid Position!";
+        delete newNode;
+        return;
+    }
+
+    if (pos == 1) { // Insertion at Head!
+        newNode->next = tail->next;
+        tail->next = newNode;
+        if (tail == tail->next) {
+            tail = newNode;
+        }
+        return;
+    }
+
+    if(pos == len + 1) { // Insertion at Tail!
+        newNode->next = tail->next;
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Insert at some position in between!
+    NodeCSLL2* temp = tail->next;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+
+void printListCSLL2(NodeCSLL2* tail) {
+    if (tail == NULL) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    NodeCSLL2* current = tail->next;
+    do {
+        cout << current->data << " ";
+        current = current->next;
+    } while (current != tail->next);
+    cout << endl;
+}
+
+int main() {
+    NodeCSLL2* n1 = new NodeCSLL2(10);
+    NodeCSLL2* tail = n1;
+    tail->next = tail; // Making it a circular LL!
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 20);
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 30);
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+    
+    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 40);
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 50);
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+
+    cout<<endl;
+
+    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 60);
+    cout<<"Current Linked List : ";
+    printListCSLL2(tail);
+    cout<<"Current Tail : "<<tail->data;
+}
 
 // Deletion of Node in Circular Linked List!
 // Approach : Check if List is Empty : If tail is NULL, just return as nothing to delete
@@ -3632,124 +3763,368 @@ int main() {
 //                               : If it's any other node : Simply connect previous node to the node after current and Delete the node we found
 //          : If Value Not Found : Just return or show error message
 //          : Memory Cleanup : Always remember to free the deleted node's memory and Don't break the circular nature of the list.
-#include<iostream>
+//          : Note : Node deletion can be performed based on either position or element value. The approach remains similar, and you can practice both methods. Here, we will focus on deleting a node based on its element value.
+
+// Implementing!
+#include <iostream>
 using namespace std;
 
-class Node11 {
-    public:
+class NodeCSLL3 {
+public:
     int data;
-    Node11* prev;
-    Node11* next;
+    NodeCSLL3* next;
 
-    Node11(int data) {
+    NodeCSLL3(int data) {
+        this->data = data;
+        this->next = nullptr;
+    }
+
+    ~NodeCSLL3() {
+        cout << "Value of deleted element: " << data << endl;
+    }
+};
+
+void insertNodeCSLL3(NodeCSLL3*& tail, int element, int data) {
+    NodeCSLL3* newNode = new NodeCSLL3(data);
+
+    // Case 1: Empty List (tail == NULL)
+    if (tail == nullptr) {
+        tail = newNode;
+        newNode->next = newNode; // Points to itself (circular)
+        return;
+    }
+
+    NodeCSLL3* current = tail->next; // Start from the head (tail's next)
+    do {
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            
+            // If inserted after tail, update the tail pointer
+            if (current == tail) {
+                tail = newNode;
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail->next); // Loop until you complete the circle
+
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode; // Prevent memory leak
+}
+
+// Delete a node with a given element
+void deleteNodeCSLL3(NodeCSLL3*& tail, int element) {
+    if (tail == nullptr) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    NodeCSLL3* prev = tail;
+    NodeCSLL3* curr = tail->next;
+
+    // Case 1: Single node in the list
+    if (curr == tail && curr->data == element) {
+        delete tail;
+        tail = nullptr;
+        return;
+    }
+
+    // Case 2: Multiple nodes
+    do {
+        if (curr->data == element) {
+            prev->next = curr->next;
+            if (curr == tail) {
+                tail = prev; // Update tail if the last node is deleted
+            }
+            delete curr;
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    } while (curr != tail->next);
+    cout << "Element " << element << " not found in the list!" << endl;
+}
+
+// Print the list
+void printListCSLL3(NodeCSLL3* tail) {
+    if (tail == nullptr) {
+        cout << "List is empty!" << endl;
+        return;
+    }
+
+    NodeCSLL3* current = tail->next;
+    do {
+        cout << current->data << " ";
+        current = current->next;
+    } while (current != tail->next);
+    cout << endl;
+}
+
+int main() {
+    NodeCSLL3* tail = nullptr;
+
+    // Test case: Insert into empty list
+    insertNodeCSLL3(tail, -1, 3);  // Insert after -1, which is not in the list
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << tail->data << endl;
+    cout << endl;
+
+    // Test case: Delete the only node
+    deleteNodeCSLL3(tail, 3);
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl; // Just to print NULL, if the list is empty!
+    cout << endl;
+
+    // Test case: Insert multiple nodes
+    insertNodeCSLL3(tail, -1, 5);  // Insert into empty list (tail is null)
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " <<(tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    insertNodeCSLL3(tail, 5, 7);  // Insert after 5
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    insertNodeCSLL3(tail, 7, 9);  // Insert after 7
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    insertNodeCSLL3(tail, 9, 3);  // Insert after 9 (tail)
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    // Test case: Delete from the list
+    deleteNodeCSLL3(tail, 7);  // Delete node with data 7
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    deleteNodeCSLL3(tail, 9);  // Delete node with data 9 (tail)
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    deleteNodeCSLL3(tail, 3);  // Delete node with data 3 (only element)
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+
+    deleteNodeCSLL3(tail, 5);
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout<<endl;
+
+    // Edge case: Try to delete from an empty list
+    deleteNodeCSLL3(tail, 5);  // List is empty
+    cout << "Current Linked List: ";
+    printListCSLL3(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+
+    return 0;
+}
+
+// Circular Doubly Linked List!
+// Implementation of node creation, insertion, deletion, and print length functions combined.
+// Insertion : Insertion can be performed based on either the position or the element’s value. Positions can be classified into four types : After the first occurrence, After the last occurrence, After the nth occurrence, After all occurrences.
+//           : There are also other combinations based on positions, but for now, we will focus only on insertion after the first occurrence. You can implement the rest as per your requirements.
+//           : Approach : Start at the head node : Begin by setting the current pointer to the head of the list. This is where the traversal begins.
+//                      : Traverse the list : Loop through the nodes starting from the head and look for the first occurrence of the given element. Since the list is circular, you will stop when the current node comes back to the head node.
+//                      : Find the first occurrence : If the element matches the data in the current node, you've found the first occurrence.
+//                      : Insert the new node : Once the first occurrence is found, create a new node with the given data. Set the next pointer of the new node to point to the node after current. Set the prev pointer of the new node to point to current. Then, update the next pointer of current to point to the new node, and the prev pointer of the node after current (if it exists) to point to the new node.
+//                      : Empty List : If the list is empty (head is NULL), create the new node and set both head and tail to this node, making the list circular.
+//                      : Update pointers : In a circular doubly linked list, ensure that the next of the tail node points to the head, and the prev of the head points to the tail, maintaining the circular structure.
+
+// Deletion : Check if the list is empty : If the head is NULL, that means the list is empty, so there's nothing to delete.
+//          : Find the node to delete : Traverse the list starting from the head node. Check each node’s data to see if it matches the value of the node you want to delete. Since the list is circular, keep traversing using the next pointer until you either find the node or return to the head node.
+//          : Handle the node to delete : If the node to delete is found : If the node to delete is the only node : Set both the head and tail to NULL, as the list will become empty.
+//                                                                       : If the node to delete is the head node : Update the head pointer to the next node and adjust the prev pointer of the new head node to point to the tail.
+//                                                                       : If the node to delete is the tail node : Update the tail pointer to the previous node and adjust the next pointer of the new tail node to point to the head.
+//                                                                       : If the node is somewhere in between : Adjust the next pointer of the previous node to point to the node after the current node. Adjust the prev pointer of the next node to point to the node before the current node.
+//          : Update the circular links : Ensure that the next pointer of the new tail points to the head, and the prev pointer of the new head points to the tail, maintaining the circular nature of the list.
+//          : Note : Deletion can also be based on the position of the node, in addition to the value. Currently, we are implementing the deletion based on the node's value. You can try implementing deletion based on position on your own, as we've done similar tasks in the past!
+
+// Implementing!
+#include <iostream>
+using namespace std;
+
+class NodeCDLL1 {
+public:
+    int data;
+    NodeCDLL1* next;
+    NodeCDLL1* prev;
+
+    NodeCDLL1(int data) {
         this->data = data;
         this->next = NULL;
         this->prev = NULL;
     }
-
-    ~Node11() {
-        int value = this->data;
-        cout << "Memory free for the node with data value: " << value << endl;
-    }
 };
 
-void insertNode(Node11* &tail, int element, int data) {
+// Insert a node after a given element
+void insertNodeCDLL1(NodeCDLL1* &tail, int element, int data) {
+    NodeCDLL1* newNode = new NodeCDLL1(data);
+
+    // Case 1: Empty List
     if (tail == NULL) {
-        Node11* newNode = new Node11(data);
         tail = newNode;
         newNode->next = newNode;
         newNode->prev = newNode;
-    } else {
-        Node11* curr = tail;
-        do {
-            if (curr->data == element) {
-                Node11* temp = new Node11(data);
-                temp->next = curr->next;
-                temp->prev = curr;
-                curr->next->prev = temp;
-                curr->next = temp;
-                return;
+        return; // No need to delete the node here, it's part of the list
+    }
+
+    NodeCDLL1* temp = tail->next;
+    
+    do {
+        if (temp->data == element) {
+            newNode->next = temp->next;
+            temp->next->prev = newNode;
+            temp->next = newNode;
+            newNode->prev = temp;
+
+            if (temp == tail) {
+                tail = newNode;
             }
-            curr = curr->next;
-        } while(curr != tail);
-        cout << "Element " << element << " not found!" << endl;
-    }
-}
-
-void deleteNode(Node11* &tail, int value) {
-    if (tail == NULL) {
-        cout << "Linked list is empty!" << endl;
-        return;
-    }
-
-    Node11* curr = tail;
-    Node11* toDelete = NULL;
-    do { // Find the node to delete
-        if (curr->data == value) {
-            toDelete = curr;
             break;
         }
-        curr = curr->next;
-    } while(curr != tail);
+        temp = temp->next;
+    } while (temp != tail->next);
 
-    if (toDelete == NULL) {
-        cout << "Value " << value << " not found!" << endl;
-        return;
-    }
-
-    if (toDelete->next == toDelete) { // Single node case
-        tail = NULL;
-        delete toDelete;
-        return;
-    }
-
-    // Multiple nodes case
-    toDelete->prev->next = toDelete->next;
-    toDelete->next->prev = toDelete->prev;
-
-    if (tail == toDelete) { // Update tail if needed
-        tail = toDelete->prev;
-    }
-
-    toDelete->next = NULL;
-    toDelete->prev = NULL;
-    delete toDelete;
+    // If element not found in the list
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode; // Prevent memory leak if the node couldn't be inserted
 }
 
-void printNode(Node11* tail) {
+void deleteNodeCDLL1(NodeCDLL1* &tail, int value) {
+    if (tail == NULL) {
+        cout << "Empty List! Cannot delete node." << endl;
+        return;
+    }
+
+    NodeCDLL1* prev = tail;
+    NodeCDLL1* curr = tail->next;
+    
+    do {
+        if (curr->data == value) {
+            // Case 1: Only one node in the list
+            if (curr == tail && curr->next == curr) {
+                delete curr;
+                tail = NULL;
+                break;
+            }
+            // Case 2: Deleting any other node
+            prev->next = curr->next;
+            curr->next->prev = prev;
+
+            // If the node to delete is the tail node, update the tail
+            if (curr == tail) {
+                tail = prev;
+            }
+            delete curr;
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    } while (curr != tail->next);
+
+    // If element not found
+    cout << "Element " << value << " not found in the list!" << endl;
+}
+
+// Print the list
+void printListCDLL1(NodeCDLL1* tail) {
     if (tail == NULL) {
         cout << "List is empty!" << endl;
         return;
     }
 
-    Node11* curr = tail->next; // Start from the first node
+    NodeCDLL1* current = tail->next;
     do {
-        cout << curr->data << " ";
-        curr = curr->next;
-    } while(curr != tail->next); // Stop when we're back at the start
+        cout << current->data << " ";
+        current = current->next;
+    } while (current != tail->next);
     cout << endl;
 }
 
 int main() {
-    Node11* tail = NULL;
-    
-    insertNode(tail, -1, 3); // First node
-    insertNode(tail, 3, 4); // Insert after 3
-    insertNode(tail, 4, 5); // Insert after 4
-    insertNode(tail, 5, 6); // Insert after 5
-    insertNode(tail, 6, 7); // Insert after 6
-    insertNode(tail, 7, 8); // Insert after 7
+    NodeCDLL1* tail = NULL;
 
-    cout << "Current Linked List is: ";
-    printNode(tail);
+    // Inserting elements into the empty list
+    cout << "Inserting 10 in empty list:" << endl;
+    insertNodeCDLL1(tail, -1, 10); // Insert 10 in an empty list (no element)
+    printListCDLL1(tail);
 
-    deleteNode(tail, 3);
-    cout << "Linked List after deleting node with value 3: ";
-    printNode(tail);
+    // Insert 20 after 10
+    cout << "\nInserting 20 after 10:" << endl;
+    insertNodeCDLL1(tail, 10, 20);
+    printListCDLL1(tail);
+
+    // Insert 30 after 20
+    cout << "\nInserting 30 after 20:" << endl;
+    insertNodeCDLL1(tail, 20, 30);
+    printListCDLL1(tail);
+
+    // Insert 15 after 10
+    cout << "\nInserting 15 after 10:" << endl;
+    insertNodeCDLL1(tail, 10, 15);
+    printListCDLL1(tail);
+
+    // Insert 25 after 20
+    cout << "\nInserting 25 after 20:" << endl;
+    insertNodeCDLL1(tail, 20, 25);
+    printListCDLL1(tail);
+
+    // Trying to insert after a non-existing element (50)
+    cout << "\nInserting 50 after non-existing element 50:" << endl;
+    insertNodeCDLL1(tail, 50, 50); // Should print "Element 50 not found in the list!"
+    printListCDLL1(tail);
+
+    // Deleting node with value 10 (it is the first node now)
+    cout << "\nDeleting node with value 10:" << endl;
+    deleteNodeCDLL1(tail, 10);
+    printListCDLL1(tail);
+
+    // Deleting node with value 30 (it is the last node now)
+    cout << "\nDeleting node with value 30:" << endl;
+    deleteNodeCDLL1(tail, 30);
+    printListCDLL1(tail);
+
+    // Deleting node with value 20
+    cout << "\nDeleting node with value 20:" << endl;
+    deleteNodeCDLL1(tail, 20);
+    printListCDLL1(tail);
+
+    // Deleting the node with value 25 (tail node)
+    cout << "\nDeleting node with value 25 (tail):" << endl;
+    deleteNodeCDLL1(tail, 25);
+    printListCDLL1(tail);
+
+    // Deleting the only remaining node (tail == NULL)
+    cout << "\nDeleting the last remaining node:" << endl;
+    deleteNodeCDLL1(tail, 15);
+    printListCDLL1(tail);
+
+    // Trying to delete from an empty list
+    cout << "\nDeleting from an empty list:" << endl;
+    deleteNodeCDLL1(tail, 15); // Should print "Empty List! Cannot delete node."
+    printListCDLL1(tail);
 
     return 0;
 }
-// Rest, you can practice and implement more of Singly Double LL and Circular Singly Doubly LL! for more understanding! process you know, just now keep implementing and practicing!
+// Rest you can learn and understand more by implementing them again and again in different ways! and solving variety of questions!
 
 // ---------------------------------------------------------- LECTURE 45 - Linked Lists Questions --------------------------------------------------------------------------------------------------------->
 // Question : Reverse a Linkedlist
