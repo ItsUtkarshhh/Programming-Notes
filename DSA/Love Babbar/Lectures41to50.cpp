@@ -4127,211 +4127,131 @@ int main() {
 // Rest you can learn and understand more by implementing them again and again in different ways! and solving variety of questions!
 
 // ---------------------------------------------------------- LECTURE 45 - Linked Lists Questions --------------------------------------------------------------------------------------------------------->
-// Question : Reverse a Linkedlist
-// Approach 1 (An iterative approach): We can do this like, suppose you have linkedlist like [3,address of next node] -> [4,address of next node] -> [5,address of next node] -> [6,address of next node] -> [7,address of next node] -> NULL... ab iss linkedlist me jo pehla node hai vo head hai and last vaala tail, toh arrays me kya krte the ki hum poore elements ko yahaa se vahaa utha kr rakhte the, but here we just reverse the links, that ki jo node abhi right vaale node ko point kr rha tha vo ab bss pichle vaale node ko point kr rha tha
-// Now lets see how we will achieve this...
-// So first we will make a pointer name as "prev" jo kisi NULL ko point kr rha hoga, then we will create a "curr" jo abhi ke liye current head node ko point kr rha hoga, then ab hume reverse krna hai toh hume saare links ulte krne honge, toh hum agar starting me hi head ke next ko next node se hataa ke prev jo ki humne NULL banaya hua hai uss pr point kraa denge toh head ka link baaki linkedlist ke elements se toot jayega! and our linkedlist will be lost! so for that we will also create a forward pointer jo curr->next ko point kr rha hoga!
-// Now, hum jaise jaise curr vaale nodes ke pointers ko "unke" prev pr point krte jayenge, vaise vaise hum forward ko bhi aage shift krte jaana hai! for this we will use the while loop! and jab curr == NULL hojayega tab hum loop se exit hojayenge! as kyunki iss time pr prev new head ko point kr rha hoga (jo head reverse krne se pehle tail tha)! and then lastly we will return prev, becoz that is the new head, and hum head se hi reversed linkedlist print krenge!
-// Lets code this approach...
+// Question 1 : Reverse a Linkedlist!
+// Iterative Approach : To reverse a linked list, we do not move the nodes themselves, but rather reverse the links between them. Suppose we have a linked list : [3 → address of next node] → [4 → address of next node] → [5 → address of next node] → [6 → address of next node] → [7 → NULL]
+//                    : Here, the first node (3) is the head, and the last node (7) is the tail. Instead of shifting elements as we do in arrays, we will reverse the direction of the links so that each node points to its previous node instead of the next one.
+//                    : Initialize Three Pointers : prev → Initially set to NULL, as the new last node will point to NULL.
+//                                                : curr → Points to the current node, starting at head.
+//                                                : forward → Stores curr->next to avoid losing track of the remaining list.
+//                    : Reverse the Links Iteratively : Set curr->next = prev to reverse the link.
+//                                                    : Move prev one step forward (prev = curr).
+//                                                    : Move curr one step forward (curr = forward).
+//                    : Continue Until curr Becomes NULL : At this point, prev will be pointing to the new head (which was previously the tail).
+//                                                       : Return prev as the new head of the reversed linked list.
+// Implementation!
 #include<iostream>
 using namespace std;
 
-class Node13 {
-    public :
+class NodeSLL6 {
+    public:
     int data;
-    Node13* next;
+    NodeSLL6* next;
 
-    Node13(int data) {
+    NodeSLL6(int data) {
         this->data = data;
         this->next = NULL;
     }
-
-    ~Node13() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
 };
 
-void insertatHead(Node13* &head, int data) {
-    Node13* temp = new Node13(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node13* &tail, int data) {
-    Node13* temp = new Node13(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node13* &head, Node13* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void insertAtHeadSLL6(NodeSLL6* &head, int data) {
+    NodeSLL6* newNode = new NodeSLL6(data);
+    if(head == NULL) {
+        head = newNode;
         return;
     }
+    newNode->next = head;
+    head = newNode;
+    return;
+}
 
-    Node13* temp = head;
-    int cnt = 1;
+void insertAtTailSLL6(NodeSLL6* &head, NodeSLL6* &tail, int data) {
+    NodeSLL6* newNode = new NodeSLL6(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
 
-    while(cnt < position-1) {
+int getLenSLL6(NodeSLL6* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return -1;
+    }
+    int len = 0;
+    NodeSLL6* temp = head;
+    while(temp != NULL) {
+        len++;
         temp = temp->next;
-        cnt++;
     }
+    return len;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+void insertAnywhereSLL6(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
+    NodeSLL6* newNode = new NodeSLL6(data);
+    if(head == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
 
-    Node13* NodetoInsert = new Node13(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    int len = getLenSLL6(head);
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid position!";
+        delete newNode;
+        return;
+    }
+
+    if(pos == 1) {
+        insertAtHeadSLL6(head, data);
+        delete newNode;
+        return;
+    }
+
+    NodeSLL6* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    if(pos == len + 1) {
+        insertAtTailSLL6(head, tail, data);
+        delete newNode;
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node13* ReversedLinkedList(Node13* head) {
-    // In case of empty list or list have only one node...
+NodeSLL6* reverseSLL6(NodeSLL6* &head, NodeSLL6* &tail) {
     if(head == NULL || head->next == NULL) {
         return head;
     }
-    // Now if list is not empty and has more than 1 node...
-    Node13* prev = NULL; // Prev create krke usko initially null pr point kraa diya
-    Node13* curr = head; // current create krke usko initially current head pr point kraa diya
-    Node13* forward = NULL; // forward ko current ke next pr point kraa diya taaki iterate kr sake linkedlist ko bina list ko lost kiye
-
+    NodeSLL6* prev = NULL;
+    NodeSLL6* curr = head;
+    NodeSLL6* forward = NULL;
+    tail = head;
     while(curr != NULL) {
-        // then iterated the list.... by moving the forward further and changing the links using curr and prev pointers!
         forward = curr->next;
         curr->next = prev;
         prev = curr;
         curr = forward;
     }
-    return prev;
-}
-
-void printNode(Node13* &head) {
-    Node13* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-int main() {
-   Node13* node1 = new Node13(10);
-   Node13* head = node1;
-   Node13* tail = node1;
-   printNode(head);
-
-    // Inserting more elements to the linkedlist...
-    insertAtAnyPosition(head, tail, 2, 20);
-    insertAtAnyPosition(head, tail, 3, 30);
-    insertAtAnyPosition(head, tail, 4, 40);
-    insertAtAnyPosition(head, tail, 5, 50);
-    insertAtAnyPosition(head, tail, 6, 60);
-    insertAtAnyPosition(head, tail, 7, 70);
-    insertAtAnyPosition(head, tail, 8, 80);
-    cout<<"Current Linkedlist : ";
-    printNode(head);
-
-    cout<<"Reversed Linkedlist : ";
-    Node13* reversedHead = ReversedLinkedList(head);
-    printNode(reversedHead);
-} // This approach time complexity and space complexity are, T(n) = O(n) & Space Complexity : O(1).
-// This was an iterative approach, lets see another one...
-
-// Approach 2 (A recursive one) : Toh jaisa abhi tak hum krte aaye hai recursive approach me, ki ek case sambhal lo base condition btaa do ki kahaa rukna hai baaki recursion sambhal lega!
-// So what we will do is, hum first node ke next ko prev pr point kraa denge and baaki then recursion sambhal lega! 
-// Base case will be ki hum jab last me pohochenge tab humara curr null hogya hoga and prev last node ko point kr rha hoga (jo reversed list ka head hai), so hum head ko prev me copy krke return krdenge! and then jo conditions upar lagai thi forwards curr and prev ki, vhi same operations yahaa pr bhi perform honge! and then baaki me recursive call krdenge!
-// Lets code this....
-#include<iostream>
-using namespace std;
-
-class Node14 {
-    public :
-    int data;
-    Node14* next;
-
-    Node14(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~Node14() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
-};
-
-void insertatHead(Node14* &head, int data) {
-    Node14* temp = new Node14(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node14* &tail, int data) {
-    Node14* temp = new Node14(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node14* &head, Node14* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node14* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node14* NodetoInsert = new Node14(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-void reverse(Node14* &head, Node14* curr, Node14* prev) {
-    // Base case
-    if(curr == NULL) {
-        head = prev;
-        return;
-    }
-    Node14* forward = curr->next;
-    reverse(head,forward,curr);
-    curr->next = prev;
-}
-
-Node14* ReversedLinkedList(Node14* head) {
-    // In case of empty list or list have only one node...
-    if(head == NULL || head->next == NULL) {
-        return head;
-    }
-    // Now if list is not empty and has more than 1 node...
-    Node14* curr = head;
-    Node14* prev = NULL;
-    reverse(head, curr, prev);
+    head = prev;
     return head;
 }
 
-void printNode(Node14* &head) {
-    Node14* temp = head;
+void printListSLL6(NodeSLL6* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return;
+    }
+    NodeSLL6* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -4340,145 +4260,340 @@ void printNode(Node14* &head) {
 }
 
 int main() {
-   Node14* node1 = new Node14(10);
-   Node14* head = node1;
-   Node14* tail = node1;
-   printNode(head);
+    NodeSLL6* n1 = new NodeSLL6(10);
+    NodeSLL6* head = n1;
+    NodeSLL6* tail = n1;
 
-    // Inserting more elements to the linkedlist...
-    insertAtAnyPosition(head, tail, 2, 20);
-    insertAtAnyPosition(head, tail, 3, 30);
-    insertAtAnyPosition(head, tail, 4, 40);
-    insertAtAnyPosition(head, tail, 5, 50);
-    insertAtAnyPosition(head, tail, 6, 60);
-    insertAtAnyPosition(head, tail, 7, 70);
-    insertAtAnyPosition(head, tail, 8, 80);
-    cout<<"Current Linkedlist : ";
-    printNode(head);
+    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 20);
+    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 30);
+    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 40);
+    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 50);
+    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 60);
+    cout<<"Current Linked List : ";
+    printListSLL6(head);
 
-    cout<<"Reversed Linkedlist : ";
-    Node14* reversedHead = ReversedLinkedList(head);
-    printNode(reversedHead);
-} // So here the time complexity is again the same O(n) and space complexity is O(n)!
+    reverseSLL6(head, tail);
 
-// Question 2 : Find middle of the linkedlist!
-// Approach 1 : So what we will do is we will find the length of the list! and then we will calculate the middle node! in case of odd length, the middle node vo hoga jo ekdum beech me hai! and in case of even length, middle node 2 honge toh unme se hum iss question ke liye right vaala consider krenge! now lets understand the rest of it through code...
+    cout<<"Reversed Linked List : ";
+    printListSLL6(head);
+} // This approach time complexity and space complexity are, T(n) = O(n) & Space Complexity : O(1).
+
+// In the recursive approach, we handle one case at a time, set a base condition to stop recursion, and let recursion do the rest.
+// Steps : Point the next of the current node to the previous node.
+//       : Move prev and curr forward.
+//       : Recursively call the function for the remaining list.
+//       : The base case occurs when curr becomes NULL, meaning we’ve reached the end. At this point, prev holds the last node, which becomes the new head.
+// Implementation!
 #include<iostream>
 using namespace std;
 
-class Node15 {
-    public :
+class NodeSLL7 {
+    public:
     int data;
-    Node15* next;
+    NodeSLL7* next;
 
-    Node15(int data) {
+    NodeSLL7(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node15() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL7() {
+        cout<<"Value of deleted element: "<<data<<endl;
     }
 };
 
-void insertatHead(Node15* &head, int data) {
-    Node15* temp = new Node15(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node15* &tail, int data) {
-    Node15* temp = new Node15(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node15* &head, Node15* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void insertAtHeadSLL7(NodeSLL7* &head, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
+    if(head == NULL) {
+        head = newNode;
         return;
     }
+    newNode->next = head;
+    head = newNode;
+    return;
+}
 
-    Node15* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+void insertAtTailSLL7(NodeSLL7* &head, NodeSLL7* &tail, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node15* NodetoInsert = new Node15(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
+    return;
 }
 
-void printNode(Node15* &head) {
-    Node15* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
+int getLenSLL7(NodeSLL7* head) {
+    if(head == NULL) {
+        cout << "Empty List!";
+        return -1;
     }
-    cout<<endl;
-}
-
-// Function to find the length of the list...
-int getlength(Node15* head) {
     int len = 0;
-    while(head != NULL) {
+    NodeSLL7* temp = head;
+    while(temp != NULL) {
         len++;
-        head = head->next;
+        temp = temp->next;
     }
     return len;
 }
 
-// Function to find the middle node...
-Node15* findMiddleNode(Node15* head) {
-    int len = getlength(head);
-    int ans = (len/2);
-    Node15* temp = head;
+void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
+    if(head == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+
+    int len = getLenSLL7(head);
+    if(pos < 1 || pos > len + 1) {
+        cout << "Invalid position!";
+        delete newNode;
+        return;
+    }
+
+    if(pos == 1) {
+        insertAtHeadSLL7(head, data);
+        delete newNode;
+        return;
+    }
+
+    NodeSLL7* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    if(pos == len + 1) {
+        insertAtTailSLL7(head, tail, data);
+        delete newNode;
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void reverseSLL7(NodeSLL7* &head, NodeSLL7* &tail, NodeSLL7* curr, NodeSLL7* prev) {
+    // Base case
+    if(curr == NULL) {
+        tail = head;
+        head = prev;
+        return;
+    }
+    NodeSLL7* forward = curr->next;
+    reverseSLL7(head, tail, forward, curr);
+    curr->next = prev;
+}
+
+NodeSLL7* ReversedLinkedListSLL7(NodeSLL7* &head, NodeSLL7* &tail) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    NodeSLL7* curr = head;
+    NodeSLL7* prev = NULL;
+    reverseSLL7(head, tail, curr, prev); 
+    return head;
+}
+
+void printListSLL7(NodeSLL7* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
+        return;
+    }
+    NodeSLL7* temp = head;
+    while(temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    NodeSLL7* n1 = new NodeSLL7(10);
+    NodeSLL7* head = n1;
+    NodeSLL7* tail = n1;
+
+    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 20);
+    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 30);
+    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 40);
+    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 50);
+    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 60);
+    
+    cout << "Current Linked List : ";
+    printListSLL7(head);
+
+    ReversedLinkedListSLL7(head, tail);
+
+    cout << "Reversed Linked List : ";
+    printListSLL7(head);
+} // So here the time complexity is again the same O(n) and space complexity is O(n)!
+
+// Question 2 : Find middle node of the linkedlist!
+// Approach 1 : So what we will do is we will find the length of the list! and then we will calculate the middle node! in case of odd length, the middle node vo hoga jo ekdum beech me hai! and in case of even length, middle node 2 honge toh unme se hum iss question ke liye right vaala consider krenge! now lets understand the rest of it through code...
+#include<iostream>
+using namespace std;
+
+class NodeSLL8 {
+    public:
+    int data;
+    NodeSLL8* next;
+
+    NodeSLL8(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+
+    ~NodeSLL8() {
+        cout << "Value of deleted element: " << data << endl;
+    }
+};
+
+void insertAtHeadSLL8(NodeSLL8* &head, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(head == NULL) {
+        head = newNode;
+        return;
+    }
+    newNode->next = head;
+    head = newNode;
+    return;
+}
+
+void insertAtTailSLL8(NodeSLL8* &head, NodeSLL8* &tail, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
+
+int getLenSLL8(NodeSLL8* head) {
+    if(head == NULL) {
+        cout << "Empty List!";
+        return -1;
+    }
+    int len = 0;
+    NodeSLL8* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    return len;
+}
+
+void insertAnywhereSLL8(NodeSLL8* &head, NodeSLL8* &tail, int pos, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(head == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+
+    int len = getLenSLL8(head);
+    if(pos < 1 || pos > len + 1) {
+        cout << "Invalid position!";
+        delete newNode;
+        return;
+    }
+
+    if(pos == 1) {
+        insertAtHeadSLL8(head, data);
+        delete newNode;
+        return;
+    }
+
+    NodeSLL8* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    if(pos == len + 1) {
+        insertAtTailSLL8(head, tail, data);
+        delete newNode;
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+NodeSLL8* findMiddleNodeSLL8(NodeSLL8* head) {
+    int len = getLenSLL8(head);
+    int mid = len / 2;
+    NodeSLL8* temp = head;
     int cnt = 0;
-    while(cnt < ans) {
+    while(cnt < mid) {
         temp = temp->next;
         cnt++;
     }
     return temp;
-} // So here what we did is, pehle getlength se length nikala! and then ans me len/2 store kiya, then list ke head ko temp me store kiya! and jo ans me jo len/2 store hai vahaa tak loop ko iterate kraa ke jab loop exit hua toh temp me vo node tha jo middle node hai! toh in the last humne temp return krdiya!
-// in case of even number of elements, let say 6, then ans = 3 (mtlb humara loop 3 baar chalega), and humara jo middle node hoga vo 4th position pr hoga! so loop start hua, cnt = 0 se, and now the thing is, starting me temp jo hai vo head pr tha, toh cnt = 0 me vo node2 pr aaya, then cnt = 1 pr vo node3 pr aaya, then cnt = 2 hua toh vo node4 pr aagya! and then jab cnt = 3 hua toh loop exit hogya and jo temp me node4 store hua vo return krdiya humne!
-// Toh yahaa thora dekhna padega ki kya ans chahiye uske according hum apna loop utni baar chalaa sakte hai, also ans me (len/2) store krna hai ya (len/2) + 1, ye sab pehle hi dekhna hoga! love babbar ka answer yhi galat aa rha tha!
+}
+
+void printListSLL8(NodeSLL8* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
+        return;
+    }
+    NodeSLL8* temp = head;
+    while(temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
 int main() {
-    Node15* node1 = new Node15(10);
-    Node15* head = node1;
-    Node15* tail = node1;
-    printNode(head);
+    NodeSLL8* n1 = new NodeSLL8(10);
+    NodeSLL8* head = n1;
+    NodeSLL8* tail = n1;
 
-    // Inserting odd number of element...
-    insertAtAnyPosition(head,tail,2,20);
-    insertAtAnyPosition(head,tail,3,30);
-    insertAtAnyPosition(head,tail,4,40);
-    insertAtAnyPosition(head,tail,5,50);
-    // Inserting another element to make it an list weith even number of elements...
-    insertAtAnyPosition(head,tail,6,60); // in this case 30 and 40 both will be middle element but for this question we are considering the right one is the middle element, so 40 will be the ans!
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 20);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 30);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 40);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 50);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 60);
     
-    cout<<"Current Linked List : ";
-    printNode(head);
+    cout << "Current Linked List : ";
+    printListSLL8(head);
+    
+    NodeSLL8* middleNode = findMiddleNodeSLL8(head);
+    cout << "Middle Node: " << middleNode->data << endl;
 
-    Node15* middleNode = findMiddleNode(head);
-    cout<<"Middle element of the Linked List is : "<<middleNode->data<<endl;
+    cout<<endl;
+
+    NodeSLL8* n2 = new NodeSLL8(10);
+    NodeSLL8* head2 = n2;
+    NodeSLL8* tail2 = n2;
+
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 20);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 30);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 40);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 50);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 60);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 70);
+    
+    cout << "Current Linked List : ";
+    printListSLL8(head2);
+    
+    NodeSLL8* middleNode2 = findMiddleNodeSLL8(head2);
+    cout << "Middle Node: " << middleNode2->data << endl;
+    
+    return 0;
 }
-// Time Complexity : T(n) + T(n/2); -> T(n) for getlength function ke liye and T(n/2) findmiddlenode vaale function me loop ke liye!
-// So overall humari TC : O(n)...
-// But here we can see that ek baar hum full traversal kr rhe hai and ek baar hum sirf half hi kr rhe hai! so lets see the optimized solution based on this approach...
+// Time Complexity: T(n) + T(n/2); Here T(n) for the getlength function and T(n/2) for the loop in findMiddleNode.
+// So, the overall time complexity is O(n).
+// However, we observe that we traverse the list once completely and then only halfway. Let's explore an optimized solution based on this observation...
 
 // Optimized Approach : Now suppose you have two person one is fast and another is slow, fast one runs 2 metre in 1 sec and slow one runs 1 metre in 1 sec! Now, jitni agar 5 sec ki race hai usme fast person will cover 10 metres and slow one will cover 5 metres! so we can see ki slow half distance cover krega, toh yahaa hum iss logic ka use krke slow ki help se middle node nikal sakte hai!
 // Now lets see the coding logic...

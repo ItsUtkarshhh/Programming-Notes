@@ -1,171 +1,156 @@
-// Implementing!
-#include <iostream>
+#include<iostream>
 using namespace std;
 
-class NodeCSLL3 {
-public:
+class NodeSLL8 {
+    public:
     int data;
-    NodeCSLL3* next;
+    NodeSLL8* next;
 
-    NodeCSLL3(int data) {
+    NodeSLL8(int data) {
         this->data = data;
-        this->next = nullptr;
+        this->next = NULL;
     }
 
-    ~NodeCSLL3() {
+    ~NodeSLL8() {
         cout << "Value of deleted element: " << data << endl;
     }
 };
 
-void insertNodeCSLL3(NodeCSLL3*& tail, int element, int data) {
-    NodeCSLL3* newNode = new NodeCSLL3(data);
+void insertAtHeadSLL8(NodeSLL8* &head, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(head == NULL) {
+        head = newNode;
+        return;
+    }
+    newNode->next = head;
+    head = newNode;
+    return;
+}
 
-    // Case 1: Empty List (tail == NULL)
-    if (tail == nullptr) {
+void insertAtTailSLL8(NodeSLL8* &head, NodeSLL8* &tail, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(tail == NULL) {
+        head = newNode;
         tail = newNode;
-        newNode->next = newNode; // Points to itself (circular)
         return;
     }
-
-    NodeCSLL3* current = tail->next; // Start from the head (tail's next)
-    do {
-        if (current->data == element) {
-            newNode->next = current->next;
-            current->next = newNode;
-            
-            // If inserted after tail, update the tail pointer
-            if (current == tail) {
-                tail = newNode;
-            }
-            return;
-        }
-        current = current->next;
-    } while (current != tail->next); // Loop until you complete the circle
-
-    cout << "Element " << element << " not found in the list!" << endl;
-    delete newNode; // Prevent memory leak
+    tail->next = newNode;
+    tail = newNode;
+    return;
 }
 
-// Delete a node with a given element
-void deleteNodeCSLL3(NodeCSLL3*& tail, int element) {
-    if (tail == nullptr) {
-        cout << "List is empty!" << endl;
-        return;
+int getLenSLL8(NodeSLL8* head) {
+    if(head == NULL) {
+        cout << "Empty List!";
+        return -1;
     }
-
-    NodeCSLL3* prev = tail;
-    NodeCSLL3* curr = tail->next;
-
-    // Case 1: Single node in the list
-    if (curr == tail && curr->data == element) {
-        delete tail;
-        tail = nullptr;
-        return;
+    int len = 0;
+    NodeSLL8* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
     }
-
-    // Case 2: Multiple nodes
-    do {
-        if (curr->data == element) {
-            prev->next = curr->next;
-            if (curr == tail) {
-                tail = prev; // Update tail if the last node is deleted
-            }
-            delete curr;
-            return;
-        }
-        prev = curr;
-        curr = curr->next;
-    } while (curr != tail->next);
-    cout << "Element " << element << " not found in the list!" << endl;
+    return len;
 }
 
-// Print the list
-void printListCSLL3(NodeCSLL3* tail) {
-    if (tail == nullptr) {
-        cout << "List is empty!" << endl;
+void insertAnywhereSLL8(NodeSLL8* &head, NodeSLL8* &tail, int pos, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+    if(head == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
 
-    NodeCSLL3* current = tail->next;
-    do {
-        cout << current->data << " ";
-        current = current->next;
-    } while (current != tail->next);
+    int len = getLenSLL8(head);
+    if(pos < 1 || pos > len + 1) {
+        cout << "Invalid position!";
+        delete newNode;
+        return;
+    }
+
+    if(pos == 1) {
+        insertAtHeadSLL8(head, data);
+        delete newNode;
+        return;
+    }
+
+    NodeSLL8* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    if(pos == len + 1) {
+        insertAtTailSLL8(head, tail, data);
+        delete newNode;
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+NodeSLL8* findMiddleNodeSLL8(NodeSLL8* head) {
+    int len = getLenSLL8(head);
+    int mid = len / 2;
+    NodeSLL8* temp = head;
+    int cnt = 0;
+    while(cnt < mid) {
+        temp = temp->next;
+        cnt++;
+    }
+    return temp;
+}
+
+void printListSLL8(NodeSLL8* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
+        return;
+    }
+    NodeSLL8* temp = head;
+    while(temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
     cout << endl;
 }
 
 int main() {
-    NodeCSLL3* tail = nullptr;
+    NodeSLL8* n1 = new NodeSLL8(10);
+    NodeSLL8* head = n1;
+    NodeSLL8* tail = n1;
 
-    // Test case: Insert into empty list
-    insertNodeCSLL3(tail, -1, 3);  // Insert after -1, which is not in the list
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << tail->data << endl;
-    cout << endl;
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 20);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 30);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 40);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 50);
+    insertAnywhereSLL8(head, tail, getLenSLL8(head) + 1, 60);
+    
+    cout << "Current Linked List : ";
+    printListSLL8(head);
+    
+    NodeSLL8* middleNode = findMiddleNodeSLL8(head);
+    cout << "Middle Node: " << middleNode->data << endl;
 
-    // Test case: Delete the only node
-    deleteNodeCSLL3(tail, 3);
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl; // Just to print NULL, if the list is empty!
-    cout << endl;
-
-    // Test case: Insert multiple nodes
-    insertNodeCSLL3(tail, -1, 5);  // Insert into empty list (tail is null)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " <<(tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 5, 7);  // Insert after 5
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 7, 9);  // Insert after 7
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 9, 3);  // Insert after 9 (tail)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    // Test case: Delete from the list
-    deleteNodeCSLL3(tail, 7);  // Delete node with data 7
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 9);  // Delete node with data 9 (tail)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 3);  // Delete node with data 3 (only element)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 5);
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
     cout<<endl;
 
-    // Edge case: Try to delete from an empty list
-    deleteNodeCSLL3(tail, 5);  // List is empty
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    NodeSLL8* n2 = new NodeSLL8(10);
+    NodeSLL8* head2 = n2;
+    NodeSLL8* tail2 = n2;
 
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 20);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 30);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 40);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 50);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 60);
+    insertAnywhereSLL8(head2, tail2, getLenSLL8(head2) + 1, 70);
+    
+    cout << "Current Linked List : ";
+    printListSLL8(head2);
+    
+    NodeSLL8* middleNode2 = findMiddleNodeSLL8(head2);
+    cout << "Middle Node: " << middleNode2->data << endl;
+    
     return 0;
 }
