@@ -4595,88 +4595,61 @@ int main() {
 // So, the overall time complexity is O(n).
 // However, we observe that we traverse the list once completely and then only halfway. Let's explore an optimized solution based on this observation...
 
-// Optimized Approach : Now suppose you have two person one is fast and another is slow, fast one runs 2 metre in 1 sec and slow one runs 1 metre in 1 sec! Now, jitni agar 5 sec ki race hai usme fast person will cover 10 metres and slow one will cover 5 metres! so we can see ki slow half distance cover krega, toh yahaa hum iss logic ka use krke slow ki help se middle node nikal sakte hai!
-// Now lets see the coding logic...
-// in case of empty list : NULL (no middle node)
-// in case of one node : Head
-// in case of 2 nodes : Head->next
-// In all other cases, we will keep fast at head->next and slow at head, now in case of suppose odd 5 nodes, and starting with slow at head and fast at head->next means node2, so first iteration me slow node2 pr pohchega and uss hi iteration me fast node4 pr pohchega, now dusri iteration me slow ek aage badh ke node3 pr pohochega and fast node4 se do aage NULL pr pohoch jayega and yahaa hum loop se exit hojayenge! and we will return slow, kyunki vo apni sahi jagah pohoch gya!
-// In case of even number of nodes, slow will ba again at head and fast will be at head->next which is node2, now in the first iteration slow will be at node2 and fast will be at node4 and then in the next iteration slow will be at node3 and fast will be at node6 and then in the next iteration, slow will be at node4 and fast can't move 2 nodes further becoz there is only one left and that is NULL, so fast will move only one step ahead and here fast is now pointing at NULL, and here we will exit the loop and we will see that slow again covered our half distance, as we have finalised the middle node in case of even is the right one... hence we got it! and now we will return the slow...
-// Lets code this logic...
+// Optimized Approach : Concept : Imagine two people : Fast person runs 2 meters/sec, Slow person runs 1 meter/sec
+//                              : In 5 seconds, the fast person covers 10 meters, while the slow one covers 5 meters (half of the total distance).
+//                              : We use this analogy to find the middle node in a linked list using two pointers : Slow pointer moves one step at a time. Fast pointer moves two steps at a time.
+//                    : Algorithm : Edge cases : If the list is empty → return NULL. If the list has one node → return head. If the list has two nodes → return head->next.
+//                                : Initialize : slow = head, fast = head->next.
+//                                             : Traverse the list : Move slow one step forward.
+//                                                                 : Move fast two steps forward.
+//                                                                 : Stop when fast reaches NULL.
+//                                                                 : Return slow (middle node).
+// Implementation!
 #include<iostream>
 using namespace std;
 
-class Node16 {
-    public :
+class NodeSLL9 {
+    public:
     int data;
-    Node16* next;
+    NodeSLL9* next;
 
-    Node16(int data) {
+    NodeSLL9(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node16() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL9() {
+        cout << "Value of deleted element: " << data << endl;
     }
 };
 
-void insertatHead(Node16* &head, int data) {
-    Node16* temp = new Node16(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node16* &tail, int data) {
-    Node16* temp = new Node16(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node16* &head, Node16* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void insertAtTailSLL9(NodeSLL9* &head, NodeSLL9* &tail, int data) {
+    NodeSLL9* newNode = new NodeSLL9(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node16* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node16* NodetoInsert = new Node16(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void printNode(Node16* &head) {
-    Node16* temp = head;
+int getLenSLL9(NodeSLL9* head) {
+    int len = 0;
+    NodeSLL9* temp = head;
     while(temp != NULL) {
-        cout<<temp->data<<" ";
+        len++;
         temp = temp->next;
     }
-    cout<<endl;
+    return len;
 }
 
-Node16* getMiddleNode(Node16* head) {
+NodeSLL9* findMiddleNodeSLL9A(NodeSLL9* head) { // Alternatively : "while(fast != NULL && fast->next != NULL)" for manage even number of nodes differently!
     if(head == NULL || head->next == NULL) {
         return head;
     }
-    Node16* slow = head;
-    Node16* fast = head->next;
+    NodeSLL9* slow = head;
+    NodeSLL9* fast = head->next;
     while(fast != NULL) {
         fast = fast->next;
         if(fast != NULL) {
@@ -4687,228 +4660,244 @@ Node16* getMiddleNode(Node16* head) {
     return slow;
 }
 
-Node16* findMiddleNode(Node16* head) {
-    getMiddleNode(head);
+NodeSLL9* findMiddleNodeSLL9B(NodeSLL9* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+    NodeSLL9* slow = head;
+    NodeSLL9* fast = head;
+    while(fast != NULL && fast->next != NULL) {
+        fast = fast->next;
+        if(fast != NULL) {
+            fast = fast->next;
+        }
+        slow = slow->next;
+    }
+    return slow;
+}
+
+void printListSLL9(NodeSLL9* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
+        return;
+    }
+    NodeSLL9* temp = head;
+    while(temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
 }
 
 int main() {
-    Node16* node1 = new Node16(10);
-    Node16* head = node1;
-    Node16* tail = node1;
-    printNode(head);
+    NodeSLL9* n1 = new NodeSLL9(10);
+    NodeSLL9* head = n1;
+    NodeSLL9* tail = n1;
 
-    // Inserting odd number of element...
-    insertAtAnyPosition(head,tail,2,20);
-    insertAtAnyPosition(head,tail,3,30);
-    insertAtAnyPosition(head,tail,4,40);
-    insertAtAnyPosition(head,tail,5,50);
-    // Inserting another element to make it an list weith even number of elements...
-    insertAtAnyPosition(head,tail,6,60); // in this case 30 and 40 both will be middle element but for this question we are considering the right one is the middle element, so 40 will be the ans!
+    insertAtTailSLL9(head, tail, 20);
+    insertAtTailSLL9(head, tail, 30);
+    insertAtTailSLL9(head, tail, 40);
+    insertAtTailSLL9(head, tail, 50);
+    insertAtTailSLL9(head, tail, 60);
     
-    cout<<"Current Linked List : ";
-    printNode(head);
+    cout << "Current Linked List: ";
+    printListSLL9(head);
+    
+    NodeSLL9* middleNodeA1 = findMiddleNodeSLL9A(head);
+    cout << "Middle Node (Method 1): " << middleNodeA1->data << endl;
 
-    Node16* middleNode = findMiddleNode(head);
-    cout<<"Middle element of the Linked List is : "<<middleNode->data<<endl;
-}
-// So this is the more optimized solution! here the TC : O(n) and SC : O(1)
+    NodeSLL9* middleNodeB1 = findMiddleNodeSLL9B(head);
+    cout << "Middle Node (Method 2): " << middleNodeB1->data << endl;
+
+    cout << endl;
+
+    NodeSLL9* n2 = new NodeSLL9(10);
+    NodeSLL9* head2 = n2;
+    NodeSLL9* tail2 = n2;
+
+    insertAtTailSLL9(head2, tail2, 20);
+    insertAtTailSLL9(head2, tail2, 30);
+    insertAtTailSLL9(head2, tail2, 40);
+    insertAtTailSLL9(head2, tail2, 50);
+    insertAtTailSLL9(head2, tail2, 60);
+    insertAtTailSLL9(head2, tail2, 70);
+
+    cout << "Current Linked List: ";
+    printListSLL9(head2);
+
+    NodeSLL9* middleNodeA2 = findMiddleNodeSLL9A(head2);
+    cout << "Middle Node (Method 1): " << middleNodeA2->data << endl;
+
+    NodeSLL9* middleNodeB2 = findMiddleNodeSLL9B(head2);
+    cout << "Middle Node (Method 2): " << middleNodeB2->data << endl;
+
+    return 0;
+} // Hence, TC : O(n) and SC : O(1)
 
 // ---------------------------------------------------------- LECTURE 46 - Linked Lists Questions --------------------------------------------------------------------------------------------------------->
 // Question 1 : Reverse the Linkedlist in the groups of K
-// Like suppose you have a linkedlist, node1 -> node2 -> node3 -> node4 -> node5 -> node6 -> NULL.
-// Now, if we are asked to reverse the linkedlist in the group of K, then if K = 2, then it means to reverse the linkedlist in the group of 2, means the final output will be, node2 -> node1 -> node4 -> node3 -> node6 -> node5 -> NULL here the head will be node2, and then similarly for K equal to any other value...
-// lets see the approach : Now if you get the input 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> NULL here the head is 2, and now in this case, the reverse with the K group will be like, 3 -> 2 -> 5 -> 4 -> 7 -> 6 -> NULL.
-// To do this pehle hum iteratively pehle do nodes ko reverse krenge and then baaki ke jo elements hai unko recursively solve krke iske aage lgaa denge!
-// Pehle lets code then you we will do a dry run! to understand it clearly!
+// Example : Input : 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> NULL, with K = 2
+//         : Output : 3 -> 2 -> 5 -> 4 -> 7 -> 6 -> NULL
+// Approach : Reverse the first K nodes iteratively : Swap links between K nodes.
+//          : Recursively process the remaining list : The head of the next reversed group is obtained using recursion. and Link the reversed K-group to the next recursively solved group.
+// Implementation!
 #include<iostream>
 using namespace std;
 
-class Node17 {
-    public :
+class NodeSLL10 {
+    public:
     int data;
-    Node17* next;
+    NodeSLL10* next;
 
-    Node17(int data) {
+    NodeSLL10(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node17() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL10() {
+        cout << "Value of deleted element: " << data << endl;
     }
 };
 
-void insertatHead(Node17* &head, int data) {
-    Node17* temp = new Node17(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node17* &tail, int data) {
-    Node17* temp = new Node17(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node17* &head, Node17* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void insertAtTailSLL10(NodeSLL10* &head, NodeSLL10* &tail, int data) {
+    NodeSLL10* newNode = new NodeSLL10(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node17* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node17* NodetoInsert = new Node17(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
+    return;
 }
 
-void printNode(Node17* &head) {
-    Node17* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-Node17* ReverseK(Node17* head, int K) {
-    // Base case...
+NodeSLL10* ReverseK(NodeSLL10* head, int K) {
     if(head == NULL) {
         return NULL;
     }
-    // In other cases...
-    // Step 1 : Reverse first K Nodes...
-    Node17* next = NULL;
-    Node17* curr = head;
-    Node17* prev = NULL;
+    NodeSLL10* prev = NULL;
+    NodeSLL10* curr = head;
+    NodeSLL10* next = NULL;
     int count = 0;
-    while( curr != NULL && count < K) {
+    while(curr != NULL && count < K) {
         next = curr->next;
         curr->next = prev;
         prev = curr;
         curr = next;
         count++;
     }
-    // Step 2 : Recursion will handle rest of it...
     if(next != NULL) {
-        head->next = ReverseK(next,K);
+        head->next = ReverseK(next, K);
     }
-    // Step 3 : Return the head of the reversed list...
     return prev;
 }
-// So what we did here is, Now suppose jo LL input me aaya hai that is 1 -> 2 -> 3 -> 4 -> NULL. now, hume isko reverse krna hai in K groups! and here for demo we let K = 2, now first we will take first 2 node, 1 -> 2 -> remaining LL, and here head is at 1, Now as hum log LL ko reverse krne ke time sirf links ko reverse krdete hai toh kaam ban jaata hai! toh bss yahaa bhi jo 1 -> 2 -> remainging list, isme se humne 2 vaali link ko hataa ke 1 pr point kraa diya and 1 jo pehle 2 ko point kr rha tha ab vo peeche ki taraf kisi NULL ko point kra denge! so what we got is, NULL <- 1 <- 2
-// Now, ye sab cheeze hui kaise toh ye sab hua humare inn operations se, humne pehle Node17* next and prev ko null pr point karaya and curr ko head pr, mtlb ki at this moment head is at 1, mtlb in 1 -> 2 -> NULL, isme head is at 1, and prev and next are at NULL now we iterated a loop, where we put the condition ki jab tak current null na hojaye and jo count hai vo K se kam na hojaye, ye tab hoga jab humaare LL me jo k value hai usse kam nodes bache hai in that case hum exit hojayenge loop se, and now iss loop ke andar we did operations! lets understand how these operations are helping in reversing the first 2 nodes (as K = 2)
-// So first we wrote, next = curr->next; means next ko NULL se hataa ke curr ke next node pr point karaa do means now the next is at 2 node, and then humne curr->next = prev; krdiya, isse kya hua ki prev me toh NULL tha and isse humne current ke next me NULL daal diya! means now at this moment curr uss par abhi head toh hai pr vo abhi NULL ko point kr rha hai! as in our approach humne discuss kiya tha ki hume links reverse krni hai toh bss hum vhi kr rhe hai current (which is currently head) usko NULL point kraa ke (mtlb ek tarah se kehdo ki peeche point kraa ke) now, we did prev = curr; it means, ab iss moment me curr and prev dono hi 1 ko point kr rhe hai! and next 2 ko point kr rha hai! now we did is curr = next; mtlb ab jahaa next point kr rha hai vaaha current point kr rha hai! and then humne count aage badhaa diya!
-// Now lets summarize what we did, pehle jahaa head point kr rha tha vahaa current point kr rha tha! and prev and next NULL ko point kr rhe the! then in the first line of while loop, humne next ko NULL se shift krke vahaa point kraa diya jahaa curr ka next point kr rha tha, then humne next line me curr (head) ke next ko vahaa point kraa diya jahaa prev point kr rha tha mtlb ki NULL, then in next line prev ko humne vahaa point kraa diya jahaa curr (head) abhi point kr rha hai! and then in next line humne current ko vahaa point kraa diya jahaa next point kr rha hai! mtlb ki at this moment, jab loop end hone vaala hai tab humara jo pehla K group tha vo aisa hogya hai! NULL <- 1 <- 2, and isme prev pehle NULL pe tha inn sab operations se humne usko 2 pr point kra diya and curr and next ko 2 pr point kra diya and then count++ krdiya to tell ki ek iteration khatam hogyi! and then firse humne ye same opeartions kiye jab next ko humne first curr->next pr point kraya! and all vo sab steps repeat kiye jo just abhi kiye the!
-// And jab ye loop se exit hoke aaye toh pehla K group reverse hogya tha! and then baaki ke liye we used recursion! and the rest of the LL is handled by recursion!
+
+void printListSLL10(NodeSLL10* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
+        return;
+    }
+    NodeSLL10* temp = head;
+    while(temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
 int main() {
-    int K;
-    cout<<"Enter the value of K : ";
-    cin>>K;
-    Node17* node1 = new Node17(10);
-    Node17* head = node1;
-    Node17* tail = node1;
-    printNode(head);
+    NodeSLL10* n1 = new NodeSLL10(10);
+    NodeSLL10* head = n1;
+    NodeSLL10* tail = n1;
 
-    // Inserting odd number of element...
-    insertAtAnyPosition(head,tail,2,20);
-    insertAtAnyPosition(head,tail,3,30);
-    insertAtAnyPosition(head,tail,4,40);
-    insertAtAnyPosition(head,tail,5,50);
-    insertAtAnyPosition(head,tail,6,60);
-    cout<<"Current LL : ";
-    printNode(head);
+    insertAtTailSLL10(head, tail, 20);
+    insertAtTailSLL10(head, tail, 30);
+    insertAtTailSLL10(head, tail, 40);
+    insertAtTailSLL10(head, tail, 50);
+    insertAtTailSLL10(head, tail, 60);
+    
+    cout << "Current Linked List: ";
+    printListSLL10(head);
 
-    cout<<"Reversed LL in groups of K : ";
-    Node17* reversedK = ReverseK(head, K);
-    printNode(reversedK);
-} // TC : Hum harr node ko sirf ek baar visit kr rhe hai and total numbers of node agar n hai toh TC = O(n)!
-// SC : Humari harr recursive calls pr K nodes ko reverse kr rhe hai and usme hum constant space le rhe hai! and aise hum n/k times space lenge baaki recursive calls me toh humari Sc = n/k * k = n, so SC = O(n)!
+    cout<<"Enter you value of K : ";
+    int k;
+    cin>>k;
+    NodeSLL10* reversedK = ReverseK(head, k);
+    cout << "Current Linked List: ";
+    printListSLL10(reversedK);
+
+    return 0;
+} // Time Complexity (TC) : Each node is visited only once, so for n nodes, TC = O(n).
+// Space Complexity (SC) : Recursive calls reverse K nodes at a time, requiring n/K recursive calls. Since each call uses O(K) space, total space used is O(n).
 
 // Question 2 : Check whether a LinkedList is Circular or Not.
-// Approach will be, like suppose if your LL is empty then return true and if your LL has only 1 node then check if the head->next is NULL or is it point towards itself, if NULL then return false and if it is equal to head->next then return true, then another case of nodes > 1... in that case, make a pointer of Node type and point it at head->next! agar head pr point krayenge then vo head ko do baar count krlega so isliye point it at heads next...
-// Then, ek loop chalo iss hi temp ka use krke jo abhi head->next ko point kr rha hai, and tak tak chalao jab tak temp yaa toh head ke equal na hojaye ya toh NULL na hojaye, then agar loop ke end me temp head ko point kr rha ho toh mtlb ki it is a circular LL and if NULL ko point kr rha ho toh mtlb ki it is a non-circular LL kyunki circular me kahin bhi NULL toh hoga nhi!
-// Now lets code...
+// Approach : Base Cases : If the list is empty, return true (considered circular). If there is only one node, check head->next. If it's NULL, return false; if it points to head, return true.
+//          : General Case (More than 1 node) : Use a pointer (temp) starting from head->next (to avoid counting head twice). Traverse the list until temp becomes head or NULL. If temp == head, it's circular; otherwise, it's not.
 #include<iostream>
 using namespace std;
 
-// Creating a Circular LinkedList
-class Node18{
-    public :
+// Node class for both Circular and Singly Linked Lists
+class GeneralNodeLL {
+public:
     int data;
-    Node18* prev;
-    Node18* next;
+    GeneralNodeLL* next;
 
-    Node18 (int data) {
+    GeneralNodeLL(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node18() {
-        int value = this->data;
-        if(next != NULL) {
-            delete next;
-            next = NULL;
-        }
-        cout<<"Memory free for the node with data value : "<<value<<endl;
+    ~GeneralNodeLL() {
+        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
-void insertNodeCircularLL(Node18* &tail, int element, int data) {
-    // Suppose the list is empty...
-    if(tail == NULL) {
-        Node18* newNode = new Node18(data);
+// Insert into Circular Linked List
+void insertCircularLL(GeneralNodeLL*& tail, int element, int data) {
+    GeneralNodeLL* newNode = new GeneralNodeLL(data);
+
+    if (tail == NULL) {
         tail = newNode;
         newNode->next = newNode;
+        return;
     }
-    else {
-        Node18* current = tail;
-        while(current->data != element) {
-            current = current->next;
-        }
-        Node18* temp = new Node18(data);
-        temp->next = current->next;
-        current->next = temp;
-    }
-}
 
-void printNodeCircularLL(Node18* tail) {
-    Node18* temp = tail;
+    GeneralNodeLL* current = tail;
     do {
-        cout<<tail->data<<" ";
-        tail = tail->next;
-    } while(tail != temp);
-    cout<<endl;
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            if (current == tail) {
+                tail = newNode; // Update tail if inserting after the last node
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail);
+
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode; // Prevent memory leak
 }
 
-// Checking for Circular or not!
-bool isCircularList(Node18* head) {
-    // Empty list..
-    if(head == NULL) {
-        return NULL;
+// Insert into Singly Linked List at the Tail
+void insertSinglyLL(GeneralNodeLL*& head, GeneralNodeLL*& tail, int data) {
+    GeneralNodeLL* newNode = new GeneralNodeLL(data);
+    if(tail == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
     }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
 
-    // We can write single node and more than 1 node case under one condition, as they are overlapping...
-    Node18* temp = head->next;
-    while(temp != NULL && temp != head) {
+// Check if Linked List is Circular
+bool checkCircularLL(GeneralNodeLL* head) {
+    if (head == NULL) return false;
+
+    GeneralNodeLL* temp = head->next;
+    while (temp != NULL && temp != head) {
         temp = temp->next;
     }
     if(temp == head) {
@@ -4919,30 +4908,65 @@ bool isCircularList(Node18* head) {
     }
 }
 
+// Print Linked List
+void printLinkedList(GeneralNodeLL* head) {
+    if (head == NULL) {
+        cout << "Empty List!" << endl;
+        return;
+    }
+    GeneralNodeLL* temp = head;
+    do {
+        cout << temp->data << " ";
+        temp = temp->next;
+    } while (temp != NULL && temp != head); // Handles both circular and singly LL
+    cout << endl;
+}
+
 int main() {
-    // Creating Circular LL...
-    Node18* tailC = NULL;
-    insertNodeCircularLL(tailC, -1, 10);
-    insertNodeCircularLL(tailC, 10, 20);
-    insertNodeCircularLL(tailC, 20, 30);
-    insertNodeCircularLL(tailC, 30, 40);
-    insertNodeCircularLL(tailC, 40, 50);
-    insertNodeCircularLL(tailC, 50, 60);
-    cout<<"Circular LL : ";
-    printNodeCircularLL(tailC);
+    // Creating Circular Linked List
+    GeneralNodeLL* tailC = NULL;
+    insertCircularLL(tailC, -1, 10);
+    insertCircularLL(tailC, 10, 20);
+    insertCircularLL(tailC, 20, 30);
+    insertCircularLL(tailC, 30, 40);
+    insertCircularLL(tailC, 40, 50);
+    insertCircularLL(tailC, 50, 60);
+    cout << "Circular Linked List: ";
+    printLinkedList(tailC);
 
-    // Now lets write code for checking that the LL is circular or not...
-    if(isCircularList(tailC)) {
-        cout<<"It is a Circular LL!";
+    // Checking if Circular Linked List is Circular
+    if (checkCircularLL(tailC)) {
+        cout << "It is a Circular Linked List!" << endl;
+    } else {
+        cout << "It is NOT a Circular Linked List!" << endl;
     }
-    else {
-        cout<<"It is not a Circular LL";
-    }
-} // TC : O(n) kyunki hum poori list ko travers kr rhe hai so n is number of nodes! and then SC : O(1) kyunki humne koi space nhi li isme!
 
-// There is another approach also to solve this question... that is useing Maps! as maps me values key value pair ke form me store hoti hai toh,
-// jaise jaise jo node traverse hote jaa rhi hai usko true mark krte jayenge and jab poori linkedlist traverse krne ke baad agar vapis true value pr ajaye iterate krne pr means that is a cicular LL otherwise Not!
-// try this on your own while doing revision!
+    cout << endl;
+
+    // Creating Singly Linked List
+    GeneralNodeLL* headS = NULL;
+    GeneralNodeLL* tailS = NULL;
+    insertSinglyLL(headS, tailS, 5);
+    insertSinglyLL(headS, tailS, 15);
+    insertSinglyLL(headS, tailS, 25);
+    insertSinglyLL(headS, tailS, 35);
+    insertSinglyLL(headS, tailS, 45);
+    insertSinglyLL(headS, tailS, 55);
+    cout << "Singly Linked List: ";
+    printLinkedList(headS);
+
+    // Checking if Singly Linked List is Circular
+    if (checkCircularLL(headS)) {
+        cout << "It is a Circular Linked List!" << endl;
+    } else {
+        cout << "It is NOT a Circular Linked List!" << endl;
+    }
+
+    return 0;
+} // Time Complexity : O(n) – We traverse the entire list (n nodes).
+// Space Complexity : O(1) – No extra space is used.
+// Another Approach : Another approach is using Maps. Since maps store data as key-value pairs, we can mark each visited node as true while traversing. If we encounter a node that is already marked true, the list is circular; otherwise, it is not.
+//                  : Although, its not the best approach, as it will require an extra space to store the boolean values!
 
 // ---------------------------------------------------------- LECTURE 47 - Detect & Remove Loop Question in LL --------------------------------------------------------------------------------------------------------->
 // Question : Detect and Remove loop in the LL! but this question is divided into 3 parts, 1) Detect the loop, 2) Output the starting node of the loop!, 3) Remove loop
