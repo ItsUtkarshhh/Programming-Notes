@@ -4599,7 +4599,7 @@ int main() {
 //                              : In 5 seconds, the fast person covers 10 meters, while the slow one covers 5 meters (half of the total distance).
 //                              : We use this analogy to find the middle node in a linked list using two pointers : Slow pointer moves one step at a time. Fast pointer moves two steps at a time.
 //                    : Algorithm : Edge cases : If the list is empty → return NULL. If the list has one node → return head. If the list has two nodes → return head->next.
-//                                : Initialize : slow = head, fast = head->next.
+//                                : Initialize : slow = head, fast = head->next. (or fast = head, in this case the loop condition will change slightly!)
 //                                             : Traverse the list : Move slow one step forward.
 //                                                                 : Move fast two steps forward.
 //                                                                 : Stop when fast reaches NULL.
@@ -4969,492 +4969,290 @@ int main() {
 //                  : Although, its not the best approach, as it will require an extra space to store the boolean values!
 
 // ---------------------------------------------------------- LECTURE 47 - Detect & Remove Loop Question in LL --------------------------------------------------------------------------------------------------------->
-// Question : Detect and Remove loop in the LL! but this question is divided into 3 parts, 1) Detect the loop, 2) Output the starting node of the loop!, 3) Remove loop
-// 1) Detect the loop/cycle in LL : We just need to check whether the LL has loop or not!
-// Yahaa pr hum kis tarah ke loops ki baat kr rhe hai ye janna zaruri hai! so like maanlo kuch nodes hai node1 -> node2 -> node3 -> node4 and now this node4 is again pointing towards node2 or node3 then iss case me ek loop ban jayega! and due to which jab bhi hum node4 visit krenge then hum node2 pr chalenge jayenge agar node4 lets say node2 pr point kr rha hoga and then hum ek loop me fass jayenge!
-// Abb iska hi ek extreme case hota hai circular linkedlist jisme node4 seedha node1 ko hi point kr rha hoga toh usme bhi ek loop hota hai! toh dono hi cases me humne loop find krna hai ki kya loop exist krta hai ya nhi!
-#include<iostream>
-#include<map>
+// Loop Detection and Removal in Linked List!
+// It is divided into three parts : Detect the Loop : Check whether the linked list contains a cycle.
+//                                : Find the Starting Node of the Loop : Identify the exact node where the loop begins.
+//                                : Remove the Loop : Break the cycle to restore the linked list to a linear structure.
+
+// Understanding Loops in a Linked List!
+// A loop in a linked list occurs when a node points back to a previous node instead of NULL. This causes the list to cycle indefinitely when traversed.
+// There are two main cases of loops : Case 1 : A node somewhere in the middle of the list points back to a previous node, forming a cycle.
+//                                   : Case 2 : A circular linked list, where the last node connects back to the first node, forming a full cycle.
+// Our goal is to detect if a cycle exists, identify where it starts, and then remove it so that the linked list functions normally.
+// Implementation!
+#include <iostream>
+#include <map>
 using namespace std;
 
-// Creating a Circular LinkedList
-class Node19{
-    public :
+// Node class for both Circular and Singly Linked Lists
+class GeneralNodeLL2 {
+public:
     int data;
-    Node19* prev;
-    Node19* next;
+    GeneralNodeLL2* next;
 
-    Node19 (int data) {
+    GeneralNodeLL2(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node19() {
-        int value = this->data;
-        if(next != NULL) {
-            delete next;
-            next = NULL;
-        }
-        cout<<"Memory free for the node with data value : "<<value<<endl;
+    ~GeneralNodeLL2() {
+        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
-void insertNodeCircularLL(Node19* &tail, int element, int data) {
-    // Suppose the list is empty...
-    if(tail == NULL) {
-        Node19* newNode = new Node19(data);
+// Insert into Circular Linked List
+void insertCircularLL2(GeneralNodeLL2*& tail, int element, int data) {
+    GeneralNodeLL2* newNode = new GeneralNodeLL2(data);
+
+    if (tail == NULL) {
         tail = newNode;
         newNode->next = newNode;
-    }
-    else {
-        Node19* current = tail;
-        while(current->data != element) {
-            current = current->next;
-        }
-        Node19* temp = new Node19(data);
-        temp->next = current->next;
-        current->next = temp;
-    }
-}
-
-void printNodeCircularLL(Node19* tail) {
-    Node19* temp = tail;
-    do {
-        cout<<tail->data<<" ";
-        tail = tail->next;
-    } while(tail != temp);
-    cout<<endl;
-}
-
-// Checking for Circular or not!
-bool isCircularList(Node19* head) {
-    // Empty list..
-    if(head == NULL) {
-        return NULL;
-    }
-
-    Node19* temp = head->next;
-    while(temp != NULL && temp != head) {
-        temp = temp->next;
-    }
-    if(temp == head) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-// Function to detect a loop in the list!
-// Approach : So for this question we will create a map and isme content key values ke pair ke form me store rehta hai, so what we will do is we will use this maps! and isme vaise hi data store krenge! jo jo nodes visit hote jayenge unko true mark krte rehna and jab poori list traverse krne ke baad jab bhi agar vapis true vaala node pr pointer aayega tab true return krdenge ki haa iss list me loop hai!
-bool detectLoop(Node19* head) {
-    if(head == NULL) {
-        return false;
-    }
-    map<Node19*, bool> visited;
-    Node19* temp = head;
-
-    while(temp != NULL) {
-        if(visited[temp] == true) {
-            return true;
-        }
-        visited[temp] = true;
-        temp = temp->next;
-    }
-    return false;
-} // jo dono tarah ke loops the vo dono tarah ke loops ye function detect kr sakta hai!
-
-int main() {
-    // Creating Circular LL...
-    Node19* tail = NULL;
-    insertNodeCircularLL(tail, -1, 10);
-    insertNodeCircularLL(tail, 10, 20);
-    insertNodeCircularLL(tail, 20, 30);
-    insertNodeCircularLL(tail, 30, 40);
-    insertNodeCircularLL(tail, 40, 50);
-    insertNodeCircularLL(tail, 50, 60);
-    cout<<"Circular LL : ";
-    printNodeCircularLL(tail);
-
-    if(detectLoop(tail)) {
-        cout<<"Loop Exist!";
-    }
-    else {
-        cout<<"Loop does not exist!";
-    }
-} // You can try to execute the detectLoop function in case of singly linkedlist, there it will print Loop does not exist! kyunki usme loop hi nhi hoga!
-// TC : O(n) and SC : O(n), but there is an algorithm, which is called Floyd Cycle Detection algorithm, and this algorithm can reduce the Space complexity to O(1). upar vaale algo se bhi harr tarah ke loops/cycle detect hojayenge but floyd cycle detection ek more optimized way hai cycles in a LL detect krne ka!
-
-// Approach 2 to solve this question! : So here we will be using the floyd cycle detection algorithm! and in this we will use jo humne fast and slow vaale pointer padhe the pehle vo sab! but pehle humne slow ko head pr rakha tha and fast ko head->next pr, but iss algo me dono head pr honge! and then vhi same cheez hoga ki fast 2 nodes ek baar me traverse krega but slow ek ek krke aage badhega!
-// Now agar traverse krte krte fast and slow equal hogye kabhi bhi then means cycle exist! and agar kabhi nhi mile ya fast ya slow me se koi bhi NULL hogya toh means cycle does not exist!
-#include<iostream>
-#include<map>
-using namespace std;
-
-// Now here what we will do is we will create a singly linkedlist and a singly linkedlist with a inner loop (jo pehla vaala case tha jisme node4 node2 ko point kr rha tha) and then a circular linkedlist! and then we will use both the methods to check are we able to identify loop/cycle in the three LLs using the two methods...
-// First using the detectLoop() function on all three LLs...
-// Constructing a Singly Linkedlist (Will use this class to make 2 LLs one without any loop and other with a inner loop)
-class Node20 {
-    public :
-    int data;
-    Node20* next;
-
-    Node20(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~Node20() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
-};
-
-void insertatHead(Node20* &head, int data) {
-    Node20* temp = new Node20(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node20* &tail, int data) {
-    Node20* temp = new Node20(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node20* &head, Node20* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
         return;
     }
 
-    Node20* temp = head;
-    int cnt = 1;
+    GeneralNodeLL2* current = tail;
+    do {
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            if (current == tail) {
+                tail = newNode;
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail);
 
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Insert into Singly Linked List at Tail
+void insertSinglyLL2(GeneralNodeLL2*& head, GeneralNodeLL2*& tail, int data) {
+    GeneralNodeLL2* newNode = new GeneralNodeLL2(data);
+    if (tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node20* NodetoInsert = new Node20(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void printNode(Node20* &head) {
-    Node20* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Check if a Linked List is Circular
+bool checkCircularLL2(GeneralNodeLL2* head) {
+    if (head == NULL) return false;
+
+    GeneralNodeLL2* temp = head->next;
+    while (temp != NULL && temp != head) {
         temp = temp->next;
     }
-    cout<<endl;
+    return (temp == head);
 }
 
-// Constructing a Circular LinkedList...
-class Node21{
-    public :
-    int data;
-    Node21* prev;
-    Node21* next;
+// Detect Loop using Map (Extra Space O(N))
+bool detectLoopWithMaps(GeneralNodeLL2* head) {
+    if (head == NULL) return false;
 
-    Node21 (int data) {
-        this->data = data;
-        this->next = NULL;
-    }
+    map<GeneralNodeLL2*, bool> visited;
+    GeneralNodeLL2* temp = head;
 
-    ~Node21() {
-        int value = this->data;
-        if(next != NULL) {
-            delete next;
-            next = NULL;
+    while (temp != NULL) {
+        if (visited[temp] == true) {
+            return true; // Loop detected
         }
-        cout<<"Memory free for the node with data value : "<<value<<endl;
+        visited[temp] = true;
+        temp = temp->next;
     }
-};
-
-void insertNodeCircularLL(Node21* &tail, int element, int data) {
-    // Suppose the list is empty...
-    if(tail == NULL) {
-        Node21* newNode = new Node21(data);
-        tail = newNode;
-        newNode->next = newNode;
-    }
-    else {
-        Node21* current = tail;
-        while(current->data != element) {
-            current = current->next;
-        }
-        Node21* temp = new Node21(data);
-        temp->next = current->next;
-        current->next = temp;
-    }
+    return false;
 }
 
-void printNodeCircularLL(Node21* tail) {
-    Node21* temp = tail;
+// Print a Linked List
+void printLinkedList2(GeneralNodeLL2* head) {
+    if (head == NULL) {
+        cout << "Empty List!" << endl;
+        return;
+    }
+    GeneralNodeLL2* temp = head;
     do {
-        cout<<tail->data<<" ";
-        tail = tail->next;
-    } while(tail != temp);
-    cout<<endl;
-}
-
-// Creating two different functions for Singly LLs and Circular LL, becoz currently I want to keep it simple and just want to understand the things clearly! isliye dono type ke LLs ke liye alag alag detectLoop function create kiye hai!
-// For Singly LLs...
-bool detectLoop1(Node20* head) {
-    if(head == NULL) {
-        return false;
-    }
-    map<Node20*, bool> visited;
-    Node20* temp = head;
-
-    while(temp != NULL) {
-        if(visited[temp] == true) {
-            return true;
-        }
-        visited[temp] = true;
+        cout << temp->data << " ";
         temp = temp->next;
-    }
-    return false;
-}
-
-// For Circular LLs...
-bool detectLoop2(Node21* head) {
-    if(head == NULL) {
-        return false;
-    }
-    map<Node21*, bool> visited;
-    Node21* temp = head;
-
-    while(temp != NULL) {
-        if(visited[temp] == true) {
-            return true;
-        }
-        visited[temp] = true;
-        temp = temp->next;
-    }
-    return false;
+    } while (temp != NULL && temp != head);
+    cout << endl;
 }
 
 int main() {
-    // Creating Singly LL 1 without any loop...
-    Node20* nodeLL1 = new Node20(10);
-    Node20* headLL1 = nodeLL1;
-    Node20* tailLL1 = nodeLL1;
-    cout<<"First node of LL1 : ";
-    printNode(headLL1);
+    GeneralNodeLL2* tailC = NULL;
+    insertCircularLL2(tailC, -1, 10);
+    insertCircularLL2(tailC, 10, 20);
+    insertCircularLL2(tailC, 20, 30);
+    insertCircularLL2(tailC, 30, 40);
+    insertCircularLL2(tailC, 40, 50);
+    insertCircularLL2(tailC, 50, 60);
+    cout << "Circular Linked List : ";
+    printLinkedList2(tailC);
 
-    // inserting more nodes...
-    insertAtAnyPosition(headLL1, tailLL1, 2, 20);
-    insertAtAnyPosition(headLL1, tailLL1, 3, 30);
-    insertAtAnyPosition(headLL1, tailLL1, 4, 40);
-    insertAtAnyPosition(headLL1, tailLL1, 5, 50);
-    insertAtAnyPosition(headLL1, tailLL1, 6, 60);
-    cout<<"Singly Linked List 1 : ";
-    printNode(headLL1);
+    cout << (checkCircularLL2(tailC) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl;
+    cout << (detectLoopWithMaps(tailC) ? "Loop detected!" : "No Loop detected!") << endl;
 
-    // Detecting Loop using detectLoop1 function of Singly LLs...
-    if(detectLoop1(headLL1)) {
-        cout<<"Loop Exist!";
+    cout<<endl;
+
+    GeneralNodeLL2* headS = NULL;
+    GeneralNodeLL2* tailS = NULL;
+    insertSinglyLL2(headS, tailS, 5);
+    insertSinglyLL2(headS, tailS, 15);
+    insertSinglyLL2(headS, tailS, 25);
+    insertSinglyLL2(headS, tailS, 35);
+    insertSinglyLL2(headS, tailS, 45);
+    insertSinglyLL2(headS, tailS, 55);
+    cout << "Singly Linked List : ";
+    printLinkedList2(headS);
+
+    cout << (checkCircularLL2(headS) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl;
+    cout << (detectLoopWithMaps(headS) ? "Loop detected!" : "No Loop detected!") << endl;
+
+    cout<<endl;
+
+    GeneralNodeLL2* headS2 = NULL;
+    GeneralNodeLL2* tailS2 = NULL;
+    insertSinglyLL2(headS2, tailS2, 100);
+    insertSinglyLL2(headS2, tailS2, 200);
+    insertSinglyLL2(headS2, tailS2, 300);
+    insertSinglyLL2(headS2, tailS2, 400);
+    insertSinglyLL2(headS2, tailS2, 500);
+    insertSinglyLL2(headS2, tailS2, 600);
+
+    GeneralNodeLL2* temp = headS2; // Adding an Inside Loop!
+    while (temp != NULL) {
+        if (temp->data == 300) {
+            tailS2->next = temp;
+            break;
+        }
+        temp = temp->next;
     }
-    else {
-        cout<<"Loop does not exist!";
-    } // And as expected it is printing Loop does not exist!
+    // cout << "Singly Linked List : ";
+    // printLinkedList(headS2); // Here this printLinkedList() is designed to print a LL which either circular or singly! not for inside loop! Hence, it will print Infinite LL!
+    cout<<"Linked List with Inside Loop at : 300"<<endl;
+    // cout << (checkCircularLL(headS2) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl; // Similarly this checkCircularLL() func is also designed for circular loops, hence, this won't work as we think!
+    cout << (detectLoopWithMaps(headS2) ? "Loop detected!" : "No Loop detected!") << endl;
 
-    cout<<endl;
-    cout<<endl;
-
-    // Now Lets create another singly LL but this time with an inner loop!
-    Node20* nodeLL2 = new Node20(100);
-    Node20* headLL2 = nodeLL2;
-    Node20* tailLL2 = nodeLL2;
-    cout<<"First node of LL2 : ";
-    printNode(headLL2);
-
-
-    // inserting more nodes...
-    insertAtAnyPosition(headLL2, tailLL2, 2, 200);
-    insertAtAnyPosition(headLL2, tailLL2, 3, 300);
-    insertAtAnyPosition(headLL2, tailLL2, 4, 400);
-    insertAtAnyPosition(headLL2, tailLL2, 5, 500);
-    insertAtAnyPosition(headLL2, tailLL2, 6, 600);
-    cout<<"Singly Linked List 2 : ";
-    printNode(headLL2);
-
-    // Detecting Loop using detectLoop1 function of Singly LLs...
-    // But for that lets create an inner loop, by pointing the tail of this LL2 at position 3...
-    tailLL2->next = headLL2->next->next; // Ab agar tum isko normally bhi seedha head se point kraa doge toh ye bhi ek circular LL ban jayega, toh your did'ne need to implement circular LL alag se, but ofc alag se krne ke apne fayede hai ki tumko harr baar ye line nhi likhni padegi kyunki vo uski class me hi implemented hai and nayaa element add krne ke time dikkat aa sakti hai also jo different operations hum perform krte hai circular LL pr vo hum aise krke na kr paye!
-    // even tho koi as such dikkat nhi hogi pr we need to be then more careful while performing delet insert and other operations, but yahaa hum bss ye check kr rhe hai ki LLs me loop exist krta hai ki nhi toh ye hum aise bhi check kr sakte hai!
-
-    // Now lets check that, does the loop exist...
-    if(detectLoop1(headLL2)) {
-        cout<<"Loop Exist!";
-    }
-    else {
-        cout<<"Loop does not exist!";
-    } // And as expected it is showing that the loop exists!
-
-    cout<<endl;
-    cout<<endl;
-
-    // Now lets create a circular linkedlist using its implementation in class node21...
-    Node21* tailC = NULL;
-    insertNodeCircularLL(tailC,-1,1000);
-    insertNodeCircularLL(tailC,1000,2000);
-    insertNodeCircularLL(tailC,2000,3000);
-    insertNodeCircularLL(tailC,3000,4000);
-    insertNodeCircularLL(tailC,4000,5000);
-    insertNodeCircularLL(tailC,5000,6000);
-    cout<<"Circular Linked List : ";
-    printNodeCircularLL(tailC);
-
-    // Now lets check whether detectLoop2 function of circular LL can detect the loop in it...
-    if(detectLoop2(tailC)) {
-        cout<<"Loop Exist!";
-    }
-    else {
-        cout<<"Loop does not exist!";
-    } // As expected it is printing Loop exist!
+    return 0;
 }
+// Learning Note : checkCircularLL() Function : Purpose : Designed only for Circular Linked Lists.
+//                                            : Limitation : It cannot detect an inside loop in a singly linked list; it only verifies if a given list is circular.
+//                                            : Usage : Best suited for checking if a linked list is completely circular (i.e., the last node connects back to the head).
+//               : detectLoopWithMaps() Function : Purpose : A general-purpose loop detection function that detects : Inside loops in a singly linked list, A fully circular linked list, Cases where no loop exists.
+//                                               : Working : Uses a hash map to track visited nodes.
+//                                               : Complexity : Time Complexity: O(n) and Space Complexity: O(n) (due to extra storage for tracking visited nodes)
+//               : Why doesn’t checkCircularLL() work for inside loops? checkCircularLL() checks only if a list is completely circular by seeing if traversal reaches the head again. If there's an inside loop (somewhere in the middle, not connecting to the head), this function won’t detect it.
+//               : Optimized Approach : Floyd’s Cycle Detection Algorithm (Tortoise and Hare Algorithm)
 
-// Now using Floyd Detection Algorithm on all the three LLs to detect the loop...
-#include<iostream>
-#include<map>
+// Optimized Approach : Floyd’s Cycle Detection Algorithm (Tortoise and Hare Algorithm)
+// Approach : Imagine two people running on a circular track : Tortoise (slow pointer) moves one step at a time and Hare (fast pointer) moves two steps at a time.
+//                                                           : If the track is a straight path, the hare will reach the end, and there’s no loop. If the track is circular (i.e., there’s a loop), the hare will eventually catch up to the tortoise inside the loop.
+//          : Steps of the Algorithm : Start two pointers : slow = head (moves 1 step at a time) and fast = head (moves 2 steps at a time)
+//                                   : Move both pointers : slow = slow->next and fast = fast->next->next
+//                                   : Check for a loop : If fast becomes NULL, the list has no loop and If slow == fast, there is a loop.
+//          : Why Does This Work? Since the fast pointer moves twice as fast, it either reaches NULL (no loop) or enters the loop and catches up with slow and This happens because the distance between fast and slow reduces every step.
+//          : Time and Space Complexity : Time Complexity : O(n) (At most n steps before detection) and Space Complexity: O(1) (No extra memory used)
+//          : Advantages of Floyd’s Algorithm : No extra space required (unlike hash maps).
+//                                            : Detects all types of loops (circular and inside loops).
+//                                            : Fast and efficient (O(n) time).
+// Implementation!
+#include <iostream>
+#include <map>
 using namespace std;
 
-// Constructing a Singly Linkedlist (Will use this class to make 2 LLs one without any loop and other with a inner loop)
-class Node22 {
-    public :
+// Node class for both Circular and Singly Linked Lists
+class GeneralNodeLL3 {
+public:
     int data;
-    Node22* next;
+    GeneralNodeLL3* next;
 
-    Node22(int data) {
+    GeneralNodeLL3(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node22() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~GeneralNodeLL3() {
+        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
-void insertatHead(Node22* &head, int data) {
-    Node22* temp = new Node22(data);
-    temp->next = head;
-    head = temp;
-}
+// Insert into Circular Linked List
+void insertCircularLL3(GeneralNodeLL3*& tail, int element, int data) {
+    GeneralNodeLL3* newNode = new GeneralNodeLL3(data);
 
-void insertAtTail(Node22* &tail, int data) {
-    Node22* temp = new Node22(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node22* &head, Node22* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node22* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node22* NodetoInsert = new Node22(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-void printNode(Node22* &head) {
-    Node22* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-// Constructing a Circular LinkedList...
-class Node23{
-    public :
-    int data;
-    Node23* prev;
-    Node23* next;
-
-    Node23 (int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~Node23() {
-        int value = this->data;
-        if(next != NULL) {
-            delete next;
-            next = NULL;
-        }
-        cout<<"Memory free for the node with data value : "<<value<<endl;
-    }
-};
-
-void insertNodeCircularLL(Node23* &tail, int element, int data) {
-    // Suppose the list is empty...
-    if(tail == NULL) {
-        Node23* newNode = new Node23(data);
+    if (tail == NULL) {
         tail = newNode;
         newNode->next = newNode;
+        return;
     }
-    else {
-        Node23* current = tail;
-        while(current->data != element) {
-            current = current->next;
-        }
-        Node23* temp = new Node23(data);
-        temp->next = current->next;
-        current->next = temp;
-    }
-}
 
-void printNodeCircularLL(Node23* tail) {
-    Node23* temp = tail;
+    GeneralNodeLL3* current = tail;
     do {
-        cout<<tail->data<<" ";
-        tail = tail->next;
-    } while(tail != temp);
-    cout<<endl;
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            if (current == tail) {
+                tail = newNode;
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail);
+
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode;
 }
 
-// Creating two different functions for Singly LLs and Circular LL, becoz currently I want to keep it simple and just want to understand the things clearly! isliye dono type ke LLs ke liye alag alag detectLoop function create kiye hai!
-// For Singly LLs...
-Node22* floydDetectLoop1(Node22* head) {
+// Insert into Singly Linked List at Tail
+void insertSinglyLL3(GeneralNodeLL3*& head, GeneralNodeLL3*& tail, int data) {
+    GeneralNodeLL3* newNode = new GeneralNodeLL3(data);
+    if (tail == NULL) {
+        head = newNode;
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+}
+
+// Check if a Linked List is Circular
+bool checkCircularLL3(GeneralNodeLL3* head) {
+    if (head == NULL) return false;
+
+    GeneralNodeLL3* temp = head->next;
+    while (temp != NULL && temp != head) {
+        temp = temp->next;
+    }
+    return (temp == head);
+}
+
+// Detect Loop using Map (Extra Space O(N))
+bool detectLoopWithMaps2(GeneralNodeLL3* head) {
+    if (head == NULL) return false;
+
+    map<GeneralNodeLL3*, bool> visited;
+    GeneralNodeLL3* temp = head;
+
+    while (temp != NULL) {
+        if (visited[temp] == true) {
+            return true; // Loop detected
+        }
+        visited[temp] = true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+GeneralNodeLL3* floydLoopDetectionAlgo(GeneralNodeLL3* head) {
     // Empty List...
     if(head == NULL) {
         return NULL;
     }
-    Node22* fast = head;
-    Node22* slow = head;
+    GeneralNodeLL3* fast = head;
+    GeneralNodeLL3* slow = head;
 
     while(slow != NULL && fast != NULL) {
         fast = fast->next;
@@ -5470,191 +5268,158 @@ Node22* floydDetectLoop1(Node22* head) {
     return NULL;
 }
 
-// For Circular LLs...
-Node23* floydDetectLoop2(Node23* head) {
-    // Empty List...
-    if(head == NULL) {
-        return NULL;
+// Print a Linked List
+void printLinkedList3(GeneralNodeLL3* head) {
+    if (head == NULL) {
+        cout << "Empty List!" << endl;
+        return;
     }
-    Node23* fast = head;
-    Node23* slow = head;
-
-    while(slow != NULL && fast != NULL) {
-        fast = fast->next;
-        if(fast != NULL) {
-            fast = fast->next;
-        }
-        slow = slow->next;
-
-        if(slow == fast) {
-            return slow;
-        }
-    }
-    return NULL;
+    GeneralNodeLL3* temp = head;
+    do {
+        cout << temp->data << " ";
+        temp = temp->next;
+    } while (temp != NULL && temp != head);
+    cout << endl;
 }
 
 int main() {
-    // Creating Singly LL 1 without any loop...
-    Node22* nodeLL1 = new Node22(10);
-    Node22* headLL1 = nodeLL1;
-    Node22* tailLL1 = nodeLL1;
-    cout<<"First node of LL1 : ";
-    printNode(headLL1);
+    GeneralNodeLL3* tailC = NULL;
+    insertCircularLL3(tailC, -1, 10);
+    insertCircularLL3(tailC, 10, 20);
+    insertCircularLL3(tailC, 20, 30);
+    insertCircularLL3(tailC, 30, 40);
+    insertCircularLL3(tailC, 40, 50);
+    insertCircularLL3(tailC, 50, 60);
+    cout << "Circular Linked List : ";
+    printLinkedList3(tailC);
 
-    // inserting more nodes...
-    insertAtAnyPosition(headLL1, tailLL1, 2, 20);
-    insertAtAnyPosition(headLL1, tailLL1, 3, 30);
-    insertAtAnyPosition(headLL1, tailLL1, 4, 40);
-    insertAtAnyPosition(headLL1, tailLL1, 5, 50);
-    insertAtAnyPosition(headLL1, tailLL1, 6, 60);
-    cout<<"Singly Linked List 1 : ";
-    printNode(headLL1);
-
-    // Detecting Loop using floydDetectLoop1() function of Singly LLs...
-    if(floydDetectLoop1(headLL1) != NULL) {
-        cout<<"Loop Exist!";
-    }
-    else {
-        cout<<"Loop does not exist!";
-    } // And as expected it is printing Loop does not exist!
+    cout << "(Detect Loop using Circular LL Logic) " << (checkCircularLL3(tailC) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl;
+    cout << "(Detect Loop using Maps) " << (detectLoopWithMaps2(tailC) ? "Loop detected!" : "No Loop detected!") << endl;
+    cout << "(Detect Loop using Floyd's Algo) " << (floydLoopDetectionAlgo(tailC) ? "Loop detected!" : "No Loop detected!") << endl;
 
     cout<<endl;
+
+    GeneralNodeLL3* headS = NULL;
+    GeneralNodeLL3* tailS = NULL;
+    insertSinglyLL3(headS, tailS, 5);
+    insertSinglyLL3(headS, tailS, 15);
+    insertSinglyLL3(headS, tailS, 25);
+    insertSinglyLL3(headS, tailS, 35);
+    insertSinglyLL3(headS, tailS, 45);
+    insertSinglyLL3(headS, tailS, 55);
+    cout << "Singly Linked List : ";
+    printLinkedList3(headS);
+
+    cout << "(Detect Loop using Circular LL Logic) " << (checkCircularLL3(headS) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl;
+    cout << "(Detect Loop using Maps) " << (detectLoopWithMaps2(headS) ? "Loop detected!" : "No Loop detected!") << endl;
+    cout << "(Detect Loop using Floyd's Algo) " << (floydLoopDetectionAlgo(headS) ? "Loop detected!" : "No Loop detected!") << endl;
+    
     cout<<endl;
-
-    // Now Lets create another singly LL but this time with an inner loop!
-    Node22* nodeLL2 = new Node22(100);
-    Node22* headLL2 = nodeLL2;
-    Node22* tailLL2 = nodeLL2;
-    cout<<"First node of LL2 : ";
-    printNode(headLL2);
-
-
-    // inserting more nodes...
-    insertAtAnyPosition(headLL2, tailLL2, 2, 200);
-    insertAtAnyPosition(headLL2, tailLL2, 3, 300);
-    insertAtAnyPosition(headLL2, tailLL2, 4, 400);
-    insertAtAnyPosition(headLL2, tailLL2, 5, 500);
-    insertAtAnyPosition(headLL2, tailLL2, 6, 600);
-    cout<<"Singly Linked List 2 : ";
-    printNode(headLL2);
-
-    // Detecting Loop using floydDetectLoop1() function of Singly LLs...
-    tailLL2->next = headLL2->next->next;
-
-    // Now lets check that, does the loop exist...
-    if(floydDetectLoop1(headLL2) != NULL) {
-        cout<<"Loop Exist!";
+    
+    GeneralNodeLL3* headS2 = NULL;
+    GeneralNodeLL3* tailS2 = NULL;
+    insertSinglyLL3(headS2, tailS2, 100);
+    insertSinglyLL3(headS2, tailS2, 200);
+    insertSinglyLL3(headS2, tailS2, 300);
+    insertSinglyLL3(headS2, tailS2, 400);
+    insertSinglyLL3(headS2, tailS2, 500);
+    insertSinglyLL3(headS2, tailS2, 600);
+    
+    GeneralNodeLL3* temp = headS2; // Adding an Inside Loop!
+    while (temp != NULL) {
+        if (temp->data == 300) {
+            tailS2->next = temp;
+            break;
+        }
+        temp = temp->next;
     }
-    else {
-        cout<<"Loop does not exist!";
-    } // And as expected it is showing that the loop exists!
-
-    cout<<endl;
-    cout<<endl;
-
-    // Now lets create a circular linkedlist using its implementation in class node21...
-    Node23* tailC = NULL;
-    insertNodeCircularLL(tailC,-1,1000);
-    insertNodeCircularLL(tailC,1000,2000);
-    insertNodeCircularLL(tailC,2000,3000);
-    insertNodeCircularLL(tailC,3000,4000);
-    insertNodeCircularLL(tailC,4000,5000);
-    insertNodeCircularLL(tailC,5000,6000);
-    cout<<"Circular Linked List : ";
-    printNodeCircularLL(tailC);
-
-    // Now lets check whether floydDetectLoop2() function of circular LL can detect the loop in it...
-    if(floydDetectLoop2(tailC) != NULL) {
-        cout<<"Loop Exist!";
-    }
-    else {
-        cout<<"Loop does not exist!";
-    }
+    
+    cout<<"Linked List with Inside Loop at : 300"<<endl;
+    // cout << "(Detect Loop using Circular LL Logic) " << (checkCircularLL3(headS2) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl; // // Won't work here!
+    cout << "(Detect Loop using Maps) " << (detectLoopWithMaps2(headS2) ? "Loop detected!" : "No Loop detected!") << endl;
+    cout << "(Detect Loop using Floyd's Algo) " << (floydLoopDetectionAlgo(headS2) ? "Loop detected!" : "No Loop detected!") << endl;   
+    return 0;
 }
-// Now lets see why it works...
-// Kyunki harr iteration me dono nodes ke beech ka distance ek ek unit kam hote jaata hai! and in the end kahin toh milna hi hai! so that is why this algorithm actually works!
 
-// Identify the starting point of the Loop!
-// Approach : What we will do is, ki hum pehle step me toh Floyd Cycle Detection algo ke through vo point of intersection toh nikal hi lenge jahaa Fast and Slow meet kr rhe hai! and then jab hum vo nikal le then in the next step what we will do is, slow ko vapis se head pr point kraa denge and fast toh abhi bhi uss point of intersection pr hi point kr rha hai! but ab iss step me hum slow and fast ko same rate se move krenge and jahaa pr iss baar ye meet kr jaye that will be the starting node of the loop!
-// But lets see why this logic works? isme ek A + B = K*C ka expression banta hai LL me, and vo kaise that you can visit again Love Babbar vdo! its very simple and easy! so iss logic se hi this algo works! refer the vdo for details and accurate explaination!
-// Lets code this logic now....
-#include<iostream>
+// Finding the Starting Node of a Loop in a Linked List!
+// Approach : Using Floyd’s Cycle Detection Algorithm
+//          : Steps : Detect the Loop using Floyd’s Cycle Detection Algorithm.
+//                  : Use slow (moves 1 step) and fast (moves 2 steps).
+//                  : If slow == fast, a loop exists, and they meet at an intersection point inside the loop.
+//          : Find the Starting Node of the Loop : Reset slow to head, but keep fast at the intersection point.
+//                                               : Move both one step at a time (slow = slow->next, fast = fast->next).
+//                                               : The point where they meet again is the starting node of the loop.
+//          : Why Does This Work? : The distance equation in a loop follows : A + B = K*C
+//                                : Where : A = Distance from head to loop start, B = Distance from loop start to intersection, C = Length of the loop and k = Some integer.
+//                                : Since both pointers now move at the same speed, they will meet at the start of the loop after covering distance A.
+//          : Complexity Analysis : Time Complexity: O(n) (At most 2 passes over the list) and Space Complexity: O(1) (No extra space used)
+// Implementation!
+#include <iostream>
+#include <map>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node24 {
-    public :
+// Node class for both Circular and Singly Linked Lists
+class GeneralNodeLL4 {
+    public:
     int data;
-    Node24* next;
+    GeneralNodeLL4* next;
 
-    Node24(int data) {
+    GeneralNodeLL4(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node24() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~GeneralNodeLL4() {
+        cout << "Memory freed for node with value: " << data << endl;
     }
 };
 
-void insertatHead(Node24* &head, int data) {
-    Node24* temp = new Node24(data);
-    temp->next = head;
-    head = temp;
-}
+// Insert into Circular Linked List
+void insertCircularLL4(GeneralNodeLL4*& tail, int element, int data) {
+    GeneralNodeLL4* newNode = new GeneralNodeLL4(data);
 
-void insertAtTail(Node24* &tail, int data) {
-    Node24* temp = new Node24(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node24* &head, Node24* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+    if (tail == NULL) {
+        tail = newNode;
+        newNode->next = newNode;
         return;
     }
 
-    Node24* temp = head;
-    int cnt = 1;
+    GeneralNodeLL4* current = tail;
+    do {
+        if (current->data == element) {
+            newNode->next = current->next;
+            current->next = newNode;
+            if (current == tail) {
+                tail = newNode;
+            }
+            return;
+        }
+        current = current->next;
+    } while (current != tail);
 
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
+    cout << "Element " << element << " not found in the list!" << endl;
+    delete newNode;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Insert into Singly Linked List at Tail
+void insertSinglyLL4(GeneralNodeLL4*& head, GeneralNodeLL4*& tail, int data) {
+    GeneralNodeLL4* newNode = new GeneralNodeLL4(data);
+    if (tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node24* NodetoInsert = new Node24(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void printNode(Node24* &head) {
-    Node24* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-// We need it as we have discussed in the approach!
-Node24* floydDetectLoop1(Node24* head) {
+GeneralNodeLL4* floydLoopDetectionAlgo2(GeneralNodeLL4* head) {
     // Empty List...
     if(head == NULL) {
         return NULL;
     }
-    Node24* fast = head;
-    Node24* slow = head;
+    GeneralNodeLL4* fast = head;
+    GeneralNodeLL4* slow = head;
 
     while(slow != NULL && fast != NULL) {
         fast = fast->next;
@@ -5670,13 +5435,12 @@ Node24* floydDetectLoop1(Node24* head) {
     return NULL;
 }
 
-// Code to implement the solution to find the starting node of the Loop!
-Node24* getStartingNode(Node24* head) {
+GeneralNodeLL4* getStartingNode(GeneralNodeLL4* head) {
     if(head == NULL) {
         return NULL;
     }
-    Node24* intersection = floydDetectLoop1(head);
-    Node24* slow = head;
+    GeneralNodeLL4* intersection = floydLoopDetectionAlgo2(head);
+    GeneralNodeLL4* slow = head;
 
     while(slow != intersection) {
         slow = slow->next;
@@ -5685,190 +5449,174 @@ Node24* getStartingNode(Node24* head) {
     return slow; // Here in the end the slow will be pointing at the starting node of the loop!
 }
 
+// Print a Linked List
+void printLinkedList4(GeneralNodeLL4* head) {
+    if (head == NULL) {
+        cout << "Empty List!" << endl;
+        return;
+    }
+    GeneralNodeLL4* temp = head;
+    do {
+        cout << temp->data << " ";
+        temp = temp->next;
+    } while (temp != NULL && temp != head);
+    cout << endl;
+}
+
 int main() {
-    Node24* node = new Node24(100);
-    Node24* tail = node;
-    Node24* head = node;
-    cout<<"First node of LL : ";
-    printNode(head);
+    GeneralNodeLL4* headS = NULL;
+    GeneralNodeLL4* tailS = NULL;
 
+    insertSinglyLL4(headS, tailS, 10);
+    insertSinglyLL4(headS, tailS, 20);
+    insertSinglyLL4(headS, tailS, 30);
+    insertSinglyLL4(headS, tailS, 40);
+    insertSinglyLL4(headS, tailS, 50);
 
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 200);
-    insertAtAnyPosition(head, tail, 3, 300);
-    insertAtAnyPosition(head, tail, 4, 400);
-    insertAtAnyPosition(head, tail, 5, 500);
-    insertAtAnyPosition(head, tail, 6, 600);
-    cout<<"Singly Linked List : ";
-    printNode(head);
+    tailS->next = headS->next->next; // Creating a loop at node 30
 
-    // Creating an inner loop!
-    tail->next = head->next->next;
+    // Detect the loop
+    GeneralNodeLL4* loopNode = floydLoopDetectionAlgo2(headS);
+    if (loopNode) {
+        cout << "Loop detected at node with value: " << loopNode->data << endl;
+        GeneralNodeLL4* loopStart = getStartingNode(headS); // Find the starting node of the loop
+        cout << "The loop starts at node with value: " << loopStart->data << endl;
+    }
+    else {
+        cout << "No loop detected in the linked list!" << endl;
+    }
 
-    // Now as we have already created a loop! lets find the starting node of the Linkedlist
-    Node24* startingNode = getStartingNode(head);
-    cout<<"The starting node of the loop is : "<<startingNode->data<<endl;
-} // So that is how we have find the starting node of the loop!
+    return 0;
+}
 
-// Removing the Loop! isme what we will do is, we will jo starting point hai Loop ka usse pehle jo node hai (inside the loop) usko NULL ko point kraa denge! ek tarah se jaise loop create hua tha vaise hi remove bhi hoga, jaise tail ko kisi ek particular node pr point kraya tha na bss uss hi pointer ko hataa do we will get the loop removed!
-// Toh for this we will need floyd detect loop vaala function jo interection point detect krega jiski help se hum starting node nikalenge and then uss starting se pehle vaale node ko (Loop ke andar) NULL pr point kraa denge! and we will get the answer!
-#include<iostream>
+// Removing Loop!
+// We need to break the loop that we detected using Floyd’s Cycle Detection Algorithm.
+// Idea : We find the starting node of the loop. -> Then, we move inside the loop until we reach the node just before the starting node. -> We change its next pointer to NULL, effectively breaking the cycle.
+// Approach : Detect the Loop (Using Floyd’s Algorithm) : If a loop exists, slow and fast will meet at some node inside the loop.
+//          : Find the Starting Node of the Loop : Now, slow is at the node where the loop starts. For our example (10 → 20 → 30 → 40 → 50 → 30...), this function will return 30.
+//          : Remove the Loop : To remove the loop we do the following, Traverse the loop starting from loopStart -> Stop at the node just before the loop starts -> Set its next pointer to NULL, breaking the loop.
+//                            : We effectively "disconnect" the last node of the loop from pointing back into the cycle.
+// Implementation!
+#include <iostream>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node25 {
-    public :
+class GeneralNodeLL5 {
+public:
     int data;
-    Node25* next;
+    GeneralNodeLL5* next;
 
-    Node25(int data) {
+    GeneralNodeLL5(int data) {
         this->data = data;
         this->next = NULL;
     }
-
-    ~Node25() {
-        int value = this->data;
-        if(this->next != NULL) {
-            delete next;
-            this->next = NULL;
-        }
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
 };
 
-void insertatHead(Node25* &head, int data) {
-    Node25* temp = new Node25(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node25* &tail, int data) {
-    Node25* temp = new Node25(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node25* &head, Node25* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+// Insert at Tail for Singly Linked List
+void insertSinglyLL5(GeneralNodeLL5*& head, GeneralNodeLL5*& tail, int data) {
+    GeneralNodeLL5* newNode = new GeneralNodeLL5(data);
+    if (tail == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
-
-    Node25* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node25* NodetoInsert = new Node25(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void printNode(Node25* &head) {
-    Node25* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
+// Detect Loop using Floyd’s Algorithm
+GeneralNodeLL5* floydLoopDetectionAlgo3(GeneralNodeLL5* head) {
+    if (head == NULL) return NULL;
 
-// We need it as we have discussed in the approach!
-Node25* floydDetectLoop1(Node25* head) {
-    // Empty List...
-    if(head == NULL) {
-        return NULL;
-    }
-    Node25* fast = head;
-    Node25* slow = head;
+    GeneralNodeLL5* slow = head;
+    GeneralNodeLL5* fast = head;
 
-    while(slow != NULL && fast != NULL) {
-        fast = fast->next;
-        if(fast != NULL) {
-            fast = fast->next;
-        }
+    while (fast != NULL && fast->next != NULL) {
         slow = slow->next;
+        fast = fast->next->next;
 
-        if(slow == fast) {
-            return slow;
-        }
+        if (slow == fast) return slow;
     }
     return NULL;
 }
 
-// We also needed this...
-Node25* getStartingNode(Node25* head) {
-    if(head == NULL) {
-        return NULL;
-    }
-    Node25* intersection = floydDetectLoop1(head);
-    if(intersection == NULL) { // Here we puting checks ki agar intersection NULL na hojaye agar hogya toh intersection -> next krne pr error aa sakta hai, kyunki iska mtlb hoga ki hum NULL->next try kr rhe hai find krne ka! which is not logical! so it can give our segementation fault or system may crash! or things like that! overall it will show error!
-        return NULL;
-    }
-    Node25* slow = head;
+// Find the Starting Node of the Loop
+GeneralNodeLL5* getStartingNode2(GeneralNodeLL5* head) {
+    if (head == NULL) return NULL;
 
-    while(slow != intersection) {
+    GeneralNodeLL5* intersection = floydLoopDetectionAlgo3(head);
+    if (intersection == NULL) return NULL;
+
+    GeneralNodeLL5* slow = head;
+
+    while (slow != intersection) {
         slow = slow->next;
-        intersection = intersection -> next;
+        intersection = intersection->next;
     }
     return slow;
 }
 
-Node25* removeLoop(Node25* head) {
-    if(head == NULL) {
-        return NULL;
-    }
-    Node25* startofLoop = getStartingNode(head);
-    // Ye humne extra NULL checks lagaye vrna segementation fault y faaltu ka kuch errors aa sakte hai, kyunki agar hume ye check nhi lgaye toh getStartingNode se NULL value aane pr intersection me NULL store hoga! and then temp me bhi NULL jayega and then temp->next ke time pr NULL->next calculate krne ki koshish hogi which will return an error! or a segementation fault!
-    if(startofLoop == NULL) {
-        return NULL;
-    }
-    Node25* temp = startofLoop;
+// Remove Loop from the Linked List
+void removeLoop(GeneralNodeLL5* head) {
+    if (head == NULL) return;
 
-    while(temp->next != startofLoop) {
-        temp = temp -> next;
+    GeneralNodeLL5* loopStart = getStartingNode2(head);
+    if (loopStart == NULL) return;
+
+    GeneralNodeLL5* temp = loopStart;
+
+    while (temp->next != loopStart) {
+        temp = temp->next;
     }
-    temp -> next = NULL;
+
+    temp->next = NULL;
 }
 
+// Print the Linked List
+void printLinkedList5(GeneralNodeLL5* head) {
+    if (head == NULL) {
+        cout << "Empty List!" << endl;
+        return;
+    }
+    GeneralNodeLL5* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+// Main Function
 int main() {
-    Node25* node = new Node25(100);
-    Node25* tail = node;
-    Node25* head = node;
-    cout<<"First node of LL : ";
-    printNode(head);
+    GeneralNodeLL5* headS = NULL;
+    GeneralNodeLL5* tailS = NULL;
 
+    insertSinglyLL5(headS, tailS, 10);
+    insertSinglyLL5(headS, tailS, 20);
+    insertSinglyLL5(headS, tailS, 30);
+    insertSinglyLL5(headS, tailS, 40);
+    insertSinglyLL5(headS, tailS, 50);
 
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 200);
-    insertAtAnyPosition(head, tail, 3, 300);
-    insertAtAnyPosition(head, tail, 4, 400);
-    insertAtAnyPosition(head, tail, 5, 500);
-    insertAtAnyPosition(head, tail, 6, 600);
-    cout<<"Singly Linked List : ";
-    printNode(head);
+    tailS->next = headS->next->next; // Creating a loop at node 30
+    cout<<"Tail next (Before Removal) : "<<tailS->next->data<<endl;
 
-    // Creating an inner loop!
-    tail->next = head->next->next;
+    // Detect Loop
+    GeneralNodeLL5* loopNode = floydLoopDetectionAlgo3(headS);
+    if (loopNode) {
+        cout << "Loop detected at node with value : " << loopNode->data << endl;
+        GeneralNodeLL5* loopStart = getStartingNode2(headS);
+        cout << "The loop starts at node with value : " << loopStart->data << endl;
 
-    // Found the starting point of the Loop!
-    Node25* startingNode = getStartingNode(head);
-    cout<<"The starting node of the loop is : "<<startingNode->data<<endl;
-
-    // Removing the loop!
-    removeLoop(head);
-
-    // To check whether loop is removed or not,
-    cout<<tail->next<<endl;
-} // So that is how you remove loops from LL
+        // Remove the loop
+        removeLoop(headS);
+        cout << "Loop removed. Linked List after loop removal : ";
+        printLinkedList5(headS);
+        cout << "Tail next (After Removal) : " << (tailS->next == NULL ? "null" : to_string(tailS->next->data)) << endl;
+    }
+    else {
+        cout << "No loop detected!" << endl;
+    }
+    return 0;
+}
 
 // ---------------------------------------------------------- LECTURE 48 - Remove Duplicates from sorted/unsorted Linkedlists! --------------------------------------------------------------------------------------------------------->
 // Question 1 : Suppose a linkedlist 10->20->20->30->30->30->30->40->NULL, so this LL is sorted and now we will, remove all the duplicates so we will get the final output as 10->20->30->40->NULL
@@ -6945,4 +6693,4 @@ int main() {
     else {
         cout<<"Its not a Palindrome!";
     }
-} // Here the TC : O(n) and SC : O(1), so here we have reduced the space complexity! as becoz no extra space is used! but the TC : O(n) kyunki time toh utna hi lag rha hai! kyunki abhi we are traversing the whole LL, pehle mid nikalne me TC : O(n/2) then reverse me TC : O(n), then humne jo comparison kiya hai usme TC : O(n), then lastly firse reverse krne me TC : O(n), so overall our TC : 3*O(n) + O(n/2) = O(n)! 
+} // Here the TC : O(n) and SC : O(1), so here we have reduced the space complexity! as becoz no extra space is used! but the TC : O(n) kyunki time toh utna hi lag rha hai! kyunki abhi we are traversing the whole LL, pehle mid nikalne me TC : O(n/2) then reverse me TC : O(n), then humne jo comparison kiya hai usme TC : O(n), then lastly firse reverse krne me TC : O(n), so overall our TC : 3*O(n) + O(n/2) = O(n)!
