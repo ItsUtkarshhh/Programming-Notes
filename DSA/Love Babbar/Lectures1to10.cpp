@@ -13,14 +13,23 @@
 // Flowchart : A diagramatic representation of the program/approach is called a flowchart! isme hum kuch symbols ka use krke apne rough solution ko diagramatic form me represent krte hai!
 // Pseudo Code : Generic way of representing a particular solution so that it can be coded in different languages!
 
-// FLowchart Components : Oval block (represents that the program start or ends here), parallelogram block (represents input/output), rectangle (represents a process), and then a decision block which is of diamond shape (used for if/else statement)!
-// Suppose you want to create a flowchart of the sum of two values, so it will be like : [Already done in handwritten notes! or if not then visit Love Babbar vdo 1 of DSA Series at 9:42 minutes]
-// Pseudo code for the above program will be, Start -> Read a, b -> sum = a + b -> print sum -> end!, And pseudo code is a generic code which represents a code in a most general way such that it can be coded in other languages also!
+// Flowchart Components and Pseudo Code Explanation!
+// Flowchart Components : Oval Block : Represents the start or end of the program.
+//                      : Parallelogram Block : Used for input/output operations.
+//                      : Rectangle Block : Represents a process, such as calculations or variable assignments.
+//                      : Diamond Block : Represents decision-making (used for if-else conditions).
+//                      : Example : Flowchart for Summing Two Numbers, If you want to create a flowchart for adding two numbers, it would include the following steps...
+//                                : Start the program -> Take input values for a and b -> Compute the sum: sum = a + b -> Display the result -> End the program
 
-// In these notes, almost everything is covered for C/C++ and its complete! more variety in questions practice from LC, CS, IB, HR, HE, GFG, CC.
-// Compiler is used to translate code and find errors in the code like compile time error and runtime error!
-// In code the compilation start with int main() and flowchart me jo start vaala component hota hai vo int main() ke liye hota hai!
-// C++ me jo using namespace std; likhte hai, iska mtlb ye hai ki like C++ me kuch namespaces hote hai unme se hum std vaala namespace use krna chahte hai! like example cout function alag alag namespace me alag type se define hoga, pr hume std (standard) vaala jo defintion hai cout ka usko use krenge output print krne ke liye!
+// Pseudo Code Explanation : Pseudo code is a structured way to represent an algorithm in a language-agnostic format, making it easy to translate into any programming language.
+//                         : The pseudo code for summing two numbers is : Start -> Read a, b -> sum = a + b -> Print sum -> End
+//                         : Why Use Pseudo Code? It provides a clear step-by-step logic before actual implementation. It ensures that the algorithm is understandable across different programming languages. It helps in debugging and improving logic before writing real code.
+
+// C/C++ Notes Summary
+// These notes comprehensively cover C and C++, making them complete for understanding the language. For additional practice, you can explore a variety of problems from platforms like LeetCode (LC), CodeStudio (CS), InterviewBit (IB), HackerRank (HR), HackerEarth (HE), GeeksforGeeks (GFG), and CodeChef (CC).
+// Understanding the Compiler : A compiler translates code into machine language and helps detect errors. It identifies compile-time errors (syntax errors) and runtime errors (logical errors that occur during execution).
+// Program Flow and Flowchart Representation : In C++, program execution starts with the int main() function. In a flowchart, the Start block corresponds to int main() in code.
+// Understanding using namespace std; in C++, C++ contains multiple namespaces, which group functions and variables to prevent naming conflicts. using namespace std; means we are specifically using the standard (std) namespace, which includes predefined functionalities like cout. Without this, we would have to use std::cout instead of cout for printing output.
 
 // How the cpp file converts to the executable file!
 // Preprocessing -> Compilation -> Assembler -> Linker
@@ -29,26 +38,42 @@
 // Assembler : Isme jo humari compiled file hoti hai ".s" vaali ye ".o" object file me convert hoti hai! means isme jo assembly code hai vo machine language code me convert hota hai! and the object file contains machine-level code, along with other information necessary for linking. 
 // Linker : Isme saari object files include hoti hai and then ek final ".exe" file banti hai, jo final executable file hoti hai!
 
-// Type Casting in C++ :
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 int main() {
-    int a = 'b';
-    cout<<a<<endl; // Yahaa kya hua ki jab a ko int data type diya and then usme ek character store krne ki koshish ki tab implicit conversion hogya int se char me and jo int value (ASCII value) b se map krti hai vo print hogyi!
+    // Implicit Type Conversion (Type Casting)
+    
+    // Example 1 : Converting 'char' to 'int'
+    int a = 'b'; // 'b' has an ASCII value of 98
+    cout << a << endl; // Output : 98
 
-    char ch = 99;
-    cout<<ch<<endl; // Yahaa bhi vaisa hi hua jo upar hua, yahaa pr jab humne 99 jo ek integer value hai jab humne vo store krne ki koshish ki tab 99 jiss character se map hota hai ASCII table ke according vo charcater print hojayega, here that character is c toh vo print hogya! 
+    // Example 2 : Converting 'int' to 'char'
+    char ch = 99; // 99 corresponds to 'c' in the ASCII table
+    cout << ch << endl; // Output : c
 
-    char ch2 = 123456;
-    cout<<ch2<<endl; // Yahaa as we know that unsigned int me 0 -> 2^31-1 tak ki values store ho sakti hai, and char me 0 -> 2^8-1 tak ki values store ho sakti hai! so what if agar hum koi 2^16 jaisi value store kraane ki koshish kre toh in character, tab kya hoga? then jo least significant byte mtlb jo rightmost 8 bits hongi (as becoz char 1 byte = 8 bits ki value store krta hai) toh utni values ko lekr utne ko hi character me convert hojayega and vo print hojayegi!
-} // Means like here in ch2 we tried to store 123456, so ho sakta hai jo rightmost byte hogi usme 64 ban rha hoga and 64 maps with @ character in the ASCII table, toh bss vo print hogya!
+    // Handling Large Values in 'char' Type
+    char ch2 = 123456; 
+    // Since 'char' can only store 1 byte (8 bits), only the least significant 8 bits of 123456 will be stored. If 123456 in binary is 0001 1110 0010 0000, then the last 8 bits (0100 0000) are stored. ASCII value of 64 is '@', so the output will be '@'.
+    cout << ch2 << endl; // Output : @ (may vary based on system implementation)
 
-// Now abhi tak toh hum ye samajh gye ki positive numbers kaise store hote hai memory me, but negative numbers kaise hote hai store?? So ans is that if first bit is 1 it is -ve and if 0 then +ve!
-// If we want to store a negative values in the memory then first we ignore the -ve sign and then we take its 1's complement and then 2's complement and now the leftmost bit will tell the sign if its 0 then +ve and 1 then -ve!
-// Example : int a = -5 ko agar store krna hai, so it will be like : first we will ignore the -ve sign hence, 00000000 00000000 00000000 00000101 -> 11111111 11111111 11111111 11111010 (1's complement) -> 11111111 11111111 11111111 11111011 (2's complement), hence ab ye store hojayega! and jo leftmost bit hai vo iska sign btaa rha hai that's negative!
+    // Storing Negative Numbers Using Two’s Complement
+    int num = -5; // Storing -5 in memory
+    // Step 1 : Ignore the negative sign and take 5 in binary : 00000000 00000000 00000000 00000101 (5 in 4 bytes)
+    // Step 2 : Take 1’s complement (invert all bits) : 11111111 11111111 11111111 11111010
+    // Step 3 : Take 2’s complement (add 1 to 1’s complement) : 11111111 11111111 11111111 11111011 (Stored value in memory)
+    // Finally : The leftmost bit (1) represents the sign (1 = negative, 0 = positive). This means the system recognizes it as -5.
+    cout << num << endl; // Output : -5
 
-// Now if we want to print that -ve value -5, so ab as we know ki memory me toh ye 11111111 11111111 11111111 11111011 stored hai, so ab pehle 1's complement hoga, steps will be, 11111111 11111111 11111111 11111011 -> 00000000 00000000 00000000 00000100 (1's complement) -> 00000000 00000000 00000000 00000101 (2's complement), now as we know the final value jo aayi vo toh +5 denote krti hai, toh value yahaa se lelenge and sign jo value pehle stored thi memory me which was this 11111111 11111111 11111111 11111011, toh yahaa se uska sign lelenge (that's the leftmost bit 1 and hence it represents the sign) and aise ye negative value print hojayegi!
+    // Retrieving & Printing Negative Numbers
+    // Step 1 : Read the stored value : 11111111 11111111 11111111 11111011
+    // Step 2 : Take 1’s complement : 00000000 00000000 00000000 00000100
+    // Step 3 : Take 2’s complement (add 1) : 00000000 00000000 00000000 00000101
+    // The value obtained is 5, Since the leftmost bit of the original stored value was 1 (indicating negative), the final output is displayed as -5.
+
+    // Note : Positive values are stored in memory exactly as their binary representation without any modifications.
+    return 0;
+}
 
 // All the data types are : int, float, char, long, double, long double, long long!
 // Other than all these data types, there are some ways of declaring data types, signed and unsigned! signed means all +ve and -ve values of that range! then unsigned is only for +ve values range! along with that there is "auto" which decides data type based on the operations jo hum perform kr rhe hote hai!
@@ -141,15 +166,36 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 2 - Basics --------------------------------------------------------------------------------------------------------->
-// And now we have 2 variation while assigning a data type, that is signed and unsigned, signed jab hota hai toh -(2^31) -> (2^31-1) itni range ki values store ho sakti hai and jab unsigned hota hai tab 0 -> (2^32-1) values store hoti hai! means only positive values!
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 int main() {
-    unsigned int a = -123;
-    cout<<a<<endl; // It will print : 4,294,967,173, Reason : We have made this int unsigned, so isme hum humesha positive values hi store krte hai! toh unn cases me kyunki ye ek unsigned int hai toh ye "a" me jo bhi value store kroge usko humara compiler ek +ve value ki tarah hi dekhega! and hence +ve value ki printing as it is ho jaati hai binary se decimal me simply convert krke! so now agar hum iss unsigned int me ek -ve value store krenge, toh usko bhi compiler ek +ve value ki tarah hi dekhega and we know -ve values kaise store hoti hai memory me pehle unka 1s comp hota hai then 2s comp hota hai and then vo store hoti hai with leftmost bit be 1!
-    // and we also know ki print kaise hoti hai -ve values! but yahaa printing ke time kya hoga ki kyunki ye unsigned int hai, toh compiler iss unsigned int me jo value store hogi usko bhi +ve value ki tarah hi treat krega by ignoring the left most bit 1 (for -ve value) and hence usko bhi as it is print krdega!
-} // Memory me store toh -ve values vaise hi hogi jaise ek -ve values hoti hai store! chahe signed ho ya unsigned, but priting ke time dhyaan rakhna hoga!
+    // In C++, we have two variations of integer data types : signed and unsigned.
+    // Signed integers can store both negative and positive values within the range: -(2^31) to (2^31 - 1).
+    // Unsigned integers can only store positive values, ranging from 0 to (2^32 - 1).
+    
+    unsigned int a = -123; // Assigning a negative value to an unsigned int
+    cout << a << endl;
+    return 0;
+
+    // Explanation : Normally, negative values are stored in memory using 2's complement representation.
+    //             : However, when a negative value is assigned to an unsigned integer, the compiler does not treat it as negative.
+    //             : Instead, it interprets the stored binary value as a large positive number.
+    
+    // Breakdown : -123 in binary (assuming a 32-bit system) : Step 1 : Ignore the negative sign and convert 123 to binary -> 00000000 00000000 00000000 01111011 (Binary of 123)
+    //                                                       : Step 2 : Take 1's complement (invert bits) -> 11111111 11111111 11111111 10000100
+    //                                                       : Step 3 : Take 2's complement (add 1) -> 11111111 11111111 11111111 10000101 (This is how -123 is stored in memory)
+    // Hence, When we print an unsigned integer, the leftmost bit is NOT treated as a sign bit. The entire binary sequence is read as a positive number.
+    // In this case, 11111111 11111111 11111111 10000101 is interpreted as: 2^32 - 123 = 4,294,967,173 (which is why we get this output).
+    // Unsigned Equivalent = 2^32 - 123, in more general form : 2^32 - |X| where, X is an unsigned value passed! (This formula is not mathematically determined, its is just analysed that this happens!)
+    // What actually happens is : 1 * 2^31 + 1 * 2^30 + 1 * 2^29 + 1 * 2^28 ... 1 * 2^32 + 0 * 2^32 + 1 * 2^32. (For 11111111 11111111 11111111 10000101)
+
+    // Summary :
+    // - Negative numbers are always stored in memory using 2's complement representation.
+    // - When using signed integers, the leftmost bit determines the sign (1 for negative, 0 for positive).
+    // - When using unsigned integers, all bits contribute to the magnitude, ignoring the sign.
+    // - This is why assigning a negative number to an unsigned int results in a large positive number.
+}
 
 // Some extra info : int/int = int, float/int = float, double/int = double
 
@@ -1247,17 +1293,21 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 5 - Bitwise Operators --------------------------------------------------------------------------------------------------------->
-// Bitwise Operators!
-// There are 4 types of bitwise operators! AND (&) OR (|) NOT (~) XOR (^)
-// These operators works on the bit level... Example :
-// AND (&) : Suppose we are doing 2 & 3, then its output will be decided at the bit level, like... 2 -> 10 and 3 -> 11 now we will do the AND operation of each bit, as 10 & 11 and it will give 10 which is 2 and hence the output will be 2, we must have to do the normal AND operation!
-// OR (|) : Similarly as above, 2 | 3, it can be written as 10 | 11 and its output will be... 11 and it is 3, hence the output will be 3!
-// NOT (~) : Here it is a little different, like ~2, now we know that int is 4 bytes and we know that it stored as 00000000 00000000 00000000 00000010 in the memory, so iska NOT krna hai, so poore ka NOT krna hai toh one's complement lelo, and it will be... 11111111 11111111 11111111 11111101 and now ab we isko print krna hai, toh ab we know kaise print krte hai, pehle most significant bit denote krta hai sign which is -ve, now baaki remaining bits ka 2's complement lenge, and we know 2's complement kaise lete hai, that is 1's complement and then add 1 and uske baad final answer ayega and hence the answer will be, (left most significant bit toh sign ke liye use hogyi toh uske alawa remaining bits ko convert krliya decimal me) (1)0000000 00000000 00000000 00000011 and hence the answer will be -3
-// XOR (^) : Here its like, jo same bits hoti hai unka output 0 and opposite bits hoti hai unka output 1, so 2 ^ 3 ka output hoga 10 ^ 11 will be 1! according to the truth table of XOR!
+// Bitwise Operators in C++
+// There are 4 main bitwise operators: AND (&), OR (|), NOT (~), and XOR (^). These work at the binary level.
+// AND (&) : Performs bitwise AND. Example : 2 & 3 → (10 & 11) = 10 (Decimal: 2)
+// OR (|) : Performs bitwise OR. Example : 2 | 3 → (10 | 11) = 11 (Decimal: 3)
+// NOT (~) : Inverts all bits (One’s Complement). Example : ~2 → 00000000 00000000 00000000 00000010 (binary representation), After NOT: 11111111 11111111 11111111 11111101, Converting to decimal (Two’s Complement) gives -3
+// XOR (^) : Bits that are the same become 0, different bits become 1. Example : 2 ^ 3 → (10 ^ 11) = 01 (Decimal: 1)
 
-// Now some more featured are, left-shift and right-shift, which will be done, suppose you are said to do "3<<2" it means 3 ko 2 baar left shift krdo, means 3 ke harr bit ko 2 baar left me shift krdo! hence, 00000000 00000000 00000000 00000011 isko 2 baar right shift krne ka mtlb hua ki 00000000 00000000 00000000 00001100, and it will be 12, and same is the right shift...
-// Also a note that mostly aisa lgega ki left shift krne se number 2 se multiply ho jaate hai, and ye baat kaafi hadd tak sahi bhi hai, like upar hi dekhlo, 3<<2 me 3 me 2 times 2 multiply hogya and answer mila 12, which is 3x2x2, so mostly cases me yhi hoga, bss right shift me 2 se divide hota hai... But in case of large numbers ye nhi hoga, kyunki reason being... suppose a number 01000000 00000000 00000000 00000010, this is a very large number, toh yahaa kya hoga ki agar humne isko 1 baar left shift krdiya, toh most significant but 1 banjayega, and isse vo number -ve number ban jayega, so yahaa aisa bhi hota hai, so that's why this shortcut is not valid for very large number, but for small number it is valid!
-// Baki ye toh baat hogyi +ve numbers ki, like ek aur cheez hoti hai that is padding, means jab hum left shift kr rhe hai toh right me 0's add kr rhe hai means +ve numbers me 0 ki padding hoti hai, but -ve numbers ka kuch ptaa nhi hota, answer will be depended on compiler!
+// Bitwise Shift Operators : Left Shift (<<) and Right Shift (>>)
+// Left Shift (<<) : Moves bits to the left by a given number of positions. Example: 3 << 2, 3 (00000000 00000000 00000000 00000011) → Left shift by 2 → 12 (00000000 00000000 00000000 00001100)
+//                 : Generally, left shift is equivalent to multiplying by powers of 2 (3 × 2 × 2 = 12).
+// Right Shift (>>) : Moves bits to the right by a given number of positions, effectively dividing by powers of 2.
+// Important Note : For small numbers, left shift ≈ multiplication by 2, and right shift ≈ division by 2.
+//                : For large numbers, left shift may turn positive numbers into negative due to the most significant bit becoming 1.
+//                : Left shift pads with 0s on the right (for positive numbers) and For negative numbers, padding behavior depends on the compiler.
+
 
 // Now lets program it! :
 #include<iostream>
@@ -1277,11 +1327,17 @@ int main() {
     cout<<(5>>1)<<endl;
 }
 
-// Some Questions on post-increments, pre increments and For Loops!
-// Now there is one "break" statement, iss instruction se jo immediate loop hota hai usse exit hojaate hai!
-// Now there is one "continue" statement, iss instruction se jo immediate next line of execution hota hai, usko skip krdete hai and uske baad ke line execute hote hai!
-// Now there are "exit" statement, An exit statement is used in programming to terminate the execution of a program or a function before it has completed its entire process. When the program encounters the exit statement, it stops running immediately and returns control to the operating system (for a full program) or to the calling function (in some cases).
-// Also in for loop where we know that there is one section of iteration, then condition and then increment or decrements, so one add on to that, is teeno section me ek se zyada iterations, conditions and increments add kr sakte hai!
+// Control Statements in Loops :
+// Break Statement : Immediately exits the nearest enclosing loop when encountered.
+// Continue Statement : Skips the current iteration and moves to the next iteration of the loop.
+// Exit Statement : Terminates the entire program immediately and returns control to the operating system.
+
+// Loop Structures :
+// For Loop : A for loop consists of three parts: initialization, condition, and update. Multiple expressions can be included in each section using commas.
+// While Loop : Executes a block of code repeatedly as long as the condition remains true. Condition is checked before each iteration, meaning the loop might not run at all if the condition is false initially.
+// Do-While Loop : Similar to the while loop but guarantees at least one execution of the loop body because the condition is checked after execution.
+
+// Implementations!
 #include<iostream>
 using namespace std;
 
@@ -1478,15 +1534,13 @@ using namespace std;
 int main() {
     uint32_t n;
     int count = 0;
-    for(cin>>n; n!=0; n=n>>1) { // Yahaa isko hum aise bhi likh sakte hai, "n>>=1" as a shortcut! 
-        // Yahaa pr hume sirf 1st bit check kr rhe hai, as we know that koi bhi number ho maanlo 5, toh iska binary representation hota hai 0101, toh bss iska 1 ke saath & kr rhe hai and jab jab ye 1 dega tab tab if condition true hojayegi and tab tab count++ ho jayega!
-        // and then right-shift krke firse & krenge 1 ke saath, toh jitni baar condition true hogi utni baar count hote jayega! and after all the right-shift it will end!
+    for(cin>>n; n!=0; n=n>>1) { // Alternativaly can write, "n>>=1" as a shortcut! 
         if(n&1) {
             count++;
         }
     }
     cout<<count;
-}
+} // Note : Using a while loop is a more natural and intuitive approach for this case. While a for loop works fine and it can loop cool, but a while loop aligns better with the logic of continuously checking and modifying n.
 
 // ---------------------------------------------------------- LECTURE 6 - Decimal to Binary & Binary to Decimal --------------------------------------------------------------------------------------------------------->
 // Decimal to Binary Conversion :
@@ -1955,7 +2009,7 @@ int main() {
     cout<<"Size of arr3 : "<<arr3size; // It will print 15
 } // Arrays character and baaki data types ke bhi bante hai, we can do the same above thing with them also! but upar me jo printArray function hai vo sirf int data type vaale arrays ke liye kaam krega!
 
-// Finding the maximum/minimum value among all the values in an array!
+// Question 1: Finding the maximum/minimum value among all the values in an array!
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -2029,7 +2083,7 @@ int main() {
     }
 }
 
-// Practice Question : Take input in an array and then find the sum of all of its elements!
+// Question 2 : Take input in an array and then find the sum of all of its elements!
 #include<iostream>
 using namespace std;
 
@@ -2052,7 +2106,7 @@ int main() {
     cout<<"Sum of all the values of the array "<<arraySum(arr1, size)<<endl;
 }
 
-// Linear Search! : This is used to seach an element in an array! and that element for which we are searching for is called a key!
+// Question 3 : Linear Search! : This is used to seach an element in an array! and that element for which we are searching for is called a key!
 #include<iostream>
 using namespace std;
 
@@ -2090,7 +2144,7 @@ int main() {
     }
 }
 
-// Reverse an Array!
+// Question 3 : Reverse an Array!
 // Approach : We will take a starting point jo 0th index of array ko represent krega and then ek end point jo last index of array ko represent krega, now what we will do is, vaise toh hum ek swap function use krenge pr vo swap function krta kya that is explained here,
 // so, kya hota hai ki jaise agar ek array hai 6 elements ka, toh pehle start point 0th index pr hoga and end vaala last index pr (which is 5 here) toh pehle inn dono ko hum swap krdenge, now we will do start++ and end-- and now will again swap, now will continue this,
 // jab tak start end se aage na badh jaye or in other words ki start>end, this will be our terminating condition!
@@ -2316,39 +2370,51 @@ int main() {
     }
 }
 
-// 4th (Love Babbar Solution) : This solution will confirm the unique element, if there is only one unique element, this is a constraint here! or are there any odd duplicates of any one number in an array!
-// Approach : Ek bhot lame si approach toh ye hogi ki hum harr ek element ka count nikal le and then jiss element ka count 1 hoga vo humara answer hojayega!
-// But that is not a very good solution, so another thing that we can do is, previously we have studied XOR operation, what it does is ki vo do same operand ki value ko 0 krdeta hai, toh hum uski iss hi property ka use krenge,
-// like agar 1,1,2,2,3 hoga array me toh vo 1 and 1 ka XOR krke 0 krdega and then 2 and 2 ka XOR krke isko bhi 0 krdega and then 0 XOR 3 XOR 0 will give us 3, and thats how we will get our answer! Agar ek XOR operation me saare same operands honge toh vo sabko 0 krdega!
-// and last me sab element ke 0 hojane ke baad jo ek akela element bacha hoga uske saath XOR krke output vo akela element ho ajayega! So we will do this...
+// 4th (Love Babbar Solution) : Finding the Unique Element
+// This approach works under the constraint that there is exactly one unique element in the array. Also it is not applicable if any number appears an odd number of times as a duplicate.
+// Approach : A straightforward but inefficient method would be to count the occurrences of each element and find the one with a count of 1. However, this is not an optimal solution.
+// A more efficient approach utilizes the XOR operation, which follows a key property : XOR of two identical numbers is always 0 (i.e., x ^ x = 0).
+//                                                                                    : XOR with 0 returns the number itself (i.e., x ^ 0 = x).
+// How XOR helps : Given an array {1,1,2,2,3}, performing XOR on all elements will cancel out the duplicate values (since 1^1 = 0 and 2^2 = 0).
+//               : What remains is 0 ^ 3 ^ 0, which results in 3, the unique element.
+//               : Since all duplicate elements cancel out, the remaining number is the unique one.
+// This method efficiently finds the unique element in O(N) time and O(1) space.
 #include<iostream>
 using namespace std;
 
+// Function to find the unique element in an array
 int findUnique(int arr[], int n) {
     int ans = 0;
-    for(int i=0; i<n; i++) {
-        ans = arr[i]^ans;
+    for(int i = 0; i < n; i++) {
+        ans ^= arr[i];  // XOR operation to cancel out duplicate elements
     }
     return ans;
 }
 
 int main() {
     int size;
-    cin>>size;
+    cin >> size;
 
-    int arr1[10000]; // Later on we should declare array dynamically but okay for now, but that will be more optimized solution!
-    for(int i=0; i<size; i++) {
-        cin>>arr1[i];
+    int arr1[10000]; // Static array declaration, though dynamic allocation is more optimized
+    for(int i = 0; i < size; i++) {
+        cin >> arr1[i];
     }
-    cout<<"The Unique Element is : "<<findUnique(arr1, size);
-}
-// Constraints : Applicable for only 1 unique element! multiple honge toh unn sabka XOR hoke answer milega!
-//             : Also it is not applicable when there are odd number of duplicates for a number!
-// Overall, The above solutions will not only check whether an array contain a unique element, but also it will tell what are frequency of all the elements and find the unique element! for checking frequencies of other elements, you can use the Maps! it will be best to use! and for most optimal solution you can use the first solution! and for the unique solution you can use the last solution!
 
-// Leetcode Question 3 : You are given an array, and it contains each element between 1 -> n-1 at least once, there is a single integer value that present in the array twice, Your task is to find the duplicate value integer value present in the array!
-// Approach : Pehli approach toh vhi hai ki harr element ko count krlo and jiss element ka count 2 ke equal hoga vo humara answer hojayega! this is a brute force approach!
-// This is a very good brute force solution also it is very optimized, but nevertheless it is a brute force solution, so it can optimized more! But yeah kuddos for that!
+    cout << "The Unique Element is: " << findUnique(arr1, size);
+}
+// Explanation : A naive approach is to count occurrences of each element and find the one with a count of 1, but this is inefficient.
+//             : Instead, we use the XOR property : XOR of two same numbers results in 0 (e.g., 1 ^ 1 = 0).
+//                                                : XOR of any number with 0 remains unchanged (e.g., 0 ^ 3 = 3).
+//                                                : XORing all elements cancels out duplicates, leaving only the unique element.
+//             : This approach is valid only when there is exactly one unique element in the array.
+//             : It does not work correctly if an element appears an odd number of times.
+//             : If you need to check the frequency of elements, using a **map** would be a better choice.
+
+// Leetcode Question 3 : Given an array containing integers in the range 1 to (n-1), where each number appears at least once, one integer is duplicated in the array. Your task is to find the duplicate integer.
+// Approach : The simplest method is to count the occurrences of each element. The number that appears twice is the duplicate.
+//          : This brute-force approach is straightforward and provides a correct solution.
+//          : While it is fairly optimized, it still falls under brute-force techniques, meaning there is room for further optimization.
+//          : That being said, it is still an effective starting solution—so kudos for that!
 #include<iostream>
 #include<climits>
 #include<cstdlib>
@@ -2381,8 +2447,13 @@ int main() {
     cout<<"Elements whose index is count 2 is : "<<countTwoIndex;
 }
 
-// But lets try to find some good solution...
-// So what we will do, maanlo array jo input me aya that is, of size = 10 and elements are 1,2,3,4,5,6,7,7,8 now we want to find the duplicate, so what we will do is ki hum isme same elements add krke (duplicate vaale me se sirf ek) and then sabka apas me XOR kra lenge taaki in the end sirf ek single element bachega and that will be our final answer!
+// Let's try to find a better solution...
+// Approach : Using XOR to Find the Duplicate Element
+// Concept Behind XOR : XOR Property : a ^ a = 0 (XOR of the same number cancels out)
+//                                   : a ^ 0 = a (XOR with 0 gives the same number)
+//                    : XOR is associative and commutative, meaning order doesn't matter.
+//                    : How XOR Helps Find the Duplicate? If we XOR all elements of the array, duplicates will cancel out.
+//                    : If we also XOR numbers from 1 to n-1, all numbers except the duplicate will cancel out, leaving just the duplicate.
 #include<iostream>
 using namespace std;
 
@@ -2406,13 +2477,9 @@ int main() {
     }
     cout<<"Duplicate Element is : "<<findDuplicate(arr1, size)<<endl;
 }
-// So what happened here is, humne arr1 me input liya array ko, and question me hai ki 1 to n-1 tak ke atleast ek element hona hi chahiye along with the sirf ek duplicate element hona chahiye!, toh ab after getting the input!
-// function definition me, humne first loop me array ke sab element ko apas me XOR karwaya, so maanlo agar humne input liya tha of size = 10, and elements are, 1,2,3,4,5,6,7,7,8,9, now, sabka apas me XOR hua, so it will be 1^2^3^4^5^6^7^7^8^9, now vaise iska answer hoga 14, so ans me yaa toh 14 store ho ya 1^2^3^4^5^6^7^7^8^9 poori string baat ek hi hai, so after completion of 1st loop, ans variable has that whole string in it (yaa 14 store ho baat ek hi hai), now...
-// in the 2nd for loop, humne normal 1 se n-1 tak ke elements ka ek ek krke XOR karwaya previous stored ans variable ki value me, so it final is like, (1^2^3^4^5^6^7^7^8^9) ^ (1) in the first iteration, then (1^2^3^4^5^6^7^7^8^9) ^ (1^2) in second iteration and similarly so on upto n-1, so the final calculation will be, (1^2^3^4^5^6^7^7^8^9) ^ (1^2^3^4^5^6^7^8^9), now we know that XOR holds associative property, so next will be, (1^1)^(2^2)^(3^3)^(4^4)^(5^5)^(6^6)^(7^7^7)^(8^8)^(9^9), and now we know ki same values ka XOR = 0 and XOR of three operation is like a^a^a, isko hum aise likh sakte hai (a^a)^a, so now...
-// 0^0^0^0^0^0^(7^7^7)^0^0 which will give output, (7^7^7) and now, (7^7)^7, it will give, 0^7 and then final answer will be, 7, hence our duplicate element is 7!
 
-// Another approach can be, ki array ko input leke sab ka sum nikal do and then 1 se n-1 tak ke saare numbers ka sum nikal do and then dono sum ko subtract krdo!
-// Lets try this approach :
+// Another approach is to take the sum of all elements in the array, then calculate the sum of numbers from 1 to n-1, and finally subtract the two sums to find the duplicate number!
+// Let's implement this approach:
 #include<iostream>
 using namespace std;
 
@@ -2438,49 +2505,60 @@ int main() {
     cout<<"Duplicate Element is : "<<findDuplicate(arr1, size)<<endl;
 }
 
-// Leetcode Question 4 : Find the intersection of 2 arrays! and if no intersection present then print -1! and arrays are sorted in non-decreasing order, means increasing order! Time Limit : 1 sec, 1 < size1 & size2 <= 10000, 0 < arr1[i] & arr2[i] <= 100000!
-// Approach : What we will do is suppose we have an Array arr1 = [1,2,3,3] and arr2 = [3,4], now hum kya krenge ki arr1 ke saare elements ko hum arr2 ke saare elements se compare krenge and jab bhi do elements match hojayenge, then usko print krdenge and then koi aur element firse uss same element se match na hojaye uske liye hum second array me jo element match hua hai iski value ko replace krke kuch abrupt value daal denge (and here that abrupt value will be INT_MIN)
-// Means, like arr1 ke saare elements humne compare kiye arr2 se, and now, we can see 1 se koi match nhi ho rha arr2 me, similarly with 2 but when we will go to 3 it matches with the first element of arr2, now we will print it and then arr2 me jo 3 hai (jo element match hua hai arr1 ke element se) usko hum replace krdenge taaki next time agar 3 aaye check krne then firse uss hi same element se match na hojaye! Now lets code it!
-// So here we have used vector as becoz we do not know what the length of the array, so we allocate the memory dynamically! the vectors we will learn deeply in STL, but for now understand the logic here!
+// Leetcode Question 4 : Find the Intersection of Two Arrays, If no intersection exists, print -1. The arrays are sorted in non-decreasing (increasing) order. Time Limit: 1 sec and Constraints: 1 < size1 & size2 <= 10000, 0 < arr1[i] & arr2[i] <= 100000
+// Approach : Given two arrays : arr1 = [1,2,3,3], arr2 = [3,4]
+//                             : Compare each element of arr1 with all elements of arr2.
+//                             : If a match is found, add it to the result and mark the matched element in arr2 with an arbitrary value (e.g., INT_MIN) to prevent duplicate matches.
+//                             : Example walkthrough : 1 and 2 don’t match with any elements in arr2, 3 matches with the first 3 in arr2, so we store it and mark that 3 in arr2 as visited (INT_MIN).
+//                                                   : The next 3 in arr1 does not match the same 3 in arr2 again, ensuring uniqueness.
+// Why use vectors? Since we don’t know the array size beforehand, vectors dynamically allocate memory. We'll cover vectors in detail in STL, but for now, focus on the logic.
 #include<iostream>
 #include<vector>
 #include<climits>
 using namespace std;
 
+// Function to find the intersection of two sorted arrays
 vector<int> findIntersection(vector<int> &arr1, int size1, vector<int> &arr2, int size2) {
-    vector<int> ans;
-    for(int i=0; i<size1; i++) {
+    vector<int> result;
+    for(int i = 0; i < size1; i++) {
         int element = arr1[i];
-        for(int j=0; j<size2; j++) {
+        for(int j = 0; j < size2; j++) {
             if(element == arr2[j]) {
-                ans.push_back(element);
-                arr2[j] = INT_MIN; // Yahaa pr koi negative number bhi daal sakte hai kyunki ek constraint question me hi diya hua hai ki dono array me value humesha positive hi hongi, toh for this case -1 se bhi replace krdenge toh koi dikkat nhi hai!
-                break; // Ek element ka ek hi match dekhna hai, multiple nhi, isliye jab ek match milgya toh break krdiya!
+                result.push_back(element); // Add to result if there's a match
+                arr2[j] = INT_MIN; // Mark the matched element as visited using a placeholder value
+                break; // Ensure a single occurrence is matched only once
             }
         }
     }
-    return ans;
+    return result;
 }
 
 int main() {
     int size1, size2;
-    cin>>size1>>size2;
+    cin >> size1 >> size2;
+    
     vector<int> arr1(size1);
     vector<int> arr2(size2);
-    for(int i=0; i<size1; i++) {
-        cin>>arr1[i];
+
+    for(int i = 0; i < size1; i++) {
+        cin >> arr1[i];
     }
-    for(int i=0; i<size2; i++) {
-        cin>>arr2[i];
+    for(int i = 0; i < size2; i++) {
+        cin >> arr2[i];
     }
+    
     vector<int> result = findIntersection(arr1, size1, arr2, size2);
     cout << "Intersection: ";
-    for (int i : result) { // Here, this is another way of using for-loop, which is called range-based forloop, which is a convenient syntax introduced in C++11 for iterating over elements in a range, such as the elements of a container (like a vector).
-        cout << i << " ";  // In summary, the range-based for loop simplifies the syntax for iterating over elements in a container, making the code more concise and readable. The loop automatically iterates over all elements in the specified range (here, the result vector), and the loop variable (i in this case) takes the value of each element in turn. This is a cleaner and more modern alternative to traditional iterator-based loops.
-    } // Normal for-loop bhi use kr sakte hai with and .size() use krke condition me jaise normal arrays ke saath krte hai!
+    for (int i : result) { 
+        cout << i << " ";  
+    } 
 }
-// But the above solution is not optimized as it is giving a warning : TLE (Time limit exceeded), so now we will make it optimize, how? so the point is, we did'nt used the point of non-decreasing order, as we know agar element non-decreasing order (increasing order) me stored hai, toh jab hum ek element ko dusre array ke first element se compare krenge and then agar second element se compare kiya and dekha ki ye element arr1 ke element se badaa hai toh hum aage jayenge hi nhi na, vrna humaari processing waste hogi! so to optimize this we will apply this as a constraint in the program!
-// like suppose we have an arr1 = [1,4,5] and arr2 = [4,5], now 1 ko ja 4 se compare krenge, then we will see ki 4>1 means aage aane vaale bhi jo bhi elements honge vo bhii 1 se bade honge toh aage jaana hi nhi and we will move to the next element of arr1! so bss yhi cheez hume apne code me add krni hai!
+
+// The previous solution is not optimized and results in a Time Limit Exceeded (TLE) warning. To optimize it, we need to utilize the fact that both arrays are sorted in non-decreasing order (increasing order).
+// Instead of comparing every element of arr1 with all elements of arr2, we can skip unnecessary comparisons. If arr2[j] becomes greater than arr1[i], there's no point in checking further elements of arr2, as they will all be greater than arr1[i].
+// Example : Let’s say arr1 = [1, 4, 5] and arr2 = [4, 5].
+//         : When arr1[0] = 1 is compared with arr2[0] = 4, we notice that 4 > 1, meaning all further elements in arr2 will also be greater than 1.
+//         : So, we skip checking further elements in arr2 and move to the next element in arr1.
 #include<iostream>
 #include<vector>
 #include<climits>
@@ -2521,13 +2599,19 @@ int main() {
         cout << i << " ";
     }
 }
-// But again this is still giving warning of TLE, so we will go with optimization 2 : now this thing is pehli baat toh time limit isliye bhi exceed ho rhi kyunki hum 2 loops use kr rhe hai! so pehle toh hume try krna hai ki ek loop kam kre, then...
-// Lets learn a different approach which is called 2 pointer approach, which says, suppose two arr1 = [1,2,2,2,3,4] and arr2 = [2,2,3,3] now hum pehla pointer (not really pointer vaala pointer), its just a iteration, so first humne i arr1 ke first element pr rakha and next humne arr2 ke 1st element pr rakha! now we will compare...
-// So first thing jo hume dhyaan se ek condition banani hai ki, arr1[i] < arr2[j], then i++ krdo
-// Now second thing jo hume dhyaan se ek aur condition banani hai ki, arr1[i] == arr2[j], then print krdo vector me push krdo and i++ and j++ krdo
-// Now lastly ek aur condition banani hai ki, agar arr1[i] > arr2[j] hogya, then j++ krdo
-// Also tab tak hi loop chalana hai jab tak dono array me se koi bhi ek ke saare elements traverse na hojaye! kisi bhi ek ke saare elements traverse hojaate hai toh exit the loop
-// So now lets follow this approach :
+
+// The previous approach still results in a TLE warning because it uses two nested loops. To optimize further, we will reduce the number of loops.
+// Let's use a more efficient method called the two-pointer approach.
+// How does the two-pointer approach work...
+// Suppose we have two sorted arrays : arr1 = [1,2,2,2,3,4] and arr2 = [2,2,3,3]
+// - We place one pointer (i) at the beginning of arr1 and another pointer (j) at the beginning of arr2.
+// - We compare arr1[i] and arr2[j]:
+// - If arr1[i] < arr2[j], move pointer i forward (i++) since the smaller element cannot be in the intersection.
+// - If arr1[i] == arr2[j], we store the element in the result and move both pointers forward (i++ and j++).
+// - If arr1[i] > arr2[j], move pointer j forward (j++).
+// - The loop runs until one of the arrays is completely traversed.
+// This approach significantly reduces time complexity to O(N + M) compared to the previous O(N × M).
+// Let's implement this optimized approach:
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -2550,7 +2634,7 @@ void intersectArrays(vector<int> arr1, vector<int> arr2) {
             i++;
             j++;
         }
-        if(arr1[i1] > arr2[j]) {
+        if(arr1[i] > arr2[j]) {
             j++;
         }
         else {
@@ -2579,10 +2663,15 @@ int main() {
     intersectArrays(arr1,arr2);
 }
 
-// Leetcode Question 5 : You are given an int array of size n, your task is return the list of all pairs of elements, such that sum of elements of each pair equals S. Each pair should be sorted and first value should be less than the second value, also...
-// Return the list of pairs sorted in non-decreasing order of their first value, in case two pairs have the same first value then the pair with smaller second value should come first!
-// A better explaination of question and its constraints : The task is to find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
-// Approach : Again 2 pointer approach, given array me i = 0 se n-1 tak ka loop chalayenge and uske andar j = i+1 se lekar n-1 tak ka loop chalayenge, and jahaa bhi sum = s hojayega usko 2D vector me daal denge! (Kyunki yahaa hume pairs toh return krna hi hai pr uske saath list of pair bhi return krna hai iske liye we need a 2D array) so we are using dynamic one!
+// Leetcode Question 5 : You are given an integer array of size n, and your task is to return a list of all pairs of elements whose sum equals a given value S.
+// The pairs must follow these constraints : Each pair should be sorted in ascending order. The list of pairs should be sorted in non-decreasing order based on the first value of the pair. If two pairs have the same first value, then the pair with the smaller second value should come first.
+// Approach (Two-Pointer Method) : We'll iterate through the array using two nested loops : The outer loop will run from i = 0 to n - 1.
+//                                                                                        : The inner loop will run from j = i + 1 to n - 1. Whenever the sum of arr[i] + arr[j] equals S, we will store the pair in a 2D vector because we need to return a list of pairs.
+// Why Use a 2D Vector : A 2D vector (i.e., vector<vector<int>>) allows us to store multiple pairs. Think of it like a dynamic array that stores vectors, similar to how a 1D vector stores individual integer values.
+// For example : Initially, ans = [[]] (empty list).
+//             : If we find a valid pair (a, b), the list updates to ans = [[a, b]].
+//             : If we find another pair (c, d), the list updates again: ans = [[a, b], [c, d]], and so on...
+//             : Finally, we use sort(ans.begin(), ans.end()) to ensure that pairs are sorted based on their first value, and in case of a tie, the second value is considered. The sort function automatically handles this requirement.
 #include<iostream>
 #include<vector>
 #include<algorithm> // To use the sort function
@@ -2618,7 +2707,7 @@ int main() {
     for (vector<int> pair : result) {
         cout << "(" << pair[0] << ", " << pair[1] << ") ";
     }
-} // Don't worry we will study the vector in detail in the upcoming lecture of STL, but for now just undertstand it as dynamic array! and more or less the above code is very clear what is it doing!
+}
 
 // Leetcode Question 7 : Sort 0, 1 in an array!
 #include<iostream>
@@ -2838,12 +2927,9 @@ int main() {
 
 // Goto Statements : The goto statement in C and C++ provides an unconditional jump to another point in the program. It allows the control to be transferred to a labeled statement within the same function. This can be useful for breaking out of deeply nested loops or for implementing certain kinds of error handling.
 // Syntax : First we define a label, by just writing "label_name : ", after this we write "goto label_name;"
-// Example Syntax :
-// label_name:
-// Code to be executed when the goto statement jumps here
-// goto label_name;
-
-// Example of goto statement :
+// Example Syntax : label_name:
+//                : [Code to be executed when the goto statement jumps here]
+//                : goto label_name;
 // Example 1 :
 #include <stdio.h>
 
@@ -2885,122 +2971,126 @@ int main() {
     printf("Loop end");
 }
 
-// Unions :
-// Union is very similar to structure! bss jo main difference vo ye hai ki jaise pehle toh ki ye dono hi user defined data types hote hai! but jo difference vo ye hai ki jaise structure me jo data members hote hai unn sabko ek individual alag se memory milti hai apne apne data ko store krne ke liye! but in case of unions jitne bhi data members hote hai unn sabke ke liye ek common memory allocate hoti hai! and utni memory allocate hogi jitni jiss data member ki sabse zyada hogi!
-// Now suppose an example of structure, where it has data members like, int roll_number; float cgpa, char name[30]; now isme kyunki ye ek structure se define hui hai toh yahaa pr harr data member ke liye alag alag memory allocate hogi! now like jaise int ke liye 4 bytes allocate hue + float ke liye 4 bytes + then char name[30] means 30 bytes for name! means in total structure needs 38 bytes in total to store values of its data members when objects/instances of structure are created.
-// But in the same example, if we just replace struct with union, then then jo data member sabse zyada memory lega utni memory bss allocate hogi! but sab data member ke liye alag memory allocate nhi hogi! means in total memory will be 30 bytes only! unions use krne ka ek fayeda hota hai ki memory kaafi efficiently use hoti hai! like isme agar hum instances bnaate hai union ke then jaise humne agar [instance].id = 3 krdi toh uss 30 bytes ki memory me ye 3 jaake store hojayega! but agar iske baad agar hum [instance].cgpa = 8.9, toh jo pehle id store tha ek instance vo corrupt hojayega and uss hi same memory space me ye cgpa store hojayegi! and similarly agar ab cgpa ke baad name store krte hai toh fir cgpa corrupt hojayegi and uss hi same memory space me name store hojayga! means jo hum end me value assign krenge jiss data member ki vo value store hogi memory me! and usse pehle jitne bhi data members ki value hai vo erase ho jayegi! but agar hum structures me dekhe toh harr data member ki value store rehti hai! and dusre data members ka initiallization kisi aur data member ki value ko change/erase/corrupt nhi krta!
-// Lets code this and understand with an example...
-#include<stdio.h>
-#include<string.h>
+// Unions vs Structures!
+// Structures (struct) : A structure is a user-defined data type that groups related data elements of different types under a single name! Each element in a structure is called a member/field, Members can be accessed using the dot (.) operator
+// Unions : A union is a special data type that allows storing different data types in the same memory location. Only one member can hold a value at a time since all members share the same memory space. The size of a union is determined by its largest member
+// Key Differences : Memory : Structures allocate separate memory for each member, while unions share memory among members
+//                 : Size : Structure size ≥ sum of member sizes; union size = size of largest member
+//                 : Access : In structures, all members can hold values simultaneously; in unions, only one member can hold a valid value at a time
+#include <stdio.h>
+#include <string.h>
 
-struct student { // Here we can use "typedef" to give it an abbreviation!
+// Structure: Each data member gets separate memory allocation
+struct Student {
     int id;
     float cgpa;
     char name[30];
 };
-// Hum int main ke bajaye yahaa pr bhi objects/instances declare kr sakte hai, by just writing it between the closed curly bracket and semicolon!
-// Something like this, } Utkarsh, Aditya, Vishal; so yahaa pr humne 3 objects bnaa diya ab seedha isko int main me id, cgpa and name ko initiallize kr sakte hai! kyunki objects toh pehle hi bnaa diye!
-// And this same thing can be done in union also!
 
-int main() {
-    student Utkarsh;
-    Utkarsh.id = 365;
-    Utkarsh.cgpa = 9.5;
-    strcpy(Utkarsh.name,"Utkarsh");
-    // Here due to struct, id + cgpa + name = 4 + 4 + 30 = 38 bytes of memory is allocate to this user defined data type student! and every data member has its own memory!
-
-    printf("ID: %d\n", Utkarsh.id); // It will print 365 and its initiallization will not affect values/initiallization of other instances!
-    printf("CGPA: %.2f\n", Utkarsh.cgpa); // It will print 9.50 and its initiallization will not affect values/initiallization of other instances!
-    printf("Name: %s\n", Utkarsh.name); // It will print Utkarsh and its initiallization will not affect values/initiallization of other instances!
-}
-
-// Now lets just replace struct with unions!
-#include<stdio.h>
-#include<string.h>
-
-union student {
+// Union: All data members share the same memory, allocated as per the largest member
+union StudentUnion {
     int id;
     float cgpa;
     char name[30];
 };
 
 int main() {
-    student Utkarsh;
-    Utkarsh.id = 365;
-    Utkarsh.cgpa = 9.5;
-    strcpy(Utkarsh.name,"Utkarsh");
-
-    printf("ID: %d\n", Utkarsh.id); // Here it will print corrupted or garbage value kyunki vaise toh ye 365 print krta agar sirf id initiallize hui hoti! but id ke baad cgpa and uske baad name bhi initiallize ho chuka hai! and union me jo last me initiallize hua hota hai sirf vhi memory me jaake store hota hai! toh isliye yahaa pr garbage value print hogi!
-    printf("CGPA: %.2f\n", Utkarsh.cgpa); // Yahaa pr bhi garbage value print hogi! reason is same as above!
-    printf("Name: %s\n", Utkarsh.name); // Here it will print name of the instance! kyunki as becoz union hai toh jaise jaise data member initiallize hote rahenge! and in the end jo last me jo initiallize hoga vhi in the end memory me store hoga! kyunki memory saare data members ke liye ek hi hai iss hi wajah se ek baar me sirf ek hi data member ki value store ho sakti hai!
+    printf("Using Structure:\n");
+    struct Student s1;
+    s1.id = 365;
+    s1.cgpa = 9.5;
+    strcpy(s1.name, "Utkarsh");
+    printf("ID: %d\nCGPA: %.2f\nName: %s\n", s1.id, s1.cgpa, s1.name);
+    // Memory allocated: 4 + 4 + 30 = 38 bytes (Each member has its own space)
+    
+    printf("\nUsing Union:\n");
+    union StudentUnion u1;
+    u1.id = 365;
+    u1.cgpa = 9.5;
+    strcpy(u1.name, "Utkarsh");
+    // Only the last assigned value remains valid, previous ones get overwritten
+    printf("ID: %d\n", u1.id); // May print garbage due to memory overwrite
+    printf("CGPA: %.2f\n", u1.cgpa); // May print garbage
+    printf("Name: %s\n", u1.name); // Prints "Utkarsh"
+    // Memory allocated: max(4, 4, 30) = 30 bytes (Shared memory for all members)
+    
+    return 0;
 }
 
-// Enums :
-// It is again a user defined data type! bss ye thora syntactically and use case wise alag hai struct and union se! like isme hum integer values ko kuch strings ki help se define krre hai! yes you heard it right! kuch "integer" value ko "string" se represent krte hai, naa ki string ko integer value se!
-// An enum, short for "enumeration," is a special data type in many programming languages that allows you to define a set of named values, which are typically used to represent a collection of related constants. Enums provide a way to group and name a set of related values, making code more readable, maintainable, and less error-prone.
-// Like aisa kabhi kabhi hota hai na jaise hume koi ek particular cheez ko integer ke jagah string se define kr paate taaki thori confusion and readability badhti code ki! toh bss vhi ki unn integers ko hi string ki help se define krte hai!
-// Use cases of Enums : Representing Fixed Options or States (Like that days of a week example)
-//                    : Increasing Code Readability
-//                    : Preventing Invalid Values, Example : "enum Gender {Male, Female};" Hence, here only two valid genders are there!
-//                    : Simplifying Switch Statements
-//                    : Replacing Magic Numbers, Enums eliminate the use of "magic numbers" by giving meaningful names to constants, improving maintainability. Example : "enum HTTPStatusCode { OK = 200, NotFound = 404, InternalServerError = 500 };"
-//                    : and some more...
-// Lets understand this with code...
-#include<stdio.h>
+// Enums : Enums are user-defined data types that give names to integral constants. By default, first value = 0, then auto-increments by 1
+//       : Values can be explicitly assigned, All enum values are integers internally.
+// Main Use Cases : Representing States/Options : Perfect for fixed sets of choices like days of week, months, or game states
+//                : Better Code Readability : Using names instead of cryptic numbers makes code self-documenting.
+//                : Type Safety : Like in enum Gender {Male, Female}, it prevents invalid values being used.
+//                : Clean Switch Statements : Makes switch-case blocks more intuitive.
+//                : Replacing Magic Numbers : Instead of using raw numbers like 404 for HTTP errors, you can use descriptive names:
+#include <stdio.h>
 
 int main() {
-    enum Meal {Breakfast, Lunch, Dinner};
-    // So maanlo jaise kabhi hume kuch calculation krni hai jahaa hume output me breakfast, lunch ya dinner chahiye! toh uss case me bina enum ke toh hum kuch integer values ya koi aur tareeke se define krte ki agar output ye aaya toh mtlb hua breakfast agar ye aaya toh lunch agar ye aaya toh dinner! so yahaa chalo theek hai ki humne output le aaye and koi dikkat bhi nhi hai as such!
-    // But aise cheezo ko krne ke ek more readable tareeka ye hai ki hum unn outputs ko kisi string se hi link krde! like Breakfast ko 0 se ki agar 0 aaya toh samajh jayenge ki iska mtlb Breakfast hai and similarly for 1 for Lunch and 2 for Dinner!
-    // So bss enum vhi krta hai! isme kuch bhi strings daloge toh usko pehla integral 0 assign hojayega! agar iss Breakfast ko lekar koi bhi calculation kroge toh uss calculation me Breakfast kisi string ka nhi ek 0 ka role play krega kyunki ye Breakfast 0 ko represent kr rha hai becoz we have used enum for it! and similarly for others!
-    // Also ye Meal ab ek data type ban gya hai jisme ye 3 tarah ki value store ho sakti hai!
+    // Enum Declaration - Creating a custom data type that maps names to integers
+    enum Meal {
+        Breakfast,  // = 0 (automatically assigned)
+        Lunch,      // = 1 (automatically assigned) 
+        Dinner      // = 2 (automatically assigned)
+    };
 
-    // For C++
-    // cout<<Breakfast;
-    // cout<<Lunch;
-    // cout<<Dinner;
+    // You can also explicitly assign values
+    enum HTTPStatus {
+        OK = 200,
+        NotFound = 404,
+        ServerError = 500
+    };
 
-    // For C
-    printf("%d\n",Breakfast); // It will print 0
-    printf("%d\n",Lunch); // It will print 1
-    printf("%d\n",Dinner); // It will print 2
-}
+    // Example showing different use cases
+    enum DaysOfWeek {
+        Monday,     // = 0
+        Tuesday,    // = 1
+        Wednesday,  // = 2
+        Thursday,   // = 3
+        Friday      // = 4
+    };
 
-// Another example :
-#include<stdio.h>
+    // Using enums instead of "magic numbers" makes code more readable
+    enum LogLevel {
+        DEBUG,      // Better than using 0
+        INFO,       // Better than using 1
+        WARNING,    // Better than using 2
+        ERROR       // Better than using 3
+    };
 
-int main() {
-    enum Week {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
-    Week Today = Wednesday; // Today is declared as Wednesday, which assigns the integer value 2 to Today (since enums start at 0 and Wednesday is the third element).
-    // Hum chaahe toh yahaa pr Today ko scanf ka use krke input bhi le sakte hai but input ek integer value honi chahiye (Means we will use %d format specifier in C for input) as each value in enum is representing an integer value!
+    // Printing enum values shows their underlying integer representation
+    printf("Meal times:\n");
+    printf("Breakfast: %d\n", Breakfast);  // Prints 0
+    printf("Lunch: %d\n", Lunch);          // Prints 1
+    printf("Dinner: %d\n", Dinner);        // Prints 2
 
-    switch (Today) {
-    case Monday:
-        printf("Today is Monday");
-        break;
-    case Tuesday:
-        printf("Today is Chewsday");
-        break;
-    case Wednesday:
-        printf("Today is Vensday");
-        break;
-    case Thursday:
-        printf("Today is Thirstay");
-        break;
-    case Friday:
-        printf("Today is Fryday");
-        break;
-    case Saturday:
-        printf("Today is Saturday");
-        break;
-    case Sunday:
-        printf("Today is Sun-Day");
-        break;
-    default:
-        printf("Not a valid day of the week");
-        break;
+    // Using enum in a variable
+    enum Meal currentMeal = Lunch;
+    printf("\nCurrent meal value: %d\n", currentMeal);  // Prints 1
+
+    // Using enum in conditions
+    if (currentMeal == Lunch) {
+        printf("It's lunch time!\n");
     }
-} // Baaki iska aur koi use case hoga you will study them going further! as of now it is enough for enum!
+
+    // Using enum with switch
+    enum LogLevel level = WARNING;
+    switch (level) {
+        case DEBUG:
+            printf("Debug message\n");
+            break;
+        case INFO:
+            printf("Info message\n");
+            break;
+        case WARNING:
+            printf("Warning message\n");
+            break;
+        case ERROR:
+            printf("Error message\n");
+            break;
+    }
+    return 0;
+}
 
 // ------------------------------------------------------------------- Some basics of exclusive C++ from CWH! ------------------------------------------------------------------------------------------------------------------------------>
 // With namespace std;
@@ -3189,17 +3279,18 @@ int main() {
 // Example :
 #include <iostream>
 #include <iomanip>  // Include the iomanip library
+using namespace std;
 
 int main() {
     int num = 123;
     double pi = 3.14159;
 
-    std::cout << std::setw(10) << num << std::endl;      // Outputs "       123"
-    std::cout << std::setw(10) << pi << std::endl;       // Outputs "   3.14159"
-    std::cout << std::setw(10) << "Hello" << std::endl;  // Outputs "     Hello"
+    cout << setw(10) << num << endl;      // Outputs "       123"
+    cout << setw(10) << pi << endl;       // Outputs "   3.14159"
+    cout << setw(10) << "Hello" << endl;  // Outputs "     Hello"
 
     // You can also chain manipulators
-    std::cout << std::setw(10) << std::setfill('*') << num << std::endl; // Outputs "*******123", means ki pehle humne set krdiya ki 10 characters ka jagah output lega! and then agar output usse chhota hai toh humare paas choice hai ki yaa toh usko hum khaali chhor de, yaa toh setfill ka use krke unn spaces ko fill krde! and agar output more than 10 characters hota toh simply vo jo limit hai uski koi value nhi rehti!
+    cout << setw(10) << setfill('*') << num << endl; // Outputs "*******123", means ki pehle humne set krdiya ki 10 characters ka jagah output lega! and then agar output usse chhota hai toh humare paas choice hai ki yaa toh usko hum khaali chhor de, yaa toh setfill ka use krke unn spaces ko fill krde! and agar output more than 10 characters hota toh simply vo jo limit hai uski koi value nhi rehti!
 }
 
 // ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->

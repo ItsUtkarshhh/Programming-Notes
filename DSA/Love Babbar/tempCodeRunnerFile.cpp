@@ -1,120 +1,87 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
 
-class GeneralNodeLL5 {
-public:
+class NodeSLL9 {
+    public:
     int data;
-    GeneralNodeLL5* next;
+    NodeSLL9* next;
 
-    GeneralNodeLL5(int data) {
+    NodeSLL9(int data) {
         this->data = data;
         this->next = NULL;
     }
+
+    ~NodeSLL9() {
+        cout << "Value of deleted element: " << data << endl;
+    }
 };
 
-// Insert at Tail for Singly Linked List
-void insertSinglyLL5(GeneralNodeLL5*& head, GeneralNodeLL5*& tail, int data) {
-    GeneralNodeLL5* newNode = new GeneralNodeLL5(data);
-    if (tail == NULL) {
+void insertAtTailSLL9(NodeSLL9* &head, NodeSLL9* &tail, int data) {
+    NodeSLL9* newNode = new NodeSLL9(data);
+    if(tail == NULL) {
         head = newNode;
         tail = newNode;
         return;
     }
     tail->next = newNode;
     tail = newNode;
+    return;
 }
 
-// Detect Loop using Floyd’s Algorithm
-GeneralNodeLL5* floydLoopDetectionAlgo3(GeneralNodeLL5* head) {
-    if (head == NULL) return NULL;
-
-    GeneralNodeLL5* slow = head;
-    GeneralNodeLL5* fast = head;
-
-    while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
-
-        if (slow == fast) return slow;
+NodeSLL9* ReverseK(NodeSLL9* head, int K) {
+    if(head == NULL) {
+        return NULL;
     }
-    return NULL;
-}
-
-// Find the Starting Node of the Loop
-GeneralNodeLL5* getStartingNode2(GeneralNodeLL5* head) {
-    if (head == NULL) return NULL;
-
-    GeneralNodeLL5* intersection = floydLoopDetectionAlgo3(head);
-    if (intersection == NULL) return NULL;
-
-    GeneralNodeLL5* slow = head;
-
-    while (slow != intersection) {
-        slow = slow->next;
-        intersection = intersection->next;
+    NodeSLL9* prev = NULL;
+    NodeSLL9* curr = head;
+    NodeSLL9* next = NULL;
+    int count = 0;
+    while(curr != NULL && count < K) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+        count++;
     }
-    return slow;
-}
-
-// Remove Loop from the Linked List
-void removeLoop(GeneralNodeLL5* head) {
-    if (head == NULL) return;
-
-    GeneralNodeLL5* loopStart = getStartingNode2(head);
-    if (loopStart == NULL) return;
-
-    GeneralNodeLL5* temp = loopStart;
-
-    while (temp->next != loopStart) {
-        temp = temp->next;
+    if(next != NULL) {
+        head->next = ReverseK(next, K);
     }
-
-    temp->next = NULL;
+    return prev;
 }
 
-// Print the Linked List
-void printLinkedList5(GeneralNodeLL5* head) {
-    if (head == NULL) {
-        cout << "Empty List!" << endl;
+void printListSLL9(NodeSLL9* head) { 
+    if(head == NULL) {
+        cout << "Empty List!";
         return;
     }
-    GeneralNodeLL5* temp = head;
-    while (temp != NULL) {
+    NodeSLL9* temp = head;
+    while(temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
     }
     cout << endl;
 }
 
-// Main Function
 int main() {
-    GeneralNodeLL5* headS = NULL;
-    GeneralNodeLL5* tailS = NULL;
+    NodeSLL9* n1 = new NodeSLL9(10);
+    NodeSLL9* head = n1;
+    NodeSLL9* tail = n1;
 
-    insertSinglyLL5(headS, tailS, 10);
-    insertSinglyLL5(headS, tailS, 20);
-    insertSinglyLL5(headS, tailS, 30);
-    insertSinglyLL5(headS, tailS, 40);
-    insertSinglyLL5(headS, tailS, 50);
+    insertAtTailSLL9(head, tail, 20);
+    insertAtTailSLL9(head, tail, 30);
+    insertAtTailSLL9(head, tail, 40);
+    insertAtTailSLL9(head, tail, 50);
+    insertAtTailSLL9(head, tail, 60);
+    
+    cout << "Current Linked List: ";
+    printListSLL9(head);
 
-    tailS->next = headS->next->next; // Creating a loop at node 30
-    cout<<"Tail next (Before Removal) : "<<tailS->next->data<<endl;
+    cout<<"Enter you value of K : ";
+    int k;
+    cin>>k;
+    NodeSLL9* reversedK = ReverseK(head, k);
+    cout << "Current Linked List: ";
+    printListSLL9(reversedK);
 
-    // Detect Loop
-    GeneralNodeLL5* loopNode = floydLoopDetectionAlgo3(headS);
-    if (loopNode) {
-        cout << "Loop detected at node with value : " << loopNode->data << endl;
-        GeneralNodeLL5* loopStart = getStartingNode2(headS);
-        cout << "The loop starts at node with value : " << loopStart->data << endl;
-
-        // Remove the loop
-        removeLoop(headS);
-        cout << "Loop removed. Linked List after loop removal : ";
-        printLinkedList5(headS);
-        cout << "Tail next (After Removal) : " << (tailS->next == NULL ? "null" : to_string(tailS->next->data)) << endl;
-    }
-    else {
-        cout << "No loop detected!" << endl;
-    }
     return 0;
 }
