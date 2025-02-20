@@ -5213,7 +5213,7 @@ int main() {
         }
         temp = temp->next;
     }
-    
+
     cout<<"Linked List with Inside Loop at : 300"<<endl;
     // cout << "(Detect Loop using Circular LL Logic) " << (checkCircularLL3(headS2) ? "It is a Circular Linked List!" : "It is NOT a Circular Linked List!") << endl; // // Won't work here!
     cout << "(Detect Loop using Maps) " << (detectLoopWithMaps2(headS2) ? "Loop detected!" : "No Loop detected!") << endl;

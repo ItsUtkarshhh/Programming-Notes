@@ -9,6 +9,7 @@
 // Detect, Get Starting Node of Loop and Remove the Loop!
 
 #include<iostream>
+#include<map>
 using namespace std;
 
 class Node {
@@ -74,25 +75,92 @@ void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
     return;
 }
 
-Node* reverseK(Node* &head, int k) {
-    if(head == NULL) {
+bool detectLoop(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return false;
+    }
+
+    Node* temp = head->next;
+    while(temp != NULL && temp != head) {
+        temp = temp->next;
+    }
+    if(temp == head) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool detectLoopwithMaps(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return false;
+    }
+
+    map<Node*, bool> visited;
+    Node* temp = head;
+    while(temp != NULL) {
+        if(visited[temp] == true) {
+            return true;
+        }
+        visited[temp] = true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+Node* detectLoopwithFLoyd(Node* head) {
+    if(head == NULL || head->next == NULL) {
         return NULL;
     }
-    Node* prev = NULL;
-    Node* curr = head;
-    Node* forward = NULL;
-    int count = 0;
-    while(curr != NULL && count < k) {
-        forward = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = forward;
-        count++;
+
+    Node* slow = head;
+    Node* fast = head;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast) {
+            return slow;
+        }
     }
-    if(forward != NULL) {
-        head->next = reverseK(forward, k);
+    return NULL;
+}
+
+Node* startingNode(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return NULL;
     }
-    return prev;
+
+    Node* intersection = detectLoopwithFLoyd(head);
+    Node* slow = head;
+    if(intersection != NULL) {
+        while(intersection != slow) {
+            intersection = intersection->next;
+            slow = slow->next;
+        }
+        return slow;
+    }
+    else {
+        return NULL;
+    }
+}
+
+void removeLoop(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return;
+    }
+
+    Node* loopstart = startingNode(head);
+    if(loopstart != NULL) {
+        Node* temp = loopstart;
+        while(temp->next != loopstart) {
+            temp = temp->next;
+        }
+        temp->next = NULL;
+    }
+    else {
+        return;
+    }
 }
 
 void printList(Node* head) {
@@ -125,17 +193,36 @@ int main() {
     insertAnywhere(head, tail, getLen(head) + 1, 15);
     insertAnywhere(head, tail, getLen(head) + 1, 20);
     insertAnywhere(head, tail, getLen(head) + 1, 25);
+    insertAnywhere(head, tail, getLen(head) + 1, 30);
+    insertAnywhere(head, tail, getLen(head) + 1, 35);
     cout<<"Current Linked List : ";
     printList(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
-
+    
     cout<<endl<<endl;
-
-    int k;
-    cout<<"Enter K : ";
-    cin>>k;
-    head = reverseK(head, k);
-    cout<<"Current Linked List : ";
+    
+    Node* temp = head;
+    while(temp->data != 0) {
+        temp = temp->next;
+    }
+    tail->next = temp;
+    cout<<"Loop created!"<<endl;
+    // tail->next = head;
+    
+    // Detect Loop
+    // cout<<detectLoop(head);
+    // cout<<"Hi 4"<<endl;
+    cout<<"Loop exist : "<<detectLoopwithMaps(head)<<endl;
+    Node* intersectionNode = detectLoopwithFLoyd(head);
+    cout<<"Intersection point : "<<intersectionNode->data<<endl;
+    
+    // Get starting node!
+    Node* loopstart = startingNode(head);
+    cout<<"Loop start point : "<<loopstart->data<<endl;
+    
+    // Remove Loop!
+    cout<<"Loop removed! ";
+    removeLoop(head);
     printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+
 }
