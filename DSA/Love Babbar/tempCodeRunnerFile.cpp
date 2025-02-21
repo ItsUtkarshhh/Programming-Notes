@@ -2,24 +2,24 @@
 #include<unordered_map>
 using namespace std;
 
-class NodeSLL7 {
+class NodeSLL3 {
     public:
     int data;
-    NodeSLL7* next;
+    NodeSLL3* next;
     
-    NodeSLL7(int data) {
+    NodeSLL3(int data) {
         this->data = data;
         this->next = NULL;
     }
 };
 
-int getLenN2(NodeSLL7* head) {
+int getLenSLL3(NodeSLL3* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return 0;
     }
     int len = 0;
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -27,14 +27,14 @@ int getLenN2(NodeSLL7* head) {
     return len;
 }
 
-void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
-    NodeSLL7* newNode = new NodeSLL7(data);
+void insertAnywhereSLL3(NodeSLL3* &head, NodeSLL3* &tail, int pos, int data) {
+    NodeSLL3* newNode = new NodeSLL3(data);
     if(head == NULL) {
         head = tail = newNode;
         return;
     }
     
-    int len = getLenN2(head);
+    int len = getLenSLL3(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid Length!";
         delete newNode;
@@ -53,7 +53,7 @@ void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
         return;
     }
     
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     int count = 1;
     while(count < pos - 1) {
         count++;
@@ -65,15 +65,15 @@ void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
 }
 
 // Approach 1: Brute Force - O(n^2)
-NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
+NodeSLL3* removeDuplicatesSLL3A(NodeSLL3* head) {
     if(head == NULL) return NULL;
 
-    NodeSLL7* curr = head;
+    NodeSLL3* curr = head;
     while(curr != NULL) {
-        NodeSLL7* temp = curr;
+        NodeSLL3* temp = curr;
         while(temp->next != NULL) {
             if(temp->next->data == curr->data) {
-                NodeSLL7* duplicate = temp->next;
+                NodeSLL3* duplicate = temp->next;
                 temp->next = temp->next->next;
                 delete duplicate;
             }
@@ -87,12 +87,12 @@ NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
 }
 
 // Approach 3: Hashing - O(n)
-NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
+NodeSLL3* removeDuplicatesSLL3B(NodeSLL3* head) {
     if (!head) return nullptr;
 
     unordered_map<int, bool> visited;
-    NodeSLL7* curr = head;
-    NodeSLL7* prev = nullptr;
+    NodeSLL3* curr = head;
+    NodeSLL3* prev = nullptr;
 
     while (curr != nullptr) {
         if (visited[curr->data]) { // If duplicate is found
@@ -108,12 +108,12 @@ NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
     return head;
 }
 
-void printListN2(NodeSLL7* head) {
+void printListSLL3(NodeSLL3* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -122,46 +122,46 @@ void printListN2(NodeSLL7* head) {
 }
 
 int main() {
-    NodeSLL7* n1 = new NodeSLL7(10);
-    NodeSLL7* head = n1;
-    NodeSLL7* tail = n1;
+    NodeSLL3* n1 = new NodeSLL3(10);
+    NodeSLL3* head = n1;
+    NodeSLL3* tail = n1;
 
-    insertAnywhereN2(head, tail, 1, 5);
-    insertAnywhereN2(head, tail, 1, 0);
-    insertAnywhereN2(head, tail, 1, -5);
-    insertAnywhereN2(head, tail, 1, -5);
+    insertAnywhereSLL3(head, tail, 1, -5);
+    insertAnywhereSLL3(head, tail, 1, 5);
+    insertAnywhereSLL3(head, tail, 1, 0);
+    insertAnywhereSLL3(head, tail, 1, -5);
     cout<<"Current Linked List: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 15);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 25);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 35);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 15);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 30);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 25);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 35);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 30);
     cout<<"Current Linked List: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
     // Removing Duplicates - Approach 1
-    head = removeDuplicatesN2(head);
+    head = removeDuplicatesSLL3A(head);
     cout<<"Final Linked List after Approach 1: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
     // Removing Duplicates - Approach 3
-    head = removeDuplicatesN3(head);
+    head = removeDuplicatesSLL3B(head);
     cout<<"Final Linked List after Approach 3: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     return 0;

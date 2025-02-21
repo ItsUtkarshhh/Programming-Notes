@@ -2599,81 +2599,33 @@ int main() {
 #include<iostream>
 using namespace std;
 
-class NodeSLL1 { // Node class to represent a single node in the linked list
+class NodeSLL { // Node Creation
     public :
     int data; // Stores the data of the node
-    NodeSLL1* next; // Pointer to the next node
+    NodeSLL* next; // Pointer to the next node
 
-    NodeSLL1(int data) { // Constructor to initialize the node with data and set next to NULL
+    NodeSLL(int data) { // Constructor to initialize the node with data and set next to NULL
         this->data = data; // Set the node's data
         this->next = NULL; // Initialize next pointer to NULL (end of the list)
     }
+
+    ~NodeSLL() {
+        cout<<"Node deleted with value : "<<this->data<<endl;
+    }
 };
-
-int main() {
-    NodeSLL1* n1 = new NodeSLL1(10); // Create a new node 'n1' with data 10
-
-    // Output the data and the next pointer of the node 'n1'
-    cout << n1->data << endl; // Print the value of the node (10)
-    cout << n1->next << endl; // Print the address of the next node (NULL)
-    // The created node 'n1' has data 10 and is pointing to NULL (end of the list)
-}
 
 // Insertion from the Head!
 // Approach : The approach creates a new node, sets its next pointer to the current head, then updates the head to the new node, effectively building the linked list from tail to head.
 // Implementation!
-#include<iostream>
-using namespace std;
-
-// Node creation!
-class NodeSLL2 {
-    public:
-    int data;
-    NodeSLL2* next;
-
-    NodeSLL2(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
-
-void insertAtHeadSLL1(NodeSLL2* &head, int data) {
+void insertAtHeadSLL(NodeSLL* &head, int data) {
     // Empty List!
-    NodeSLL2* newNode = new NodeSLL2(data);
+    NodeSLL* newNode = new NodeSLL(data);
     if(head == NULL) {
         head = newNode;
         return;
     }
     newNode->next = head;
     head = newNode;
-}
-
-void printNodeSLL1(NodeSLL2* &head) {
-    if (head == NULL) {
-        cout << "Empty List!" << endl;
-        return;
-    }
-    NodeSLL2* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-}
-
-int main() {
-    NodeSLL2* n1 = new NodeSLL2(10);
-    NodeSLL2* head = n1;
-    NodeSLL2* tail = n1;
-
-    insertAtHeadSLL1(head, 5);
-    insertAtHeadSLL1(head, 0);
-    insertAtHeadSLL1(head, -5);
-    cout<<"Current Linked List : ";
-    printNodeSLL1(head);
-
-    cout<<endl;
-
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
 }
 
 // Inserting from the Tail!
@@ -2682,34 +2634,8 @@ int main() {
 //            : Advantages : Simpler function signature without the tail pointer.
 //            : Disadvantages : Slower for large lists due to the O(n) traversal time.
 // Implementation!
-#include<iostream>
-using namespace std;
-
-// Node creation!
-class NodeSLL3 {
-    public:
-    int data;
-    NodeSLL3* next;
-
-    NodeSLL3(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
-
-void insertAtHeadSLL2(NodeSLL3* &head, int data) {
-    // Empty List!
-    NodeSLL3* newNode = new NodeSLL3(data);
-    if(head == NULL) {
-        head = newNode;
-        return;
-    }
-    newNode->next = head;
-    head = newNode;
-}
-
-void insertAtTailSLL1(NodeSLL3* &head, NodeSLL3* &tail, int data) {
-    NodeSLL3* newNode = new NodeSLL3(data);
+void insertAtTailSLL(NodeSLL* &head, NodeSLL* &tail, int data) {
+    NodeSLL* newNode = new NodeSLL(data);
     // Empty List!
     if(tail == NULL) {
         head = tail = newNode;
@@ -2720,38 +2646,16 @@ void insertAtTailSLL1(NodeSLL3* &head, NodeSLL3* &tail, int data) {
     tail = newNode;
 }
 
-void printNodeSLL2(NodeSLL3* &head) {
-    if (head == NULL) {
-        cout << "Empty List!" << endl;
-        return;
-    }
-    NodeSLL3* temp = head;
+// Finding Length of a Singly Linked List!
+// Approach : Simply traverse the LL till the very end and keep counting all the nodes on by one!
+int getLenSLL(NodeSLL* &head) {
+    int len = 0;
+    NodeSLL* temp = head;
     while(temp != NULL) {
-        cout<<temp->data<<" ";
+        len++;
         temp = temp->next;
     }
-}
-
-int main() {
-    NodeSLL3* n1 = new NodeSLL3(10);
-    NodeSLL3* head = n1;
-    NodeSLL3* tail = n1;
-
-    insertAtHeadSLL2(head, 5);
-    insertAtHeadSLL2(head, 0);
-    cout<<"Current Linked List : ";
-    printNodeSLL2(head);
-
-    cout<<endl;
-
-    insertAtTailSLL1(head, tail, 15);
-    insertAtTailSLL1(head, tail, 20);
-    cout<<"Current Linked List : ";
-    printNodeSLL2(head);
-
-    cout<<endl;
-
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    return len;
 }
 
 // Insertion Anywhere (Head, Tail, or Middle):
@@ -2760,58 +2664,10 @@ int main() {
 // Insert at Tail/Middle : Traverse to the desired position and insert.
 // Update Tail : If inserted node is at the end (newNode->next == NULL), update tail pointer.
 // Implementation!
-#include<iostream>
-using namespace std;
-
-// Node creation!
-class NodeSLL4 {
-    public:
-    int data;
-    NodeSLL4* next;
-
-    NodeSLL4(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
-
-void insertAtHeadSLL3(NodeSLL4* &head, int data) {
-    NodeSLL4* newNode = new NodeSLL4(data);
+void insertAnywhereSLL(NodeSLL* &head, NodeSLL* &tail, int pos, int data) {
     // Empty List!
     if(head == NULL) {
-        head = newNode;
-        return;
-    }
-    newNode->next = head;
-    head = newNode;
-}
-
-void insertAtTailSLL2(NodeSLL4* &head, NodeSLL4* &tail, int data) {
-    NodeSLL4* newNode = new NodeSLL4(data);
-    // Empty List!
-    if(tail == NULL) {
-        head = tail = newNode;
-        tail->next = NULL;
-        return;
-    }
-    tail->next = newNode;
-    tail = newNode;
-}
-
-int getLenSLL1(NodeSLL4* &head) {
-    int len = 0;
-    NodeSLL4* temp = head;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAnywhereSLL1(NodeSLL4* &head, NodeSLL4* &tail, int pos, int data) {
-    // Empty List!
-    if(head == NULL) {
-        NodeSLL4* newNode = new NodeSLL4(data);
+        NodeSLL* newNode = new NodeSLL(data);
         head = newNode;
         tail = newNode;
         return;
@@ -2819,17 +2675,17 @@ void insertAnywhereSLL1(NodeSLL4* &head, NodeSLL4* &tail, int pos, int data) {
 
     // Insertion at Head!
     if(pos == 1) {
-        insertAtHeadSLL3(head, data);
+        insertAtHeadSLL(head, data);
         return;
     }
 
-    int len = getLenSLL1(head);
+    int len = getLenSLL(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid position!";
         return;
     }
 
-    NodeSLL4* temp = head;
+    NodeSLL* temp = head;
     int count = 1;
 
     // Traversing between nodes where excluding first node and last node!
@@ -2839,7 +2695,7 @@ void insertAnywhereSLL1(NodeSLL4* &head, NodeSLL4* &tail, int pos, int data) {
     }
 
     // Insertion at Tail Node!
-    NodeSLL4* newNode = new NodeSLL4(data);
+    NodeSLL* newNode = new NodeSLL(data);
 
     if(temp->next == NULL) {
         temp->next = newNode;
@@ -2848,51 +2704,6 @@ void insertAnywhereSLL1(NodeSLL4* &head, NodeSLL4* &tail, int pos, int data) {
     }
     newNode->next = temp->next;
     temp->next = newNode;
-}
-
-void printNodeSLL3(NodeSLL4* &head) {
-    if (head == NULL) {
-        cout << "Empty List!" << endl;
-        return;
-    }
-    NodeSLL4* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-}
-
-int main() {
-    NodeSLL4* n1 = new NodeSLL4(10);
-    NodeSLL4* head = n1;
-    NodeSLL4* tail = n1;
-
-    insertAtHeadSLL3(head, 5);
-    insertAtHeadSLL3(head, 0);
-    cout<<"Current Linked List : ";
-    printNodeSLL3(head);
-
-    cout<<endl;
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
-
-    insertAtTailSLL2(head, tail, 15);
-    insertAtTailSLL2(head, tail, 20);
-    cout<<"Current Linked List : ";
-    printNodeSLL3(head);
-
-    cout<<endl;
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertAnywhereSLL1(head, tail, 1, -5);
-    insertAnywhereSLL1(head, tail, getLenSLL1(head)+1, 25);
-    insertAnywhereSLL1(head, tail, 3, 1000);
-    cout<<"Current Linked List : ";
-    printNodeSLL3(head);
-
-    cout<<endl;
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
 }
 
 // Deletion of Node from Singly LL!
@@ -2901,101 +2712,7 @@ int main() {
 // Delete Head Node : If position is 1, update the head to the next node, delete the original head.
 // Delete Node at Other Positions : Traverse to the node just before the one to be deleted, adjust pointers to skip the node, and delete it.
 // Update Tail : If deleting the last node, update the tail pointer to the previous node.
-#include<iostream>
-using namespace std;
-
-// Node creation!
-class NodeSLL5 {
-    public:
-    int data;
-    NodeSLL5* next;
-
-    NodeSLL5(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~NodeSLL5() {
-        cout<<"Node deleted with value : "<<this->data<<endl;
-    }
-};
-
-void insertAtHeadSLL4(NodeSLL5* &head, int data) {
-    // Empty List!
-    NodeSLL5* newNode = new NodeSLL5(data);
-    if(head == NULL) {
-        head = newNode;
-        return;
-    }
-    newNode->next = head;
-    head = newNode;
-}
-
-void insertAtTailSLL3(NodeSLL5* &head, NodeSLL5* &tail, int data) {
-    NodeSLL5* newNode = new NodeSLL5(data);
-    // Empty List!
-    if(tail == NULL) {
-        head = tail = newNode;
-        tail->next = NULL;
-        return;
-    }
-    tail->next = newNode;
-    tail = newNode;
-}
-
-int getLenSLL2(NodeSLL5* head) {
-    int len = 0;
-    NodeSLL5* temp = head;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAnywhereSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos, int data) {
-    // Empty List!
-    if(head == NULL) {
-        NodeSLL5* newNode = new NodeSLL5(data);
-        head = newNode;
-        tail = newNode;
-        return;
-    }
-
-    // Insertion at Head!
-    if(pos == 1) {
-        insertAtHeadSLL4(head, data);
-        return;
-    }
-
-    int len = getLenSLL2(head);
-    if(pos < 1 || pos > len + 1) { // Validating Position!
-        cout<<"Invalid position!";
-        return;
-    }
-
-    NodeSLL5* temp = head;
-    int count = 1;
-
-    // Traversing between nodes where excluding first node and last node!
-    while(count < pos - 1) {
-        temp = temp->next;
-        count++;
-    }
-
-    // Checking if its Insertion at Tail, if yes then Insert at Tail and update Tail pointer!
-    NodeSLL5* newNode = new NodeSLL5(data);
-
-    if(temp->next == NULL) {
-        temp->next = newNode;
-        tail = newNode;
-        return;
-    }
-    newNode->next = temp->next;
-    temp->next = newNode;
-}
-
-void deleteNodeSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos) {
+void deleteNodeSLL(NodeSLL* &head, NodeSLL* &tail, int pos) {
     // Empty List!
     if(head == NULL) {
         cout<<"Empty List!";
@@ -3003,7 +2720,7 @@ void deleteNodeSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos) {
     }
 
     // Validating Position!
-    int len = getLenSLL2(head);
+    int len = getLenSLL(head);
     if(pos < 1 || pos > len) {
         cout<<"Invalid Position!";
         return;
@@ -3017,7 +2734,7 @@ void deleteNodeSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos) {
 
     // Deleting from head!
     if(pos == 1) {
-        NodeSLL5* temp = head;
+        NodeSLL* temp = head;
         head = head->next;
         temp->next = NULL;
         delete temp;
@@ -3025,8 +2742,8 @@ void deleteNodeSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos) {
     }
 
     // General case!
-    NodeSLL5* prev = NULL;
-    NodeSLL5* curr = head;
+    NodeSLL* prev = NULL;
+    NodeSLL* curr = head;
     int count = 1;
 
     while(count < pos) {
@@ -3045,12 +2762,14 @@ void deleteNodeSLL2(NodeSLL5* &head, NodeSLL5* &tail, int pos) {
     delete curr;
 }
 
-void printNodeSLL4(NodeSLL5* &head) {
+// Printing of Node!
+// Approach : Simply traverse the LL till the very end and output all the data values!
+void printListSLL(NodeSLL* &head) {
     if (head == NULL) {
         cout << "Empty List!" << endl;
         return;
     }
-    NodeSLL5* temp = head;
+    NodeSLL* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -3059,54 +2778,61 @@ void printNodeSLL4(NodeSLL5* &head) {
 }
 
 int main() {
-    NodeSLL5* n1 = new NodeSLL5(10);
-    NodeSLL5* head = n1;
-    NodeSLL5* tail = n1;
+    // Node Creation and Accessing Data members!
+    NodeSLL* n1 = new NodeSLL(10); // Create a new node 'n1' with data 10
 
-    insertAtHeadSLL4(head, 5);
-    insertAtHeadSLL4(head, 0);
-    cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    // Output the data and the next pointer of the node 'n1'
+    cout << n1->data << " " << n1->next;// Print the value of the node (10) and the address of the next node (NULL), means the created node 'n1' has data 10 and is pointing to NULL (end of the list)
+    // Creating Head and Tail!
+    NodeSLL* head = n1;
+    NodeSLL* tail = n1;
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data;
 
-    cout<<endl;
+    cout<<endl<<endl;
     
-    insertAtTailSLL3(head, tail, 15);
-    insertAtTailSLL3(head, tail, 20);
+    // Inserting nodes at head!
+    insertAtHeadSLL(head, 5);
+    insertAtHeadSLL(head, 0);
+    insertAtHeadSLL(head, -5);
     cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertAnywhereSLL2(head, tail, 1, -5);
-    insertAnywhereSLL2(head, tail, getLenSLL2(head)+1, 25);
-    insertAnywhereSLL2(head, tail, 3, 1000);
-    insertAnywhereSLL2(head, tail, getLenSLL2(head)+1, 40);
-    cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    deleteNodeSLL2(head, tail, 1);
-    cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    printListSLL(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data;
     
-    cout<<endl;
-
-    deleteNodeSLL2(head, tail, 3);
+    cout<<endl<<endl;
+    
+    // Inserting nodes at tail!
+    insertAtTailSLL(head, tail, 15);
+    insertAtTailSLL(head, tail, 20);
+    insertAtTailSLL(head, tail, 25);
     cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    printListSLL(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data;
 
-    cout<<endl;
-
-    deleteNodeSLL2(head, tail, getLenSLL2(head));
+    cout<<endl<<endl;
+    
+    // Inserting nodes Anywhere!
+    insertAnywhereSLL(head, tail, 1, -10);
+    insertAnywhereSLL(head, tail, 1, -15);
+    insertAnywhereSLL(head, tail, 1, -20);
+    insertAnywhereSLL(head, tail, getLenSLL(head) + 1, 30);
+    insertAnywhereSLL(head, tail, getLenSLL(head) + 1, 35);
+    insertAnywhereSLL(head, tail, getLenSLL(head) + 1, 40);
+    insertAnywhereSLL(head, tail, 3, 1000);
+    insertAnywhereSLL(head, tail, 6, 2000);
+    insertAnywhereSLL(head, tail, 9, 3000);
     cout<<"Current Linked List : ";
-    printNodeSLL4(head);
-    cout<<"Current Head : "<<head->data<<" "<<"Current Tail : "<<tail->data<<endl;
+    printListSLL(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data;
+    
+    cout<<endl<<endl;
+    
+    // Deleting Node!
+    deleteNodeSLL(head, tail, 3);
+    deleteNodeSLL(head, tail, 5);
+    deleteNodeSLL(head, tail, 7);
+    cout<<"Current Linked List : ";
+    printListSLL(head);
+    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data;
 }
 
 // Doubly Linked List (DLL)!
@@ -3118,21 +2844,25 @@ int main() {
 #include<iostream>
 using namespace std;
 
-class NodeDLL1 { // Node creation
+class NodeDLL { // Node creation
     public:
     int data;
-    NodeDLL1* next = NULL;
-    NodeDLL1* prev = NULL;
+    NodeDLL* next = NULL;
+    NodeDLL* prev = NULL;
 
-    NodeDLL1(int data) {
+    NodeDLL(int data) {
         this->data = data;
         this->next = NULL;
         this->prev = NULL;
     }
+
+    ~NodeDLL() {
+        cout<<"Node deleted with value : "<<this->data<<endl;
+    }
 };
 
-void insertAtHeadDLL1(NodeDLL1* &head, int data) { // Insertion at Head!
-    NodeDLL1* temp = new NodeDLL1(data);
+void insertAtHeadDLL(NodeDLL* &head, int data) { // Insertion at Head!
+    NodeDLL* temp = new NodeDLL(data);
     if(head == NULL) {
         head = temp;
         return;
@@ -3142,8 +2872,8 @@ void insertAtHeadDLL1(NodeDLL1* &head, int data) { // Insertion at Head!
     head = temp;
 }
 
-void insertAtTailDLL1(NodeDLL1* &head ,NodeDLL1* &tail, int data) { // Insertion at Tail!
-    NodeDLL1* temp = new NodeDLL1(data);
+void insertAtTailDLL(NodeDLL* &head ,NodeDLL* &tail, int data) { // Insertion at Tail!
+    NodeDLL* temp = new NodeDLL(data);
     if(tail == NULL) {
         head = tail = temp;
         return;
@@ -3153,8 +2883,8 @@ void insertAtTailDLL1(NodeDLL1* &head ,NodeDLL1* &tail, int data) { // Insertion
     tail = temp;
 }
 
-int getLenDLL1(NodeDLL1* &head) { // Claculating Length of LL!
-    NodeDLL1* temp = head;
+int getLenDLL(NodeDLL* &head) { // Claculating Length of LL!
+    NodeDLL* temp = head;
     int len = 0;
     while(temp != NULL) {
         len++;
@@ -3163,34 +2893,34 @@ int getLenDLL1(NodeDLL1* &head) { // Claculating Length of LL!
     return len;
 }
 
-void insertAnywhereDLL1(NodeDLL1* &head, NodeDLL1* &tail, int data, int pos) { // Insertion anywhere based on Position!
+void insertAnywhereDLL(NodeDLL* &head, NodeDLL* &tail, int data, int pos) { // Insertion anywhere based on Position!
     // Empty List!
     if(head == NULL) {
-        NodeDLL1* temp = new NodeDLL1(data);
+        NodeDLL* temp = new NodeDLL(data);
         head = tail = temp;
         return;
     }
 
     // Insertion at Head if pos == 1.
     if(pos == 1) {
-        insertAtHeadDLL1(head, data);
+        insertAtHeadDLL(head, data);
         return;
     }
 
-    int len = getLenDLL1(head);
+    int len = getLenDLL(head);
     if(pos < 1 || pos > len + 1) { // Validating position!
         cout<<"Invalid Length!";
         return;
     }
 
-    NodeDLL1* temp = head;
+    NodeDLL* temp = head;
     int count = 1;
     while(count < pos - 1) { // Traversing between nodes where excluding first node and last node!
         count++;
         temp = temp->next;
     }
 
-    NodeDLL1* newNode = new NodeDLL1(data);
+    NodeDLL* newNode = new NodeDLL(data);
     
     if(temp->next == NULL) { // Checking if its Insertion at Tail, if yes then Insert at Tail and update Tail pointer!
         newNode->prev = temp;
@@ -3205,172 +2935,26 @@ void insertAnywhereDLL1(NodeDLL1* &head, NodeDLL1* &tail, int data, int pos) { /
     temp->next = newNode;
 }
 
-void printNodeDLL1(NodeDLL1* &head) {
-    NodeDLL1* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-int main() {
-    NodeDLL1* n1 = new NodeDLL1(10);
-    NodeDLL1* head = n1;
-    NodeDLL1* tail = n1;
-
-    cout<<"Current LinkedList : ";
-    printNodeDLL1(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertAtHeadDLL1(head, 5);
-    insertAtHeadDLL1(head, 0);
-    insertAtHeadDLL1(head, -5);
-    insertAtHeadDLL1(head, -10);
-    cout<<"Current LinkedList : ";
-    printNodeDLL1(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertAtTailDLL1(head, tail, 15);
-    insertAtTailDLL1(head, tail, 20);
-    insertAtTailDLL1(head, tail, 25);
-    insertAtTailDLL1(head, tail, 30);
-    cout<<"Current LinkedList : ";
-    printNodeDLL1(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertAnywhereDLL1(head, tail, -15,1);
-    insertAnywhereDLL1(head, tail, -20,1);
-    insertAnywhereDLL1(head, tail, 101,5);
-    insertAnywhereDLL1(head, tail, 35, getLenDLL1(head) + 1);
-    insertAnywhereDLL1(head, tail, 40, getLenDLL1(head) + 1);
-    cout<<"Current LinkedList : ";
-    printNodeDLL1(head);
-    cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
-}
-// Note : Using both head and tail makes operations faster and avoids unnecessary traversal.
-//      : Using only head reduces space but increases time complexity for tail insertions (O(n)).
-
 // Deletion of Node!
 // Approach : Deleting the Head Node : The head node's prev will point to NULL because it's the first node. The head's next node will have its prev pointer updated to point to the new head.
 //                                   : Update the head to point to the next node. Finally, free the memory of the old head node to prevent memory leaks.
 //          : Deleting a Node Other Than the Head : Set the previous node's next pointer to the current node's next (i.e., skip the node). Set the current node's next pointer to NULL.
 //                                                : Free the memory of the current node after unlinking it from the list.
 // Implementation!
-#include<iostream>
-using namespace std;
-
-class NodeDLL2 {
-    public:
-    int data;
-    NodeDLL2* next = NULL;
-    NodeDLL2* prev = NULL;
-
-    NodeDLL2(int data) {
-        this->data = data;
-        this->next = NULL;
-        this->prev = NULL;
-    }
-
-    ~NodeDLL2() {
-        next = NULL;
-        prev = NULL;
-        cout << "Value of deleted node: " << data << endl;
-    }
-};
-
-void insertAtHeadDLL2(NodeDLL2* &head, int data) {
-    NodeDLL2* temp = new NodeDLL2(data);
-    if(head == NULL) {
-        head = temp;
-        return;
-    }
-    head->prev = temp;
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTailDLL2(NodeDLL2* &head ,NodeDLL2* &tail, int data) {
-    NodeDLL2* temp = new NodeDLL2(data);
-    if(tail == NULL) {
-        head = tail = temp;
-        return;
-    }
-    tail->next = temp;
-    temp->prev = tail;
-    tail = temp;
-}
-
-int getLenDLL2(NodeDLL2* head) {
-    NodeDLL2* temp = head;
-    int len = 0;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAnywhereDLL2(NodeDLL2* &head, NodeDLL2* &tail, int data, int pos) {
-    if(head == NULL) {
-        NodeDLL2* temp = new NodeDLL2(data);
-        head = tail = temp;
-        return;
-    }
-
-    if(pos == 1) {
-        insertAtHeadDLL2(head, data);
-        return;
-    }
-
-    int len = getLenDLL2(head);
-    if(pos < 1 || pos > len + 1) {
-        cout<<"Invalid Length!";
-        return;
-    }
-
-    NodeDLL2* temp = head;
-    int count = 1;
-    while(count < pos - 1) {
-        count++;
-        temp = temp->next;
-    }
-
-    if(temp->next == NULL) {
-        NodeDLL2* newNode = new NodeDLL2(data);
-        newNode->prev = temp;
-        temp->next = newNode;
-        tail = newNode;
-        return;
-    }
-
-    NodeDLL2* newNode = new NodeDLL2(data);
-    newNode->prev = temp;
-    newNode->next = temp->next;
-    temp->next->prev = newNode;
-    temp->next = newNode;
-}
-
-void deleteNodeDLL1(NodeDLL2* &head, NodeDLL2* &tail, int pos) {
+void deleteNodeDLL(NodeDLL* &head, NodeDLL* &tail, int pos) {
     if(head == NULL) { // Empty List!
         cout<<"Empty List!";
         return;
     }
 
-    int len = getLenDLL2(head);
+    int len = getLenDLL(head);
     if(pos < 1 || pos > len) { // Validating Position!
         cout<<"Invalid Position!";
         return;
     }
 
     if(pos == 1) { // Deleting from Head!
-        NodeDLL2* temp = head;
+        NodeDLL* temp = head;
         head = temp->next;
         if(head != NULL) {
             head->prev = NULL;
@@ -3383,7 +2967,7 @@ void deleteNodeDLL1(NodeDLL2* &head, NodeDLL2* &tail, int pos) {
         return;
     }
 
-    NodeDLL2* temp = head;
+    NodeDLL* temp = head;
     int count = 1;
     while(count < pos) { // Traversing to a particular node!
         count++;
@@ -3406,8 +2990,8 @@ void deleteNodeDLL1(NodeDLL2* &head, NodeDLL2* &tail, int pos) {
     delete temp;
 }
 
-void printNodeDLL2(NodeDLL2* &head) {
-    NodeDLL2* temp = head;
+void printNodeDLL(NodeDLL* &head) {
+    NodeDLL* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -3416,66 +3000,68 @@ void printNodeDLL2(NodeDLL2* &head) {
 }
 
 int main() {
-    NodeDLL2* n1 = new NodeDLL2(10);
-    NodeDLL2* head = n1;
-    NodeDLL2* tail = n1;
+    NodeDLL* n1 = new NodeDLL(10);
+    NodeDLL* head = n1;
+    NodeDLL* tail = n1;
 
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAtHeadDLL2(head, 5);
-    insertAtHeadDLL2(head, 0);
-    insertAtHeadDLL2(head, -5);
-    insertAtHeadDLL2(head, -10);
+    insertAtHeadDLL(head, 5);
+    insertAtHeadDLL(head, 0);
+    insertAtHeadDLL(head, -5);
+    insertAtHeadDLL(head, -10);
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAtTailDLL2(head, tail, 15);
-    insertAtTailDLL2(head, tail, 20);
-    insertAtTailDLL2(head, tail, 25);
-    insertAtTailDLL2(head, tail, 30);
+    insertAtTailDLL(head, tail, 15);
+    insertAtTailDLL(head, tail, 20);
+    insertAtTailDLL(head, tail, 25);
+    insertAtTailDLL(head, tail, 30);
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhereDLL2(head, tail, -15,1);
-    insertAnywhereDLL2(head, tail, -20,1);
-    insertAnywhereDLL2(head, tail, 101,5);
-    insertAnywhereDLL2(head, tail, 35, getLenDLL2(head) + 1);
-    insertAnywhereDLL2(head, tail, 40, getLenDLL2(head) + 1);
+    insertAnywhereDLL(head, tail, -15,1);
+    insertAnywhereDLL(head, tail, -20,1);
+    insertAnywhereDLL(head, tail, 101,5);
+    insertAnywhereDLL(head, tail, 35, getLenDLL(head) + 1);
+    insertAnywhereDLL(head, tail, 40, getLenDLL(head) + 1);
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNodeDLL1(head, tail, 5);
+    deleteNodeDLL(head, tail, 5);
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNodeDLL1(head, tail, 1);
+    deleteNodeDLL(head, tail, 1);
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    deleteNodeDLL1(head, tail, getLenDLL2(head));
+    deleteNodeDLL(head, tail, getLenDLL(head));
     cout<<"Current LinkedList : ";
-    printNodeDLL2(head);
+    printNodeDLL(head);
     cout<<"Current Head : "<<head->data<<" Current Tail : "<<tail->data<<endl;
 }
+// Note : Using both head and tail makes operations faster and avoids unnecessary traversal.
+//      : Using only head reduces space but increases time complexity for tail insertions (O(n)).
 
 // Circular Linked List!
 // A Circular Linked List (CLL) is a variation of a linked list where the last node connects back to the first node instead of NULL.
@@ -3509,35 +3095,37 @@ int main() {
 // Conclusion : Position based insertion is most common in real-world applications like : Circular queues (used in operating systems, buffering, etc.), Multitasking OS scheduling (Round-Robin scheduling), Data structures like circular lists used in graph traversal (e.g., adjacency lists) and more...
 //            : Value-based insertion is preferred when dealing with unique identifiers or sorted lists where insertion needs to be based on values.
 //            : Here in, we have implemented two insertion methods including one as Position and one as default after first element! rest you can implement at per need!
-
-// Implementation! (Element based insertion!)
 #include <iostream>
 using namespace std;
 
-class NodeCSLL1 {
-public:
+class NodeCSLL {
+    public:
     int data;
-    NodeCSLL1* next;
-
-    NodeCSLL1(int data) {
+    NodeCSLL* next;
+    
+    NodeCSLL(int data) {
         this->data = data;
         this->next = NULL;
     }
+
+    ~NodeCSLL() {
+        cout << "Value of deleted element: " << data << endl;
+    }
 };
 
-// Insert a node after the given element
-void insertNodeCSLL1(NodeCSLL1*& tail, int element, int data) {
-    NodeCSLL1* newNode = new NodeCSLL1(data);
-
+// Implementation! (Element based insertion!) : Insert a node after the given element
+void insertNodeCSLLA(NodeCSLL*& tail, int element, int data) {
+    NodeCSLL* newNode = new NodeCSLL(data);
+    
     // Case 1: Empty List
     if (tail == NULL) {
         tail = newNode;
         newNode->next = newNode;
         return;
     }
-
+    
     // Case 2: Insert after a specific element
-    NodeCSLL1* current = tail;
+    NodeCSLL* current = tail;
     do {
         if (current->data == element) {
             newNode->next = current->next;
@@ -3549,107 +3137,17 @@ void insertNodeCSLL1(NodeCSLL1*& tail, int element, int data) {
         }
         current = current->next;
     } while (current != tail);
-
+    
     cout << "Element " << element << " not found in the list!" << endl;
     delete newNode; // Prevent memory leak
 }
 
-// Print the list
-void printListCSLL1(NodeCSLL1* tail) {
-    if (tail == NULL) {
-        cout << "List is empty!" << endl;
-        return;
-    }
-
-    NodeCSLL1* current = tail->next;
-    do {
-        cout << current->data << " ";
-        current = current->next;
-    } while (current != tail->next);
-    cout << endl;
-}
-
-int main() {
-    NodeCSLL1* tail = NULL;
-
-    insertNodeCSLL1(tail, -1, 3);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-    
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 3, 5);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 5, 7);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 7, 9);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 3, 4);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 9, 10);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 7, 8);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    cout<<endl;
-
-    insertNodeCSLL1(tail, 10, 2);
-    cout<<"Current Linked List : ";
-    printListCSLL1(tail);
-    cout<<"Current Tail : "<<tail->data<<endl;
-
-    return 0;
-}
-
-// Implementation! (Position based insertion!)
-#include<iostream>
-using namespace std;
-
-class NodeCSLL2 { // General Node Creation!
-    public:
-    int data;
-    NodeCSLL2* next;
-
-    NodeCSLL2(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
-
-int getLenCSLL2(NodeCSLL2* tail) { // Calculating Length!
+int getLenCSLL(NodeCSLL* tail) { // Calculating Length!
     if(tail == NULL) {
         cout<<"Empty List!";
         return 0;
     }
-    NodeCSLL2* curr = tail->next;
+    NodeCSLL* curr = tail->next;
     int len = 0;
     do {
         len++;
@@ -3658,8 +3156,9 @@ int getLenCSLL2(NodeCSLL2* tail) { // Calculating Length!
     return len;
 }
 
-void insertNodeCSLL2(NodeCSLL2* &tail, int pos, int data) {
-    NodeCSLL2* newNode = new NodeCSLL2(data);
+// Implementation! (Position based insertion!) : Insert a node at a particular position!
+void insertNodeCSLLB(NodeCSLL* &tail, int pos, int data) {
+    NodeCSLL* newNode = new NodeCSLL(data);
 
     if(tail == NULL) { // Empty List Condition!
         tail = newNode;
@@ -3667,7 +3166,7 @@ void insertNodeCSLL2(NodeCSLL2* &tail, int pos, int data) {
         return;
     }
 
-    int len = getLenCSLL2(tail);
+    int len = getLenCSLL(tail);
     if(pos < 1 || pos > len + 1) { // Validating Position!
         cout<<"Invalid Position!";
         delete newNode;
@@ -3691,7 +3190,7 @@ void insertNodeCSLL2(NodeCSLL2* &tail, int pos, int data) {
     }
 
     // Insert at some position in between!
-    NodeCSLL2* temp = tail->next;
+    NodeCSLL* temp = tail->next;
     int count = 1;
     while(count < pos - 1) {
         count++;
@@ -3700,65 +3199,6 @@ void insertNodeCSLL2(NodeCSLL2* &tail, int pos, int data) {
 
     newNode->next = temp->next;
     temp->next = newNode;
-}
-
-
-void printListCSLL2(NodeCSLL2* tail) {
-    if (tail == NULL) {
-        cout << "List is empty!" << endl;
-        return;
-    }
-
-    NodeCSLL2* current = tail->next;
-    do {
-        cout << current->data << " ";
-        current = current->next;
-    } while (current != tail->next);
-    cout << endl;
-}
-
-int main() {
-    NodeCSLL2* n1 = new NodeCSLL2(10);
-    NodeCSLL2* tail = n1;
-    tail->next = tail; // Making it a circular LL!
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
-
-    cout<<endl;
-
-    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 20);
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
-
-    cout<<endl;
-
-    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 30);
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
-
-    cout<<endl;
-    
-    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 40);
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
-
-    cout<<endl;
-
-    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 50);
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
-
-    cout<<endl;
-
-    insertNodeCSLL2(tail, getLenCSLL2(tail) + 1, 60);
-    cout<<"Current Linked List : ";
-    printListCSLL2(tail);
-    cout<<"Current Tail : "<<tail->data;
 }
 
 // Deletion of Node in Circular Linked List!
@@ -3770,64 +3210,14 @@ int main() {
 //          : If Value Not Found : Just return or show error message
 //          : Memory Cleanup : Always remember to free the deleted node's memory and Don't break the circular nature of the list.
 //          : Note : Node deletion can be performed based on either position or element value. The approach remains similar, and you can practice both methods. Here, we will focus on deleting a node based on its element value.
-
-// Implementing!
-#include <iostream>
-using namespace std;
-
-class NodeCSLL3 {
-public:
-    int data;
-    NodeCSLL3* next;
-
-    NodeCSLL3(int data) {
-        this->data = data;
-        this->next = nullptr;
-    }
-
-    ~NodeCSLL3() {
-        cout << "Value of deleted element: " << data << endl;
-    }
-};
-
-void insertNodeCSLL3(NodeCSLL3*& tail, int element, int data) {
-    NodeCSLL3* newNode = new NodeCSLL3(data);
-
-    // Case 1: Empty List (tail == NULL)
-    if (tail == nullptr) {
-        tail = newNode;
-        newNode->next = newNode; // Points to itself (circular)
-        return;
-    }
-
-    NodeCSLL3* current = tail->next; // Start from the head (tail's next)
-    do {
-        if (current->data == element) {
-            newNode->next = current->next;
-            current->next = newNode;
-            
-            // If inserted after tail, update the tail pointer
-            if (current == tail) {
-                tail = newNode;
-            }
-            return;
-        }
-        current = current->next;
-    } while (current != tail->next); // Loop until you complete the circle
-
-    cout << "Element " << element << " not found in the list!" << endl;
-    delete newNode; // Prevent memory leak
-}
-
-// Delete a node with a given element
-void deleteNodeCSLL3(NodeCSLL3*& tail, int element) {
+void deleteNodeCSLL(NodeCSLL*& tail, int element) {
     if (tail == nullptr) {
         cout << "List is empty!" << endl;
         return;
     }
 
-    NodeCSLL3* prev = tail;
-    NodeCSLL3* curr = tail->next;
+    NodeCSLL* prev = tail;
+    NodeCSLL* curr = tail->next;
 
     // Case 1: Single node in the list
     if (curr == tail && curr->data == element) {
@@ -3853,13 +3243,13 @@ void deleteNodeCSLL3(NodeCSLL3*& tail, int element) {
 }
 
 // Print the list
-void printListCSLL3(NodeCSLL3* tail) {
-    if (tail == nullptr) {
+void printListCSLL(NodeCSLL* tail) {
+    if (tail == NULL) {
         cout << "List is empty!" << endl;
         return;
     }
 
-    NodeCSLL3* current = tail->next;
+    NodeCSLL* current = tail->next;
     do {
         cout << current->data << " ";
         current = current->next;
@@ -3868,77 +3258,82 @@ void printListCSLL3(NodeCSLL3* tail) {
 }
 
 int main() {
-    NodeCSLL3* tail = nullptr;
-
-    // Test case: Insert into empty list
-    insertNodeCSLL3(tail, -1, 3);  // Insert after -1, which is not in the list
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << tail->data << endl;
-    cout << endl;
-
-    // Test case: Delete the only node
-    deleteNodeCSLL3(tail, 3);
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl; // Just to print NULL, if the list is empty!
-    cout << endl;
-
-    // Test case: Insert multiple nodes
-    insertNodeCSLL3(tail, -1, 5);  // Insert into empty list (tail is null)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " <<(tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 5, 7);  // Insert after 5
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 7, 9);  // Insert after 7
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    insertNodeCSLL3(tail, 9, 3);  // Insert after 9 (tail)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    // Test case: Delete from the list
-    deleteNodeCSLL3(tail, 7);  // Delete node with data 7
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 9);  // Delete node with data 9 (tail)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 3);  // Delete node with data 3 (only element)
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
-    cout << endl;
-
-    deleteNodeCSLL3(tail, 5);
-    cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    // Using value based insertion!
+    NodeCSLL* tail = NULL;
+    
+    insertNodeCSLLA(tail, -1, 3);
+    insertNodeCSLLA(tail, 3, 5);
+    insertNodeCSLLA(tail, 5, 7);
+    insertNodeCSLLA(tail, 7, 9);
+    insertNodeCSLLA(tail, 3, 4);
+    insertNodeCSLLA(tail, 9, 10);
+    insertNodeCSLLA(tail, 7, 8);
+    insertNodeCSLLA(tail, 10, 2);
+    cout<<"Current Linked List : ";
+    printListCSLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<endl;
+    
+    // ---------------------------------------------->
+    
+    // Using position based insertion!
+    NodeCSLL* n1 = new NodeCSLL(10);
+    NodeCSLL* tail2 = n1;
+    tail2->next = tail2; // Making it a circular LL!
+    cout<<"Current Linked List : ";
+    printListCSLL(tail2);
+    cout<<"Current Tail : "<<tail2->data<<endl;
+    
+    insertNodeCSLLB(tail2, getLenCSLL(tail2) + 1, 20);
+    insertNodeCSLLB(tail2, getLenCSLL(tail2) + 1, 30);
+    insertNodeCSLLB(tail2, getLenCSLL(tail2) + 1, 40);
+    insertNodeCSLLB(tail2, getLenCSLL(tail2) + 1, 50);
+    insertNodeCSLLB(tail2, getLenCSLL(tail2) + 1, 60);
+    cout<<"Current Linked List : ";
+    printListCSLL(tail2);
+    cout<<"Current Tail : "<<tail2->data<<endl;
     cout<<endl;
 
-    // Edge case: Try to delete from an empty list
-    deleteNodeCSLL3(tail, 5);  // List is empty
+    // ---------------------------------------------->
+
+    // Demonstrating Deleting a node!
+    cout<<"Insert into empty list and then Deleting the only node"<<endl;
+    NodeCSLL* tail3 = nullptr;
+
+    // Test case 1 : Insert into empty list and then Deleting the only node
+    insertNodeCSLLA(tail3, -1, 3); // Insert after -1, which is not in the list
     cout << "Current Linked List: ";
-    printListCSLL3(tail);
-    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    printListCSLL(tail3);
+    cout << "Current Tail: " << (tail3 ? to_string(tail3->data) : "null") << endl;
+
+    deleteNodeCSLL(tail3, 3);
+    cout << "Current Linked List: ";
+    printListCSLL(tail3);
+    cout << "Current Tail: " << (tail3 ? to_string(tail3->data) : "null") << endl; // Just to print NULL, if the list is empty!
+    
+    cout << endl;
+
+    // Test case 2 : Insert multiple nodes and then Deleting the multiple nodes.
+    cout<<"Insert multiple nodes and then Deleting the multiple nodes."<<endl;
+    insertNodeCSLLA(tail3, -1, 5); // Insert into empty list (tail is null)
+    insertNodeCSLLA(tail3, 5, 7); // Insert after 5
+    insertNodeCSLLA(tail3, 7, 9); // Insert after 7
+    insertNodeCSLLA(tail3, 9, 3); // Insert after 9 (tail)
+    cout << "Current Linked List: ";
+    printListCSLL(tail3);
+    cout << "Current Tail: " << (tail3 ? to_string(tail3->data) : "null") << endl;
+    
+    cout << endl;
+
+    deleteNodeCSLL(tail3, 7); // Delete node with data 7
+    deleteNodeCSLL(tail3, 9); // Delete node with data 9 (tail)
+    deleteNodeCSLL(tail3, 3); // Delete node with data 3 (only element)
+    deleteNodeCSLL(tail3, 5);
+
+    deleteNodeCSLL(tail3, 5); // Edge case : Try to delete from an empty list. List is empty
+    cout << "Current Linked List: ";
+    printListCSLL(tail3);
+    cout << "Current Tail: " << (tail3 ? to_string(tail3->data) : "null") << endl;
 
     return 0;
 }
@@ -3967,32 +3362,36 @@ int main() {
 #include <iostream>
 using namespace std;
 
-class NodeCDLL1 {
+class NodeCDLL {
 public:
     int data;
-    NodeCDLL1* next;
-    NodeCDLL1* prev;
+    NodeCDLL* next;
+    NodeCDLL* prev;
 
-    NodeCDLL1(int data) {
+    NodeCDLL(int data) {
         this->data = data;
         this->next = NULL;
         this->prev = NULL;
     }
+
+    ~NodeCDLL() {
+        cout << "Value of deleted element: " << data << endl;
+    }
 };
 
 // Insert a node after a given element
-void insertNodeCDLL1(NodeCDLL1* &tail, int element, int data) {
-    NodeCDLL1* newNode = new NodeCDLL1(data);
+void insertNodeCDLL(NodeCDLL* &tail, int element, int data) {
+    NodeCDLL* newNode = new NodeCDLL(data);
 
     // Case 1: Empty List
     if (tail == NULL) {
         tail = newNode;
         newNode->next = newNode;
         newNode->prev = newNode;
-        return; // No need to delete the node here, it's part of the list
+        return;
     }
 
-    NodeCDLL1* temp = tail->next;
+    NodeCDLL* temp = tail->next;
     
     do {
         if (temp->data == element) {
@@ -4004,7 +3403,7 @@ void insertNodeCDLL1(NodeCDLL1* &tail, int element, int data) {
             if (temp == tail) {
                 tail = newNode;
             }
-            break;
+            return; // Node inserted, exit function
         }
         temp = temp->next;
     } while (temp != tail->next);
@@ -4014,14 +3413,14 @@ void insertNodeCDLL1(NodeCDLL1* &tail, int element, int data) {
     delete newNode; // Prevent memory leak if the node couldn't be inserted
 }
 
-void deleteNodeCDLL1(NodeCDLL1* &tail, int value) {
+void deleteNodeCDLL(NodeCDLL* &tail, int value) {
     if (tail == NULL) {
         cout << "Empty List! Cannot delete node." << endl;
         return;
     }
 
-    NodeCDLL1* prev = tail;
-    NodeCDLL1* curr = tail->next;
+    NodeCDLL* curr = tail->next;
+    NodeCDLL* prev = tail;
     
     do {
         if (curr->data == value) {
@@ -4029,8 +3428,9 @@ void deleteNodeCDLL1(NodeCDLL1* &tail, int value) {
             if (curr == tail && curr->next == curr) {
                 delete curr;
                 tail = NULL;
-                break;
+                return;
             }
+
             // Case 2: Deleting any other node
             prev->next = curr->next;
             curr->next->prev = prev;
@@ -4040,7 +3440,7 @@ void deleteNodeCDLL1(NodeCDLL1* &tail, int value) {
                 tail = prev;
             }
             delete curr;
-            break;
+            return; // Exit after deletion
         }
         prev = curr;
         curr = curr->next;
@@ -4051,13 +3451,13 @@ void deleteNodeCDLL1(NodeCDLL1* &tail, int value) {
 }
 
 // Print the list
-void printListCDLL1(NodeCDLL1* tail) {
+void printListCDLL(NodeCDLL* tail) {
     if (tail == NULL) {
         cout << "List is empty!" << endl;
         return;
     }
 
-    NodeCDLL1* current = tail->next;
+    NodeCDLL* current = tail->next;
     do {
         cout << current->data << " ";
         current = current->next;
@@ -4066,68 +3466,58 @@ void printListCDLL1(NodeCDLL1* tail) {
 }
 
 int main() {
-    NodeCDLL1* tail = NULL;
+    NodeCDLL* tail = NULL;
 
     // Inserting elements into the empty list
-    cout << "Inserting 10 in empty list:" << endl;
-    insertNodeCDLL1(tail, -1, 10); // Insert 10 in an empty list (no element)
-    printListCDLL1(tail);
-
-    // Insert 20 after 10
-    cout << "\nInserting 20 after 10:" << endl;
-    insertNodeCDLL1(tail, 10, 20);
-    printListCDLL1(tail);
-
-    // Insert 30 after 20
-    cout << "\nInserting 30 after 20:" << endl;
-    insertNodeCDLL1(tail, 20, 30);
-    printListCDLL1(tail);
-
-    // Insert 15 after 10
-    cout << "\nInserting 15 after 10:" << endl;
-    insertNodeCDLL1(tail, 10, 15);
-    printListCDLL1(tail);
-
-    // Insert 25 after 20
-    cout << "\nInserting 25 after 20:" << endl;
-    insertNodeCDLL1(tail, 20, 25);
-    printListCDLL1(tail);
-
+    cout << "Inserting 10 in empty list!" << endl;
+    insertNodeCDLL(tail, -1, 10); // Insert 10 in an empty list
+    insertNodeCDLL(tail, 10, 20); // Insert 20 after 10
+    insertNodeCDLL(tail, 20, 30); // Insert 30 after 20
+    insertNodeCDLL(tail, 10, 15); // Insert 15 after 10
+    insertNodeCDLL(tail, 20, 25); // Insert 25 after 20
+    cout << "Current Linked List: ";
+    printListCDLL(tail);
+    cout << "Current Tail: " << (tail ? to_string(tail->data) : "null") << endl;
+    cout << endl;
+    
     // Trying to insert after a non-existing element (50)
-    cout << "\nInserting 50 after non-existing element 50:" << endl;
-    insertNodeCDLL1(tail, 50, 50); // Should print "Element 50 not found in the list!"
-    printListCDLL1(tail);
-
-    // Deleting node with value 10 (it is the first node now)
-    cout << "\nDeleting node with value 10:" << endl;
-    deleteNodeCDLL1(tail, 10);
-    printListCDLL1(tail);
-
-    // Deleting node with value 30 (it is the last node now)
-    cout << "\nDeleting node with value 30:" << endl;
-    deleteNodeCDLL1(tail, 30);
-    printListCDLL1(tail);
-
-    // Deleting node with value 20
-    cout << "\nDeleting node with value 20:" << endl;
-    deleteNodeCDLL1(tail, 20);
-    printListCDLL1(tail);
-
-    // Deleting the node with value 25 (tail node)
-    cout << "\nDeleting node with value 25 (tail):" << endl;
-    deleteNodeCDLL1(tail, 25);
-    printListCDLL1(tail);
-
-    // Deleting the only remaining node (tail == NULL)
-    cout << "\nDeleting the last remaining node:" << endl;
-    deleteNodeCDLL1(tail, 15);
-    printListCDLL1(tail);
-
+    insertNodeCDLL(tail, 50, 50); // Should print "Element 50 not found in the list!"
+    cout << endl;
+    
+    deleteNodeCDLL(tail, 10); // Deleting node with value 10 (it is the first node now)
+    cout<<"Current Linked List : ";
+    printListCDLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<endl;
+    
+    deleteNodeCDLL(tail, 30); // Deleting node with value 30 (it is the last node now)
+    cout<<"Current Linked List : ";
+    printListCDLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<endl;
+    
+    deleteNodeCDLL(tail, 20); // Deleting node with value 20
+    cout<<"Current Linked List : ";
+    printListCDLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<endl;
+    
+    deleteNodeCDLL(tail, 25); // Deleting the node with value 25 (tail node)
+    cout<<"Current Linked List : ";
+    printListCDLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout<<endl;
+    
+    deleteNodeCDLL(tail, 15); // Deleting the only remaining node (tail == NULL)
+    cout<<"Current Linked List : ";
+    printListCDLL(tail);
+    cout<<"Current Tail : "<<tail->data<<endl;
+    cout << endl;
+    cout<<endl;
+    
     // Trying to delete from an empty list
-    cout << "\nDeleting from an empty list:" << endl;
-    deleteNodeCDLL1(tail, 15); // Should print "Empty List! Cannot delete node."
-    printListCDLL1(tail);
-
+    deleteNodeCDLL(tail, 15); // Should print "Empty List! Cannot delete node."
+    cout << endl;
     return 0;
 }
 // Rest you can learn and understand more by implementing them again and again in different ways! and solving variety of questions!
@@ -4148,24 +3538,24 @@ int main() {
 #include<iostream>
 using namespace std;
 
-class NodeSLL6 {
+class NodeSLL2 {
     public:
     int data;
-    NodeSLL6* next;
+    NodeSLL2* next;
 
-    NodeSLL6(int data) {
+    NodeSLL2(int data) {
         this->data = data;
         this->next = NULL;
     }
 };
 
-int getLenSLL6(NodeSLL6* head) {
+int getLenSLL2(NodeSLL2* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return 0;
     }
     int len = 0;
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -4173,14 +3563,14 @@ int getLenSLL6(NodeSLL6* head) {
     return len;
 }
 
-void insertAnywhereSLL6(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
-    NodeSLL6* newNode = new NodeSLL6(data);
+void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
+    NodeSLL2* newNode = new NodeSLL2(data);
     if(head == NULL) {
         head = tail = newNode;
         return;
     }
 
-    int len = getLenSLL6(head);
+    int len = getLenSLL2(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid Length!";
         delete newNode;
@@ -4199,7 +3589,7 @@ void insertAnywhereSLL6(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
         return;
     }
 
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     int count = 0;
     while(count < pos - 1) {
         count++;
@@ -4211,7 +3601,7 @@ void insertAnywhereSLL6(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
     return;
 }
 
-NodeSLL6* reverseSLL6(NodeSLL6* &head, NodeSLL6* &tail) {
+NodeSLL2* reverseSLL2(NodeSLL2* &head, NodeSLL2* &tail) {
     if(head == NULL) {
         cout<<"Empty List!";
         return nullptr;
@@ -4221,9 +3611,9 @@ NodeSLL6* reverseSLL6(NodeSLL6* &head, NodeSLL6* &tail) {
         return head;
     }
 
-    NodeSLL6* prev = NULL;
-    NodeSLL6* curr = head;
-    NodeSLL6* forward = curr->next;
+    NodeSLL2* prev = NULL;
+    NodeSLL2* curr = head;
+    NodeSLL2* forward = curr->next;
     while(curr != NULL) {
         forward = curr->next;
         curr->next = prev;
@@ -4241,34 +3631,34 @@ NodeSLL6* reverseSLL6(NodeSLL6* &head, NodeSLL6* &tail) {
 //       : Recursively call the function for the remaining list.
 //       : The base case occurs when curr becomes NULL, meaning we’ve reached the end. At this point, prev holds the last node, which becomes the new head.
 // Implementation!
-void reverseRec_helperSLL6(NodeSLL6* &head, NodeSLL6* &tail, NodeSLL6* curr, NodeSLL6* prev) {
+void reverseRec_helperSLL2(NodeSLL2* &head, NodeSLL2* &tail, NodeSLL2* curr, NodeSLL2* prev) {
     if(curr == NULL) {
         tail = head;
         head = prev;
         return;
     }
-    NodeSLL6* forward = curr->next;
-    reverseRec_helperSLL6(head, tail, forward, curr);
+    NodeSLL2* forward = curr->next;
+    reverseRec_helperSLL2(head, tail, forward, curr);
     curr->next = prev;
 }
 
-NodeSLL6* reverseRecSLL6(NodeSLL6* &head, NodeSLL6* &tail) {
+NodeSLL2* reverseRecSLL2(NodeSLL2* &head, NodeSLL2* &tail) {
     if(head == NULL || head->next == NULL) {
         return head;
     }
 
-    NodeSLL6* curr = head;
-    NodeSLL6* prev = NULL;
-    reverseRec_helperSLL6(head, tail, curr, prev);
+    NodeSLL2* curr = head;
+    NodeSLL2* prev = NULL;
+    reverseRec_helperSLL2(head, tail, curr, prev);
     return head;
 }
 
-void printListSLL6(NodeSLL6* head) {
+void printListSLL2(NodeSLL2* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -4277,38 +3667,38 @@ void printListSLL6(NodeSLL6* head) {
 }
 
 int main() {
-    NodeSLL6* n1 = new NodeSLL6(10);
-    NodeSLL6* head = n1;
-    NodeSLL6* tail = n1;
+    NodeSLL2* n1 = new NodeSLL2(10);
+    NodeSLL2* head = n1;
+    NodeSLL2* tail = n1;
 
-    insertAnywhereSLL6(head, tail, 1, 5);
-    insertAnywhereSLL6(head, tail, 1, 0);
-    insertAnywhereSLL6(head, tail, 1, -5);
+    insertAnywhereSLL2(head, tail, 1, 5);
+    insertAnywhereSLL2(head, tail, 1, 0);
+    insertAnywhereSLL2(head, tail, 1, -5);
     cout<<"Current Linked List : ";
-    printListSLL6(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 15);
-    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 20);
-    insertAnywhereSLL6(head, tail, getLenSLL6(head) + 1, 25);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 15);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 20);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 25);
     cout<<"Current Linked List : ";
-    printListSLL6(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
     cout<<endl<<endl;
 
-    reverseSLL6(head, tail); // Reversed
+    reverseSLL2(head, tail); // Reversed
     cout<<"Current Linked List : ";
-    printListSLL6(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
     cout<<endl<<endl;
 
-    reverseRecSLL6(head, tail); // Reversed again
+    reverseRecSLL2(head, tail); // Reversed again
     cout<<"Current Linked List : ";
-    printListSLL6(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 } // So here the time complexity is again the same O(n) and space complexity is O(n)!
 
@@ -4317,23 +3707,23 @@ int main() {
 #include<iostream>
 using namespace std;
 
-class NodeSLL7 {
+class NodeSLL3 {
     public:
     int data;
-    NodeSLL7* next;
+    NodeSLL3* next;
 
-    NodeSLL7(int data) {
+    NodeSLL3(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~NodeSLL7() {
+    ~NodeSLL3() {
         cout << "Value of deleted element: " << data << endl;
     }
 };
 
-void insertAtHeadSLL7(NodeSLL7* &head, int data) {
-    NodeSLL7* newNode = new NodeSLL7(data);
+void insertAtHeadSLL3(NodeSLL3* &head, int data) {
+    NodeSLL3* newNode = new NodeSLL3(data);
     if(head == NULL) {
         head = newNode;
         return;
@@ -4343,8 +3733,8 @@ void insertAtHeadSLL7(NodeSLL7* &head, int data) {
     return;
 }
 
-void insertAtTailSLL7(NodeSLL7* &head, NodeSLL7* &tail, int data) {
-    NodeSLL7* newNode = new NodeSLL7(data);
+void insertAtTailSLL3(NodeSLL3* &head, NodeSLL3* &tail, int data) {
+    NodeSLL3* newNode = new NodeSLL3(data);
     if(tail == NULL) {
         head = newNode;
         tail = newNode;
@@ -4355,13 +3745,13 @@ void insertAtTailSLL7(NodeSLL7* &head, NodeSLL7* &tail, int data) {
     return;
 }
 
-int getLenSLL7(NodeSLL7* head) {
+int getLenSLL3(NodeSLL3* head) {
     if(head == NULL) {
         cout << "Empty List!";
         return -1;
     }
     int len = 0;
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -4369,15 +3759,15 @@ int getLenSLL7(NodeSLL7* head) {
     return len;
 }
 
-void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
-    NodeSLL7* newNode = new NodeSLL7(data);
+void insertAnywhereSLL3(NodeSLL3* &head, NodeSLL3* &tail, int pos, int data) {
+    NodeSLL3* newNode = new NodeSLL3(data);
     if(head == NULL) {
         head = newNode;
         tail = newNode;
         return;
     }
 
-    int len = getLenSLL7(head);
+    int len = getLenSLL3(head);
     if(pos < 1 || pos > len + 1) {
         cout << "Invalid position!";
         delete newNode;
@@ -4385,12 +3775,12 @@ void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
     }
 
     if(pos == 1) {
-        insertAtHeadSLL7(head, data);
-        delete newNode;
+        newNode->next = head;
+        head = newNode;
         return;
     }
 
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     int count = 1;
     while(count < pos - 1) {
         count++;
@@ -4398,8 +3788,8 @@ void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
     }
 
     if(pos == len + 1) {
-        insertAtTailSLL7(head, tail, data);
-        delete newNode;
+        tail->next = newNode;
+        tail = newNode;
         return;
     }
 
@@ -4407,68 +3797,16 @@ void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
     temp->next = newNode;
 }
 
-NodeSLL7* findMiddleNodeSLL7(NodeSLL7* head) {
-    int len = getLenSLL7(head);
+NodeSLL3* findMiddleNodeSLL3(NodeSLL3* head) {
+    int len = getLenSLL3(head);
     int mid = len / 2;
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     int cnt = 0;
     while(cnt < mid) {
         temp = temp->next;
         cnt++;
     }
     return temp;
-}
-
-void printListSLL7(NodeSLL7* head) { 
-    if(head == NULL) {
-        cout << "Empty List!";
-        return;
-    }
-    NodeSLL7* temp = head;
-    while(temp != NULL) {
-        cout << temp->data << " ";
-        temp = temp->next;
-    }
-    cout << endl;
-}
-
-int main() {
-    NodeSLL7* n1 = new NodeSLL7(10);
-    NodeSLL7* head = n1;
-    NodeSLL7* tail = n1;
-
-    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 30);
-    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 20);
-    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 40);
-    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 50);
-    insertAnywhereSLL7(head, tail, getLenSLL7(head) + 1, 60);
-    
-    cout << "Current Linked List : ";
-    printListSLL7(head);
-    
-    NodeSLL7* middleNode = findMiddleNodeSLL7(head);
-    cout << "Middle Node: " << middleNode->data << endl;
-
-    cout<<endl;
-
-    NodeSLL7* n2 = new NodeSLL7(10);
-    NodeSLL7* head2 = n2;
-    NodeSLL7* tail2 = n2;
-
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 20);
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 30);
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 40);
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 50);
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 60);
-    insertAnywhereSLL7(head2, tail2, getLenSLL7(head2) + 1, 70);
-    
-    cout << "Current Linked List : ";
-    printListSLL7(head2);
-    
-    NodeSLL7* middleNode2 = findMiddleNodeSLL7(head2);
-    cout << "Middle Node: " << middleNode2->data << endl;
-    
-    return 0;
 }
 // Time Complexity: T(n) + T(n/2); Here T(n) for the getlength function and T(n/2) for the loop in findMiddleNode.
 // So, the overall time complexity is O(n).
@@ -4484,51 +3822,12 @@ int main() {
 //                                                                 : Stop when fast reaches NULL.
 //                                                                 : Return slow (middle node).
 // Implementation!
-#include<iostream>
-using namespace std;
-
-class NodeSLL8 {
-    public:
-    int data;
-    NodeSLL8* next;
-
-    NodeSLL8(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~NodeSLL8() {
-        cout << "Value of deleted element: " << data << endl;
-    }
-};
-
-void insertAtTailSLL8(NodeSLL8* &head, NodeSLL8* &tail, int data) {
-    NodeSLL8* newNode = new NodeSLL8(data);
-    if(tail == NULL) {
-        head = newNode;
-        tail = newNode;
-        return;
-    }
-    tail->next = newNode;
-    tail = newNode;
-}
-
-int getLenSLL8(NodeSLL8* head) {
-    int len = 0;
-    NodeSLL8* temp = head;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-NodeSLL8* findMiddleNodeSLL8A(NodeSLL8* head) { // Alternatively : "while(fast != NULL && fast->next != NULL)" for manage even number of nodes differently!
+NodeSLL3* findMiddleNodeSLL3A(NodeSLL3* head) { // Alternatively : "while(fast != NULL && fast->next != NULL)" for manage even number of nodes differently!
     if(head == NULL || head->next == NULL) {
         return head;
     }
-    NodeSLL8* slow = head;
-    NodeSLL8* fast = head->next;
+    NodeSLL3* slow = head;
+    NodeSLL3* fast = head->next;
     while(fast != NULL && fast->next != NULL) {
         fast = fast->next;
         if(fast != NULL) {
@@ -4539,12 +3838,12 @@ NodeSLL8* findMiddleNodeSLL8A(NodeSLL8* head) { // Alternatively : "while(fast !
     return slow;
 }
 
-NodeSLL8* findMiddleNodeSLL8B(NodeSLL8* head) {
+NodeSLL3* findMiddleNodeSLL3B(NodeSLL3* head) {
     if(head == NULL || head->next == NULL) {
         return head;
     }
-    NodeSLL8* slow = head;
-    NodeSLL8* fast = head;
+    NodeSLL3* slow = head;
+    NodeSLL3* fast = head;
     while(fast != NULL && fast->next != NULL) {
         fast = fast->next;
         if(fast != NULL) {
@@ -4554,13 +3853,14 @@ NodeSLL8* findMiddleNodeSLL8B(NodeSLL8* head) {
     }
     return slow;
 }
+// Hence, overall for optmized approach TC : O(n) and SC : O(1)
 
-void printListSLL8(NodeSLL8* head) { 
+void printListSLL3(NodeSLL3* head) { 
     if(head == NULL) {
         cout << "Empty List!";
         return;
     }
-    NodeSLL8* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
@@ -4569,49 +3869,88 @@ void printListSLL8(NodeSLL8* head) {
 }
 
 int main() {
-    NodeSLL8* n1 = new NodeSLL8(10);
-    NodeSLL8* head = n1;
-    NodeSLL8* tail = n1;
-
-    insertAtTailSLL8(head, tail, 20);
-    insertAtTailSLL8(head, tail, 30);
-    insertAtTailSLL8(head, tail, 40);
-    insertAtTailSLL8(head, tail, 50);
-    insertAtTailSLL8(head, tail, 60);
+    // Brute/Basic Approach! ---------------------------------->
+    // Odd numbers of Nodes!
+    NodeSLL3* n1 = new NodeSLL3(10);
+    NodeSLL3* head = n1;
+    NodeSLL3* tail = n1;
     
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 30);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 40);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 50);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 60);
+    
+    cout << "Current Linked List : ";
+    printListSLL3(head);
+    
+    NodeSLL3* middleNode = findMiddleNodeSLL3(head);
+    cout << "Middle Node: " << middleNode->data << endl;
+    
+    cout<<endl;
+    
+    // Even numbers of Nodes!
+    NodeSLL3* n2 = new NodeSLL3(10);
+    NodeSLL3* head2 = n2;
+    NodeSLL3* tail2 = n2;
+    
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 20);
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 30);
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 40);
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 50);
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 60);
+    insertAnywhereSLL3(head2, tail2, getLenSLL3(head2) + 1, 70);
+    
+    cout << "Current Linked List : ";
+    printListSLL3(head2);
+    
+    NodeSLL3* middleNode2 = findMiddleNodeSLL3(head2);
+    cout << "Middle Node: " << middleNode2->data << endl;
+    cout<<endl;
+    
+    // Optimized Approach! ---------------------------------->
+    // Odd numbers of Nodes!
+    NodeSLL3* n3 = new NodeSLL3(10);
+    NodeSLL3* head3 = n3;
+    NodeSLL3* tail3 = n3;
+    
+    insertAtTailSLL3(head3, tail3, 20);
+    insertAtTailSLL3(head3, tail3, 30);
+    insertAtTailSLL3(head3, tail3, 40);
+    insertAtTailSLL3(head3, tail3, 50);
+    insertAtTailSLL3(head3, tail3, 60);
     cout << "Current Linked List: ";
-    printListSLL8(head);
+    printListSLL3(head3);
     
-    NodeSLL8* middleNodeA1 = findMiddleNodeSLL8A(head);
+    NodeSLL3* middleNodeA1 = findMiddleNodeSLL3A(head3);
     cout << "Middle Node (Method 1): " << middleNodeA1->data << endl;
 
-    NodeSLL8* middleNodeB1 = findMiddleNodeSLL8B(head);
+    NodeSLL3* middleNodeB1 = findMiddleNodeSLL3B(head3);
     cout << "Middle Node (Method 2): " << middleNodeB1->data << endl;
-
     cout << endl;
 
-    NodeSLL8* n2 = new NodeSLL8(10);
-    NodeSLL8* head2 = n2;
-    NodeSLL8* tail2 = n2;
+    // Even numbers of Nodes!
+    NodeSLL3* n4 = new NodeSLL3(10);
+    NodeSLL3* head4 = n4;
+    NodeSLL3* tail4 = n4;
 
-    insertAtTailSLL8(head2, tail2, 20);
-    insertAtTailSLL8(head2, tail2, 30);
-    insertAtTailSLL8(head2, tail2, 40);
-    insertAtTailSLL8(head2, tail2, 50);
-    insertAtTailSLL8(head2, tail2, 60);
-    insertAtTailSLL8(head2, tail2, 70);
+    insertAtTailSLL3(head4, tail4, 20);
+    insertAtTailSLL3(head4, tail4, 30);
+    insertAtTailSLL3(head4, tail4, 40);
+    insertAtTailSLL3(head4, tail4, 50);
+    insertAtTailSLL3(head4, tail4, 60);
+    insertAtTailSLL3(head4, tail4, 70);
 
     cout << "Current Linked List: ";
-    printListSLL8(head2);
+    printListSLL3(head4);
 
-    NodeSLL8* middleNodeA2 = findMiddleNodeSLL8A(head2);
+    NodeSLL3* middleNodeA2 = findMiddleNodeSLL3A(head4);
     cout << "Middle Node (Method 1): " << middleNodeA2->data << endl;
 
-    NodeSLL8* middleNodeB2 = findMiddleNodeSLL8B(head2);
+    NodeSLL3* middleNodeB2 = findMiddleNodeSLL3B(head4);
     cout << "Middle Node (Method 2): " << middleNodeB2->data << endl;
-
     return 0;
-} // Hence, TC : O(n) and SC : O(1)
+}
 
 // ---------------------------------------------------------- LECTURE 46 - Linked Lists Questions --------------------------------------------------------------------------------------------------------->
 // Question 1 : Reverse the Linkedlist in the groups of K
@@ -4623,23 +3962,23 @@ int main() {
 #include<iostream>
 using namespace std;
 
-class NodeSLL9 {
+class NodeSLL4 {
     public:
     int data;
-    NodeSLL9* next;
+    NodeSLL4* next;
 
-    NodeSLL9(int data) {
+    NodeSLL4(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~NodeSLL9() {
+    ~NodeSLL4() {
         cout << "Value of deleted element: " << data << endl;
     }
 };
 
-void insertAtTailSLL9(NodeSLL9* &head, NodeSLL9* &tail, int data) {
-    NodeSLL9* newNode = new NodeSLL9(data);
+void insertAtTailSLL4(NodeSLL4* &head, NodeSLL4* &tail, int data) {
+    NodeSLL4* newNode = new NodeSLL4(data);
     if(tail == NULL) {
         head = newNode;
         tail = newNode;
@@ -4650,13 +3989,13 @@ void insertAtTailSLL9(NodeSLL9* &head, NodeSLL9* &tail, int data) {
     return;
 }
 
-NodeSLL9* ReverseK(NodeSLL9* head, int K) {
+NodeSLL4* ReverseK(NodeSLL4* head, int K) {
     if(head == NULL) {
         return NULL;
     }
-    NodeSLL9* prev = NULL;
-    NodeSLL9* curr = head;
-    NodeSLL9* next = NULL;
+    NodeSLL4* prev = NULL;
+    NodeSLL4* curr = head;
+    NodeSLL4* next = NULL;
     int count = 0;
     while(curr != NULL && count < K) {
         next = curr->next;
@@ -4671,12 +4010,12 @@ NodeSLL9* ReverseK(NodeSLL9* head, int K) {
     return prev;
 }
 
-void printListSLL9(NodeSLL9* head) { 
+void printListSLL4(NodeSLL4* head) { 
     if(head == NULL) {
         cout << "Empty List!";
         return;
     }
-    NodeSLL9* temp = head;
+    NodeSLL4* temp = head;
     while(temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
@@ -4685,25 +4024,25 @@ void printListSLL9(NodeSLL9* head) {
 }
 
 int main() {
-    NodeSLL9* n1 = new NodeSLL9(10);
-    NodeSLL9* head = n1;
-    NodeSLL9* tail = n1;
+    NodeSLL4* n1 = new NodeSLL4(10);
+    NodeSLL4* head = n1;
+    NodeSLL4* tail = n1;
 
-    insertAtTailSLL9(head, tail, 20);
-    insertAtTailSLL9(head, tail, 30);
-    insertAtTailSLL9(head, tail, 40);
-    insertAtTailSLL9(head, tail, 50);
-    insertAtTailSLL9(head, tail, 60);
+    insertAtTailSLL4(head, tail, 20);
+    insertAtTailSLL4(head, tail, 30);
+    insertAtTailSLL4(head, tail, 40);
+    insertAtTailSLL4(head, tail, 50);
+    insertAtTailSLL4(head, tail, 60);
     
     cout << "Current Linked List: ";
-    printListSLL9(head);
+    printListSLL4(head);
 
     cout<<"Enter you value of K : ";
     int k;
     cin>>k;
-    NodeSLL9* reversedK = ReverseK(head, k);
+    NodeSLL4* reversedK = ReverseK(head, k);
     cout << "Current Linked List: ";
-    printListSLL9(reversedK);
+    printListSLL4(reversedK);
 
     return 0;
 } // Time Complexity (TC) : Each node is visited only once, so for n nodes, TC = O(n).
@@ -5513,24 +4852,24 @@ int main() {
 #include<map>
 using namespace std;
 
-class NodeSLL6 {
+class NodeSLL2 {
     public:
     int data;
-    NodeSLL6* next;
+    NodeSLL2* next;
 
-    NodeSLL6(int data) {
+    NodeSLL2(int data) {
         this->data = data;
         this->next = NULL;
     }
 };
 
-int getLenN1(NodeSLL6* head) {
+int getLenSLL2(NodeSLL2* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return 0;
     }
     int len = 0;
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -5538,14 +4877,14 @@ int getLenN1(NodeSLL6* head) {
     return len;
 }
 
-void insertAnywhereN1(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
-    NodeSLL6* newNode = new NodeSLL6(data);
+void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
+    NodeSLL2* newNode = new NodeSLL2(data);
     if(head == NULL) {
         head = tail = newNode;
         return;
     }
 
-    int len = getLenN1(head);
+    int len = getLenSLL2(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid Length!";
         delete newNode;
@@ -5564,7 +4903,7 @@ void insertAnywhereN1(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
         return;
     }
 
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     int count = 0;
     while(count < pos - 1) {
         count++;
@@ -5576,15 +4915,15 @@ void insertAnywhereN1(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
     return;
 }
 
-NodeSLL6* removeDuplicatesN1(NodeSLL6* head) {
+NodeSLL2* removeDuplicatesSLL2(NodeSLL2* head) {
     if (head == NULL) {
         return NULL;
     }
 
-    NodeSLL6* curr = head;
+    NodeSLL2* curr = head;
     while (curr != NULL && curr->next != NULL) { // Ensure curr->next is not NULL before accessing its data
         if (curr->data == curr->next->data) {
-            NodeSLL6* nodeToDelete = curr->next;
+            NodeSLL2* nodeToDelete = curr->next;
             curr->next = curr->next->next;
             nodeToDelete->next = NULL; // Good practice before deleting
             delete nodeToDelete;
@@ -5595,12 +4934,12 @@ NodeSLL6* removeDuplicatesN1(NodeSLL6* head) {
     return head;
 }
 
-void printListN1(NodeSLL6* head) {
+void printListSLL2(NodeSLL2* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
-    NodeSLL6* temp = head;
+    NodeSLL2* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -5609,38 +4948,38 @@ void printListN1(NodeSLL6* head) {
 }
 
 int main() {
-    NodeSLL6* n1 = new NodeSLL6(10);
-    NodeSLL6* head = n1;
-    NodeSLL6* tail = n1;
+    NodeSLL2* n1 = new NodeSLL2(10);
+    NodeSLL2* head = n1;
+    NodeSLL2* tail = n1;
 
-    insertAnywhereN1(head, tail, 1, 5);
-    insertAnywhereN1(head, tail, 1, 0);
-    insertAnywhereN1(head, tail, 1, -5);
-    insertAnywhereN1(head, tail, 1, -5);
+    insertAnywhereSLL2(head, tail, 1, 5);
+    insertAnywhereSLL2(head, tail, 1, 0);
+    insertAnywhereSLL2(head, tail, 1, -5);
+    insertAnywhereSLL2(head, tail, 1, -5);
     cout<<"Current Linked List : ";
-    printListN1(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
     cout<<endl<<endl;
     
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 15);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 25);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 30);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 30);
-    insertAnywhereN1(head, tail, getLenN1(head) + 1, 35);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 15);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 20);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 20);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 20);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 25);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 30);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 30);
+    insertAnywhereSLL2(head, tail, getLenSLL2(head) + 1, 35);
     cout<<"Current Linked List : ";
-    printListN1(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
     
     cout<<endl<<endl;
     
     // Removing Duplicates!
-    NodeSLL6* Head = removeDuplicatesN1(head);
+    NodeSLL2* Head = removeDuplicatesSLL2(head);
     cout<<"Final Linked List : ";
-    printListN1(head);
+    printListSLL2(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 } // Time Complexity : O(n) and Space Complexity : O(1).
 
@@ -5660,24 +4999,24 @@ int main() {
 #include<unordered_map>
 using namespace std;
 
-class NodeSLL7 {
+class NodeSLL3 {
     public:
     int data;
-    NodeSLL7* next;
+    NodeSLL3* next;
     
-    NodeSLL7(int data) {
+    NodeSLL3(int data) {
         this->data = data;
         this->next = NULL;
     }
 };
 
-int getLenN2(NodeSLL7* head) {
+int getLenSLL3(NodeSLL3* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return 0;
     }
     int len = 0;
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -5685,14 +5024,14 @@ int getLenN2(NodeSLL7* head) {
     return len;
 }
 
-void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
-    NodeSLL7* newNode = new NodeSLL7(data);
+void insertAnywhereSLL3(NodeSLL3* &head, NodeSLL3* &tail, int pos, int data) {
+    NodeSLL3* newNode = new NodeSLL3(data);
     if(head == NULL) {
         head = tail = newNode;
         return;
     }
     
-    int len = getLenN2(head);
+    int len = getLenSLL3(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid Length!";
         delete newNode;
@@ -5711,7 +5050,7 @@ void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
         return;
     }
     
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     int count = 1;
     while(count < pos - 1) {
         count++;
@@ -5723,15 +5062,15 @@ void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
 }
 
 // Approach 1: Brute Force - O(n^2)
-NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
+NodeSLL3* removeDuplicatesSLL3A(NodeSLL3* head) {
     if(head == NULL) return NULL;
 
-    NodeSLL7* curr = head;
+    NodeSLL3* curr = head;
     while(curr != NULL) {
-        NodeSLL7* temp = curr;
+        NodeSLL3* temp = curr;
         while(temp->next != NULL) {
             if(temp->next->data == curr->data) {
-                NodeSLL7* duplicate = temp->next;
+                NodeSLL3* duplicate = temp->next;
                 temp->next = temp->next->next;
                 delete duplicate;
             }
@@ -5745,12 +5084,12 @@ NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
 }
 
 // Approach 3: Hashing - O(n)
-NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
+NodeSLL3* removeDuplicatesSLL3B(NodeSLL3* head) {
     if (!head) return nullptr;
 
     unordered_map<int, bool> visited;
-    NodeSLL7* curr = head;
-    NodeSLL7* prev = nullptr;
+    NodeSLL3* curr = head;
+    NodeSLL3* prev = nullptr;
 
     while (curr != nullptr) {
         if (visited[curr->data]) { // If duplicate is found
@@ -5766,12 +5105,12 @@ NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
     return head;
 }
 
-void printListN2(NodeSLL7* head) {
+void printListSLL3(NodeSLL3* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
-    NodeSLL7* temp = head;
+    NodeSLL3* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -5780,46 +5119,46 @@ void printListN2(NodeSLL7* head) {
 }
 
 int main() {
-    NodeSLL7* n1 = new NodeSLL7(10);
-    NodeSLL7* head = n1;
-    NodeSLL7* tail = n1;
+    NodeSLL3* n1 = new NodeSLL3(10);
+    NodeSLL3* head = n1;
+    NodeSLL3* tail = n1;
 
-    insertAnywhereN2(head, tail, 1, 5);
-    insertAnywhereN2(head, tail, 1, 0);
-    insertAnywhereN2(head, tail, 1, -5);
-    insertAnywhereN2(head, tail, 1, -5);
+    insertAnywhereSLL3(head, tail, 1, -5);
+    insertAnywhereSLL3(head, tail, 1, 5);
+    insertAnywhereSLL3(head, tail, 1, 0);
+    insertAnywhereSLL3(head, tail, 1, -5);
     cout<<"Current Linked List: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 15);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 25);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
-    insertAnywhereN2(head, tail, getLenN2(head) + 1, 35);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 15);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 30);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 25);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 20);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 35);
+    insertAnywhereSLL3(head, tail, getLenSLL3(head) + 1, 30);
     cout<<"Current Linked List: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
     // Removing Duplicates - Approach 1
-    head = removeDuplicatesN2(head);
+    head = removeDuplicatesSLL3A(head);
     cout<<"Final Linked List after Approach 1: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
     // Removing Duplicates - Approach 3
-    head = removeDuplicatesN3(head);
+    head = removeDuplicatesSLL3B(head);
     cout<<"Final Linked List after Approach 3: ";
-    printListN2(head);
+    printListSLL3(head);
     cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     return 0;
