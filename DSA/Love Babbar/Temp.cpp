@@ -75,92 +75,23 @@ void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
     return;
 }
 
-bool detectLoop(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return false;
-    }
-
-    Node* temp = head->next;
-    while(temp != NULL && temp != head) {
-        temp = temp->next;
-    }
-    if(temp == head) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool detectLoopwithMaps(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return false;
-    }
-
-    map<Node*, bool> visited;
-    Node* temp = head;
-    while(temp != NULL) {
-        if(visited[temp] == true) {
-            return true;
-        }
-        visited[temp] = true;
-        temp = temp->next;
-    }
-    return false;
-}
-
-Node* detectLoopwithFLoyd(Node* head) {
-    if(head == NULL || head->next == NULL) {
+Node* uniqueSortedList(Node* head) {
+    if (head == NULL) {
         return NULL;
     }
 
-    Node* slow = head;
-    Node* fast = head;
-    while(fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if(slow == fast) {
-            return slow;
+    Node* curr = head;
+    while (curr != NULL && curr->next != NULL) {  // Ensure curr->next is not NULL before accessing its data
+        if (curr->data == curr->next->data) {
+            Node* nodeToDelete = curr->next;
+            curr->next = curr->next->next;
+            nodeToDelete->next = NULL;  // Good practice before deleting
+            delete nodeToDelete;
+        } else {
+            curr = curr->next;
         }
     }
-    return NULL;
-}
-
-Node* startingNode(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return NULL;
-    }
-
-    Node* intersection = detectLoopwithFLoyd(head);
-    Node* slow = head;
-    if(intersection != NULL) {
-        while(intersection != slow) {
-            intersection = intersection->next;
-            slow = slow->next;
-        }
-        return slow;
-    }
-    else {
-        return NULL;
-    }
-}
-
-void removeLoop(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return;
-    }
-
-    Node* loopstart = startingNode(head);
-    if(loopstart != NULL) {
-        Node* temp = loopstart;
-        while(temp->next != loopstart) {
-            temp = temp->next;
-        }
-        temp->next = NULL;
-    }
-    else {
-        return;
-    }
+    return head;
 }
 
 void printList(Node* head) {
@@ -184,15 +115,19 @@ int main() {
     insertAnywhere(head, tail, 1, 5);
     insertAnywhere(head, tail, 1, 0);
     insertAnywhere(head, tail, 1, -5);
+    insertAnywhere(head, tail, 1, -5);
     cout<<"Current Linked List : ";
     printList(head);
     cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
-    cout<<endl;
-
+    cout<<endl<<endl;
+    
     insertAnywhere(head, tail, getLen(head) + 1, 15);
     insertAnywhere(head, tail, getLen(head) + 1, 20);
+    insertAnywhere(head, tail, getLen(head) + 1, 20);
+    insertAnywhere(head, tail, getLen(head) + 1, 20);
     insertAnywhere(head, tail, getLen(head) + 1, 25);
+    insertAnywhere(head, tail, getLen(head) + 1, 30);
     insertAnywhere(head, tail, getLen(head) + 1, 30);
     insertAnywhere(head, tail, getLen(head) + 1, 35);
     cout<<"Current Linked List : ";
@@ -201,28 +136,9 @@ int main() {
     
     cout<<endl<<endl;
     
-    Node* temp = head;
-    while(temp->data != 0) {
-        temp = temp->next;
-    }
-    tail->next = temp;
-    cout<<"Loop created!"<<endl;
-    // tail->next = head;
-    
-    // Detect Loop
-    // cout<<detectLoop(head);
-    // cout<<"Hi 4"<<endl;
-    cout<<"Loop exist : "<<detectLoopwithMaps(head)<<endl;
-    Node* intersectionNode = detectLoopwithFLoyd(head);
-    cout<<"Intersection point : "<<intersectionNode->data<<endl;
-    
-    // Get starting node!
-    Node* loopstart = startingNode(head);
-    cout<<"Loop start point : "<<loopstart->data<<endl;
-    
-    // Remove Loop!
-    cout<<"Loop removed! ";
-    removeLoop(head);
+    // Removing Duplicates!
+    Node* Head = uniqueSortedList(head);
+    cout<<"Final Linked List : ";
     printList(head);
-
+    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 }

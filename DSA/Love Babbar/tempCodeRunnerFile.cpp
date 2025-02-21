@@ -1,35 +1,25 @@
-// Single Linked List Implementation! - Creation, Insertion (Head Tail and Anywhere), Deletion, Length, Print! [DONE]
-// Doubly Linked List Implementation! - Creation, Insertion (Head Tail and Anywhere), Deletion, Length, Print! [DONE]
-// Circular Singly Linked List Implementation! - Creation, Insertion (Tail and Anywhere), Deletion, Length, Print! [DONE]
-// Circular Doubly Linked List Implementation! - Creation, Insertion (Tail and Anywhere), Deletion, Length, Print! [DONE]
-// Reverse a Linked List! - Recursive and Non-Recursive Method! [DONE]
-// Middle Node! - Brute force and Optimized approach! [DONE]
-// Reverse the Linkedlist in the groups of K!
-// Check whether a LinkedList is Circular or Not! - Circular, Detect-Loop using Maps and Detect-Loop using Floyd's Algo methods!
-// Detect, Get Starting Node of Loop and Remove the Loop!
-
 #include<iostream>
-#include<map>
+#include<unordered_map>
 using namespace std;
 
-class Node {
+class NodeSLL7 {
     public:
     int data;
-    Node* next;
-
-    Node(int data) {
+    NodeSLL7* next;
+    
+    NodeSLL7(int data) {
         this->data = data;
         this->next = NULL;
     }
 };
 
-int getLen(Node* head) {
+int getLenN2(NodeSLL7* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return 0;
     }
     int len = 0;
-    Node* temp = head;
+    NodeSLL7* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -37,138 +27,93 @@ int getLen(Node* head) {
     return len;
 }
 
-void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
-    Node* newNode = new Node(data);
+void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
     if(head == NULL) {
         head = tail = newNode;
         return;
     }
-
-    int len = getLen(head);
+    
+    int len = getLenN2(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid Length!";
         delete newNode;
         return;
     }
-
+    
     if(pos == 1) {
         newNode->next = head;
         head = newNode;
         return;
     }
-
+    
     if(pos == len + 1) {
         tail->next = newNode;
         tail = newNode;
         return;
     }
-
-    Node* temp = head;
-    int count = 0;
+    
+    NodeSLL7* temp = head;
+    int count = 1;
     while(count < pos - 1) {
         count++;
         temp = temp->next;
     }
-
+    
     newNode->next = temp->next;
     temp->next = newNode;
-    return;
 }
 
-bool detectLoop(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return false;
-    }
+// Approach 1: Brute Force - O(n^2)
+NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
+    if(head == NULL) return NULL;
 
-    Node* temp = head->next;
-    while(temp != NULL && temp != head) {
-        temp = temp->next;
-    }
-    if(temp == head) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool detectLoopwithMaps(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return false;
-    }
-
-    map<Node*, bool> visited;
-    Node* temp = head;
-    while(temp != NULL) {
-        if(visited[temp] == true) {
-            return true;
+    NodeSLL7* curr = head;
+    while(curr != NULL) {
+        NodeSLL7* temp = curr;
+        while(temp->next != NULL) {
+            if(temp->next->data == curr->data) {
+                NodeSLL7* duplicate = temp->next;
+                temp->next = temp->next->next;
+                delete duplicate;
+            }
+            else {
+                temp = temp->next;
+            }
         }
-        visited[temp] = true;
-        temp = temp->next;
+        curr = curr->next;
     }
-    return false;
+    return head;
 }
 
-Node* detectLoopwithFLoyd(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return NULL;
-    }
+// Approach 3: Hashing - O(n)
+NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
+    if (!head) return nullptr;
 
-    Node* slow = head;
-    Node* fast = head;
-    while(fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if(slow == fast) {
-            return slow;
+    unordered_map<int, bool> visited;
+    NodeSLL7* curr = head;
+    NodeSLL7* prev = nullptr;
+
+    while (curr != nullptr) {
+        if (visited[curr->data]) { // If duplicate is found
+            prev->next = curr->next; 
+            delete curr;
+            curr = prev->next; // Move to the next node
+        } else {
+            visited[curr->data] = true; // Mark node as visited
+            prev = curr;
+            curr = curr->next;
         }
     }
-    return NULL;
+    return head;
 }
 
-Node* startingNode(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return NULL;
-    }
-
-    Node* intersection = detectLoopwithFLoyd(head);
-    Node* slow = head;
-    if(intersection != NULL) {
-        while(intersection != slow) {
-            intersection = intersection->next;
-            slow = slow->next;
-        }
-        return slow;
-    }
-    else {
-        return NULL;
-    }
-}
-
-void removeLoop(Node* head) {
-    if(head == NULL || head->next == NULL) {
-        return;
-    }
-
-    Node* loopstart = startingNode(head);
-    if(loopstart != NULL) {
-        Node* temp = loopstart;
-        while(temp->next != loopstart) {
-            temp = temp->next;
-        }
-        temp->next = NULL;
-    }
-    else {
-        return;
-    }
-}
-
-void printList(Node* head) {
+void printListN2(NodeSLL7* head) {
     if(head == NULL) {
         cout<<"Empty List!";
         return;
     }
-    Node* temp = head;
+    NodeSLL7* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -177,52 +122,47 @@ void printList(Node* head) {
 }
 
 int main() {
-    Node* n1 = new Node(10);
-    Node* head = n1;
-    Node* tail = n1;
+    NodeSLL7* n1 = new NodeSLL7(10);
+    NodeSLL7* head = n1;
+    NodeSLL7* tail = n1;
 
-    insertAnywhere(head, tail, 1, 5);
-    insertAnywhere(head, tail, 1, 0);
-    insertAnywhere(head, tail, 1, -5);
-    cout<<"Current Linked List : ";
-    printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+    insertAnywhereN2(head, tail, 1, 5);
+    insertAnywhereN2(head, tail, 1, 0);
+    insertAnywhereN2(head, tail, 1, -5);
+    insertAnywhereN2(head, tail, 1, -5);
+    cout<<"Current Linked List: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
     cout<<endl;
 
-    insertAnywhere(head, tail, getLen(head) + 1, 15);
-    insertAnywhere(head, tail, getLen(head) + 1, 20);
-    insertAnywhere(head, tail, getLen(head) + 1, 25);
-    insertAnywhere(head, tail, getLen(head) + 1, 30);
-    insertAnywhere(head, tail, getLen(head) + 1, 35);
-    cout<<"Current Linked List : ";
-    printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
-    
-    cout<<endl<<endl;
-    
-    Node* temp = head;
-    while(temp->data != 0) {
-        temp = temp->next;
-    }
-    tail->next = temp;
-    cout<<"Loop created!"<<endl;
-    // tail->next = head;
-    
-    // Detect Loop
-    // cout<<detectLoop(head);
-    // cout<<"Hi 4"<<endl;
-    cout<<"Loop exist : "<<detectLoopwithMaps(head)<<endl;
-    Node* intersectionNode = detectLoopwithFLoyd(head);
-    cout<<"Intersection point : "<<intersectionNode->data<<endl;
-    
-    // Get starting node!
-    Node* loopstart = startingNode(head);
-    cout<<"Loop start point : "<<loopstart->data<<endl;
-    
-    // Remove Loop!
-    cout<<"Loop removed! ";
-    removeLoop(head);
-    printList(head);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 15);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 25);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 35);
+    cout<<"Current Linked List: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
+    cout<<endl;
+
+    // Removing Duplicates - Approach 1
+    head = removeDuplicatesN2(head);
+    cout<<"Final Linked List after Approach 1: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
+
+    cout<<endl;
+
+    // Removing Duplicates - Approach 3
+    head = removeDuplicatesN3(head);
+    cout<<"Final Linked List after Approach 3: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
+
+    return 0;
 }

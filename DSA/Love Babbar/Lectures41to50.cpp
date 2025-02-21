@@ -5499,180 +5499,108 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 48 - Remove Duplicates from sorted/unsorted Linkedlists! --------------------------------------------------------------------------------------------------------->
-// Question 1 : Suppose a linkedlist 10->20->20->30->30->30->30->40->NULL, so this LL is sorted and now we will, remove all the duplicates so we will get the final output as 10->20->30->40->NULL
-// Approach : With the example of the above case, we will use tow pointers, head and current, initially dono head pr point kr rhe honge! now hum current ko use krke current ka data and current ke next ka data compare krenge, agar dono same honge toh hum current ka next ka data delete krdenge and current ke next ko current->next->next pr point kraa denge! and agar same nhi hote toh hum current ko just ek aage badhaa dete!
-// Lets code now....
+// Question 1 : We have a sorted linked list where some elements appear multiple times. Our task is to remove all duplicate elements so that only distinct values remain.
+//            : Example : Input Linked List : 10 -> 20 -> 20 -> 30 -> 30 -> 30 -> 30 -> 40 -> NULL
+//                      : Output Linked List : 10 -> 20 -> 30 -> 40 -> NULL
+// Approach : Two Pointer Method : Initialization : Both head and current start at the beginning of the linked list.
+//                                                : current will traverse the list, comparing each node with the next one.
+//                               : Comparison & Deletion : If current->data is equal to current->next->data, it means we have found a duplicate.
+//                                                       : To remove the duplicate, we update the next pointer of current to skip the duplicate node.
+//                                                       : The duplicate node is then deleted to free up memory.
+//                              : Moving Forward : If current->data and current->next->data are not equal, simply move current one step ahead. Continue this process until current->next becomes NULL.
+// Implementation!
 #include<iostream>
+#include<map>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node26 {
-    public :
+class NodeSLL6 {
+    public:
     int data;
-    Node26* next;
+    NodeSLL6* next;
 
-    Node26(int data) {
+    NodeSLL6(int data) {
         this->data = data;
         this->next = NULL;
     }
-
-    ~Node26() {
-        int value = this->data; // isme isko bhi likhne ki zrurat nhi hai, kyunki jiss jagah pr delete keyword call hua hoga hoga vo uske hisaab se data utha lega! toh alag se specify krne ki zarurat nhi hai!
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    } // Here we have changed the destructor a little bit becoz destructor already delete krta hai, toh usme alag se delete operation perform krne ki zarurat nhi hai!
 };
 
-void insertatHead(Node26* &head, int data) {
-    Node26* temp = new Node26(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node26* &tail, int data) {
-    Node26* temp = new Node26(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node26* &head, Node26* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node26* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node26* NodetoInsert = new Node26(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-void printNode(Node26* &head) {
-    Node26* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
-        temp = temp->next;
-    }
-    cout<<endl;
-}
-
-Node26* uniqueSortedList(Node26* head) { // This function is to remove all the duplicate elements!
-    // Empty list...
+int getLenN1(NodeSLL6* head) {
     if(head == NULL) {
+        cout<<"Empty List!";
+        return 0;
+    }
+    int len = 0;
+    NodeSLL6* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    return len;
+}
+
+void insertAnywhereN1(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
+    NodeSLL6* newNode = new NodeSLL6(data);
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+
+    int len = getLenN1(head);
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid Length!";
+        delete newNode;
+        return;
+    }
+
+    if(pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    if(pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    NodeSLL6* temp = head;
+    int count = 0;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+    return;
+}
+
+NodeSLL6* removeDuplicatesN1(NodeSLL6* head) {
+    if (head == NULL) {
         return NULL;
     }
-    Node26* curr = head;
-    while(curr != NULL) {
-        if((curr->next != NULL) && (curr->data == curr->next->data)) {
-            Node26* next_to_next = curr->next->next;
-            Node26* nodeToDelete = curr->next;
-            curr->next = next_to_next;
-            delete(nodeToDelete);
-        }
-        else {
+
+    NodeSLL6* curr = head;
+    while (curr != NULL && curr->next != NULL) { // Ensure curr->next is not NULL before accessing its data
+        if (curr->data == curr->next->data) {
+            NodeSLL6* nodeToDelete = curr->next;
+            curr->next = curr->next->next;
+            nodeToDelete->next = NULL; // Good practice before deleting
+            delete nodeToDelete;
+        } else {
             curr = curr->next;
         }
     }
     return head;
 }
 
-int main() {
-    Node26* node = new Node26(10);
-    Node26* head = node;
-    Node26* tail = node;
-    cout<<"First node of LL : ";
-    printNode(head);
-
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 20);
-    insertAtAnyPosition(head, tail, 3, 20);
-    insertAtAnyPosition(head, tail, 4, 30);
-    insertAtAnyPosition(head, tail, 5, 30);
-    insertAtAnyPosition(head, tail, 6, 40);
-    cout<<"Singly Linked List : ";
-    printNode(head); // Currently this LL contains duplicate elements!
-
-    // Removing duplicate elements...
-    head = uniqueSortedList(head);
-    printNode(head);
-} // Time Complexity : O(n) and Space Complexity : O(1).
-// So this is how we will remove duplicates in a sorted Linkedlist!, now lets remove duplicates from UnSorted!
-
-// Removing duplicates in unsorted Linkedlist!
-// Jaise pehle hum kr rhe the ki current ko harr iteration me aage badhaa rhe the and current->data and current->next hai usko compare kr rhe the agar dono same ho rhe the toh current->next ko pehle delete krke and then usko current->next->next pr point kraa de rhe the! and aise current ko aage badhaye jaa rhe the jab tak current->next NULL na hojaye!
-// Approach 1 : So in this case what we will do is, hum iss baar curr ko head pr rakhenge and then poori LL traverse krenge then jaha jahaa same values dikhengi current->data se, unn unn nodes ke data ko vahaa se delete krte jayenge! and that is how we will move further! but isme TC will become O(n^2) which is not a good thing, so...
-// Approach 2 : Yaa toh pehle hi LL ko sort krlo and then jo pehle vaala tha method tha usse hi solve krlo! in this case the TC : O(nlogn)
-// Approach 3 : Yaa toh map use krlo, where map create krlo <node, bool> type ka jisme jo jo nodes hum visit krte jayenge unko hum true mark krte jayenge! and jab bhi traverse krte time koi aisa node aata hai jo map me already true marked hai usko delete krke uske prev node ko uske aage vaale node pr point kraa denge! and similarly for other nodes!
-// Code for Approach 1, rest you can try while doing practice!
-#include<iostream>
-using namespace std;
-
-// Basic code to create the singly linkedist!
-class Node27 {
-    public :
-    int data;
-    Node27* next;
-
-    Node27(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~Node27() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
-};
-
-void insertatHead(Node27* &head, int data) {
-    Node27* temp = new Node27(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node27* &tail, int data) {
-    Node27* temp = new Node27(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node27* &head, Node27* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void printListN1(NodeSLL6* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
         return;
     }
-
-    Node27* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node27* NodetoInsert = new Node27(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-void printNode(Node27* &head) {
-    Node27* temp = head;
+    NodeSLL6* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -5680,17 +5608,130 @@ void printNode(Node27* &head) {
     cout<<endl;
 }
 
-Node27* uniqueUnsortedList(Node27* head) { // This function is to remove all the duplicate elements!
-    // Empty list...
-    if(head == NULL) {
-        return NULL;
+int main() {
+    NodeSLL6* n1 = new NodeSLL6(10);
+    NodeSLL6* head = n1;
+    NodeSLL6* tail = n1;
+
+    insertAnywhereN1(head, tail, 1, 5);
+    insertAnywhereN1(head, tail, 1, 0);
+    insertAnywhereN1(head, tail, 1, -5);
+    insertAnywhereN1(head, tail, 1, -5);
+    cout<<"Current Linked List : ";
+    printListN1(head);
+    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+
+    cout<<endl<<endl;
+    
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 15);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 20);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 25);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 30);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 30);
+    insertAnywhereN1(head, tail, getLenN1(head) + 1, 35);
+    cout<<"Current Linked List : ";
+    printListN1(head);
+    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+    
+    cout<<endl<<endl;
+    
+    // Removing Duplicates!
+    NodeSLL6* Head = removeDuplicatesN1(head);
+    cout<<"Final Linked List : ";
+    printListN1(head);
+    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+} // Time Complexity : O(n) and Space Complexity : O(1).
+
+// Question 2 : Removing Duplicates from an Unsorted Linked List
+//            : Previously, we handled duplicates in a sorted linked list by comparing current->data with current->next->data. If they were the same, we removed current->next and updated the links accordingly. This approach worked because the list was already sorted.
+//            : However, in an unsorted linked list, we need a different approach. Here are some possible solutions..
+// Approach 1 : Brute Force (O(n²))
+//            : Start with curr = head and traverse the entire list -> For each node, check the entire list for duplicate values and remove them -> Continue this process until all duplicates are removed.
+//            : Time Complexity: O(n²) (Not efficient for large lists).
+// Approach 2 : Sort & Remove (O(n log n))
+//            : First, sort the linked list -> Then, use the previous method (removing duplicates in a sorted list).
+//            : Time Complexity: O(n log n) (sorting) + O(n) (removal) = O(n log n). Here we are using MergeSort! So try this approach once you learn MergeSort in LL.
+// Approach 3 : Using Hashing (O(n))
+//            : Use a hash map (unordered_map in C++) to store visited values -> Traverse the list and check if the value is already present in the map -> If not present, mark it as true in the map and If already present, delete that node and adjust links.
+//            : Time Complexity: O(n) (Best approach for large lists).
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+class NodeSLL7 {
+    public:
+    int data;
+    NodeSLL7* next;
+    
+    NodeSLL7(int data) {
+        this->data = data;
+        this->next = NULL;
     }
-    Node27* curr = head;
+};
+
+int getLenN2(NodeSLL7* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return 0;
+    }
+    int len = 0;
+    NodeSLL7* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    return len;
+}
+
+void insertAnywhereN2(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+    
+    int len = getLenN2(head);
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid Length!";
+        delete newNode;
+        return;
+    }
+    
+    if(pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+    
+    if(pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+    
+    NodeSLL7* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+    
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+// Approach 1: Brute Force - O(n^2)
+NodeSLL7* removeDuplicatesN2(NodeSLL7* head) {
+    if(head == NULL) return NULL;
+
+    NodeSLL7* curr = head;
     while(curr != NULL) {
-        Node27* temp = curr;
+        NodeSLL7* temp = curr;
         while(temp->next != NULL) {
             if(temp->next->data == curr->data) {
-                Node27* duplicate = temp->next;
+                NodeSLL7* duplicate = temp->next;
                 temp->next = temp->next->next;
                 delete duplicate;
             }
@@ -5703,28 +5744,89 @@ Node27* uniqueUnsortedList(Node27* head) { // This function is to remove all the
     return head;
 }
 
+// Approach 3: Hashing - O(n)
+NodeSLL7* removeDuplicatesN3(NodeSLL7* head) {
+    if (!head) return nullptr;
+
+    unordered_map<int, bool> visited;
+    NodeSLL7* curr = head;
+    NodeSLL7* prev = nullptr;
+
+    while (curr != nullptr) {
+        if (visited[curr->data]) { // If duplicate is found
+            prev->next = curr->next; 
+            delete curr;
+            curr = prev->next; // Move to the next node
+        } else {
+            visited[curr->data] = true; // Mark node as visited
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+    return head;
+}
+
+void printListN2(NodeSLL7* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return;
+    }
+    NodeSLL7* temp = head;
+    while(temp != NULL) {
+        cout<<temp->data<<" ";
+        temp = temp->next;
+    }
+    cout<<endl;
+}
+
 int main() {
-    Node27* node = new Node27(10);
-    Node27* head = node;
-    Node27* tail = node;
-    cout<<"First node of LL : ";
-    printNode(head);
+    NodeSLL7* n1 = new NodeSLL7(10);
+    NodeSLL7* head = n1;
+    NodeSLL7* tail = n1;
 
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 20);
-    insertAtAnyPosition(head, tail, 3, 20);
-    insertAtAnyPosition(head, tail, 4, 30);
-    insertAtAnyPosition(head, tail, 5, 30);
-    insertAtAnyPosition(head, tail, 6, 40);
-    cout<<"Singly Linked List : ";
-    printNode(head); // Currently this LL contains duplicate elements!
+    insertAnywhereN2(head, tail, 1, 5);
+    insertAnywhereN2(head, tail, 1, 0);
+    insertAnywhereN2(head, tail, 1, -5);
+    insertAnywhereN2(head, tail, 1, -5);
+    cout<<"Current Linked List: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
 
-    // Removing duplicate elements...
-    head = uniqueUnsortedList(head);
-    printNode(head);
-} // It will have TC : O(n^2) becoz we have used two loops!, and SC will be constant O(1) kyunki koi extra space nhi li gyi hai!
-// Rest, write and practice other approaches as well! as they are important to know, kyunki interviews me different approaches puche jaa sakte hai!
-// Along with this learn to split cicular LL into two halves! and write the code!
+    cout<<endl;
+
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 15);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 20);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 25);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 30);
+    insertAnywhereN2(head, tail, getLenN2(head) + 1, 35);
+    cout<<"Current Linked List: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
+
+    cout<<endl;
+
+    // Removing Duplicates - Approach 1
+    head = removeDuplicatesN2(head);
+    cout<<"Final Linked List after Approach 1: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
+
+    cout<<endl;
+
+    // Removing Duplicates - Approach 3
+    head = removeDuplicatesN3(head);
+    cout<<"Final Linked List after Approach 3: ";
+    printListN2(head);
+    cout<<"Current head: "<<head->data<<" Current tail: "<<tail->data<<endl;
+
+    return 0;
+} // Comment one approach to see the effect of other!
+// The given code removes duplicates from a singly linked list using two different approaches...
+// Approach 1 (O(n²) Time Complexity, O(1) Space Complexity) : Uses nested loops to check and remove duplicate nodes. No extra space is used, making it space-efficient but time-consuming.
+// Approach 3 (O(n) Time Complexity, O(n) Space Complexity) : Uses an unordered map to track visited nodes, ensuring duplicates are removed in a single pass. More efficient in terms of time but requires additional space.
 
 // ---------------------------------------------------------- LECTURE 49 - Merge 2 Sorted LLs, Sort 0s, 1s, 2s --------------------------------------------------------------------------------------------------------->
 // Question 1 : We are given with a LL with 0s 1s and 2s in the LL as nodes but they are are not in a sequence! so we have to sort them in a order!, like if you have a LL, 0->1->0->2->1->2, so we need to sort them as 0->0->1->1->2->2, so how will you do this...
