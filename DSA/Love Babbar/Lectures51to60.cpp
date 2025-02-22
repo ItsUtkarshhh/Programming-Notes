@@ -1,10 +1,12 @@
 // ---------------------------------------------------------- LECTURE 51 - Add two numbers represented by a LinkedList! --------------------------------------------------------------------------------------------------------->
-// Approach : So here what we will do is, we know LL is like...
-// 4->5->NULL
-// 3->4->5->NULL, Dono ko add krenge toh we will get, 3->9->0->NULL, but ye ayega kaise, kyunki we know that addition hum right side se krte hai! but LL toh left se like shuru hoti hai toh addition krne ke liye, ya toh hum aisa kuch kre ki 5 ko 5 se add kr paye 4 ko 4 se and then 3 ko 0 se so that we get 390, but vo krenge kaise, so for that we will reverse both the LLs and then add the corresponding elements!
-// 5->4->NULL
-// 5->4->3->NULL, now on adding them, we will get 0->9->3->NULL, now we will reverse this also! and we will get 390!
-// Lets code this....
+// Question 1 : We are given two numbers represented as linked lists, where each node contains a single digit. The digits are stored in forward order, meaning the most significant digit appears first. Our task is to add these two numbers and return the sum as a linked list in the same format.
+//            : Example : Input : LL1 = 4 -> 5 -> NULL (represents 45), LL2 = 3 -> 4 -> 5 -> NULL (represents 345)
+//                      : Output : Result = 3 -> 9 -> 0 -> NULL (represents 390)
+// Approach : Problem with Direct Addition : Normally, we add numbers from the rightmost digit (least significant) first. But in linked lists, numbers are given from the leftmost digit (most significant) first. To correctly align corresponding digits for addition, we need to reverse both linked lists first.
+//          : Reverse the Input Lists : LL1 = 4 -> 5 -> NULL → After reversing: 5 -> 4 -> NULL
+//                                    : LL2 = 3 -> 4 -> 5 -> NULL → After reversing: 5 -> 4 -> 3 -> NULL
+//          : Perform Addition Digit by Digit : Add corresponding nodes, keeping track of the carry. If the sum of two digits is >= 10, store the last digit and carry forward the remaining value.
+// Implementation!
 #include<iostream>
 using namespace std;
 

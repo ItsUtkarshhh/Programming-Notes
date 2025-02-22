@@ -5168,84 +5168,110 @@ int main() {
 // Approach 3 (O(n) Time Complexity, O(n) Space Complexity) : Uses an unordered map to track visited nodes, ensuring duplicates are removed in a single pass. More efficient in terms of time but requires additional space.
 
 // ---------------------------------------------------------- LECTURE 49 - Merge 2 Sorted LLs, Sort 0s, 1s, 2s --------------------------------------------------------------------------------------------------------->
-// Question 1 : We are given with a LL with 0s 1s and 2s in the LL as nodes but they are are not in a sequence! so we have to sort them in a order!, like if you have a LL, 0->1->0->2->1->2, so we need to sort them as 0->0->1->1->2->2, so how will you do this...
-// Approach 1 : So what we will do is that we will traverse the whole LL and count all the 0s 1s and 2s in the LL and then jo given LL hai usme hi start se end tak jaate jaate jitni jitni baar 0s 1s and 2s hai unko LL me data replace krte jayenge!
-// Lets code this approach :
+// Question 1 : We are given a singly linked list where each node contains either 0, 1, or 2, but they are not in sorted order. We need to rearrange the linked list such that all 0s come first, followed by 1s, and then 2s, while maintaining the original structure of the linked list.
+// Approach 1 : Count and Replace Method!
+//            : Step 1 : Count the occurrences of 0s, 1s, and 2s by traversing the linked list once.
+//                     : Maintain three counters : count0 → Stores the number of times 0 appears in the list.
+//                                               : count1 → Stores the number of times 1 appears in the list.
+//                                               : count2 → Stores the number of times 2 appears in the list.
+//                                               : This helps us determine how many times each value should appear in the sorted list.
+//            : Step 2 :  Modify the existing linked list by traversing the linked list again.
+//                     : Overwrite the node values by placing 0s first, then 1s, and finally 2s, based on the counts we calculated earlier.
+//                     : The structure of the linked list remains the same, only the node values are updated.
+// Implementation!
 #include<iostream>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node28 {
+// Class representing a node in a singly linked list
+class NodeSLL4 {
     public :
     int data;
-    Node28* next;
+    NodeSLL4* next;
 
-    Node28(int data) {
+    NodeSLL4(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node28() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL4() {
+        cout<<"Memory is freed for the node with data "<<this->data<<endl;
     }
 };
 
-void insertatHead(Node28* &head, int data) {
-    Node28* temp = new Node28(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node28* &tail, int data) {
-    Node28* temp = new Node28(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node28* &head, Node28* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
+// Function to calculate the length of the linked list
+int getLenSLL4(NodeSLL4* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return 0;
     }
-
-    Node28* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node28* NodetoInsert = new Node28(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-Node28* sortList(Node28* head) { // Here we have codes the same approach! to print all the nodes 0 1 2 one by one according to there count! by replace the previous nodes data with the sorted ones!
-    int zeroCount = 0;
-    int oneCount = 0;
-    int twoCount = 0;
-
-    Node28* temp = head;
+    int len = 0;
+    NodeSLL4* temp = head;
     while(temp != NULL) {
-        if(temp->data == 0) {
-            zeroCount++;
-        }
-        else if(temp->data == 1) {
-            oneCount++;
-        }
-        else if(temp->data == 2) {
-            twoCount++;
-        }
+        len++;
+        temp = temp->next;
+    }
+    return len;
+}
+
+// Function to insert a node at any position in the linked list
+void insertAnywhereSLL4(NodeSLL4* &head, NodeSLL4* &tail, int pos, int data) {
+    NodeSLL4* newNode = new NodeSLL4(data);
+    
+    // If list is empty, make the new node the head and tail
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+    
+    int len = getLenSLL4(head);
+    
+    // Validate position
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid Position!";
+        delete newNode;
+        return;
+    }
+    
+    // Insert at the beginning
+    if(pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+    
+    // Insert at the end
+    if(pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+    
+    // Insert at the given position
+    NodeSLL4* temp = head;
+    int count = 1;
+    while(count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+    
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+// Function to sort the linked list containing only 0s, 1s, and 2s
+NodeSLL4* sortList(NodeSLL4* head) {
+    int zeroCount = 0, oneCount = 0, twoCount = 0;
+
+    // Count occurrences of 0s, 1s, and 2s in the list
+    NodeSLL4* temp = head;
+    while(temp != NULL) {
+        if(temp->data == 0) zeroCount++;
+        else if(temp->data == 1) oneCount++;
+        else if(temp->data == 2) twoCount++;
         temp = temp->next;
     }
 
+    // Overwrite the linked list with sorted values
     temp = head;
     while(temp != NULL) {
         if(zeroCount != 0) {
@@ -5265,8 +5291,9 @@ Node28* sortList(Node28* head) { // Here we have codes the same approach! to pri
     return head;
 }
 
-void printNode(Node28* &head) {
-    Node28* temp = head;
+// Function to print the linked list
+void printListSLL4(NodeSLL4* &head) {
+    NodeSLL4* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -5275,544 +5302,506 @@ void printNode(Node28* &head) {
 }
 
 int main() {
-    Node28* node = new Node28(0);
-    Node28* head = node;
-    Node28* tail = node;
-    cout<<"First node of LL : ";
-    printNode(head);
+    // Creating the first node of the linked list
+    NodeSLL4* node = new NodeSLL4(0);
+    NodeSLL4* head = node;
+    NodeSLL4* tail = node;
+    cout<<"Initial Linked List: ";
+    printListSLL4(head);
 
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 2);
-    insertAtAnyPosition(head, tail, 3, 1);
-    insertAtAnyPosition(head, tail, 4, 0);
-    insertAtAnyPosition(head, tail, 5, 1);
-    insertAtAnyPosition(head, tail, 6, 2);
-    cout<<"Singly Linked List : ";
-    printNode(head);
+    // Inserting nodes at different positions
+    insertAnywhereSLL4(head, tail, 2, 2);
+    insertAnywhereSLL4(head, tail, 3, 1);
+    insertAnywhereSLL4(head, tail, 4, 0);
+    insertAnywhereSLL4(head, tail, 5, 1);
+    insertAnywhereSLL4(head, tail, 6, 2);
+    cout<<"Linked List before sorting: ";
+    printListSLL4(head);
 
-    head = sortList(head); // Updated the head
-    printNode(head); // Printing the LL with the new head!
-} // TC will be O(n) kyunki do loops alag alag traverse hue hai! and koi extra space nhi use ki bss variables hi create kiye hai! so SC will be O(1)
+    // Sorting the linked list
+    head = sortList(head);
+    cout<<"Linked List after sorting: ";
+    printListSLL4(head);
+} // Time complexity is O(n) due to two separate traversals, and space complexity is O(1) as only a few variables are used.
 
-// Approach 2 : Now what if we are not allowed to replace the data! then in that case what else can we replace or change? that is Links! so we will try to change the Links of nodes though this approach!
-// So what we will do is we will create 3 LLs one for 0s and one 1s and one for 2s, and then we will merge all of them! Here we will be using dummy nodes like ye ek tarah se head nodes honge saare individual LLs ke taaki hum identify kr sake ki ye jo 3 LLs honge vo teeno kiske kiske hai! and then final jab hum merge kr rhe honge toh inn Dummy nodes ki help se hi krenge!
-// Bina dummy nodes ke bhi hojayega question solve, pr usme if condition lga lga ke pagal hojayenge! isliye we will use dummy nodes!
-// Lets code and see further...
+// Approach 2 : Changing Links Instead of Modifying Data!
+//            : Step 1 : Create Three Separate Linked Lists for 0s, 1s, and 2s.
+//                     : Each list will have a dummy node at the beginning. These dummy nodes help us easily track the heads of the three lists and simplify merging later.
+//                     : As we traverse the original linked list, we will append nodes to the respective lists while maintaining their original sequence.
+//            : Step 2 : Merge the Three Lists, Once all nodes are distributed into the three separate linked lists.
+//                     : We merge them in order : Connect the last node of the 0s list to the head of the 1s list. Connect the last node of the 1s list to the head of the 2s list.
+//                     : The head of the new sorted linked list will be the first non-dummy node in the 0s list, or if it's empty, then the 1s list, and so on.
+// Implementation!
 #include<iostream>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node28 {
-    public :
+// Class representing a Node in a singly linked list
+class NodeSLL5 {
+public:
     int data;
-    Node28* next;
+    NodeSLL5* next;
 
-    Node28(int data) {
+    NodeSLL5(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node28() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL5() {
+        cout << "Memory freed for node with data: " << this->data << endl;
     }
 };
 
-void insertatHead(Node28* &head, int data) {
-    Node28* temp = new Node28(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node28* &tail, int data) {
-    Node28* temp = new Node28(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node28* &head, Node28* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node28* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
+// Function to calculate the length of the linked list
+int getLenSLL5(NodeSLL5* head) {
+    int len = 0;
+    NodeSLL5* temp = head;
+    while (temp != NULL) {
+        len++;
         temp = temp->next;
-        cnt++;
     }
+    return len;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Function to insert a node at any given position in the linked list
+void insertAnywhereSLL5(NodeSLL5* &head, NodeSLL5* &tail, int pos, int data) {
+    NodeSLL5* newNode = new NodeSLL5(data);
+    
+    // If the list is empty, set the head and tail to the new node
+    if (head == NULL) {
+        head = tail = newNode;
         return;
     }
 
-    Node28* NodetoInsert = new Node28(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    int len = getLenSLL5(head);
+    if (pos < 1 || pos > len + 1) {
+        cout << "Invalid Position!" << endl;
+        delete newNode;
+        return;
+    }
+
+    // Inserting at the head
+    if (pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    // Inserting at the tail
+    if (pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Inserting at a middle position
+    NodeSLL5* temp = head;
+    int count = 1;
+    while (count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-void insertAtTail2(Node28* &tail, Node28* curr) { // This is just created to insert the data into the created sub-LLs in the sortList function!
+// Helper function to insert a node at the tail of a given list (used in sorting function)
+void insertAtTailHelperSLL5(NodeSLL5* &tail, NodeSLL5* curr) {
     tail->next = curr;
     tail = curr;
 }
 
-Node28* sortList(Node28* head) { // As we discussed in the approach using dummy nodes! and merge all the three LLs!
-    // Three individual LLs created for 0s 1s and 2s
-    // Here we have created head and tail both! kyunki humaari jo LL ki implementations hai usme hum head and tail dono leke chal rhe hai and isliye humne insert at tail ko bhi implement kiya hua hai apne insertAtAnyPosition me! so isliye humne tail bhi banai! otherwise jab actually implement log krte hai toh generally tail bnaate hi nhi hai sirf head ke through hi inserting operations implement kr dete hai! but okay hum head nad tail dono leke chal rhe hai!
-    // So here we have created three dummy nodes with head and tails which are be pointing at sub-LLs of 0s 1s and 2s! and later on we will merge them!
-    Node28* zeroHead = new Node28(-1);
-    Node28* zeroTail = zeroHead;
-
-    Node28* oneHead = new Node28(-1);
-    Node28* oneTail = oneHead;
-
-    Node28* twoHead = new Node28(-1);
-    Node28* twoTail = twoHead;
-
-    Node28* curr = head;
-    while(curr != NULL) {
-        int value = curr->data;
-        if(value == 0) {
-            insertAtTail2(zeroTail, curr);
-        }
-        else if(value == 1) {
-            insertAtTail2(oneTail, curr);
-        }
-        else if(value == 2) {
-            insertAtTail2(twoTail, curr);
+// Function to sort a linked list containing only 0s, 1s, and 2s
+NodeSLL5* sortListSLL5(NodeSLL5* head) {
+    // Creating dummy nodes for three separate lists for 0s, 1s, and 2s
+    NodeSLL5* zeroHead = new NodeSLL5(-1);
+    NodeSLL5* zeroTail = zeroHead;
+    
+    NodeSLL5* oneHead = new NodeSLL5(-1);
+    NodeSLL5* oneTail = oneHead;
+    
+    NodeSLL5* twoHead = new NodeSLL5(-1);
+    NodeSLL5* twoTail = twoHead;
+    
+    // Traversing the original list and distributing nodes into the three lists
+    NodeSLL5* curr = head;
+    while (curr != NULL) {
+        if (curr->data == 0) {
+            insertAtTailHelperSLL5(zeroTail, curr);
+        } else if (curr->data == 1) {
+            insertAtTailHelperSLL5(oneTail, curr);
+        } else if (curr->data == 2) {
+            insertAtTailHelperSLL5(twoTail, curr);
         }
         curr = curr->next;
     }
-    // Now we will merge the created three sub-LLs...
-    // Approach is ki hum zerotail ke next ko oneHead ke next se link kr denge (one head is just a dummy node main data toh oneHead ke next node se store hona shuru ho rha hai isliye zeroTail next ko oneHead ke next se link kraa rhe hai!)
-    // and similarly for other sub-LLs... but isme ek dikkat ho sakti hai, that is ki what if zeroHead vaali LL me toh 0s hai, pr 1s vaali poori khali ho! and jo 2s vaali hai usme 2s hai, so in this case hum 0s vaali LL ko 2s vaali LL se link naa krke 2s vaali se link krdenge seedha, and for this we will use a if else conditions!
-
-    // 1s list is not empty...
-    if(oneHead->next != NULL) {
+    
+    // Merging the three lists
+    if (oneHead->next != NULL) {
         zeroTail->next = oneHead->next;
-    }
-    else {
+    } else {
         zeroTail->next = twoHead->next;
     }
-
+    
     oneTail->next = twoHead->next;
     twoTail->next = NULL;
-    // Ab yahaa tak ka toh kaam hogya! but ab humari list ready hai, but now we need to remove the dummy nodes as becoz they are using extra space also zeroHead vaal dummy node toh abhi current head bnaa hua hai is merged LL ka, so hum chahenge ki usko 0s ki first vaali node pr point kraye! toh hum head bhi change krna hoga!
+    
+    // Setting the new head and deleting dummy nodes
     head = zeroHead->next;
-
-    // Deleting dummy nodes!
     delete zeroHead;
     delete oneHead;
     delete twoHead;
-
+    
     return head;
 }
 
-void printNode(Node28* &head) {
-    Node28* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to print the linked list
+void printListSLL5(NodeSLL5* head) {
+    NodeSLL5* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
-    Node28* node = new Node28(0);
-    Node28* head = node;
-    Node28* tail = node;
-    cout<<"First node of LL : ";
-    printNode(head);
+    // Creating the first node of the linked list
+    NodeSLL5* node = new NodeSLL5(0);
+    NodeSLL5* head = node;
+    NodeSLL5* tail = node;
+    
+    cout << "Initial node of Linked List: ";
+    printListSLL5(head);
+    
+    // Inserting more nodes
+    insertAnywhereSLL5(head, tail, 2, 2);
+    insertAnywhereSLL5(head, tail, 3, 1);
+    insertAnywhereSLL5(head, tail, 4, 0);
+    insertAnywhereSLL5(head, tail, 5, 1);
+    insertAnywhereSLL5(head, tail, 6, 2);
+    
+    cout << "Linked List before sorting: ";
+    printListSLL5(head);
+    
+    // Sorting the list
+    head = sortListSLL5(head);
+    
+    cout << "Linked List after sorting: ";
+    printListSLL5(head);
+    
+    return 0;
+} // Both approaches have O(n) time complexity and O(1) space complexity. The choice depends on the interviewer, if they ask to sort 0s, 1s, and 2s without replacing values, this approach should be used.
 
-    // inserting more nodes...
-    insertAtAnyPosition(head, tail, 2, 2);
-    insertAtAnyPosition(head, tail, 3, 1);
-    insertAtAnyPosition(head, tail, 4, 0);
-    insertAtAnyPosition(head, tail, 5, 1);
-    insertAtAnyPosition(head, tail, 6, 2);
-    cout<<"Singly Linked List : ";
-    printNode(head);
-
-    head = sortList(head); // Updated the head
-    printNode(head); // Printing the LL with the new head!
-} // TC : O(n) and SC : O(1), iski aur upar vaale approach ki TC and SC dono same hai, so ab interviewer pr depend krta hai ki what they will ask! if they tell to sort 0s 1s and 2s without replacement, then you will use this approach!
-
-
-// Question 2 : Merge two sorted LLs!
-// You will be given with two sorted LLs and dono ko merge krke jo resultant LL hogi vo bhi sorted honi chahiye!
-// Lets see the approach : Pehli baar toh agar dono me se koi bhi LL empty hoti hai toh hum dusri vaali LL ko print krdenge as simple as that! but now lets see otherwise...
-// So, here what we will do is, suppose have two LLs one is LL1 and another is LL2, now, LL1 me do pointer honge prev and curr, and hum prev and curr node ke beech me kisi aisi value ko dhundenge dusri LL me jo inn dono ke beech me aa sakti hai, agar aa sakti hai toh simply uss node ko daal denge LL1 me and prev ko update krke uss node pr le ayenge jisko abhi abhi merge kiya LL1 me from LL2, now again we will check ki kya ab kr sakte hai ki prev and curr ke beech me koi node insert from LL2, if yes then will repeat the same and if noe then will just update prev and curr! and will keep on doing this jab tak LL2 k NULL nhi aa jaata!
-// So yahaa hum merge krne ke liye kisi ek LL ko LL1 maanenge and ek ko LL2! and LL2 ke nodes ko LL1 me add krte jayenge! and once LL2 ka NULL aajaata hai toh hum vhi ruk jayenge! and will print LL1!
-// Also hum kisko LL1 maanna hai and kisko LL2 ye bhi toh ptaa krna padega! kyunki LL1 me LL2 ka data tab hi daalenge na jab LL2 ka first node badaa ho LL1 ke first node se!, so for that pehle hume yhi ptaa krna pdega ki konsa LL1 and and konsa LL2!
-// Now lets code...
-#include<iostream>
+// Question 2 : You are given two sorted singly linked lists, and you need to merge them into a single sorted linked list. The merged list should maintain the sorted order.
+// Approach 1 : Handle Base Case : If either of the linked lists is empty, simply return the other list.
+//            : Choosing Primary List (LL1) & Secondary List (LL2) : Identify which list has the smaller first node. Let this be LL1, and the other list be LL2. We will merge nodes from LL2 into LL1 while maintaining sorted order.
+//            : Merging Process : Use two pointers, prev and curr, to traverse LL1.
+//                              : For each node in LL2 : Find a position between prev and curr where the LL2 node fits.
+//                                                     : Insert the LL2 node into LL1.
+//                                                     : Update prev to point to the newly inserted node.
+//                              : If a node does not fit between prev and curr, simply move prev and curr forward.
+//            : Termination : Repeat the above steps until all nodes of LL2 are merged into LL1. The final linked list LL1 is the sorted merged list.
+// Implementation!
+#include <iostream>
 using namespace std;
 
-// Basic code to create the singly linkedist!
-class Node29 {
-    public :
+// Node definition for singly linked list
+class NodeSLL6 {
+public:
     int data;
-    Node29* next;
+    NodeSLL6* next;
 
-    Node29(int data) {
+    NodeSLL6(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node29() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    ~NodeSLL6() {
+        cout << "Memory freed for node with data: " << data << endl;
     }
 };
 
-void insertatHead(Node29* &head, int data) {
-    Node29* temp = new Node29(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node29* &tail, int data) {
-    Node29* temp = new Node29(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node29* &head, Node29* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node29* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
-        temp = temp->next;
-        cnt++;
-    }
-
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node29* NodetoInsert = new Node29(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
-}
-
-Node29* solve(Node29* ActualLL1, Node29* ActualLL2) {
-    // Here we have created prev and curr jisko use krke hum Actual LL1 pr windows create krenge jisme hum LL2 ke elements ko compare krke merge krenge!
-    Node29* prev = ActualLL1;
-    Node29* curr = prev->next;
-
-    // This is a pointer is created jisse hum Actual LL2 me traverse krenge!
-    Node29* temp = ActualLL2;
-    Node29* tempNext = temp->next; // Isko hum bss use krenge ActualLL2 ko track me rakhne ke liye ki kahin jab ActualLL2 ke nodes ActualLL1 me merge ho rhe ho toh uss instant pr kahin baaki nodes ka access na kho jaye humse! isliye ye create kiya gya hai! It is just like a helping pointer! which will just track the nodes of ALL2.
-
-    while(curr != NULL && temp != NULL) {
-        if((temp->data >= prev->data) && (temp->data <= curr->data)) {
-            prev->next = temp; // Prev of ALL1 ke next ko ALL2 ke temp se link krdiya! 
-            tempNext = temp->next; // ALL2 ke remaining nodes ka track na kho jaye isliye unko tempNext ek helping pointer create krke usko uss remaining part of ALL2 pr point kraa diya!
-            temp->next = curr; // Ab hum safely temp of ALL2 ke next ko ALL1 ke curr ke saath link kr sakte hai
-
-            // Now just update the pointers...
-            prev = temp;
-            temp = tempNext;
-        }
-        else {
-            // If me tha ki agar temp prev and curr ke beech me lie krta hai toh temp daaldo ALL1 me, but what if agar nhi krta hai lie between prev and curr...then...
-            // So in this case hume bss prev and curr ko aage badhaana padega!
-            prev = curr;
-            curr = curr->next;
-        }
-    }
-    return ActualLL1;
-}
-
-Node29* mergeLLs(Node29* LL1, Node29* LL2) {
-    if(LL1 == NULL) {
-        return LL2;
-    }
-    if(LL2 == NULL) {
-        return LL1;
-    }
-
-    // Here we have managed that konsi Linkedlist actual LL1 banegi and konsi actual LL2!
-    if(LL1->data <= LL2->data) {
-        return solve(LL1, LL2);
-    }
-    else {
-        return solve(LL2, LL1);
-    }
-}
-
-void printNode(Node29* &head) {
-    Node29* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to calculate the length of the linked list
+int getLenSLL6(NodeSLL6* head) {
+    int len = 0;
+    NodeSLL6* temp = head;
+    while (temp != NULL) {
+        len++;
         temp = temp->next;
     }
-    cout<<endl;
+    return len;
 }
 
-int main() {
-    // Creating Linkedlist 1...
-    Node29* LL1 = new Node29(1);
-    Node29* headLL1 = LL1;
-    Node29* tailLL1 = headLL1;
-    cout<<"First node of LL1 : ";
-    printNode(headLL1);
+// Function to insert a node at any given position in a linked list
+void insertAnywhereSLL6(NodeSLL6* &head, NodeSLL6* &tail, int pos, int data) {
+    NodeSLL6* newNode = new NodeSLL6(data);
 
-    // Inserting more nodes in LL1...
-    insertAtAnyPosition(headLL1, tailLL1, 2, 5);
-    insertAtAnyPosition(headLL1, tailLL1, 3, 6);
-    insertAtAnyPosition(headLL1, tailLL1, 4, 8);
-    insertAtAnyPosition(headLL1, tailLL1, 5, 10);
-    insertAtAnyPosition(headLL1, tailLL1, 6, 15);
-    cout<<"Singly Linkedlist LL1 : ";
-    printNode(headLL1);
-
-    cout<<endl;
-
-    // Creating Linkedlist 2...
-    Node29* LL2 = new Node29(1);
-    Node29* headLL2 = LL2;
-    Node29* tailLL2 = headLL2;
-    cout<<"First node of LL2 : ";
-    printNode(headLL2);
-
-    // Inserting more nodes in LL2...
-    insertAtAnyPosition(headLL2, tailLL2, 2, 2);
-    insertAtAnyPosition(headLL2, tailLL2, 3, 3);
-    insertAtAnyPosition(headLL2, tailLL2, 4, 7);
-    insertAtAnyPosition(headLL2, tailLL2, 5, 9);
-    insertAtAnyPosition(headLL2, tailLL2, 6, 12);
-    cout<<"Singly Linkedlist LL2 : ";
-    printNode(headLL2);
-
-    cout<<endl;
-
-    // merging the two Linkedlists LL1 and LL2...
-    Node29* head = mergeLLs(LL1, LL2);
-    cout<<"Final merged Linkedlist : ";
-    printNode(head);
-} // So that is how we do it! and its TC : O(n) and SC : O(1), kyunki do loops chale hai jo poori linkedlist traverse kr rhe hai and space bhi koi as such li nhi hai bss variables alot kiye hai!
-
-// But there is still one problem and that is ki suppose LL1 has only 1 node then in that case prev will be at that node and curr will be at NULL, now due to which solve vaale function me kabhi bhi Loop chalega hi nhi!, so bss yhi ek case handle krna bacha hai upar vaale case me!, so for that we will do this...
-#include<iostream>
-using namespace std;
-
-class Node29 {
-    public :
-    int data;
-    Node29* next;
-
-    Node29(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-
-    ~Node29() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
-    }
-};
-
-void insertatHead(Node29* &head, int data) {
-    Node29* temp = new Node29(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node29* &tail, int data) {
-    Node29* temp = new Node29(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node29* &head, Node29* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+    // If the list is empty, make the new node the head and tail
+    if (head == NULL) {
+        head = tail = newNode;
         return;
     }
 
-    Node29* temp = head;
-    int cnt = 1;
+    // Check for valid position
+    int len = getLenSLL6(head);
+    if (pos < 1 || pos > len + 1) {
+        cout << "Invalid Position!" << endl;
+        delete newNode;
+        return;
+    }
 
-    while(cnt < position-1) {
+    // Insert at the head position
+    if (pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    // Insert at the tail position
+    if (pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Insert at the middle position
+    NodeSLL6* temp = head;
+    int count = 1;
+    while (count < pos - 1) {
+        count++;
         temp = temp->next;
-        cnt++;
     }
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
-        return;
-    }
-
-    Node29* NodetoInsert = new Node29(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node29* solve(Node29* ActualLL1, Node29* ActualLL2) {
-    // If only one node is present in the ActualLL1, iss case me simply uss first node ke next ko ActualLL2 ke first se link krdo, and thats it!
-    if(ActualLL1->next == NULL) {
-        ActualLL1->next = ActualLL2;
-        return ActualLL1;
-    } // this is the change we have done here!
+// Function to merge two sorted singly linked lists
+NodeSLL6* mergeSortedSLL6A(NodeSLL6* LL1, NodeSLL6* LL2) {
+    // If either list is empty, return the other list
+    if (!LL1) return LL2;
+    if (!LL2) return LL1;
 
-    Node29* prev = ActualLL1;
-    Node29* curr = prev->next;
+    // Ensure LL1 starts with the smaller value for easier merging
+    if (LL1->data > LL2->data) {
+        swap(LL1, LL2);
+    }
 
-    Node29* temp = ActualLL2;
-    Node29* tempNext = temp->next;
+    NodeSLL6* prev = LL1;
+    NodeSLL6* curr = prev->next;
+    NodeSLL6* temp = LL2;
 
-    while(curr != NULL && temp != NULL) {
-        if((temp->data >= prev->data) && (temp->data <= curr->data)) {
+    // Traverse both lists and merge in sorted order
+    while (curr != NULL && temp != NULL) {
+        // If temp's value fits between prev and curr, insert it
+        if (temp->data >= prev->data && temp->data <= curr->data) {
+            NodeSLL6* tempNext = temp->next; // Store next node of LL2
             prev->next = temp;
-            tempNext = temp->next;
             temp->next = curr;
-
-            // Now just update the pointers...
             prev = temp;
-            temp = tempNext;
-        }
-        else {
-            prev = curr;
-            curr = curr->next;
+            temp = tempNext; // Move temp forward
+        } else {
+            prev = curr; // Move prev forward
+            curr = curr->next; // Move curr forward
         }
     }
-    return ActualLL1;
+
+    // Attach any remaining nodes from LL2
+    if (temp) {
+        prev->next = temp;
+    }
+
+    return LL1; // Return head of merged list
 }
 
-Node29* mergeLLs(Node29* LL1, Node29* LL2) {
-    if(LL1 == NULL) {
-        return LL2;
+// Edge case handling : If LL1 has only one node, prev will be at that node, and curr will be NULL. In this case, the loop inside solve() won't execute.
+//                    : To handle this, we need to explicitly merge the remaining nodes of LL2 into LL1.
+NodeSLL6* mergeSortedSLL6B(NodeSLL6* LL1, NodeSLL6* LL2) {
+    // If either list is empty, return the other list
+    if (!LL1) return LL2;
+    if (!LL2) return LL1;
+
+    // Ensure LL1 starts with the smaller value for easier merging
+    if (LL1->data > LL2->data) {
+        swap(LL1, LL2);
     }
-    if(LL2 == NULL) {
+
+    // Edge case handling!
+    if(LL1->next == NULL) {
+        LL1->next = LL2;
         return LL1;
     }
 
-    // Here we have managed that konsi Linkedlist actual LL1 banegi and konsi actual LL2!
-    if(LL1->data <= LL2->data) {
-        return solve(LL1, LL2);
+    NodeSLL6* prev = LL1;
+    NodeSLL6* curr = prev->next;
+    NodeSLL6* temp = LL2;
+
+    // Traverse both lists and merge in sorted order
+    while (curr != NULL && temp != NULL) {
+        // If temp's value fits between prev and curr, insert it
+        if (temp->data >= prev->data && temp->data <= curr->data) {
+            NodeSLL6* tempNext = temp->next; // Store next node of LL2
+            prev->next = temp;
+            temp->next = curr;
+            prev = temp;
+            temp = tempNext; // Move temp forward
+        } else {
+            prev = curr; // Move prev forward
+            curr = curr->next; // Move curr forward
+        }
     }
-    else {
-        return solve(LL2, LL1);
+
+    // Attach any remaining nodes from LL2
+    if (temp) {
+        prev->next = temp;
     }
+
+    return LL1; // Return head of merged list
 }
 
-void printNode(Node29* &head) {
-    Node29* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to print the linked list
+void printListSLL6(NodeSLL6* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return;
+    }
+    NodeSLL6* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
-    // Creating Linkedlist 1 with only one element!...
-    Node29* LL1 = new Node29(1);
-    Node29* headLL1 = LL1;
-    Node29* tailLL1 = headLL1;
-    cout<<"First node of LL1 : ";
-    printNode(headLL1);
+    // Creating first sorted linked list
+    NodeSLL6* LL1 = new NodeSLL6(1);
+    NodeSLL6* headLL1 = LL1;
+    NodeSLL6* tailLL1 = LL1;
 
-    cout<<"Singly Linkedlist LL1 : ";
-    printNode(headLL1);
+    insertAnywhereSLL6(headLL1, tailLL1, 2, 5);
+    insertAnywhereSLL6(headLL1, tailLL1, 3, 6);
+    insertAnywhereSLL6(headLL1, tailLL1, 4, 8);
+    insertAnywhereSLL6(headLL1, tailLL1, 5, 10);
+    insertAnywhereSLL6(headLL1, tailLL1, 6, 15);
 
+    cout << "Linked List 1: ";
+    printListSLL6(headLL1);
+
+    // Creating second sorted linked list
+    NodeSLL6* LL2 = new NodeSLL6(1);
+    NodeSLL6* headLL2 = LL2;
+    NodeSLL6* tailLL2 = LL2;
+
+    insertAnywhereSLL6(headLL2, tailLL2, 2, 2);
+    insertAnywhereSLL6(headLL2, tailLL2, 3, 3);
+    insertAnywhereSLL6(headLL2, tailLL2, 4, 7);
+    insertAnywhereSLL6(headLL2, tailLL2, 5, 9);
+    insertAnywhereSLL6(headLL2, tailLL2, 6, 12);
+
+    cout << "Linked List 2: ";
+    printListSLL6(headLL2);
+
+    // Merging both sorted linked lists
+    NodeSLL6* mergedHead = mergeSortedSLL6A(headLL1, headLL2);
+    cout << "Merged Linked List (using mergeSortedSLL6A): ";
+    printListSLL6(mergedHead);
     cout<<endl;
 
-    // Creating Linkedlist 2...
-    Node29* LL2 = new Node29(1);
-    Node29* headLL2 = LL2;
-    Node29* tailLL2 = headLL2;
-    cout<<"First node of LL2 : ";
-    printNode(headLL2);
-
-    // Inserting more nodes in LL2...
-    insertAtAnyPosition(headLL2, tailLL2, 2, 2);
-    insertAtAnyPosition(headLL2, tailLL2, 3, 3);
-    insertAtAnyPosition(headLL2, tailLL2, 4, 7);
-    insertAtAnyPosition(headLL2, tailLL2, 5, 9);
-    insertAtAnyPosition(headLL2, tailLL2, 6, 12);
-    cout<<"Singly Linkedlist LL2 : ";
-    printNode(headLL2);
-
-    cout<<endl;
-
-    // merging the two Linkedlists LL1 and LL2...
-    Node29* head = mergeLLs(LL1, LL2);
-    cout<<"Final merged Linkedlist : ";
-    printNode(head);
-} // So overall that is how we merge two linkedlists!
+    // Merging both sorted linked lists
+    NodeSLL6* mergedHead2 = mergeSortedSLL6B(headLL1, headLL2);
+    cout << "Merged Linked List (using mergeSortedSLL6B): ";
+    printListSLL6(mergedHead2);
+    return 0;
+} // Calling both merge functions simultaneously causes a runtime error. Comment out one to see the effect of the other! Both functions are similar, but just 6B handles an edge case more effectively.
+// Time Complexity: O(n), since both linked lists are traversed once.
+// Space Complexity: O(1), as no extra data structure is used, only a few variables are allocated.
 
 // ---------------------------------------------------------- LECTURE 50 - Palindrome Problem! --------------------------------------------------------------------------------------------------------->
-// Question : Check whether the List is a palidrome or not!, we already know what is a palindrome!
-// Approach 1 : So here we will proceed with creating an array! and then will copy all the nodes value into the array! and then will apply the array vaala logic to check a palindrome! so is case me SC : o(n) kyunki jitne nodes honge utni space lagegi! and TC : O(n) kyunki ek toh LL traverse krne me O(n) ki TC thi and then reverse krne me O(n) so we will get the final TC : O(n)!
-// Lets code this....
+// Question 1 : Check whether the List is a palidrome or not!
+// Approach 1 : Using an Array to Check for Palindrome in a Linked List!
+//            : To determine whether a given linked list is a palindrome, we need to check if the sequence of elements in the linked list reads the same forward and backward. Since linked lists do not allow direct index-based access like arrays, we can convert the linked list into an array and then apply the standard palindrome-checking logic.
+//            : Traverse the linked list and store all the node values in an array.
+//            : Use two-pointer technique to check if the array represents a palindrome : One pointer starts from the beginning (left) and Another pointer starts from the end (right).
+//            : Compare values at both pointers and move them towards the center. If all elements match, the linked list is a palindrome; otherwise, it is not.
+// Implementation!
 #include<iostream>
 #include<vector>
 using namespace std;
 
-class Node30 {
+class NodeSLL7 {
     public :
     int data;
-    Node30* next;
+    NodeSLL7* next;
 
-    Node30(int data) {
+    NodeSLL7(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node30() {
+    ~NodeSLL7() {
         int value = this->data;
         cout<<"Memory is free for the node with data "<<value<<endl;
     }
 };
 
-void insertatHead(Node30* &head, int data) {
-    Node30* temp = new Node30(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node30* &tail, int data) {
-    Node30* temp = new Node30(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node30* &head, Node30* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node30* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
+// Function to calculate the length of the linked list
+int getLenSLL7(NodeSLL7* head) {
+    int len = 0;
+    NodeSLL7* temp = head;
+    while (temp != NULL) {
+        len++;
         temp = temp->next;
-        cnt++;
     }
+    return len;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Function to insert a node at any given position in a linked list
+void insertAnywhereSLL7(NodeSLL7* &head, NodeSLL7* &tail, int pos, int data) {
+    NodeSLL7* newNode = new NodeSLL7(data);
+
+    // If the list is empty, make the new node the head and tail
+    if (head == NULL) {
+        head = tail = newNode;
         return;
     }
 
-    Node30* NodetoInsert = new Node30(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    // Check for valid position
+    int len = getLenSLL7(head);
+    if (pos < 1 || pos > len + 1) {
+        cout << "Invalid Position!" << endl;
+        delete newNode;
+        return;
+    }
+
+    // Insert at the head position
+    if (pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    // Insert at the tail position
+    if (pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Insert at the middle position
+    NodeSLL7* temp = head;
+    int count = 1;
+    while (count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-bool checkPalindrome(vector<int> arr) {
+bool checkPalindromeSLL7(vector<int> arr) {
     int n = arr.size();
     int s = 0;
     int e = n-1;
@@ -5826,110 +5815,140 @@ bool checkPalindrome(vector<int> arr) {
     return 1;
 }
 
-bool isPalindrome(Node30* head) {
+bool isPalindromeSLL7(NodeSLL7* head) {
     vector<int> arr;
-    Node30* temp = head;
+    NodeSLL7* temp = head;
     while(temp != NULL) {
         arr.push_back(temp->data);
         temp = temp->next;
     }
-    return checkPalindrome(arr);
+    return checkPalindromeSLL7(arr);
 }
 
-void printNode(Node30* &head) {
-    Node30* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to print the linked list
+void printListSLL7(NodeSLL7* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return;
+    }
+    NodeSLL7* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
     // Creating a Linkedlist...
-    Node30* node = new Node30(1);
-    Node30* head = node;
-    Node30* tail = head;
+    NodeSLL7* node = new NodeSLL7(1);
+    NodeSLL7* head = node;
+    NodeSLL7* tail = head;
     cout<<"First node of LL : ";
-    printNode(head);
-
+    printListSLL7(head);
+    
     cout<<"Singly Linkedlist : ";
-    insertAtAnyPosition(head, tail, 2, 2);
-    insertAtAnyPosition(head, tail, 3, 3);
-    insertAtAnyPosition(head, tail, 4, 2);
-    insertAtAnyPosition(head, tail, 5, 1);
-    printNode(head);
+    insertAnywhereSLL7(head, tail, 2, 2);
+    insertAnywhereSLL7(head, tail, 3, 3);
+    insertAnywhereSLL7(head, tail, 4, 2);
+    insertAnywhereSLL7(head, tail, 5, 1);
+    printListSLL7(head);
 
-    if(isPalindrome(head)) {
+    if(isPalindromeSLL7(head)) {
         cout<<"This Linked List is a Palindrome!";
     }
     else {
         cout<<"Its not a Palindrome!";
     }
-} // So yes this is how we do it with approach 1...
+}
+// Time Complexity Analysis : O(n) for traversing the linked list to store values in an array. O(n) for checking the palindrome condition using the two-pointer approach. Total Time Complexity: O(n)
+// Space Complexity Analysis : We use an extra array to store all n node values. Total Space Complexity: O(n)
 
-// But in the above approach we are taking extra space! so lets try something there different where we could minimize the SC!
-// Approach 2 : Isme what we do is hum pehle LL ka mid find krenge and then mid ke next se remaining LL ko reverse krenge and then uske baad ek ek krke first node ko mid ke next node se compare krenge and second node ko mid ke next ke next se compare krenge and so on...
-// agar sab same hote hai toh it will be a Palindrome! otherwise not! and then last me vapis LL ko reverse krdenge taki we get our original LL back jo humne compare krne ke liye reverse krdi thi
-// lets code this...
-#include<iostream>
+// Approach 2 : Optimized Approach (O(1) Space): Using Slow-Fast Pointers & Reversing the Second Half
+//            : Why Optmization : In the previous approach (Approach 1), we used extra space (O(n)) to store the linked list in an array before checking for a palindrome. However, we can solve this problem in O(1) extra space by modifying the linked list temporarily.
+//            : Step 1 : Find the Middle of the Linked List using Slow and Fast pointers! For even-length lists, slow will point to the first node of the second half and for odd-length lists, slow will point to the exact middle.
+//            : Step 2 : Reverse the Second Half, Starting from slow->next, reverse the second half of the list. This ensures we can now compare both halves.
+//            : Step 3 : Compare Both Halves, We now have two linked list halves : First half: original order and Second half: reversed order, Compare node values one by one.
+//            : Step 4 : Restore the Linked List, Since we reversed the second half, we reverse it back to restore the original list.
+// Implementation!
+##include<iostream>
+#include<vector>
 using namespace std;
 
-class Node31 {
+class NodeSLL8 {
     public :
     int data;
-    Node31* next;
+    NodeSLL8* next;
 
-    Node31(int data) {
+    NodeSLL8(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node31() {
+    ~NodeSLL8() {
         int value = this->data;
         cout<<"Memory is free for the node with data "<<value<<endl;
     }
 };
 
-void insertatHead(Node31* &head, int data) {
-    Node31* temp = new Node31(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node31* &tail, int data) {
-    Node31* temp = new Node31(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node31* &head, Node31* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node31* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
+// Function to calculate the length of the linked list
+int getLenSLL8(NodeSLL8* head) {
+    int len = 0;
+    NodeSLL8* temp = head;
+    while (temp != NULL) {
+        len++;
         temp = temp->next;
-        cnt++;
     }
+    return len;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Function to insert a node at any given position in a linked list
+void insertAnywhereSLL8(NodeSLL8* &head, NodeSLL8* &tail, int pos, int data) {
+    NodeSLL8* newNode = new NodeSLL8(data);
+
+    // If the list is empty, make the new node the head and tail
+    if (head == NULL) {
+        head = tail = newNode;
         return;
     }
 
-    Node31* NodetoInsert = new Node31(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    // Check for valid position
+    int len = getLenSLL8(head);
+    if (pos < 1 || pos > len + 1) {
+        cout << "Invalid Position!" << endl;
+        delete newNode;
+        return;
+    }
+
+    // Insert at the head position
+    if (pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    // Insert at the tail position
+    if (pos == len + 1) {
+        tail->next = newNode;
+        tail = newNode;
+        return;
+    }
+
+    // Insert at the middle position
+    NodeSLL8* temp = head;
+    int count = 1;
+    while (count < pos - 1) {
+        count++;
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node31* getMid(Node31* head) {
-    Node31* slow = head;
-    Node31* fast = head->next;
+NodeSLL8* getMidSLL8(NodeSLL8* head) { // Basic finding middle node function!
+    NodeSLL8* slow = head;
+    NodeSLL8* fast = head->next;
 
     while(fast != NULL && fast->next != NULL) {
         fast = fast->next->next;
@@ -5938,10 +5957,10 @@ Node31* getMid(Node31* head) {
     return slow;
 }
 
-Node31* reverse(Node31* head) {
-    Node31* curr = head;
-    Node31* prev = NULL;
-    Node31* next = NULL;
+NodeSLL8* reverseSLL8(NodeSLL8* head) { // Basic reverse function!
+    NodeSLL8* curr = head;
+    NodeSLL8* prev = NULL;
+    NodeSLL8* next = NULL;
 
     while(curr != NULL) {
         next = curr->next;
@@ -5952,22 +5971,22 @@ Node31* reverse(Node31* head) {
     return prev;
 }
 
-bool isPalindrome(Node31* head) {
+bool isPalindromeSLL8(NodeSLL8* head) {
     // If the list is empty...
     if(head == NULL || head->next == NULL) {
         return 1;
     }
 
     // Finding the middle node...
-    Node31* mid = getMid(head);
+    NodeSLL8* mid = getMidSLL8(head);
 
     // Reverse the list after the middle node...
-    Node31* temp = mid->next;
-    mid->next = reverse(temp);
+    NodeSLL8* temp = mid->next;
+    mid->next = reverseSLL8(temp);
 
     // Now lets compare the two halves! for that we will create two pointers! head1 and head2! where head1 will be pointing at the first half of the LL and head2 will pointing at the other half of the LL!
-    Node31* head1 = head;
-    Node31* head2 = mid->next;
+    NodeSLL8* head1 = head;
+    NodeSLL8* head2 = mid->next;
     while(head2 != NULL) {
         if(head1->data != head2->data) {
             return 0;
@@ -5976,42 +5995,48 @@ bool isPalindrome(Node31* head) {
         head2 = head2->next;
     }
     
-    // Now bss ab vapis LL ko reverse krdo! taki we get our original LL back! hum chaahe toh bina iske bhi humara answer sahi ayega! we just have used this piece of code with a wider perspective! that ki kabhi agar hume future me LL original vaali chahiye! toh thats why we did this! taaki original LL intact rahe!
+    // Restore the original list
     temp = temp->next;
-    reverse(temp);
+    reverseSLL8(temp);
 
-    // Now return true agar ye sab hoke uss loop se successfully bahar aa chuke hai toh...
     return true;
 }
 
-void printNode(Node31* &head) {
-    Node31* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to print the linked list
+void printListSLL8(NodeSLL8* head) {
+    if(head == NULL) {
+        cout<<"Empty List!";
+        return;
+    }
+    NodeSLL8* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
     // Creating a Linkedlist...
-    Node31* node = new Node31(1);
-    Node31* head = node;
-    Node31* tail = head;
+    NodeSLL8* node = new NodeSLL8(1);
+    NodeSLL8* head = node;
+    NodeSLL8* tail = head;
     cout<<"First node of LL : ";
-    printNode(head);
-
+    printListSLL8(head);
+    
     cout<<"Singly Linkedlist : ";
-    insertAtAnyPosition(head, tail, 2, 2);
-    insertAtAnyPosition(head, tail, 3, 3);
-    insertAtAnyPosition(head, tail, 4, 2);
-    insertAtAnyPosition(head, tail, 5, 1);
-    printNode(head);
+    insertAnywhereSLL8(head, tail, 2, 2);
+    insertAnywhereSLL8(head, tail, 3, 3);
+    insertAnywhereSLL8(head, tail, 4, 2);
+    insertAnywhereSLL8(head, tail, 5, 1);
+    printListSLL8(head);
 
-    if(isPalindrome(head)) {
+    if(isPalindromeSLL8(head)) {
         cout<<"This Linked List is a Palindrome!";
     }
     else {
         cout<<"Its not a Palindrome!";
     }
-} // Here the TC : O(n) and SC : O(1), so here we have reduced the space complexity! as becoz no extra space is used! but the TC : O(n) kyunki time toh utna hi lag rha hai! kyunki abhi we are traversing the whole LL, pehle mid nikalne me TC : O(n/2) then reverse me TC : O(n), then humne jo comparison kiya hai usme TC : O(n), then lastly firse reverse krne me TC : O(n), so overall our TC : 3*O(n) + O(n/2) = O(n)!
+}
+// The time complexity remains O(n) as we traverse the list multiple times : Finding the middle: O(n/2), Reversing the second half: O(n), Comparing halves: O(n) and Restoring the list: O(n)
+// Total: O(n) (ignoring constants). However, space complexity is O(1) since no extra space is used.
