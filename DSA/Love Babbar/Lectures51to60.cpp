@@ -10,62 +10,78 @@
 #include<iostream>
 using namespace std;
 
-class Node32 {
+class NodeSLL {
     public :
     int data;
-    Node32* next;
+    NodeSLL* next;
 
-    Node32(int data) {
+    NodeSLL(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node32() {
+    ~NodeSLL() {
         int value = this->data;
         cout<<"Memory is free for the node with data "<<value<<endl;
     }
 };
 
-void insertatHead(Node32* &head, int data) {
-    Node32* temp = new Node32(data);
-    temp->next = head;
-    head = temp;
+int getLenSLL(NodeSLL* head) {
+    if(head == NULL) {
+        return 0;
+    }
+    int len = 0;
+    NodeSLL* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    return len;
 }
 
-void insertAtTail(Node32* &tail, int data) {
-    Node32* temp = new Node32(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node32* &head, Node32* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
+void insertAnywhereSLL(NodeSLL* &head, NodeSLL* &tail, int pos, int data) {
+    NodeSLL* newNode = new NodeSLL(data);
+    if(head == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
 
-    Node32* temp = head;
-    int cnt = 1;
+    // Insertion at Head!
+    if(pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
 
-    while(cnt < position-1) {
+    int len = getLenSLL(head);
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid position!";
+        return;
+    }
+
+    NodeSLL* temp = head;
+    int count = 1;
+
+    // Traversing between nodes where excluding first node and last node!
+    while(count < pos - 1) {
         temp = temp->next;
-        cnt++;
+        count++;
     }
 
     if(temp->next == NULL) {
-        insertAtTail(tail,data);
+        temp->next = newNode;
+        tail = newNode;
         return;
     }
-
-    Node32* NodetoInsert = new Node32(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node32* reverse(Node32* head) {
-    Node32* curr = head;
-    Node32* prev = NULL;
-    Node32* next = NULL;
+NodeSLL* reverseSLL(NodeSLL* head) {
+    NodeSLL* curr = head;
+    NodeSLL* prev = NULL;
+    NodeSLL* next = NULL;
 
     while(curr != NULL) {
         next = curr->next;
@@ -77,31 +93,24 @@ Node32* reverse(Node32* head) {
 }
 
 // This func is created to insert the digit in the answer linkedlist!
-void insertAtTail3(Node32* &head, Node32* &tail, int digit) {
-    Node32* temp = new Node32(digit);
-
-    // empty list...
+void insertAtTailSLL(NodeSLL* &head, NodeSLL* &tail, int data) {
+    NodeSLL* temp = new NodeSLL(data);
     if(head == NULL) {
-        head = temp;
-        tail = temp;
+        head = tail = temp;
         return;
     }
-    else {
-        tail->next = temp;
-        tail = temp;
-    }
+    tail->next = temp;
+    tail = temp;
 }
 
-Node32* addingLLs1(Node32* LL1, Node32* LL2) {
+NodeSLL* addingSLLs1(NodeSLL* LL1, NodeSLL* LL2) {
     int carry = 0;
-    Node32* ansHead = NULL;
-    Node32* ansTail = NULL;
+    NodeSLL* ansHead = NULL;
+    NodeSLL* ansTail = NULL;
     while(LL1 != NULL && LL2 != NULL) {
         int sum = carry + LL1->data + LL2->data;
         int digit = sum%10;
-
-        // Create node and add it in answer Likedlist!
-        insertAtTail3(ansHead, ansTail, digit);
+        insertAtTailSLL(ansHead, ansTail, digit); // Create node and add it in answer Likedlist!
 
         // Calculating carry...
         carry = sum/10;
@@ -109,14 +118,11 @@ Node32* addingLLs1(Node32* LL1, Node32* LL2) {
         LL2 = LL2->next;
     }
 
-    // Now ek kaisa aisa bhi hoga jab jo do nodes add ho rhe honge unme se ek NULL hoga, ye kab hoga? jab koi ek list choti ho ya badi ho! tab ek node and NULL ko kaise manage krenge add krna? lets see...
     // When first List is short...
     while(LL1 != NULL) {
         int sum = carry + LL1->data;
         int digit = sum%10;
-
-        // Create node and add it in answer Likedlist!
-        insertAtTail3(ansHead, ansTail, digit);
+        insertAtTailSLL(ansHead, ansTail, digit); // Create node and add it in answer Likedlist!
 
         // Calculating carry...
         carry = sum/10;
@@ -127,9 +133,7 @@ Node32* addingLLs1(Node32* LL1, Node32* LL2) {
     while(LL2 != NULL) {
         int sum = carry + LL2->data;
         int digit = sum%10;
-
-        // Create node and add it in answer Likedlist!
-        insertAtTail3(ansHead, ansTail, digit);
+        insertAtTailSLL(ansHead, ansTail, digit); // Create node and add it in answer Likedlist!
 
         // Calculating carry...
         int carry = sum/10;
@@ -140,18 +144,21 @@ Node32* addingLLs1(Node32* LL1, Node32* LL2) {
     while(carry != 0) {
         int sum = carry;
         int digit = sum%10;
+        insertAtTailSLL(ansHead, ansTail, digit); // Create node and add it in answer Likedlist!
 
-        // Create node and add it in answer Likedlist!
-        insertAtTail3(ansHead, ansTail, digit);
         carry = sum/10;
     }
+
     return ansHead;
 } // But this function have became too lengthy! so we will write another function addingLLs2. where we will combine all these while loops together!
 
-Node32* addingLLs2(Node32* LL1, Node32* LL2) {
+// Optimized function to add two linked lists representing numbers
+NodeSLL* addingSLLs2(NodeSLL* LL1, NodeSLL* LL2) {
     int carry = 0;
-    Node32* ansHead = NULL;
-    Node32* ansTail = NULL;
+    NodeSLL* ansHead = NULL;
+    NodeSLL* ansTail = NULL;
+
+    // Loop runs while there are nodes in either list or there is a carry left
     while(LL1 != NULL || LL2 != NULL || carry != 0) {
         int val1 = 0;
         if(LL1 != NULL) {
@@ -162,16 +169,16 @@ Node32* addingLLs2(Node32* LL1, Node32* LL2) {
         if(LL2 != NULL) {
             val2 = LL2->data;
         }
-
+        
+        // Sum the values from both lists and carry
         int sum = carry + val1 + val2;
-        int digit = sum%10;
+        int digit = sum % 10;  // Extract last digit to store in node
+        insertAtTailSLL(ansHead, ansTail, digit); // Add node to result linked list
 
-        // Create node and add it in answer Likedlist!
-        insertAtTail3(ansHead, ansTail, digit);
+        // Calculate carry for the next position
+        carry = sum / 10;
 
-        // Calculating carry...
-        carry = sum/10;
-
+        // Move to next nodes if available
         if(LL1 != NULL) {
             LL1 = LL1->next;
         }
@@ -179,25 +186,25 @@ Node32* addingLLs2(Node32* LL1, Node32* LL2) {
             LL2 = LL2->next;
         }
     }
-    return ansHead;
+    return ansHead;  // Return head of the sum linked list
 }
 
-Node32* addTwoLLs(Node32* LL1, Node32* LL2) {
-    // Reverse the input Linkedlists!
-    LL1 = reverse(LL1);
-    LL2 = reverse(LL2);
+// Function to add two linked lists representing numbers
+NodeSLL* addTwoLLs(NodeSLL* LL1, NodeSLL* LL2) {
+    // Step 1: Reverse both input linked lists
+    LL1 = reverseSLL(LL1);
+    LL2 = reverseSLL(LL2);
 
-    // Add the two LLs...
-    // Node32* ans = addingLLs1(LL1, LL2); // This has a lengthy code! and has 4 loops!
-    Node32* ans = addingLLs2(LL1, LL2); // This has the same logic just with less lines of code and 1 loop
+    // Step 2: Add the two reversed linked lists
+    NodeSLL* ans = addingSLLs2(LL1, LL2); 
 
-    // Now reverse the answer...
-    ans = reverse(ans);
+    // Step 3: Reverse the resultant linked list to get the final sum
+    ans = reverseSLL(ans);
     return ans;
 }
 
-void printNode(Node32* &head) {
-    Node32* temp = head;
+void printListSLL(NodeSLL* &head) {
+    NodeSLL* temp = head;
     while(temp != NULL) {
         cout<<temp->data<<" ";
         temp = temp->next;
@@ -207,136 +214,245 @@ void printNode(Node32* &head) {
 
 int main() {
     // Creating a Linkedlist LL1...
-    Node32* nodeLL1 = new Node32(1);
-    Node32* headLL1 = nodeLL1;
-    Node32* tailLL1 = headLL1;
-    cout<<"First node of LL1 : ";
-    printNode(headLL1);
-
-    cout<<"Singly Linkedlist : ";
-    insertAtAnyPosition(headLL1, tailLL1, 2, 3);
-    insertAtAnyPosition(headLL1, tailLL1, 3, 4);
-    insertAtAnyPosition(headLL1, tailLL1, 4, 1);
-    printNode(headLL1);
-
-
-    cout<<endl;
+    NodeSLL* nodeLL1 = new NodeSLL(1);
+    NodeSLL* headLL1 = nodeLL1;
+    NodeSLL* tailLL1 = headLL1;
+    
+    insertAnywhereSLL(headLL1, tailLL1, 2, 3);
+    insertAnywhereSLL(headLL1, tailLL1, 3, 4);
+    insertAnywhereSLL(headLL1, tailLL1, 4, 1);
+    cout<<"Linkedlist 1 : ";
+    printListSLL(headLL1);
 
     // Creating another Linkedlist LL2...
-    Node32* nodeLL2 = new Node32(1);
-    Node32* headLL2 = nodeLL2;
-    Node32* tailLL2 = headLL2;
-    cout<<"First node of LL2 : ";
-    printNode(headLL2);
+    NodeSLL* nodeLL2 = new NodeSLL(1);
+    NodeSLL* headLL2 = nodeLL2;
+    NodeSLL* tailLL2 = headLL2;
+    
+    insertAnywhereSLL(headLL2, tailLL2, 2, 2);
+    insertAnywhereSLL(headLL2, tailLL2, 3, 3);
+    insertAnywhereSLL(headLL2, tailLL2, 4, 2);
+    insertAnywhereSLL(headLL2, tailLL2, 5, 1);
+    cout<<"Linkedlist 2 : ";
+    printListSLL(headLL2);
 
-    cout<<"Singly Linkedlist : ";
-    insertAtAnyPosition(headLL2, tailLL2, 2, 2);
-    insertAtAnyPosition(headLL2, tailLL2, 3, 3);
-    insertAtAnyPosition(headLL2, tailLL2, 4, 2);
-    insertAtAnyPosition(headLL2, tailLL2, 5, 1);
-    printNode(headLL2);
-
-    Node32* ans = addTwoLLs(headLL1, headLL2);
-    printNode(ans);
-} // So that is how we add two numbers represented with LLs!
-// TC : O(max(M+N)) & SC : O(max(M,N))... kyunki jiss list me zyada nodes honge uske hisaab se TC ya SC calculate hogi! TC ke case me dono me mila ke time lag rha hai reverse and all operations krne me! and in case of SC ke case me jis LL me zyada elements honge vo zyada spage lega!
+    cout<<"Sum of LL1 & LL2 : ";
+    NodeSLL* ans = addTwoLLs(headLL1, headLL2);
+    printListSLL(ans);
+} // Time Complexity (TC) : Since we process both linked lists completely, the time complexity depends on the longer list. Operations include reversing, traversing, and adding nodes, all taking O(MAX(M,N)) time.
+// Space Complexity (SC) : The new linked list (sum of two lists) requires space proportional to the larger list. Extra space is used only for storing the result, making it O(MAX(M,N)) space.
 
 // ---------------------------------------------------------- LECTURE 52 - Clone a Linkedlist with Random pointers! --------------------------------------------------------------------------------------------------------->
-// Question : Till now we have studied about the linkedlist implementation as, ki ek node me ek data hota hai ek next pointer hota hai jo next node ko point kr rha hota hai! So what this question says is ki bss implementation me change hoga! and that is ki data and next ke alawa ek random pointer bhi hoga jo kisi bhi random nodes ko point kr rha hoga! so then finally jo hume krna hai ki ek aise hi linkedlist ka clone banana hai! mtlb ki as it is ek aur LL banani hai!
-// Toh hume aise hi ek LL input me di hui hogi! hume bss uss same Linkedlist ko clone krke output dedena hai!
-// Approach : So pehle cheez toh humare input me jo LL hogi usko bina randome pointer ke copy krlenge! and then hum Random pointers copy krna shuru krenge! and vo kaise? so vo aise ki hum harr node pr traverse krenge and dekhenge ki usko randome pointer jahaa point kr rha hai vo node kitni dur hai! toh hum humari LL me bhi uss node ko uss randome vaale pointer ke hisaab se point kraa denge! and will do this for all nodes!
-// So isme we will use two loops! ek toh jisse hum saare LLs copy krenge bina random node ke! and then uske andar me ek aur loop chalayenge jiske through hum harr node ke random pointers check krte krte vo randome pointers add krte jayenge!, so in this case the TC : O(n^2), and this is not a very good thing! so we will try to minimize this!...
-// So for that lets see another approaches!
+// Question : We have a special type of linked list, where each node contains : Data (value of the node), Next pointer (points to the next node in the list) and Random pointer (can point to any random node in the list, or it can be NULL).
+//          : Our task is to create a clone (copy) of this linked list, meaning we need to make an exact duplicate of the given list, including both the next and random pointers.
+// Approach 1 : Naive (Brute Force) - O(n^2) Time Complexity
+//            : Step 1 : First, copy the linked list without random pointers.
+//            : Step 3 : Then, for each node in the original list, find the corresponding random pointer in the copied list.
+//            : Step 3 : Set the random pointer in the cloned list accordingly.
+//            : Problem : Since finding the correct random pointer for each node requires another traversal, this results in O(n²) time complexity, which is slow for large lists.
+// Implementation!
+#include <iostream>
+using namespace std;
 
-// Approach 2 : In this we will again copy the whole LL without the random pointers! and now ab random pointers copy krne ke liye we will use maps! so ye aise ki, suppose you have input LL which has head named as original node and the copied one is called the clone LL which has a head named as clone node! now suppose jo input LL hai usme jo original node hai vo normally next node ko toh point kr hi rha hai but uske saath saath vo node 3 pr bhi point kr rha hai! (using random pointier), so hum inn hi random pointers ko store krlenge inside a map! ki like input LL me kahaa kahaa random pointers kin kin node ko point kr rhe hai, ye cheez humne store krliya map me! so what we will do is...
-// jaise humne jo overall LL hai with data and next pointers vo toh copy krliya! ab in case of copying the random node, what we will do is, we will write cloneNode->random = map[originalNode->random]! and similarly we will do it for the whole LL!
-// Here humare iss approach se TC : O(n) and SC will also be O(n), kyunki dono me hi hum poori poori linkedlist traverse kr rhe the!
-// Lets code this approach!
+// Definition for a Node.
+class NodeSLL2A {
+public:
+    int data;
+    NodeSLL2A* next;
+    Node* random;
+    
+    NodeSLL2A(int val) {
+        data = val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
+// Function to clone the linked list using brute force approach
+NodeSLL2A* cloneLinkedListSLL2A(NodeSLL2A* head) {
+    if (!head) return NULL;  // If the list is empty, return NULL.
+
+    // Step 1: Copy the linked list without random pointers
+    NodeSLL2A* original = head;
+    NodeSLL2A* cloneHead = new NodeSLL2A(original->data);
+    NodeSLL2A* cloneTail = cloneHead;
+    original = original->next;
+
+    while (original) {
+        NodeSLL2A* newNode = new NodeSLL2A(original->data);
+        cloneTail->next = newNode;
+        cloneTail = newNode;
+        original = original->next;
+    }
+
+    // Step 2: Assign random pointers
+    original = head;
+    NodeSLL2A* cloned = cloneHead;
+
+    while (original) {
+        if (original->random) {
+            // Step 3: Find the corresponding node in the cloned list
+            NodeSLL2A* temp = head;
+            NodeSLL2A* tempClone = cloneHead;
+            while (temp) {
+                if (temp == original->random) {
+                    cloned->random = tempClone;
+                    break;
+                }
+                temp = temp->next;
+                tempClone = tempClone->next;
+            }
+        }
+        original = original->next;
+        cloned = cloned->next;
+    }
+
+    return cloneHead;
+}
+
+// Function to print the linked list (for testing)
+void printListSLL2A(NodeSLL2A* head) {
+    NodeSLL2A* temp = head;
+    while (temp) {
+        cout << "Node: " << temp->data;
+        if (temp->random) {
+            cout << ", Random: " << temp->random->data;
+        } else {
+            cout << ", Random: NULL";
+        }
+        cout << endl;
+        temp = temp->next;
+    }
+}
+
+// Driver code to test the function
+int main() {
+    NodeSLL2A* head = new NodeSLL2A(1);
+    head->next = new NodeSLL2A(2);
+    head->next->next = new NodeSLL2A(3);
+    head->next->next->next = new NodeSLL2A(4);
+
+    // Assign random pointers
+    head->random = head->next->next;  // 1 -> 3
+    head->next->random = head;        // 2 -> 1
+    head->next->next->random = head->next->next->next;  // 3 -> 4
+
+    cout << "Original Linked List:\n";
+    printList(head);
+
+    NodeSLL2A* clonedList = cloneLinkedListSLL2A(head);
+
+    cout << "\nCloned Linked List:\n";
+    printListSLL2A(clonedList);
+
+    return 0;
+}
+
+
+// Approach 2 : Using a Hash Map - O(n) Time Complexity (Optimized Approach)
+//            : Create a copy of the linked list, storing the mapping of original nodes to cloned nodes in a hash map. Key: Original Node, Value: Corresponding Cloned Node
+//            : Assign next and random pointers using the map : cloneNode->next = map[originalNode->next], cloneNode->random = map[originalNode->random]
+//            : Why is this better? We traverse the list only twice, making it O(n) time complexity. We use a hash map for storing references, leading to O(n) space complexity.
+// Implementation!
 #include <iostream>
 #include <unordered_map>
 using namespace std;
 
-class Node33 {
+class NodeSLL2 {
 public:
     int data;
-    Node33* next;
-    Node33* random;
+    NodeSLL2* next;
+    NodeSLL2* random;
 
-    Node33(int data) {
+    NodeSLL2(int data) {
         this->data = data;
         this->next = NULL;
         this->random = NULL;
     }
 
-    ~Node33() {
-        cout << "Memory is free for the node with data " << data << endl;
+    ~NodeSLL2() {
+        cout << "Node deleted with value : " << data << endl;
     }
 };
 
-void insertAtHead(Node33* &head, int data) {
-    Node33* temp = new Node33(data);
-    temp->next = head;
-    head = temp;
+int getLenSLL2(NodeSLL2* head) {
+    if(head == NULL) {
+        return 0;
+    }
+    int len = 0;
+    NodeSLL2* temp = head;
+    while(temp != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    return len;
 }
 
-void insertAtTail4(Node33* &head, Node33* &tail, int data) {
-    Node33* newNode = new Node33(data);
-    if (head == NULL) {
+void insertAtTailSLL2(NodeSLL2* &head, NodeSLL2* &tail, int data) {
+    NodeSLL2* temp = new NodeSLL2(data);
+    if(head == NULL) {
+        head = tail = temp;
+        return;
+    }
+    tail->next = temp;
+    tail = temp;
+}
+
+void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
+    NodeSLL2* newNode = new NodeSLL2(data);
+    if(head == NULL) {
         head = newNode;
         tail = newNode;
-    } else {
-        tail->next = newNode;
-        tail = newNode;
-    }
-}
-
-void insertAtAnyPosition(Node33* &head, Node33* &tail, int position, int data) {
-    if (position == 1) {
-        insertAtHead(head, data);
-        if (tail == NULL) {
-            tail = head; // if the list was empty, now head is also the tail.
-        }
         return;
     }
 
-    Node33* temp = head;
-    int cnt = 1;
-    while (cnt < position - 1 && temp != NULL) {
+    // Insertion at Head!
+    if(pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    int len = getLenSLL2(head);
+    if(pos < 1 || pos > len + 1) {
+        cout<<"Invalid position!";
+        return;
+    }
+
+    NodeSLL2* temp = head;
+    int count = 1;
+
+    // Traversing between nodes where excluding first node and last node!
+    while(count < pos - 1) {
         temp = temp->next;
-        cnt++;
+        count++;
     }
 
-    if (temp == NULL) {
-        cout << "Position is out of bounds." << endl;
+    if(temp->next == NULL) {
+        temp->next = newNode;
+        tail = newNode;
         return;
     }
-
-    if (temp->next == NULL) {
-        insertAtTail4(head, tail, data);
-        return;
-    }
-
-    Node33* nodeToInsert = new Node33(data);
-    nodeToInsert->next = temp->next;
-    temp->next = nodeToInsert;
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node33* cloneList(Node33* head) {
+NodeSLL2* cloneList(NodeSLL2* head) {
     if (!head) return NULL;
 
-    Node33* cloneHead = NULL;
-    Node33* cloneTail = NULL;
-    Node33* temp = head;
+    NodeSLL2* cloneHead = NULL;
+    NodeSLL2* cloneTail = NULL;
+    NodeSLL2* temp = head;
 
-    unordered_map<Node33*, Node33*> oldToNewNode;
+    unordered_map<NodeSLL2*, NodeSLL2*> oldToNewNode;
     while (temp != NULL) {
-        insertAtTail4(cloneHead, cloneTail, temp->data);
+        insertAtTailSLL2(cloneHead, cloneTail, temp->data);
         oldToNewNode[temp] = cloneTail;
         temp = temp->next;
     }
 
-    Node33* originalNode = head;
-    Node33* cloneNode = cloneHead;
+    NodeSLL2* originalNode = head;
+    NodeSLL2* cloneNode = cloneHead;
     while (originalNode != NULL) {
         cloneNode->random = oldToNewNode[originalNode->random];
         originalNode = originalNode->next;
@@ -346,8 +462,8 @@ Node33* cloneList(Node33* head) {
     return cloneHead;
 }
 
-void printNode(const Node33* head) {
-    const Node33* temp = head;
+void printListSLL2(const NodeSLL2* head) {
+    const NodeSLL2* temp = head;
     while (temp != NULL) {
         cout << temp->data;
         if (temp->random) {
@@ -360,14 +476,14 @@ void printNode(const Node33* head) {
 }
 
 int main() {
-    Node33* headO = new Node33(1);
-    Node33* tailO = headO;
+    NodeSLL2* headO = new NodeSLL2(1);
+    NodeSLL2* tailO = headO;
 
     // Construct the linked list
-    insertAtAnyPosition(headO, tailO, 2, 2);
-    insertAtAnyPosition(headO, tailO, 3, 3);
-    insertAtAnyPosition(headO, tailO, 4, 4);
-    insertAtAnyPosition(headO, tailO, 5, 5);
+    insertAnywhereSLL2(headO, tailO, 2, 2);
+    insertAnywhereSLL2(headO, tailO, 3, 3);
+    insertAnywhereSLL2(headO, tailO, 4, 4);
+    insertAnywhereSLL2(headO, tailO, 5, 5);
 
     // Set up random pointers
     headO->random = headO->next->next; // Head's random points to third node
@@ -376,14 +492,12 @@ int main() {
 
     // Print the original list
     cout << "Original list:" << endl;
-    printNode(headO);
+    printListSLL2(headO);
 
-    // Clone the list
-    Node33* clonedList = cloneList(headO);
+    NodeSLL2* clonedList = cloneList(headO); // Clone the list
 
-    // Print the cloned list
-    cout << "Cloned list:" << endl;
-    printNode(clonedList);
+    cout << "Cloned list:" << endl; // Print the cloned list
+    printListSLL2(clonedList);
 
     return 0;
 } // This code is entirely of ChatGPT and is giving the correct answer! its the same approach, bss love babbar ke code se thora alag hai, baaki approach is all same! go through the code to understand it!

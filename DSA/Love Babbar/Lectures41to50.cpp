@@ -2665,9 +2665,8 @@ int getLenSLL(NodeSLL* &head) {
 // Update Tail : If inserted node is at the end (newNode->next == NULL), update tail pointer.
 // Implementation!
 void insertAnywhereSLL(NodeSLL* &head, NodeSLL* &tail, int pos, int data) {
-    // Empty List!
+    NodeSLL* newNode = new NodeSLL(data);
     if(head == NULL) {
-        NodeSLL* newNode = new NodeSLL(data);
         head = newNode;
         tail = newNode;
         return;
@@ -2675,7 +2674,8 @@ void insertAnywhereSLL(NodeSLL* &head, NodeSLL* &tail, int pos, int data) {
 
     // Insertion at Head!
     if(pos == 1) {
-        insertAtHeadSLL(head, data);
+        newNode->next = head;
+        head = newNode;
         return;
     }
 
@@ -2689,13 +2689,10 @@ void insertAnywhereSLL(NodeSLL* &head, NodeSLL* &tail, int pos, int data) {
     int count = 1;
 
     // Traversing between nodes where excluding first node and last node!
-    while(count < pos - 1 && temp->next != NULL) {
+    while(count < pos - 1) {
         temp = temp->next;
         count++;
     }
-
-    // Insertion at Tail Node!
-    NodeSLL* newNode = new NodeSLL(data);
 
     if(temp->next == NULL) {
         temp->next = newNode;
