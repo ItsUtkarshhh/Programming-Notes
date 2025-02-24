@@ -16,82 +16,81 @@ class Node {
     public:
     int data;
     Node* next;
+    Node* random;
 
     Node(int data) {
         this->data = data;
         this->next = NULL;
+        this->random = NULL;
     }
 };
 
-int getLen(Node* head) {
-    if(head == NULL) {
-        cout<<"Empty List!";
-        return 0;
-    }
-    int len = 0;
-    Node* temp = head;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAnywhere(Node* &head, Node* &tail, int pos, int data) {
+void insertAtTail(Node* &head, Node* &tail, int data) {
     Node* newNode = new Node(data);
     if(head == NULL) {
-        head = tail = newNode;
+        cout<<"Empty List!";
         return;
     }
-
-    int len = getLen(head);
-    if(pos < 1 || pos > len + 1) {
-        cout<<"Invalid Length!";
-        delete newNode;
-        return;
-    }
-
-    if(pos == 1) {
-        newNode->next = head;
-        head = newNode;
-        return;
-    }
-
-    if(pos == len + 1) {
-        tail->next = newNode;
-        tail = newNode;
-        return;
-    }
-
-    Node* temp = head;
-    int count = 0;
-    while(count < pos - 1) {
-        count++;
-        temp = temp->next;
-    }
-
-    newNode->next = temp->next;
-    temp->next = newNode;
-    return;
+    tail->next = newNode;
+    tail = newNode;
 }
 
-Node* uniqueSortedList(Node* head) {
-    if (head == NULL) {
-        return NULL;
+Node* findMid(Node* head) {
+    Node* slow = head;
+    Node* fast = head->next;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
     }
+    return slow;
+}
 
-    Node* curr = head;
-    while (curr != NULL && curr->next != NULL) {  // Ensure curr->next is not NULL before accessing its data
-        if (curr->data == curr->next->data) {
-            Node* nodeToDelete = curr->next;
-            curr->next = curr->next->next;
-            nodeToDelete->next = NULL;  // Good practice before deleting
-            delete nodeToDelete;
-        } else {
-            curr = curr->next;
+Node* merge(Node* leftHead, Node* rightHead) {
+    if(leftHead == NULL) return rightHead;
+    if(rightHead == NULL) return leftHead;
+
+    Node* ans = new Node(-1);
+    Node* temp = ans;
+
+    while(leftHead != NULL && rightHead != NULL) {
+        if(leftHead->data < rightHead->data) {
+            temp->next = leftHead;
+            temp = leftHead;
+            leftHead = leftHead->next;
+        }
+        else {
+            temp->next = rightHead;
+            temp = rightHead;
+            rightHead = rightHead->next;
         }
     }
-    return head;
+
+    while(leftHead) {
+        temp->next = leftHead;
+        temp = leftHead;
+        leftHead = leftHead->next;
+    }
+
+    while(rightHead) {
+        temp->next = rightHead;
+        temp = rightHead;
+        rightHead = rightHead->next;
+    }
+    return ans->next;
+}
+
+Node* mergeSort(Node* &head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+    Node* mid = findMid(head);
+    Node* leftHead = head;
+    Node* rightHead = mid->next;
+    mid->next = NULL;
+
+    leftHead = mergeSort(leftHead);
+    rightHead = mergeSort(rightHead);
+    return merge(leftHead, rightHead);    
 }
 
 void printList(Node* head) {
@@ -108,37 +107,18 @@ void printList(Node* head) {
 }
 
 int main() {
-    Node* n1 = new Node(10);
+    Node* n1 = new Node(30);
     Node* head = n1;
     Node* tail = n1;
 
-    insertAnywhere(head, tail, 1, 5);
-    insertAnywhere(head, tail, 1, 0);
-    insertAnywhere(head, tail, 1, -5);
-    insertAnywhere(head, tail, 1, -5);
+    insertAtTail(head, tail, 10);
+    insertAtTail(head, tail, 20);
+    insertAtTail(head, tail, 50);
+    insertAtTail(head, tail, 40);
     cout<<"Current Linked List : ";
     printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
 
-    cout<<endl<<endl;
-    
-    insertAnywhere(head, tail, getLen(head) + 1, 15);
-    insertAnywhere(head, tail, getLen(head) + 1, 20);
-    insertAnywhere(head, tail, getLen(head) + 1, 20);
-    insertAnywhere(head, tail, getLen(head) + 1, 20);
-    insertAnywhere(head, tail, getLen(head) + 1, 25);
-    insertAnywhere(head, tail, getLen(head) + 1, 30);
-    insertAnywhere(head, tail, getLen(head) + 1, 30);
-    insertAnywhere(head, tail, getLen(head) + 1, 35);
-    cout<<"Current Linked List : ";
-    printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
-    
-    cout<<endl<<endl;
-    
-    // Removing Duplicates!
-    Node* Head = uniqueSortedList(head);
-    cout<<"Final Linked List : ";
-    printList(head);
-    cout<<"Current head : "<<head->data<<" Current tail : "<<tail->data<<endl;
+    Node* sortedList = mergeSort(head);
+    cout<<"Sorted Linked List : ";
+    printList(sortedList);
 }

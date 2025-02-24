@@ -1,147 +1,76 @@
-#include <iostream>
-#include <unordered_map>
+#include<iostream>
 using namespace std;
 
-class NodeSLL2 {
-public:
-    int data;
-    NodeSLL2* next;
-    NodeSLL2* random;
+class TwoStack {
+    int *arr;
+    int top1;
+    int top2;
+    int size;
 
-    NodeSLL2(int data) {
-        this->data = data;
-        this->next = NULL;
-        this->random = NULL;
+    public:
+    TwoStack(int s) {
+        this->size = s;
+        top1 = -1;
+        top2 = s;
+        arr = new int[s];
     }
 
-    ~NodeSLL2() {
-        cout << "Node deleted with value : " << data << endl;
-    }
-};
-
-int getLenSLL2(NodeSLL2* head) {
-    if(head == NULL) {
-        return 0;
-    }
-    int len = 0;
-    NodeSLL2* temp = head;
-    while(temp != NULL) {
-        len++;
-        temp = temp->next;
-    }
-    return len;
-}
-
-void insertAtTailSLL2(NodeSLL2* &head, NodeSLL2* &tail, int data) {
-    NodeSLL2* temp = new NodeSLL2(data);
-    if(head == NULL) {
-        head = tail = temp;
-        return;
-    }
-    tail->next = temp;
-    tail = temp;
-}
-
-void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
-    NodeSLL2* newNode = new NodeSLL2(data);
-    if(head == NULL) {
-        head = newNode;
-        tail = newNode;
-        return;
-    }
-
-    // Insertion at Head!
-    if(pos == 1) {
-        newNode->next = head;
-        head = newNode;
-        return;
-    }
-
-    int len = getLenSLL2(head);
-    if(pos < 1 || pos > len + 1) {
-        cout<<"Invalid position!";
-        return;
-    }
-
-    NodeSLL2* temp = head;
-    int count = 1;
-
-    // Traversing between nodes where excluding first node and last node!
-    while(count < pos - 1) {
-        temp = temp->next;
-        count++;
-    }
-
-    if(temp->next == NULL) {
-        temp->next = newNode;
-        tail = newNode;
-        return;
-    }
-    newNode->next = temp->next;
-    temp->next = newNode;
-}
-
-NodeSLL2* cloneList(NodeSLL2* head) {
-    if (!head) return NULL;
-
-    NodeSLL2* cloneHead = NULL;
-    NodeSLL2* cloneTail = NULL;
-    NodeSLL2* temp = head;
-
-    unordered_map<NodeSLL2*, NodeSLL2*> oldToNewNode;
-    while (temp != NULL) {
-        insertAtTailSLL2(cloneHead, cloneTail, temp->data);
-        oldToNewNode[temp] = cloneTail;
-        temp = temp->next;
-    }
-
-    NodeSLL2* originalNode = head;
-    NodeSLL2* cloneNode = cloneHead;
-    while (originalNode != NULL) {
-        cloneNode->random = oldToNewNode[originalNode->random];
-        originalNode = originalNode->next;
-        cloneNode = cloneNode->next;
-    }
-
-    return cloneHead;
-}
-
-void printListSLL2(const NodeSLL2* head) {
-    const NodeSLL2* temp = head;
-    while (temp != NULL) {
-        cout << temp->data;
-        if (temp->random) {
-            cout << " [Random points to " << temp->random->data << "]";
+    void Push1(int element) {
+        if(top2 - top1 > 1) {
+            top1++;
+            arr[top1] = element;
         }
-        cout << " -> ";
-        temp = temp->next;
+        else {
+            cout<<"Stack Overflow!"<<endl;
+        }
     }
-    cout << "NULL" << endl;
-}
+
+    void Push2(int element) {
+        if(top2-top1 > 1) {
+            top2--;
+            arr[top2] = element;
+        }
+        else {
+            cout<<"Stack overflow!"<<endl;
+        }
+    }
+
+    int pop1() {
+        if(top1 >= 0) {
+            int ans = arr[top1];
+            top1--;
+            return ans;
+        }
+        else {
+            return -1;
+        }
+    }
+
+    int pop2() {
+        if(top2 < size) {
+            int ans = arr[top2];
+            top2++;
+            return ans;
+        }
+        else {
+            return -1;
+        }
+    }
+}; // Also, yahaa hum ye bhi kr sakte the ki array ko n/2 n/2 parts me tod ke fir dono stacks ko daalte raho usme! but ye ek acha tareeka nhi hota! kyunki kyunki maanlo agar ek stack ne poori n/2 space leli hai but ek ne sirf lets suppose bss n/4 hi space li hai toh in that case n/4 space waste hojaati! so this is not the optimal usage of space!
 
 int main() {
-    NodeSLL2* headO = new NodeSLL2(1);
-    NodeSLL2* tailO = headO;
+    TwoStack s1(10); // using this we have created a common array for both the stack with memory space = 10.
+    s1.Push1(1);
+    s1.Push1(2);
+    s1.Push1(3);
+    s1.Push1(4);
+    s1.Push1(5);
+    s1.Push1(6); // Here these operations pushed 6 elements inside the array! means now for stack2 only 4 elements ke liye size bacha hai!
 
-    // Construct the linked list
-    insertAnywhereSLL2(headO, tailO, 2, 2);
-    insertAnywhereSLL2(headO, tailO, 3, 3);
-    insertAnywhereSLL2(headO, tailO, 4, 4);
-    insertAnywhereSLL2(headO, tailO, 5, 5);
+    s1.Push2(10);
+    s1.Push2(20);
+    s1.Push2(30);
+    s1.Push2(40); // Here we have filled the entire array with 10 elements inside it!
 
-    // Set up random pointers
-    headO->random = headO->next->next; // Head's random points to third node
-    headO->next->random = headO->next->next->next; // Second node's random points to fourth node
-    headO->next->next->random = headO; // Third node's random points back to head
-
-    // Print the original list
-    cout << "Original list:" << endl;
-    printListSLL2(headO);
-
-    NodeSLL2* clonedList = cloneList(headO); // Clone the list
-
-    cout << "Cloned list:" << endl; // Print the cloned list
-    printListSLL2(clonedList);
-
-    return 0;
+    s1.Push1(10); // Here it will print Stack Overflow!
 }

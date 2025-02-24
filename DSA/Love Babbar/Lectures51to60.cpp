@@ -259,7 +259,7 @@ class NodeSLL2A {
 public:
     int data;
     NodeSLL2A* next;
-    Node* random;
+    NodeSLL2A* random;
     
     NodeSLL2A(int val) {
         data = val;
@@ -333,12 +333,12 @@ int main() {
     head->next->next->next = new NodeSLL2A(4);
 
     // Assign random pointers
-    head->random = head->next->next;  // 1 -> 3
-    head->next->random = head;        // 2 -> 1
-    head->next->next->random = head->next->next->next;  // 3 -> 4
+    head->random = head->next->next; // 1 -> 3
+    head->next->random = head; // 2 -> 1
+    head->next->next->random = head->next->next->next; // 3 -> 4
 
     cout << "Original Linked List:\n";
-    printList(head);
+    printListSLL2A(head);
 
     NodeSLL2A* clonedList = cloneLinkedListSLL2A(head);
 
@@ -347,7 +347,8 @@ int main() {
 
     return 0;
 }
-
+// Time Complexity O(n^2) : We traverse the list twice.
+// Space Complexity O(n) : For the hash map storing the cloned nodes.
 
 // Approach 2 : Using a Hash Map - O(n) Time Complexity (Optimized Approach)
 //            : Create a copy of the linked list, storing the mapping of original nodes to cloned nodes in a hash map. Key: Original Node, Value: Corresponding Cloned Node
@@ -358,29 +359,29 @@ int main() {
 #include <unordered_map>
 using namespace std;
 
-class NodeSLL2 {
+class NodeSLL2B {
 public:
     int data;
-    NodeSLL2* next;
-    NodeSLL2* random;
+    NodeSLL2B* next;
+    NodeSLL2B* random;
 
-    NodeSLL2(int data) {
+    NodeSLL2B(int data) {
         this->data = data;
         this->next = NULL;
         this->random = NULL;
     }
 
-    ~NodeSLL2() {
+    ~NodeSLL2B() {
         cout << "Node deleted with value : " << data << endl;
     }
 };
 
-int getLenSLL2(NodeSLL2* head) {
+int getLenSLL2B(NodeSLL2B* head) {
     if(head == NULL) {
         return 0;
     }
     int len = 0;
-    NodeSLL2* temp = head;
+    NodeSLL2B* temp = head;
     while(temp != NULL) {
         len++;
         temp = temp->next;
@@ -388,8 +389,8 @@ int getLenSLL2(NodeSLL2* head) {
     return len;
 }
 
-void insertAtTailSLL2(NodeSLL2* &head, NodeSLL2* &tail, int data) {
-    NodeSLL2* temp = new NodeSLL2(data);
+void insertAtTailSLL2B(NodeSLL2B* &head, NodeSLL2B* &tail, int data) {
+    NodeSLL2B* temp = new NodeSLL2B(data);
     if(head == NULL) {
         head = tail = temp;
         return;
@@ -398,8 +399,8 @@ void insertAtTailSLL2(NodeSLL2* &head, NodeSLL2* &tail, int data) {
     tail = temp;
 }
 
-void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
-    NodeSLL2* newNode = new NodeSLL2(data);
+void insertAnywhereSLL2B(NodeSLL2B* &head, NodeSLL2B* &tail, int pos, int data) {
+    NodeSLL2B* newNode = new NodeSLL2(data);
     if(head == NULL) {
         head = newNode;
         tail = newNode;
@@ -413,13 +414,13 @@ void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
         return;
     }
 
-    int len = getLenSLL2(head);
+    int len = getLenSLL2B(head);
     if(pos < 1 || pos > len + 1) {
         cout<<"Invalid position!";
         return;
     }
 
-    NodeSLL2* temp = head;
+    NodeSLL2B* temp = head;
     int count = 1;
 
     // Traversing between nodes where excluding first node and last node!
@@ -437,22 +438,22 @@ void insertAnywhereSLL2(NodeSLL2* &head, NodeSLL2* &tail, int pos, int data) {
     temp->next = newNode;
 }
 
-NodeSLL2* cloneList(NodeSLL2* head) {
+NodeSLL2B* cloneLinkedListSLL2B(NodeSLL2B* head) {
     if (!head) return NULL;
 
-    NodeSLL2* cloneHead = NULL;
-    NodeSLL2* cloneTail = NULL;
-    NodeSLL2* temp = head;
+    NodeSLL2B* cloneHead = NULL;
+    NodeSLL2B* cloneTail = NULL;
+    NodeSLL2B* temp = head;
 
-    unordered_map<NodeSLL2*, NodeSLL2*> oldToNewNode;
+    unordered_map<NodeSLL2B*, NodeSLL2B*> oldToNewNode;
     while (temp != NULL) {
-        insertAtTailSLL2(cloneHead, cloneTail, temp->data);
+        insertAtTailSLL2B(cloneHead, cloneTail, temp->data);
         oldToNewNode[temp] = cloneTail;
         temp = temp->next;
     }
 
-    NodeSLL2* originalNode = head;
-    NodeSLL2* cloneNode = cloneHead;
+    NodeSLL2B* originalNode = head;
+    NodeSLL2B* cloneNode = cloneHead;
     while (originalNode != NULL) {
         cloneNode->random = oldToNewNode[originalNode->random];
         originalNode = originalNode->next;
@@ -462,8 +463,8 @@ NodeSLL2* cloneList(NodeSLL2* head) {
     return cloneHead;
 }
 
-void printListSLL2(const NodeSLL2* head) {
-    const NodeSLL2* temp = head;
+void printListSLL2B(const NodeSLL2* head) {
+    const NodeSLL2B* temp = head;
     while (temp != NULL) {
         cout << temp->data;
         if (temp->random) {
@@ -476,14 +477,14 @@ void printListSLL2(const NodeSLL2* head) {
 }
 
 int main() {
-    NodeSLL2* headO = new NodeSLL2(1);
-    NodeSLL2* tailO = headO;
+    NodeSLL2B* headO = new NodeSLL2B(1);
+    NodeSLL2B* tailO = headO;
 
     // Construct the linked list
-    insertAnywhereSLL2(headO, tailO, 2, 2);
-    insertAnywhereSLL2(headO, tailO, 3, 3);
-    insertAnywhereSLL2(headO, tailO, 4, 4);
-    insertAnywhereSLL2(headO, tailO, 5, 5);
+    insertAnywhereSLL2B(headO, tailO, 2, 2);
+    insertAnywhereSLL2B(headO, tailO, 3, 3);
+    insertAnywhereSLL2B(headO, tailO, 4, 4);
+    insertAnywhereSLL2B(headO, tailO, 5, 5);
 
     // Set up random pointers
     headO->random = headO->next->next; // Head's random points to third node
@@ -492,325 +493,662 @@ int main() {
 
     // Print the original list
     cout << "Original list:" << endl;
-    printListSLL2(headO);
+    printListSLL2B(headO);
 
-    NodeSLL2* clonedList = cloneList(headO); // Clone the list
+    NodeSLL2B* clonedList = cloneLinkedListSLL2B(headO); // Clone the list
 
     cout << "Cloned list:" << endl; // Print the cloned list
-    printListSLL2(clonedList);
+    printListSLL2B(clonedList);
 
     return 0;
-} // This code is entirely of ChatGPT and is giving the correct answer! its the same approach, bss love babbar ke code se thora alag hai, baaki approach is all same! go through the code to understand it!
+}
+// Time Complexity O(n) : Copy nodes and store in HashMap → O(n), Assign next and random pointers using HashMap → O(n) and Return the cloned list → O(1)
+// Space Complexity O(n) : We store n nodes in the hashmap, which takes O(n) space and We don’t modify the original list structure 
 
-// Approach 3 : Upar vaale me SC : O(n) aa rhi thi, iss approach me we will try to minimize this also! so we will not use maps!
-// So means here we will change the links!
-// Further approach you can see while revision of this topic! till you understood how to actually clone the list! throught the above two approaches! and for now that is enuf!
-
-// ---------------------------------------------------------- LECTURE 53 - Merge Sort in LinkedList --------------------------------------------------------------------------------------------------------->
-// We already know what is Merge sort! so bss vhi krna hai yahaa!
-// Also we wont change the data! hum sirf links ko change krenge!
-// So lets see how...
-// Lets code and see...
-#include<iostream>
+// Approach 3 : Optimized Approach (O(n) Time & O(1) Space)
+// In this approach, we don’t use extra space like a hashmap. Instead, we modify the linked list structure temporarily to efficiently copy it.
+// Steps to Solve the Problem : Step 1 : Insert Cloned Nodes in Between
+//                                     : For each original node, create a cloned node and insert it right next to the original node. This will interleave the original and cloned nodes.
+//                                     : Original List : 1 → 2 → 3 → 4 → NULL, After inserting cloned nodes : 1 → 1' → 2 → 2' → 3 → 3' → 4 → 4' → NULL, (where ' represents cloned nodes).
+//                            : Step 2 : Copy Random Pointers
+//                                     : For each original node, update the random pointer of its cloned node.
+//                                     : Since cloned nodes are placed right after their originals, we can copy the random pointers easily : clonedNode->random = originalNode->random->next;
+//                                     : This works because originalNode->random already points to the correct node, and the cloned version of that node is right after it.
+//                                     : Example Random Pointer Copying : Original Node 1 → Random → 3, Cloned Node  1' → Random → 3' and Similarly, we copy random pointers for all nodes.
+//                            : Step 3 : Separate the Cloned List
+//                                     : Now, we need to separate the cloned nodes from the original list. We restore the original list while extracting the cloned list.
+//                                     : Example After Separation : Original List:  1 → 2 → 3 → 4 → NULL, Cloned List:   1' → 2' → 3' → 4' → NULL
+//                                     : Now, the cloned list is independent and identical to the original.
+// Implementation!
+#include <iostream>
 using namespace std;
 
-class Node34 {
-    public :
+class NodeSLL2C {
+public:
     int data;
-    Node34* next;
+    NodeSLL2C* next;
+    NodeSLL2C* random;
 
-    Node34(int data) {
+    NodeSLL2C(int val) {
+        data = val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
+// Function to clone a linked list with random pointers
+NodeSLL2C* cloneLinkedListSLL2C(NodeSLL2C* head) {
+    if (!head) return NULL;
+
+    // Step 1: Insert cloned nodes in between original nodes
+    NodeSLL2C* temp = head;
+    while (temp) {
+        NodeSLL2C* cloneNode = new NodeSLL2C(temp->data);
+        cloneNode->next = temp->next;
+        temp->next = cloneNode;
+        temp = cloneNode->next;
+    }
+
+    // Step 2: Copy random pointers
+    temp = head;
+    while (temp) {
+        if (temp->random)
+            temp->next->random = temp->random->next;
+        temp = temp->next->next;
+    }
+
+    // Step 3: Separate the cloned list from the original
+    NodeSLL2C* cloneHead = head->next;
+    NodeSLL2C* original = head;
+    NodeSLL2C* clone = cloneHead;
+    
+    while (original) {
+        original->next = original->next->next;
+        if (clone->next) clone->next = clone->next->next;
+        original = original->next;
+        clone = clone->next;
+    }
+
+    return cloneHead;
+}
+
+// Utility function to print the linked list
+void printListSLL2C(NodeSLL2C* head) {
+    NodeSLL2C* temp = head;
+    while (temp) {
+        cout << "Data: " << temp->data << ", Random: ";
+        if (temp->random) 
+            cout << temp->random->data;
+        else 
+            cout << "NULL";
+        cout << endl;
+        temp = temp->next;
+    }
+}
+
+int main() {
+    // Creating a test case
+    NodeSLL2C* head = new NodeSLL2C(1);
+    head->next = new NodeSLL2C(2);
+    head->next->next = new NodeSLL2C(3);
+    head->next->next->next = new NodeSLL2C(4);
+
+    // Setting up random pointers
+    head->random = head->next->next;  // 1 → 3
+    head->next->random = head;        // 2 → 1
+    head->next->next->random = head->next->next->next; // 3 → 4
+    head->next->next->next->random = NULL; // 4 → NULL
+
+    cout << "Original List:\n";
+    printListSLL2C(head);
+
+    NodeSLL2C* clonedHead = cloneLinkedListSLL2C(head);
+
+    cout << "\nCloned List:\n";
+    printListSLL2C(clonedHead);
+
+    return 0;
+}
+// Time Complexity O(n) : O(n) (Insert cloned nodes), O(n) (Copy random pointers) and O(n) (Separate lists)
+// Space Complexity O(1) : We don’t use extra memory, only modify pointers.
+
+// ---------------------------------------------------------- LECTURE 53 - Merge Sort in LinkedList --------------------------------------------------------------------------------------------------------->
+// Question 1 : You are given a singly linked list, and you need to sort it using Merge Sort. You cannot change the data inside nodes; instead, you should only rearrange the links to achieve the sorted order.
+// Approach (Merge Sort on Linked List) : Merge Sort follows Divide and Conquer, so we will break the list into smaller parts, sort them, and merge them back.
+//                                      : Step 1 : Find the Middle of the Linked List, Using the slow and fast pointer technique to find the middle node. Slow pointer moves one step, and fast pointer moves two steps at a time.
+//                                               : When the fast pointer reaches the end, the slow pointer will be at the middle. Why? This helps us split the linked list into two halves.
+//                                      : Step 2: Recursively Sort Both Halves, Call mergeSort() recursively on both halves until we reach a single-node list.
+//                                      : Step 3: Merge Two Sorted Lists, Use the Merge Two Sorted Lists technique to combine the two sorted halves. Compare the values and adjust the next pointers accordingly.
+// Implementation!
+#include <iostream>
+using namespace std;
+
+// Node class for Singly Linked List (SLL3)
+class NodeSLL3A {
+public:
+    int data;
+    NodeSLL3A* next;
+
+    // Constructor to initialize the node
+    NodeSLL3A(int data) {
         this->data = data;
         this->next = NULL;
     }
 
-    ~Node34() {
-        int value = this->data;
-        cout<<"Memory is free for the node with data "<<value<<endl;
+    // Destructor to free memory
+    ~NodeSLL3A() {
+        cout << "Memory is free for the node with data " << this->data << endl;
     }
 };
 
-void insertatHead(Node34* &head, int data) {
-    Node34* temp = new Node34(data);
-    temp->next = head;
-    head = temp;
-}
-
-void insertAtTail(Node34* &tail, int data) {
-    Node34* temp = new Node34(data);
-    tail->next = temp;
-    tail = tail->next;
-}
-
-void insertAtAnyPosition(Node34* &head, Node34* &tail, int position, int data) {
-    if(position == 1) {
-        insertatHead(head,data);
-        return;
-    }
-
-    Node34* temp = head;
-    int cnt = 1;
-
-    while(cnt < position-1) {
+// Function to get the length of the linked list
+int getLenSLL3A(NodeSLL3A* head) {
+    int len = 0;
+    NodeSLL3A* temp = head;
+    while (temp != NULL) {
+        len++;
         temp = temp->next;
-        cnt++;
     }
+    return len;
+}
 
-    if(temp->next == NULL) {
-        insertAtTail(tail,data);
+// Function to insert a node at any position in the linked list
+void insertAnywhereSLL3A(NodeSLL3A* &head, NodeSLL3A* &tail, int pos, int data) {
+    NodeSLL3A* newNode = new NodeSLL3A(data);
+    
+    // If the list is empty
+    if (head == NULL) {
+        head = newNode;
+        tail = newNode;
         return;
     }
 
-    Node34* NodetoInsert = new Node34(data);
-    NodetoInsert->next = temp->next;
-    temp->next = NodetoInsert;
+    // Insert at the head position
+    if (pos == 1) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    int len = getLenSLL3A(head);
+    
+    // If position is invalid
+    if (pos < 1 || pos > len + 1) {
+        cout << "Invalid position!" << endl;
+        return;
+    }
+
+    NodeSLL3A* temp = head;
+    int count = 1;
+    
+    // Traverse to the position before insertion point
+    while (count < pos - 1) {
+        temp = temp->next;
+        count++;
+    }
+
+    // If inserting at the last position, update tail
+    if (temp->next == NULL) {
+        temp->next = newNode;
+        tail = newNode;
+        return;
+    }
+    
+    // Insert in the middle
+    newNode->next = temp->next;
+    temp->next = newNode;
 }
 
-Node34* findMid(Node34* head) {
-    Node34* slow = head;
-    Node34* fast = head->next;
-
-    while(fast != NULL && fast->next != NULL) {
+// Function to find the middle node of the linked list
+NodeSLL3A* findMidSLL3A(NodeSLL3A* head) {
+    NodeSLL3A* slow = head;
+    NodeSLL3A* fast = head->next;
+    
+    // Fast moves twice as slow, so when fast reaches the end, slow is at the middle
+    while (fast != NULL && fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
     }
     return slow;
 }
 
-Node34* merge(Node34* left, Node34* right) {
-    if(left == NULL) {
-        return right;
-    }
-    if(right == NULL) {
-        return left;
-    }
-    Node34* ans = new Node34(-1); // dummy node! and iske aage hi poori list ko sort krke lgaa denge and then iss ans ko hi update krke head pr le ayenge! and then finally ans ko hi return krdege!
-    Node34* temp = ans;
+// Function to merge two sorted linked lists
+NodeSLL3A* mergeSLL3A(NodeSLL3A* left, NodeSLL3A* right) {
+    if (left == NULL) return right;
+    if (right == NULL) return left;
 
-    // Merge two sorted LL
-    while(left != NULL && right != NULL) {
-        if(left->data < right->data) {
-            temp->next = left;
+    // Dummy node to simplify merging
+    NodeSLL3A* ans = new NodeSLL3A(-1);
+    NodeSLL3A* temp = ans;
+
+    // Merge both lists in sorted order
+    while (left != NULL && right != NULL) {
+        if (left->data < right->data) {
+            temp->next  = left;
             temp = left;
             left = left->next;
-        }
-        else {
+        } else {
             temp->next = right;
             temp = right;
             right = right->next;
         }
     }
-    while(left != NULL) {
+
+    // Attach the remaining elements
+    while (left != NULL) {
         temp->next = left;
         temp = left;
         left = left->next;
     }
-    while(right != NULL) {
+    while (right != NULL) {
         temp->next = right;
         temp = right;
         right = right->next;
     }
-    ans = ans->next;
-    return ans;
+
+    // Return merged list, skipping dummy node
+    return ans->next;
 }
 
-Node34* mergeSort(Node34* head) { // We will use recursion here!
-    // Base case...
-    if(head == NULL || head->next == NULL) {
+// Merge Sort function for linked list
+NodeSLL3A* mergeSortSLL3A(NodeSLL3A* head) {
+    // Base case: if list is empty or has only one node, it's already sorted
+    if (head == NULL || head->next == NULL) {
         return head;
     }
 
-    // now in otherwise cases we will break the LL and will apply merge sort recursively!
-    // Ab hume LL ko do halves me todna hai, toh ye cheez arrays ke case me toh simple si thi ki mid find kiya and tod diya vahaa se! but in case of LL its a little difficult! ki mid alag se nikalo! so we better use slow and fast vaala method!
-    Node34* mid = findMid(head);
+    // Find the middle node
+    NodeSLL3A* mid = findMidSLL3A(head);
 
-    Node34* leftHalf = head;
-    Node34* rightHalf = mid->next;
-    mid->next = NULL; // Ye isliye kiya taaki left half ka tail NULL ko pint kr rha hai tab hi toh actually do halves me tootegi LL! jab dono LL ke tails NULL ko point kr rhe honge!
+    // Split the list into two halves
+    NodeSLL3A* leftHalf = head;
+    NodeSLL3A* rightHalf = mid->next;
+    mid->next = NULL; // Break the link to split the list
 
-    // recursive calls to sort both halves!
-    leftHalf = mergeSort(leftHalf);
-    rightHalf = mergeSort(rightHalf);
+    // Recursively sort both halves 
+    leftHalf = mergeSortSLL3A(leftHalf);
+    rightHalf = mergeSortSLL3A(rightHalf);
 
-    Node34* result = merge(leftHalf, rightHalf);
-    return result;
+    // Merge the sorted halves
+    return mergeSLL3A(leftHalf, rightHalf);
 }
 
-void printNode(Node34* &head) {
-    Node34* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" ";
+// Function to print the linked list
+void printListSLL3A(NodeSLL3A* head) {
+    NodeSLL3A* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
         temp = temp->next;
     }
-    cout<<endl;
+    cout << endl;
 }
 
 int main() {
-    // Creating a Linkedlist LL1...
-    Node34* node = new Node34(1);
-    Node34* head = node;
-    Node34* tail = head;
-    cout<<"First node of LL1 : ";
-    printNode(head);
+    // Creating the linked list
+    NodeSLL3A* node = new NodeSLL3A(1);
+    NodeSLL3A* head = node;
+    NodeSLL3A* tail = node;
 
-    cout<<"Singly Linkedlist : ";
-    insertAtAnyPosition(head, tail, 2, 3);
-    insertAtAnyPosition(head, tail, 3, 4);
-    insertAtAnyPosition(head, tail, 4, 1);
-    insertAtAnyPosition(head, tail, 5, 0);
-    printNode(head);
+    cout << "First node of SLL3: ";
+    printListSLL3A(head);
 
-    Node34* result = mergeSort(head);
-    cout<<"Sorted Linkedlist : ";
-    printNode(result);
-} // So that is we have done sorting using Merge Sort! TC : O(nlogn) and SC : O(logn)
+    // Insert elements at various positions
+    insertAnywhereSLL3A(head, tail, 2, 3);
+    insertAnywhereSLL3A(head, tail, 3, 4);
+    insertAnywhereSLL3A(head, tail, 4, 1);
+    insertAnywhereSLL3A(head, tail, 5, 0);
 
-// Question for Homework : Flatten Linkedlis! isme kya hota hai ki kuch aisi LL hoti hai!
-// Node1 -> Node2 -> Node3 -> Node4 -> NULL
-// and har node ke downward directions me bhi aur nodes linked hai! toh hume kya krna hai ki hume unn sab nodes ko ek seedh me lgaa dena hai! and that is called Flattened Linkedlist!
-// For reference visit question name : Flatten A Linkedlist! on codestudio! link is given under Lovebabbar vdo!
-// Approach is :
-// flatten(head) {
-//     node* down = head;
-//     down->next = NULL;
-//     node* right flatten(head->right);
-//     node* ans = merge(down, right);
-//     return ans;
-// }
-// Visit the LB vdo for proper explaination! and try this question while revision!
+    cout << "Original Linked List: ";
+    printListSLL3A(head);
+
+    // Apply Merge Sort
+    head = mergeSortSLL3A(head);
+
+    cout << "Sorted Linked List: ";
+    printListSLL3A(head);
+
+    return 0;
+}
+// Time Complexity O(nlogn) : Since we divide the list into halves → O(log n) and merge each node once → O(n).
+// Space Complexity O(log n) : Due to recursive stack space.
+
+// Question 2 : Flatten a Linked List!
+//            : We are given a 2D linked list, where each node has two pointers : next (pointing to the right node in the same row) and down (pointing to a node in the downward direction, creating a vertical linked list).
+//            : Our task is to flatten this 2D linked list into a single sorted linked list by merging the downward nodes into the right nodes.
+// Approach : Merge-Based Recursion
+//          : Understanding the Structure : Each node has a next → Points to the next linked list horizontally. and down → Points to the next node in a vertically sorted list.
+//                                        : You are given multiple vertically sorted linked lists connected horizontally via next, and the goal is to merge them into a single sorted linked list.
+//          : Merging Two Sorted Lists : This function merges two sorted lists in a manner similar to the merge step of Merge Sort : Uses a dummy node (dummyNode) for easy list construction. Iterates through both lists, attaching the smaller node to down and updating the pointer.
+//                                     : Ensures next is always NULL for the merged result. Handles remaining elements from either list. Time Complexity is O(N) (where N is the total number of nodes in the two lists).
+//          : Recursively Flattening the Linked List : Base Case: If the list is empty or only has one column, return head. Recursively flattens the rest of the list (head->next). Merges the current vertical list (head) with the flattened remaining list (mergeHead) using mergeSLL3B.
+//                                                   : Time Complexity : Merging each pair takes O(N) Recursive calls reduce horizontal size by half.
+// Implementation!
+#include<iostream>
+using namespace std;
+
+class NodeSLL3B {
+public:
+    int data;
+    NodeSLL3B* next;
+    NodeSLL3B* down;
+
+    NodeSLL3B(int data) {
+        this->data = data;
+        this->next = NULL;
+        this->down = NULL;
+    }
+};
+
+// Merging two sorted linked lists (like in Merge Sort)
+NodeSLL3B* mergeSLL3B(NodeSLL3B* LL1, NodeSLL3B* LL2) {
+    if (LL1 == NULL) return LL2;
+    if (LL2 == NULL) return LL1;
+
+    NodeSLL3B* dummyNode = new NodeSLL3B(-1);
+    NodeSLL3B* result = dummyNode;
+    while(LL1 != NULL && LL2 != NULL) {
+        if(LL1->data < LL2->data) {
+            result->down = LL1;
+            result = LL1;
+            LL1 = LL1->down;
+        }
+        else {
+            result->down = LL2;
+            result = LL2;
+            LL2 = LL2->down;
+        }
+        result->next = NULL;
+    }
+    if(LL1 != NULL) result->down = LL1;
+    else result->down = LL2;
+
+    return dummyNode->down;
+}
+
+// Recursively flatten the linked list
+NodeSLL3B* flattenSLL3B(NodeSLL3B* head) {
+    if (head == NULL || head->next == NULL)
+        return head;
+
+    NodeSLL3B* mergeHead = flattenSLL3B(head->next);
+    return mergeSLL3B(head, mergeHead);
+}
+
+// Utility function to print the flattened linked list
+void printListSLL3B(NodeSLL3B* head) {
+    while (head != NULL) {
+        cout << head->data << " ";
+        head = head->down;
+    }
+    cout << endl;
+}
+
+int main() {
+    NodeSLL3B* head = new NodeSLL3B(1);
+    head->down = new NodeSLL3B(5);
+    head->down->down = new NodeSLL3B(9);
+
+    head->next = new NodeSLL3B(2);
+    head->next->down = new NodeSLL3B(6);
+    head->next->down->down = new NodeSLL3B(10);
+
+    head->next->next = new NodeSLL3B(3);
+    head->next->next->down = new NodeSLL3B(7);
+    head->next->next->down->down = new NodeSLL3B(11);
+
+    head->next->next->next = new NodeSLL3B(4);
+    head->next->next->next->down = new NodeSLL3B(8);
+    head->next->next->next->down->down = new NodeSLL3B(12);
+
+    cout << "Flattened Linked List: ";
+    NodeSLL3B* result = flattenSLL3B(head);
+    printListSLL3B(result);
+
+    return 0;
+}
+// Time Complexity : O(N*logk) (where N is the total number of nodes and  k is the number of initial linked lists).
+// Space Complexity : Recursive stack space: O(logk) No extra data structures used, Overall Complexity: O(logk) (Auxiliary).
 
 // ---------------------------------------------------------- LECTURE 54 - Introduction to Stacks --------------------------------------------------------------------------------------------------------->
-// Visualize it as a stack of Plates! and sabse pehle sabse upar vaali plate uthate hai and then uske neeche vaali! and that is how we access the plates! this is called LIFO principle! which means Last In First Out!
-// So like suppse you have stack and you have inserted data into stack 1,2,3,4 here the insertion operation is called push operation! and and yahaa 4 sabse upar hoga stack ke mtlb ki jab element ko remove ya access krne ki baari ayegi toh sabse pehle 4 hoga then 3,2,1 and that is how it will be done! and isme jo remove operation hota hai usko pop kehte hai!
-// So here we have Push and Pop operations!
-// Along with these two, we also have a Peek operation in stack which returns the top most element of the stack!
-// Another operation is empty() function, jo batata hai ki stack empty hai ya nhi!
-// But before starting with implementation, lets use Stack using STL!
+// Understanding Stack with a Simple Analogy
+// Imagine a stack of plates in your kitchen. You always add a new plate on top, and when you need a plate, you remove the top one first. This follows the LIFO (Last In, First Out) principle, meaning the last item added is the first one to be removed.
+
+// Stack Operations and Their Meaning!
+// Push (Insertion) : Just like placing a new plate on top of the stack, when we add an element to the stack, it goes on top. Example : If we push 1, 2, 3, 4 into the stack, the order will be : Top → [4, 3, 2, 1] (4 is at the top).
+// Pop (Removal) : Just like removing the topmost plate, when we remove an element from the stack, the top element is removed first. If we pop(), the stack changes like this, Before Pop : [4, 3, 2, 1] (Top is 4) -> After Pop : [3, 2, 1] (Now, 3 is on top).
+// Peek (Top Element) : Suppose you just want to see the top plate without removing it. Similarly, peek() returns the top element of the stack without removing it. Example : Stack [4, 3, 2, 1] -> Peek() returns 4 (but does not remove it).
+// Empty (Check if Stack is Empty) : This function checks if there are any plates left in the stack. If the stack is empty, it returns true; otherwise, it returns false.
+// Implementation using STL!
 #include<iostream>
-#include<stack>
+#include<stack> // Include stack library
 using namespace std;
 
 int main() {
     stack<int> s1;
-    s1.push(1);
+
+    // Pushing elements onto the stack (LIFO Order)
+    s1.push(1);    
     s1.push(2);    
     s1.push(3);    
     s1.push(4);
     s1.push(5);
-    // So right now the top most element will be 5 and the bottom most will be 1, as becoz 1 sabse pehle enter kiya tha toh vo isliye stack ke sabse neeche hoga!
+    // At this point, the stack looks like: Top -> 5  4  3  2  1 <- Bottom
 
-    s1.pop(); // Here we are removing the element from stack, here we dont need to specify the element we want to remove kyunki sirf top most element hi nikal sakta hai stack me se! agar chaahe ki koi aur element nikalne ka then it will show error!
-    // So here we have removed 5!
+    s1.pop(); // Removing the topmost element (5)
+    cout << "Topmost element: " << s1.top() << endl; // Display the current top element (which is now 4)
 
-    cout<<"Printing the top most element : "<<s1.top()<<endl;; // here this works what the peek function does! it will return the top most element!
-    
-    // Empty function is checked
-    if(s1.empty()) {
-        cout<<"Stack is empty!"<<endl;
-    }
-    else {
-        cout<<"Stack is not empty"<<endl;
-    }
+    // Checking if the stack is empty
+    if(s1.empty()) cout << "Stack is empty!" << endl;
+    else cout << "Stack is not empty!" << endl;
 
-    cout<<"Size of stack : "<<s1.size(); // For this case it will return 4
+    // Display the current size of the stack
+    cout << "Size of stack: " << s1.size() << endl; // Expected output: 4
+    return 0;
 }
 
-// Implementation of Stack Class!
-// Now Stack can be implemented using Arrays and Linkedlists! try implementing stack using Linkedlist as homework! currently lets try with Arrays!
-// Implementing Stack using Arrays!
-// Approach : Kya kya chahiye hoga? pehle toh ek array chahiye hogi! then we will make a top and jaise jaise element dalte jayenge vaise vaise top change hota jayega! and once the top goes out of the size of array, then we will call it stack overflow, means aur elements ab insert nhi ho sakte!
-// and top size ke bahar na chale jaaye iss cheez ko bhi track krne ke liye bhi size toh chahiye hi hoga! so till now as privatee members of the class we will need int* arr, int top and int size!
-// Now lets see how to implement function!
-// Push Function! : pehle toh we will check ki stack khaali hai ya nhi! agar khaali hai toh tab hi insert krenge vrna stack overflow boldenge! now agar jagah khaali hai element ke aane ki toh we will do something like this arr[top] = element and top++! and when top>=size, then it will be called stack overflow means aur element nhi aa sakte!
-// Pop Function! : pehle we will check ki stack khaali toh nhi hai? agar khaali hai toh kya hi pop krenge! will just return stack is empty! (Stack underFlow) and otherwise, will just write top-- and we are done with pop! stack empty haui ya nhi ye check krne ke liye we will check that top>=0 or not! if yes means the stack is not empty! otherwise stack is empty!
-// Empty Function! : agar top == -1 hu means stack is empty! Stack underflow
-// Top Function! : isme pehle ye check krlena ki stack empty hai ya nhi! agar hai toh top = -1 hoga in that case return stack underflow! and jab top element chahiye hoag toh return arr[top];
-// Now lets implement!
+// Implementation of Stack!
+// Understanding the Approach : A stack follows the LIFO (Last In, First Out) principle, which means the last element inserted will be the first one to be removed.
+// There are two common ways to implement a stack : Using Arrays and Using Linked Lists.
+
+// Implementation of Stack (Using Arrays)!
+// Essentials : An Array (arr) (This will store the stack elements), A top variable (This will track the index of the topmost element) and A size variable (This will define the capacity of the stack)
+// Functionalities of the Stack : Push Operation (Insert an element) : Before inserting, check if the stack is full (top >= size - 1). If it's not full, insert the element at arr[top] and then increment top. If it's full, print "Stack Overflow" (No more insertions possible).
+//                              : Pop Operation (Remove an element) : Before removing, check if the stack is empty (top == -1). If it's not empty, decrease top to remove the element. If it's empty, print "Stack Underflow" (Nothing to remove).
+//                              : Top Function (Get the Topmost Element) : If the stack is empty, return "Stack is empty". Otherwise, return arr[top], which is the topmost element.
+//                              : Empty Function (Check if Stack is Empty) : If top == -1, it means there are no elements in the stack. Otherwise, the stack is not empty.
+// Note : Stack Overflow occurs when we try to push elements beyond the fixed size of the array.
+//      : Stack Underflow occurs when we try to pop elements from an empty stack.
+//      : The time complexity of push(), pop(), top(), and empty() operations is O(1) because they require only constant time.
+//      : Stacks are widely used in Recursion, Expression Evaluation (Postfix/Infix), Function Calls (Call Stack), and Undo/Redo operations in applications.
 #include<iostream>
 using namespace std;
 
-class Stack{
-    // properties!
+class Stack1 {
+    // Stack properties (data members)
     public:
-    int top;
-    int* arr;
-    int size;
-
-    // Behaviours!
-    Stack(int size) {
+    int top; // To keep track of the topmost index
+    int* arr; // Dynamic array to store stack elements
+    int size; // Maximum size of the stack
+    
+    // Constructor to initialize stack with given size
+    Stack1(int size) {
         this->size = size;
         arr = new int[size];
-        top = -1;
+        top = -1; // Stack is initially empty
     }
 
-    // Push Function...
+    // Push Function - Inserts an element into the stack
     void push(int element) {
-        if(size - top > 1) {
-            top++;
-            arr[top] = element;
+        if(size - top > 1) { // Check if space is available
+            top++; // Move top pointer
+            arr[top] = element; // Insert element at top
         }
         else {
-            cout<<"Stack Overflow";
+            cout<<"Stack Overflow"<<endl; // Stack is full
         }
     }
-
+    
+    // Pop Function - Removes the topmost element from the stack
     void pop() {
-        if(top >= 0) {
-            top--;
+        if(top >= 0) { // Check if stack is not empty
+            top--; // Remove top element by moving pointer
         }
         else {
-            cout<<"Stack Underflow";
+            cout<<"Stack Underflow"<<endl; // Stack is already empty
         }
     }
 
+    // Peek Function - Returns the topmost element without removing it
     int peek() {
-        if(top>=0) {
+        if(top >= 0) { // Check if stack is not empty
             return arr[top];
         }
         else {
-            cout<<"Stack is empty!";
-            return -1;
+            cout<<"Stack is empty!"<<endl;
+            return -1; // Indicating stack is empty
         }
     }
 
+    // Empty Function - Checks if the stack is empty
     bool empty() {
-        if(top == -1) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+        return (top == -1); // Returns true if stack is empty
     }
 };
 
 int main() {
-    Stack s1(5); // Here we have created a stack with size = 5! means isme hum maximum 5 elements daal payenge!
+    Stack1 s1(5); // Creating a stack with a maximum size of 5
+
+    // Pushing elements into the stack
     s1.push(1);
     s1.push(2);
     s1.push(3);
     s1.push(4);
     s1.push(5);
-    // The above operations will work just like the regular push operations!
 
-    cout<<"The top most element is : "<<s1.peek()<<endl;
+    cout<<"The topmost element is: "<<s1.peek()<<endl; // Printing the topmost element
+    
+    // Checking if the stack is empty
+    if(s1.empty()) cout<<"The stack is empty!"<<endl;
+    else cout<<"Stack is not empty"<<endl;
+    
+    s1.pop(); // Popping an element
+    cout<<"The topmost element is: "<<s1.peek()<<endl; // Now the top should be 4
+
+    // Trying to push beyond the stack's limit
+    s1.push(5);
+    s1.push(6); // This will trigger "Stack Overflow" because max size is 5
+    
+    return 0;
+}
+
+// Implementation of Stack (Using LinkedList)!
+// A stack follows the LIFO (Last In, First Out) principle, where the last inserted element is the first one to be removed. We can implement this behavior efficiently using a singly linked list.
+// Why Use a Linked List Instead of an Array : Dynamic Size – Unlike an array, we don't need to define a fixed size.
+//                                           : Efficient Insertions & Deletions – No need to shift elements; operations occur in constant time O(1).
+//                                           : Memory Efficient – Uses memory only when needed, unlike arrays that allocate fixed memory.
+// How Does It Work : We define a Node structure containing : data (Stores the element) and next (Pointer to the next node).
+//                  : The Stack class will have: top (Points to the top node of the stack like the head of a linked list).
+// Operations : Push (Insert at the top) : Create a new node -> Point its next to the current top -> Update top to this new node.
+//            : Pop (Remove from the top) : Check if the stack is empty -> Update top to top->next and delete the removed node.
+//            : Peek (Get top element without removing) : Return top->data.
+//            : Empty (Check if stack is empty) : Return true if top == NULL.
+#include<iostream>
+using namespace std;
+
+// Node structure for Stack
+class NodeforStack2 {
+    public:
+    int data;
+    NodeforStack2* next;
+
+    // Constructor
+    NodeforStack2(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+// Stack class
+class Stack2 {
+    private:
+    NodeforStack2* top; // Top pointer
+
+    public:
+    // Constructor - Initialize top to NULL
+    Stack2() {
+        top = NULL;
+    }
+
+    // Push Operation - Insert at the top
+    void push(int element) {
+        NodeforStack2* newNode = new NodeforStack2(element); // Create a new node
+        newNode->next = top; // Link new node with the previous top
+        top = newNode; // Update top to the new node
+    }
+
+    // Pop Operation - Remove the topmost element
+    void pop() {
+        if(top == NULL) { // Check for underflow
+            cout<<"Stack Underflow"<<endl;
+            return;
+        }
+        NodeforStack2* temp = top; // Store current top
+        top = top->next; // Move top to next node
+        delete temp; // Delete the old top node
+    }
+
+    // Peek Operation - Get the top element
+    int peek() {
+        if(top == NULL) { // Check if stack is empty
+            cout<<"Stack is empty!"<<endl;
+            return -1;
+        }
+        return top->data; // Return the top element
+    }
+
+    // Empty Function - Check if stack is empty
+    bool empty() {
+        return (top == NULL); // Returns true if top is NULL
+    }
+};
+
+int main() {
+    Stack2 s1; // Creating a stack
+
+    // Pushing elements into stack
+    s1.push(1);
+    s1.push(2);
+    s1.push(3);
+    s1.push(4);
+    s1.push(5);
+
+    // Printing the topmost element
+    cout<<"The topmost element is: "<<s1.peek()<<endl;
+
+    // Checking if the stack is empty
     if(s1.empty()) {
         cout<<"The stack is empty!"<<endl;
     }
     else {
         cout<<"Stack is not empty"<<endl;
     }
-    s1.pop();
-    cout<<"The top most element is : "<<s1.peek()<<endl;
 
-    // Now lets try to add elements more than the size!
-    s1.push(5);
-    s1.push(6); // Here we are trying to add 6th element in the stack! and due to which yahaa pr Stack overflow vaali condition reach hojayegi! and hence adding this into stack will print Stack overflow becoz we have wrote it in our implementation!
+    // Popping an element
+    s1.pop();
+    cout<<"The topmost element after pop is: "<<s1.peek()<<endl; // Now top should be 4
+
+    return 0;
 }
 
-// Question : Implement two stacks in an array!
-// Approach : Pehli baat toh yahaa hume array ek hi leni hai! and then yahaa pr do tops lene padenge! and size bhi lena hoga! the two tops are the tops of individual stacks! 
-// Toh ye krenge kaise ki do stacks hum ek hi array me daal de aur usme LIFO principle bhi follow ho paye! so for that hum uss array ke dono ends ko use krenge! ek end ko top1 bnaa denge stack1 ka and ek end ko top2 bnaa denge stack2 ka! and then elements insert krna shuru krenge! and jahaa pr tops equal hojaye vahaa pr aur elements insert nhi ho sakte! kyunki jo array ki memory fill hogyi!
-// Lets code this approach and see...
+// Practice Question : Implement two stacks in an array!
+// This problem requires us to implement two stacks using a single array, ensuring that both stacks follow the LIFO (Last In, First Out) principle while efficiently utilizing the available memory.
+// Approach : Understanding the Challenge : Normally, a stack is implemented using an array, where: Push operation adds elements to the top. Pop operation removes elements from the top. Peek operation returns the top element. Empty check determines if the stack is empty.
+//                                        : Here, we have two stacks but only one array to store their elements efficiently.
+//          : How to Store Two Stacks in One Array : Instead of dividing the array into two fixed parts (which may waste space), we dynamically use the array from both ends.
+//                                                 : Stack1 starts from index 0 (left to right) : Its top pointer, top1, starts at -1 (meaning stack1 is empty). Elements are inserted from the left side (top1++).
+//                                                 : Stack2 starts from index size-1 (right to left) : Its top pointer, top2, starts at size (meaning stack2 is empty). Elements are inserted from the right side (top2--).
+//                                                 : Stopping Condition : When top1 + 1 == top2, it means no space is left in the array, and we can’t insert further.
+// Implementation!
 #include<iostream>
 using namespace std;
 
@@ -820,72 +1158,102 @@ class TwoStack {
     int top2;
     int size;
 
-    public:
+public:
+    // Constructor to initialize stack
     TwoStack(int s) {
         this->size = s;
-        top1 = -1;
-        top2 = s;
+        top1 = -1;  // Stack1 starts from left
+        top2 = s;   // Stack2 starts from right
         arr = new int[s];
     }
 
+    // Push element into Stack1
     void Push1(int element) {
-        if(top2-top1 > 1) {
+        if (top2 - top1 > 1) { // Ensure there is space
             top1++;
             arr[top1] = element;
-        }
-        else {
-            cout<<"Stack Overflow!"<<endl;
+            cout << "Pushed " << element << " into Stack1 at index " << top1 << endl;
+        } else {
+            cout << "Stack1 Overflow!" << endl;
         }
     }
 
+    // Push element into Stack2
     void Push2(int element) {
-        if(top2-top1 > 1) {
+        if (top2 - top1 > 1) { // Ensure there is space
             top2--;
             arr[top2] = element;
-        }
-        else {
-            cout<<"Stack overflow!"<<endl;
+            cout << "Pushed " << element << " into Stack2 at index " << top2 << endl;
+        } else {
+            cout << "Stack2 Overflow!" << endl;
         }
     }
 
+    // Pop element from Stack1
     int pop1() {
-        if(top1 >= 0) {
+        if (top1 >= 0) {
             int ans = arr[top1];
+            cout << "Popped " << ans << " from Stack1 at index " << top1 << endl;
             top1--;
             return ans;
-        }
-        else {
+        } else {
+            cout << "Stack1 Underflow!" << endl;
             return -1;
         }
     }
 
+    // Pop element from Stack2
     int pop2() {
-        if(top2 < size) {
+        if (top2 < size) {
             int ans = arr[top2];
+            cout << "Popped " << ans << " from Stack2 at index " << top2 << endl;
             top2++;
             return ans;
-        }
-        else {
+        } else {
+            cout << "Stack2 Underflow!" << endl;
             return -1;
         }
     }
-}; // Also, yahaa hum ye bhi kr sakte the ki array ko n/2 n/2 parts me tod ke fir dono stacks ko daalte raho usme! but ye ek acha tareeka nhi hota! kyunki kyunki maanlo agar ek stack ne poori n/2 space leli hai but ek ne sirf lets suppose bss n/4 hi space li hai toh in that case n/4 space waste hojaati! so this is not the optimal usage of space!
+
+    // Display the current state of the array
+    void printArray() {
+        cout << "Current Stack Representation: [";
+        for (int i = 0; i < size; i++) {
+            if (i == top1) cout << "(T1)";
+            if (i == top2) cout << "(T2)";
+            cout << arr[i] << " ";
+        }
+        cout << "]" << endl;
+    }
+};
+// Note : You could choose to divide the array into two halves and allocate each stack a fixed half.
+//      : However, this is not an efficient approach because if one stack fills up while the other has unused space, that memory goes to waste. Instead, a dynamic approach that allows both stacks to grow towards each other optimally utilizes available space.
 
 int main() {
-    TwoStack s1(10); // using this we have created a common array for both the stack with memory space = 10.
+    TwoStack s1(10); // Creating a common array of size 10 for both stacks
+
     s1.Push1(1);
     s1.Push1(2);
     s1.Push1(3);
     s1.Push1(4);
     s1.Push1(5);
-    s1.Push1(6); // Here these operations pushed 6 elements inside the array! means now for stack2 only 4 elements ke liye size bacha hai!
+    s1.Push1(6); // Stack1 filled up to index 5
+    s1.printArray();
 
     s1.Push2(10);
     s1.Push2(20);
     s1.Push2(30);
-    s1.Push2(40); // Here we have filled the entire array with 10 elements inside it!
+    s1.Push2(40); // Stack2 filled up to index 6
+    s1.printArray();
 
-    s1.Push1(10); // Here it will print Stack Overflow!
+    s1.Push1(10); // Overflow condition
+    s1.printArray();
+
+    s1.pop1(); // Remove top of Stack1
+    s1.pop2(); // Remove top of Stack2
+    s1.printArray();
+
+    return 0;
 }
 
 // ---------------------------------------------------------- LECTURE 55 - Questions on Stack! --------------------------------------------------------------------------------------------------------->
