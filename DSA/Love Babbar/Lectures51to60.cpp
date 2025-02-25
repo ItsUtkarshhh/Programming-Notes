@@ -965,11 +965,12 @@ using namespace std;
 
 class Stack1 {
     // Stack properties (data members)
-    public:
+    private:
     int top; // To keep track of the topmost index
     int* arr; // Dynamic array to store stack elements
     int size; // Maximum size of the stack
     
+    public:
     // Constructor to initialize stack with given size
     Stack1(int size) {
         this->size = size;
@@ -1139,6 +1140,18 @@ int main() {
 
     return 0;
 }
+// Note : In LinkedList Implementation of Stack, stack overflow condition does not occur in the same way as in an array-based implementation. However, it can still run out of memory in extreme cases.
+// Why Stack Overflow Does Not Occur in a Linked List Implementation!
+// Dynamic Memory Allocation : In a linked list, new nodes are allocated dynamically using new in C++ (or malloc() in C).
+//                           : This means there is no fixed size limit as in an array-based stack.
+// No Fixed Capacity : Unlike an array-based stack, which has a pre-defined size (int arr[100]), a linked list-based stack can keep growing as long as memory is available.
+// Efficient Push Operation : Each new element is added as a new node, and there's no need to shift elements as in an array.
+
+// When Can It Still Run Out of Memory!
+// Even though a stack overflow (like in an array) does not happen, the system can still run out of heap memory in these cases.
+// Too many push operations : If you keep pushing elements indefinitely, the system will run out of available heap memory.
+// Memory fragmentation : If heap memory is fragmented due to inefficient allocations, a new operation might fail.
+// Recursive stack overflow : If recursion is involved, the system might hit a stack segment overflow in deep recursive calls.
 
 // Practice Question : Implement two stacks in an array!
 // This problem requires us to implement two stacks using a single array, ensuring that both stacks follow the LIFO (Last In, First Out) principle while efficiently utilizing the available memory.
@@ -1158,7 +1171,7 @@ class TwoStack {
     int top2;
     int size;
 
-public:
+    public:
     // Constructor to initialize stack
     TwoStack(int s) {
         this->size = s;
@@ -1258,8 +1271,11 @@ int main() {
 
 // ---------------------------------------------------------- LECTURE 55 - Questions on Stack! --------------------------------------------------------------------------------------------------------->
 // Question 1 : Reverse a string using stack!
-// Approach : Ab dekhha jaye toh ye toh stack ki property hi hai! kyunki if we see, jab bhi stack me kuch daalte hai! toh vo pop toh reverse order me hi hota hai! so we will do the same!
-// Lets code...
+// Approach : A stack follows the LIFO (Last In, First Out) principle, which means the last element inserted into the stack is the first to be removed. This property makes a stack perfectly suited for reversing a string.
+//          : Push all characters into the stack : Since a stack stores elements in the order they are inserted, we push each character of the string into the stack one by one.
+//          : Pop characters from the stack : As we pop elements from the stack, they will come out in reverse order because the last inserted character is removed first.
+//          : Reconstruct the reversed string : We store the popped characters in a new string and return it as the reversed version of the original string.
+//          : This method ensures that the string is reversed efficiently using the fundamental properties of a stack.
 #include<iostream>
 #include<stack>
 #include<string>
@@ -1268,12 +1284,14 @@ using namespace std;
 int main() {
     string str1 = "Utkarsh";
     stack<char> st1;
+    // Pushing into stack!
     for(int i = 0; i<str1.length(); i++) {
         char ch = str1[i];
         st1.push(ch);
     }
-
+    
     string ans = "";
+    // Popping from stack and storing into a string!
     while(!st1.empty()) {
         char ch = st1.top();
         ans.push_back(ch);
@@ -1281,111 +1299,137 @@ int main() {
     }
     cout<<"Answer is : "<<ans<<endl;
     return 0;
-} // So that is how we have reversed the string using stack!
-// We have done this using swap function earlier! and there TC : O(n) and SC : O(1) kyunki swap me humne koi extra space nhi liya tha! but here, we can see we needed another ans variable toh reverse the string! so here TC : O(n) and SC : O(n)! so ofc better approach pehle vaala hi hai! but ye just ek aur nayaa approach hai!
+}
+// Time Complexity O(N) : Where N is the length of the string (each character is pushed and popped once).
+// Note : Previously, we reversed the string using the swap function, where the time complexity was O(n) and space complexity was O(1) because we didn't use any extra space just swapped characters in place.
+//      : However, in the stack-based approach, we require an additional variable (reversed) to store the reversed string, leading to O(n) space complexity since we are using extra memory for the stack.
+//      : Thus, the swap method is more efficient in terms of space, making it the preferred approach. However, using a stack provides an alternative way to solve the problem, leveraging the Last In, First Out (LIFO) property.
 
 // Question 2 : Delete middle element of the stack!
-// Approach : Jaise arrays ke case me krte hai vaise hi yahaa bhi krenge! ki pehle yaha mid nikal lenge and ek iterator se stack ke deep jaate rahenge and mid hum (stack.size())/2 se nikal lenge! and then jab uss element pr pohochenge tab usko pop krdenge! but yes yahaa itna easily pop nhi hoga kyunki yahaa pop krne ke liye pehle uske upar ke elements ko nikalna hoga toh hum uss mid ke upar ke elements ko nikal ke kahi store krte jayenge and then jab mid element pop krle then unn sab elements ko vapis daal denge!
-// Lets code now....
-#include<iostream>
+// Approach : To delete the middle element from a stack, we follow a method similar to how we handle deletion in an array or linked list first identifying the middle element and then removing it.
+//          : However, since a stack follows the LIFO (Last In, First Out) principle, we can't directly access the middle element. Instead, we need to remove elements from the top until we reach the middle element.
+//          : Find the middle index : The middle position can be determined using mid = stack.size() / 2. If the stack has odd elements, the exact middle is removed. If the stack has even elements, we remove the lower middle element (0-based index).
+//          : Recursively remove elements until we reach the middle : We pop elements from the stack one by one and store them temporarily (either in a separate variable or by using recursion).
+//          : Remove the middle element : Once the middle index is reached, we pop it from the stack.
+//          : Push back the stored elements in the same order : After deleting the middle element, we push the previously popped elements back into the stack, ensuring the order remains unchanged.
+#include <iostream>
 using namespace std;
 
-// Using implementation of stack rather than STL.
-class Stack2{
-    // properties!
-    public:
-    int top;
-    int* arr;
-    int size;
+// Custom Stack Implementation (Array-based)
+class Stack3 {
+    private:
+    int top;   // Tracks the topmost index
+    int* arr;  // Dynamic array for stack storage
+    int size;  // Maximum size of the stack
 
-    // behaviours!
-    Stack2(int size) {
+    public:
+    Stack3(int size) {  // Constructor to initialize stack
         this->size = size;
         arr = new int[size];
         top = -1;
     }
 
-    // Push Function...
+    // Push an element onto the stack
     void push(int element) {
-        if(size - top > 1) {
-            top++;
-            arr[top] = element;
-        }
-        else {
-            cout<<"Stack Overflow";
+        if (top < size - 1) {
+            arr[++top] = element;
+        } else {
+            cout << "Stack Overflow" << endl;
         }
     }
 
+    // Pop the top element from the stack
     void pop() {
-        if(top >= 0) {
+        if (top >= 0) {
             top--;
-        }
-        else {
-            cout<<"Stack Underflow";
+        } else {
+            cout << "Stack Underflow" << endl;
         }
     }
 
+    // Get the top element of the stack
     int peek() {
-        if(top>=0) {
+        if (top >= 0) {
             return arr[top];
-        }
-        else {
-            cout<<"Stack is empty!";
+        } else {
+            cout << "Stack is empty!" << endl;
             return -1;
         }
     }
 
+    // Check if the stack is empty
     bool empty() {
-        if(top == -1) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+        return top == -1;
     }
 };
 
-void solve(Stack2 &inputStack, int count, int size) {
-    // Base case...
-    if(count == size/2) {
+// Recursive function to delete the middle element
+void solve(Stack3& inputStack, int count, int size) {
+    // Base case: If count reaches mid position, remove element
+    if (count == size / 2) {
         inputStack.pop();
         return;
     }
+
+    // Store the top element and remove it temporarily
     int num = inputStack.peek();
     inputStack.pop();
 
-    // Recusrive call...
-    solve(inputStack, count+1, size);
+    // Recursive call to move deeper in the stack
+    solve(inputStack, count + 1, size);
 
+    // Push the element back after removing the middle one
     inputStack.push(num);
 }
 
-void deleteMiddle(Stack2 &inputStack, int n) {
+// Function to delete the middle element of the stack
+void deleteMiddle(Stack3& inputStack, int n) {
     int count = 0;
     solve(inputStack, count, n);
 }
 
 int main() {
-    Stack2 st1(5); // We need to add size kyunki humne ek paramterized constructor create kiya hua hai jo call hojayega jab bhi hum stack2 ka object create krenge isliye hume size daalna padega!
+    Stack3 st1(5); // Create a stack of size 5
+
+    // Pushing elements into the stack
     st1.push(1);
     st1.push(2);
     st1.push(3);
     st1.push(4);
     st1.push(5);
 
-    // Now lets find the middle element!
+    // Delete middle element
     deleteMiddle(st1, 5);
 
-    // Printing remaining nodes...
+    // Printing remaining elements after deletion
     while (!st1.empty()) {
-        cout << st1.peek() << " "; // Ye ulta stack print krega!
+        cout << st1.peek() << " "; // Stack prints in reverse order (LIFO)
         st1.pop();
     }
-}
 
-// Question 3 : Valid Parentheses! we need to check here ki harr opening parantheses ke liye close parantheses hai ki nhi! for example, {}, {()}, {{[]}} all these are examples of valid parantheses!
-// Approach : Hum jaise jaise input aayega usko stack me daalte rahenge and jab bhi koi aisa input ayega jiska open vaala bracket already stack me available hoga hum usko pop krdenge! and we will continue doing this! and agar end me stack empty milta hai! we will call that set of parantheses a valid one! otherwise not!
-// Lets code it now...
+    return 0;
+}
+// Time Complexity : O(N), since we remove and push back elements once.
+// Space Complexity : O(N), due to recursive calls storing temporary elements.
+
+// Question 3 : Valid Parentheses!
+// Problem Statament : We are given a string containing only opening and closing brackets : () (Round Brackets), {} (Curly Braces) and [] (Square Brackets).
+//                   : Our task is to check whether the given string has valid parentheses or not. A set of parentheses is considered valid if : Every opening bracket has a corresponding closing bracket and the brackets are closed in the correct order.
+//                   : Examples of Valid Parentheses : "()" → Valid, as opening ( is closed by ). "{}[]" → Valid, as {} and [] are correctly closed. "{[()]}" → Valid, as {} contains [], which contains (), and all are closed in the correct order.
+//                   : Examples of Invalid Parentheses : "({)" → Invalid, because { is not closed before ). "{[}" → Invalid, because { is opened but not properly closed. "(" → Invalid, because an opening bracket is not closed.
+// Approach : Why Use a Stack : A stack is a perfect data structure for this problem because it follows LIFO (Last In, First Out), which helps track the most recent opening brackets that need closing.
+//          : Explaination : Read the string character by character.
+//                         : If an opening bracket ((, {, [), push it into the stack.
+//                         : If a closing bracket (), }, ]), check the stack : If the stack is empty → Invalid (no matching opening bracket). If the top of the stack has the correct matching opening bracket → Pop it. If the top doesn’t match → Invalid.
+//                         : After scanning the string, if the stack is empty, the parentheses are valid. Otherwise, invalid.
+// Example : For input: "{[()]}"
+//         : Push { → Stack: {
+//         : Push [ → Stack: { [
+//         : Push ( → Stack: { [ (
+//         : Encounter ) → Matches with (, so pop → Stack: { [
+//         : Encounter ] → Matches with [, so pop → Stack: {
+//         : Encounter } → Matches with {, so pop → Stack: [] (empty)
+//         : Stack is empty at the end, so the string is valid.
 #include<iostream>
 #include<stack>
 #include<string>
@@ -1395,13 +1439,10 @@ bool isValidParantheses(string exp) {
     stack<char> st1;
     for(int i = 0; i<exp.length(); i++) {
         char ch = exp[i];
-    // If opening bracket then push it into stack!
-    // If closing bracket then check and pop!
         if(ch == '{' || ch == '(' || ch == '[') {
             st1.push(ch);
         }
         else {
-            // for closing bracket
             if(!st1.empty()) {
                 char top = st1.top();
                 if( (ch == '}' && top == '{') || (ch == ')' && top == '(') || (ch == ']' && top == '[')) {
@@ -1433,6 +1474,8 @@ int main() {
         cout<<"Not a valid parantheses";
     }
 }
+// Time Complexity : O(N) (We traverse the string once)
+// Space Complexity : O(N) (In worst case, all brackets go into the stack)
 
 // Question 4 : Add an element at the bottom of the stack!
 // Approach : Here we will use the similar approach what we did in the deleting the middle node of the stack! so bss vhi krenge ki stack ke top ko ek jagah save krte jayenge and jab stack empty hojaye tab jis element ko add krna hai usko push krdenge stack me and then jin elements ko store kiya tha unko vapis restore krdenge!

@@ -1,76 +1,66 @@
 #include<iostream>
+// #include<stack>
 using namespace std;
 
-class TwoStack {
-    int *arr;
-    int top1;
-    int top2;
+class Stack {
+    private:
+    int top;
+    int* arr;
     int size;
-
+    
     public:
-    TwoStack(int s) {
-        this->size = s;
-        top1 = -1;
-        top2 = s;
-        arr = new int[s];
+    Stack(int size) {
+        this->size = size;
+        arr = new int[this->size];
+        top = -1;
     }
 
-    void Push1(int element) {
-        if(top2 - top1 > 1) {
-            top1++;
-            arr[top1] = element;
+    void push(int data) {
+        if(size - top > 1) {
+            arr[top] = data;
+            top++;
         }
         else {
-            cout<<"Stack Overflow!"<<endl;
-        }
-    }
-
-    void Push2(int element) {
-        if(top2-top1 > 1) {
-            top2--;
-            arr[top2] = element;
-        }
-        else {
-            cout<<"Stack overflow!"<<endl;
+            cout<<"Stack Overflow";
         }
     }
 
-    int pop1() {
-        if(top1 >= 0) {
-            int ans = arr[top1];
-            top1--;
-            return ans;
+    void pop() {
+        if(top >= 0) {
+            top--;
         }
         else {
-            return -1;
+            cout<<"Stack Underflow";
         }
     }
 
-    int pop2() {
-        if(top2 < size) {
-            int ans = arr[top2];
-            top2++;
-            return ans;
+    void peek() {
+        if(top >= 0) {
+            cout<<arr[top];
         }
         else {
-            return -1;
+            cout<<"Stack Underflow";
         }
     }
-}; // Also, yahaa hum ye bhi kr sakte the ki array ko n/2 n/2 parts me tod ke fir dono stacks ko daalte raho usme! but ye ek acha tareeka nhi hota! kyunki kyunki maanlo agar ek stack ne poori n/2 space leli hai but ek ne sirf lets suppose bss n/4 hi space li hai toh in that case n/4 space waste hojaati! so this is not the optimal usage of space!
+
+    bool empty() {
+        return top == -1;
+    }
+};
 
 int main() {
-    TwoStack s1(10); // using this we have created a common array for both the stack with memory space = 10.
-    s1.Push1(1);
-    s1.Push1(2);
-    s1.Push1(3);
-    s1.Push1(4);
-    s1.Push1(5);
-    s1.Push1(6); // Here these operations pushed 6 elements inside the array! means now for stack2 only 4 elements ke liye size bacha hai!
+    Stack st1(4);
+    st1.push(1);
+    st1.push(2);
+    st1.push(3);
+    st1.push(4);
+    st1.push(5);
 
-    s1.Push2(10);
-    s1.Push2(20);
-    s1.Push2(30);
-    s1.Push2(40); // Here we have filled the entire array with 10 elements inside it!
-
-    s1.Push1(10); // Here it will print Stack Overflow!
+    cout<<endl;
+    
+    st1.pop();
+    st1.pop();
+    st1.pop();
+    st1.pop();
+    st1.pop();
 }
