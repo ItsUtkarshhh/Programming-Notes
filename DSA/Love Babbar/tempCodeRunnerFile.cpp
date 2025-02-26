@@ -1,66 +1,55 @@
 #include<iostream>
-// #include<stack>
+#include<stack> // You can use Stack Implementation rather than using STL! Its your choice!
 using namespace std;
 
-class Stack {
-    private:
-    int top;
-    int* arr;
-    int size;
-    
-    public:
-    Stack(int size) {
-        this->size = size;
-        arr = new int[this->size];
-        top = -1;
+void sortedInsert(stack<int> &inputStack, int num) {
+    // Base case
+    if(inputStack.empty() || (!inputStack.empty() && inputStack.top() < num)) {
+        inputStack.push(num);
+        return;
     }
+    int n = inputStack.top();
+    inputStack.pop();
 
-    void push(int data) {
-        if(size - top > 1) {
-            arr[top] = data;
-            top++;
-        }
-        else {
-            cout<<"Stack Overflow";
-        }
-    }
+    // recursive call
+    sortedInsert(inputStack, num);
+    inputStack.push(n);
+}
 
-    void pop() {
-        if(top >= 0) {
-            top--;
-        }
-        else {
-            cout<<"Stack Underflow";
-        }
+void sortStack(stack<int> &inputStack) {
+    // Base case
+    if(inputStack.empty()) {
+        return;
     }
+    int num = inputStack.top();
+    inputStack.pop();
 
-    void peek() {
-        if(top >= 0) {
-            cout<<arr[top];
-        }
-        else {
-            cout<<"Stack Underflow";
-        }
-    }
+    // recursive call
+    sortStack(inputStack);
+    sortedInsert(inputStack, num);
+}
 
-    bool empty() {
-        return top == -1;
+void printStack3(stack<int> stk) {
+    while (!stk.empty()) {
+        cout << stk.top() << " ";
+        stk.pop();
     }
-};
+    cout << endl;
+}
 
 int main() {
-    Stack st1(4);
-    st1.push(1);
-    st1.push(2);
-    st1.push(3);
-    st1.push(4);
-    st1.push(5);
+    stack<int> stk;
+    stk.push(1);
+    stk.push(5);
+    stk.push(3);
+    stk.push(2);
+    stk.push(4);
 
-    cout<<endl;
-    
-    st1.pop();
-    st1.pop();
-    st1.pop();
-    st1.pop();
-    st1.pop();
+    cout << "Original stack st1 : ";
+    printStack3(stk);
+
+    sortStack(stk);
+
+    cout << "After sorting the stack st1 : ";
+    printStack3(stk);
 }

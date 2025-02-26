@@ -1478,32 +1478,32 @@ int main() {
 // Space Complexity : O(N) (In worst case, all brackets go into the stack)
 
 // Question 4 : Add an element at the bottom of the stack!
-// Approach : Here we will use the similar approach what we did in the deleting the middle node of the stack! so bss vhi krenge ki stack ke top ko ek jagah save krte jayenge and jab stack empty hojaye tab jis element ko add krna hai usko push krdenge stack me and then jin elements ko store kiya tha unko vapis restore krdenge!
-// Lets code...
+// Approach : We will follow a similar approach to deleting the middle node of a stack.
+//          : The idea is to temporarily remove elements from the stack until it becomes empty, then push the new element at the bottom, and finally restore the removed elements back in order.
 #include<iostream>
 #include<stack>
 using namespace std;
 
-void solve(stack<int> &s, int x ) {
-    // Base case...
-    if(s.empty()) {
-        s.push(x);
+void solve(stack<int> &inputStack, int value) {
+    // Base case
+    if(inputStack.empty()) {
+        inputStack.push(x);
         return;
     }
-    int num = s.top();
-    s.pop();
+    int num = inputStack.top();
+    inputStack.pop();
 
-    // recurive call...
-    solve(s, x);
-    s.push(num);
+    // recurive call
+    solve(inputStack, x);
+    inputStack.push(num);
 }
 
-stack<int> pushAtBottom(stack<int> &myStack, int x) {
-    solve(myStack, x);
-    return myStack;
+stack<int> pushAtBottom(stack<int> &inputStack, int value) {
+    solve(inputStack, value);
+    return inputStack;
 }
 
-void printStack(stack<int> s) {
+void printStack(stack<int> st) {
     while (!s.empty()) {
         cout << s.top() << " ";
         s.pop();
@@ -1529,195 +1529,291 @@ int main() {
 }
 
 // Question 5 : Reverse a stack!
-// Approach : So what we will do is pehle toh hum top most element ko ek jagah save krlenge and then jo remaining stack hai usko reverse krdenge using recursion! and then jis element ko save kiya tha usko insert at bottom krdenge!
-// Lets code this approach!
-#include<iostream>
-#include<stack>
+// Approach : We will use recursion to reverse the stack step by step. The idea is to remove elements from the top one by one, reverse the remaining stack, and then insert the removed elements at the bottom.
+//          : Remove the Top Element : Take out the top element of the stack and store it in a variable. This reduces the problem size, as we now have a smaller stack to work with.
+//          : Recursively Reverse the Remaining Stack : Call the function recursively to reverse the rest of the stack. This continues until the stack becomes empty.
+//          : Insert the Removed Element at the Bottom : Once the stack is completely reversed, insert the stored top element at the bottom of the stack. This is done using another helper function that pushes the element at the bottom instead of the top.
+//          : Stack is Now Reversed! By following this process, we effectively reverse the order of elements in the stack.
+#include <iostream>
+#include <stack>
 using namespace std;
 
-void solve(stack<int> &s, int x ) {
-    // Base case...
-    if(s.empty()) {
-        s.push(x);
+void insertAtBottomHelper(stack<int> &inputStack, int value) {
+    // Base case
+    if (inputStack.empty()) {
+        inputStack.push(value);
         return;
     }
-    int num = s.top();
-    s.pop();
+    int topElement = inputStack.top();
+    inputStack.pop();
 
-    // recurive call...
-    solve(s, x);
-    s.push(num);
+    // Recursive call
+    insertAtBottomHelper(inputStack, value);
+    inputStack.push(topElement);
 }
 
-stack<int> insertAtBottom(stack<int> &myStack, int x) {
-    solve(myStack, x);
-    return myStack;
+stack<int> insertAtBottom(stack<int> &inputStack, int value) {
+    insertAtBottomHelper(inputStack, value);
+    return inputStack;
 }
 
-void printStack(stack<int> s) {
-    while (!s.empty()) {
-        cout << s.top() << " ";
-        s.pop();
+void printStack(stack<int> stk) {
+    while (!stk.empty()) {
+        cout << stk.top() << " ";
+        stk.pop();
     }
     cout << endl;
 }
 
-void reverseStack(stack<int> &myStack) {
-    // Base case...
-    if(myStack.empty()) {
+void reverseStack(stack<int> &inputStack) {
+    // Base case
+    if (inputStack.empty()) {
         return;
     }
-    int num = myStack.top();
-    myStack.pop();
+    int topElement = inputStack.top();
+    inputStack.pop();
 
-    reverseStack(myStack);
-    insertAtBottom(myStack, num);
-}
-
-void printStack2(stack<int> s) {
-    while (!s.empty()) {
-        cout << s.top() << " ";
-        s.pop();
-    }
-    cout << endl;
+    // Recursive call
+    reverseStack(inputStack);
+    insertAtBottom(inputStack, topElement);
 }
 
 int main() {
-    stack<int> st1;
-    st1.push(1);
-    st1.push(2);
-    st1.push(3);
-    st1.push(4);
-    st1.push(5);
-    cout << "Original stack st1 : ";
-    printStack2(st1);
+    stack<int> stk;
+    stk.push(1);
+    stk.push(2);
+    stk.push(3);
+    stk.push(4);
+    stk.push(5);
 
-    reverseStack(st1);
+    cout << "Original stack: ";
+    printStack(stk);
 
-    cout << "After reversing the stack st1 : ";
-    printStack2(st1);
+    reverseStack(stk);
+
+    cout << "Reversed stack: ";
+    printStack(stk);
 }
 
 // Question 6 : Sort a stack! Constraint is not to use loop!
-// Approach : So what we will do is again hum pehle stack ke top ke elements ko save krte jayenge and pop krte jayenge and jab stack empty hojaye uske baad hum unn hi element ko vapis stack me daalte jayenge but iss baar in sorted manner!
-// Lets code this approach...
+// Approach : We will use recursion to sort the stack. The idea is to remove elements one by one, sort the remaining stack recursively, and then insert each removed element back in the correct position.
+//          : Remove and Sort the Stack Recursively : Take the top element from the stack and store it. Recursively sort the remaining stack until the stack becomes empty. This ensures that the smaller elements reach the bottom and larger elements stay at the top.
+//          : Insert Each Element Back in Sorted Order : After sorting the remaining stack, insert the stored element back in its correct position. Use a helper function to insert an element into the correct place in the sorted stack.
+//          : Base Condition : If the stack is empty, return (this is our base case for recursion).
 #include<iostream>
-#include<stack> // Here we are using STL again and again! but its good if we practice using the questions using stacks implementation!
+#include<stack> // You can use Stack Implementation rather than using STL! Its your choice!
 using namespace std;
 
-void sortedInsert(stack<int> &s, int num) {
-    // Base case...
-    if(s.empty() || (!s.empty() && s.top() < num)) {
-        s.push(num);
+void sortedInsert(stack<int> &inputStack, int num) {
+    // Base case
+    if(inputStack.empty() || (!inputStack.empty() && inputStack.top() < num)) {
+        inputStack.push(num);
         return;
     }
-    int n = s.top();
-    s.pop();
+    int n = inputStack.top();
+    inputStack.pop();
 
     // recursive call
-    sortedInsert(s, num);
-    s.push(n);
+    sortedInsert(inputStack, num);
+    inputStack.push(n);
 }
 
-void sortStack(stack<int> &s) {
-    // Base case...
-    if(s.empty()) {
+void sortStack(stack<int> &inputStack) {
+    // Base case
+    if(inputStack.empty()) {
         return;
     }
-    int num = s.top();
-    s.pop();
+    int num = inputStack.top();
+    inputStack.pop();
 
-    // recursive call...
-    sortStack(s);
-    sortedInsert(s, num);
+    // recursive call
+    sortStack(inputStack);
+    sortedInsert(inputStack, num);
 }
 
-void printStack3(stack<int> s) {
-    while (!s.empty()) {
-        cout << s.top() << " ";
-        s.pop();
+void printStack3(stack<int> stk) {
+    while (!stk.empty()) {
+        cout << stk.top() << " ";
+        stk.pop();
     }
     cout << endl;
 }
 
 int main() {
-    stack<int> st1;
-    st1.push(1);
-    st1.push(5);
-    st1.push(3);
-    st1.push(2);
-    st1.push(4);
+    stack<int> stk;
+    stk.push(1);
+    stk.push(5);
+    stk.push(3);
+    stk.push(2);
+    stk.push(4);
 
     cout << "Original stack st1 : ";
-    printStack3(st1);
+    printStack3(stk);
 
-    sortStack(st1);
+    sortStack(stk);
 
     cout << "After sorting the stack st1 : ";
-    printStack3(st1);
+    printStack3(stk);
 }
 
 // Question 7 : Remove redudant brackets!
-// Approach : So what we will do is ki koi bracket redundant kab hoga? jab opening and closing bracket ke beech me koi bhi useful operation nhi ho rha! like ((a+b)) isme bahar vaala opeing bracket ki koi zarurat thi! so these are redudant bracket! now agar opening and closing bracket ke beech me koi bhi operator aata hai toh vo redudant nhi hoga! operand se mtlb nhi hai vo aaye ya nhi aaye, but agar operator aata hai then then vo redudant bracket nhi hoga!
-// So bss hum vhi krenge ki stack me input lenge string ka and opening and closing bracket ke beech me check krlenge ki kya koi operator hai ya nhi!
-// Lets code...
-#include<iostream>
-#include<stack>
-#include<string>
+//            : A bracket is redundant if there is no useful operation inside it. Example of Redundant Brackets : ((a+b)) → The outer brackets are redundant because a+b is already grouped. and (a) → The brackets are redundant as they don’t serve any purpose.
+//            : Example of Non-Redundant Brackets : (a+b*c) → The brackets are useful because they maintain the correct precedence. (a+(b/c)) → The inner brackets are necessary for division to happen first.
+// Approach : Use a Stack to Process the String : Push each character of the expression onto the stack.
+//  	    : Check for Redundant Brackets : When encountering a closing bracket ), check if there’s at least one operator (+, -, *, /) between this and its matching opening bracket (.
+//                                         : If no operator is found, the brackets are redundant.
+//          : How to Detect Redundant Brackets : If between an opening ( and closing ), there is no operator, the brackets are redundant. If at least one operator is found, the brackets are necessary.
+//          : Example : (a+(b*c)) : Push (, a, +, (, b, *, c onto the stack.
+//                    : When ) is encountered : Pop until ( is found. The popped elements contain b * c (which includes * operator), so these brackets are not redundant.
+#include <iostream>
+#include <stack>
 using namespace std;
 
-bool findRedundantBrackets(string &s) {
+bool findRedundantBrackets(const string& s) {
     stack<char> st;
-    for(int i=0; i<s.length(); i++) {
-        char ch =s[i];
-        if(ch == '(' || ch == '+' ||ch == '-' || ch == '*' || ch == '/') {
+
+    for (int i = 0; i < s.length(); i++) {
+        char ch = s[i];
+        // Push opening bracket & operators into stack
+        if (ch == '(' || ch == '+' || ch == '-' || ch == '*' || ch == '/') {
             st.push(ch);
-        }
-        else {
-            //ch ya toh ')' hai or lowercase letter
-            if(ch == ')') {
-                bool isRedundant = true;
-                while(st.top() != '(') {
-                    char top = st.top();
-                    if(top == '+' ||top == '-' || top == '*' || top == '/') {
-                        isRedundant = false;
-                    }
-                    st.pop();
-                }
-                if(isRedundant == true) {
-                    return true;
+        } 
+        else if (ch == ')') {  
+            // Check for redundant brackets
+            bool isRedundant = true;
+            while (!st.empty() && st.top() != '(') { 
+                char top = st.top();
+                // If an operator is found, the brackets are NOT redundant
+                if (top == '+' || top == '-' || top == '*' || top == '/') {
+                    isRedundant = false;
                 }
                 st.pop();
             }
-        } 
+            // If stack is empty, it means there was an issue with bracket pairing
+            if (!st.empty()) {
+                st.pop();  // Pop the corresponding '('
+            }
+            if (isRedundant) {
+                return true; // Redundant brackets found
+            }
+        }
     }
-    return false;
+    return false;  // No redundant brackets found
 }
 
 int main() {
-    string s1 = "((a+b))";
-    if(findRedundantBrackets(s1)) {
-        cout<<"Redudant brackets present!";
-    }
-    else {
-        cout<<"Not present";
-    }
-}
-// Lets understand this approach, our string was ((a+b)), so what happened is, ki pehle humne stack me opening brackets jaise jaise milte gye humne unko push krte gye! and operands ki need nhi hai push krne ki kyunki logic wise hume mtlb hume sirf operator and brackets se mtlb hai! so now humne pehle pehla ( push kiya then dusra ( push kiya and then + push kiya stack me! and now we got pehla ) toh ab hum stack me check krenge ki kya iska koi pair opening bracket hai and agar hume iska pair opening bracket dhundte time koi operator mil jaata hai toh toh mtlb ki ye toh vo redudant bracket nhi hai! and vo closing bracket and vo operator dono hi stack me se pop krdenge!
-// now we will move forward, now jo dusra vaala closing bracket pr pohoche toh again check krenge ki kya iska koi pair opening bracket hai ya nhi! and we got the pair in the stack and this time koi bhi operator beech me nhi aaya! means this is the redudant bracket! means we will say that ki string me redudant bracket hai!
+    string expression;
+    cout << "Enter an expression: ";
+    cin >> expression;
 
-// Question 8 : Minimum cost to make string valid or Minimum bracket reversal! Humare paas input me ek expression diya hua hoga! which will be set of curly brackets! and the string will be called valid if all the brackets are balanced! formally for each opening bracket there must be a closing bracket right to it!
-// Toh pehle toh hume ye check krna hai ki string valid hai ya nhi! aur valid vhi hone jo logically bhi correct honge! like {}{}, {{}}, {{}{}} all these are valid, now unvalid are like }{}, {}}{{}, {{}}}{} all these are unvalids!
-// Now hume kuch operations perform krne hai taaki hum jo unvalid strings hai unko valid bnaa paaye! and isme kuch operations use kr sakte hai like reversing the bracket! ek bracket ke reverse krne ki cost hogi 1, so hume minimum cost of making the expression valid nikalni hai!
-// Approach : for a valid expression, no. of open brackets = no. of closed brackets! means even number of brackets hone chahiye!
-// Practice this question while revising!
+    if (findRedundantBrackets(expression)) {
+        cout << "The expression has redundant brackets." << endl;
+    } else {
+        cout << "The expression does not have redundant brackets." << endl;
+    }
+    return 0;
+}
+
+// Question 8 : Minimum Cost to Make a String Valid (Bracket Reversal Problem)
+//            : We are given a string consisting of only curly brackets { and }. The string is called valid if : Every opening bracket { has a corresponding closing bracket } after it.
+//            : Examples of Valid Strings : "{}{}", "{ { } }" and "{ { }{ } }".
+//            : Examples of Invalid Strings : "}{" (Closing bracket appears before opening), "{ } { }{ }" (Extra closing bracket at the end), "{ { }{ } }{" (Extra opening bracket { at the end).
+//            : Goal : We need to convert the given invalid string into a valid one with the minimum cost.
+//                   : Allowed operation: We can reverse any bracket { ↔ } at a cost of 1 unit per reversal and find the minimum cost needed to make the string valid.
+// Approach : Step 1 : Check if a valid solution is possible : A valid string must have an even number of brackets. If the total number of brackets is odd, it is impossible to make it valid → Return -1.
+//          : Step 2 : Use a Stack to Identify Misplaced Brackets : We process the string and use a stack to track unmatched brackets...
+//                                                                : If we find an opening bracket {, we push it onto the stack.
+//                                                                : If we find a closing bracket } : If the stack has an opening bracket {, we pop it (as it forms a valid pair).
+//                                                                                                : Otherwise, we push the } onto the stack (it remains unmatched).
+//                                                                : Overall, at the end, the stack will contain only unbalanced brackets (either { or }).
+//          : Step 3 : Calculate the Minimum Cost : Suppose the stack has x { brackets and y } brackets left. We need to reverse pairs of these to balance them.
+//                                                : Formula to calculate cost : (x/2) + (y/2) + 2 * (remainder when x or y is odd)
+//                                                : Every two unmatched { or } require one reversal. If there's an odd number of { or }, we need one extra reversal (cost = 2).
+// Example Dry Run : Input : "}{{{}}"
+//                 : Check length → Even
+//                 : Stack processing : } → No { in stack → Push }.
+//                                    : { → Push {
+//                                    : { → Push {
+//                                    : { → Push {
+//                                    : } → Matches with { → Pop {
+//                                    : } → Matches with { → Pop {
+//                                    : Stack now contains: ["}", "{"].
+//                 : Calculate Cost : One { and one } left → Requires one reversal each → Cost = 1 and Output: 1
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int minCostToMakeValid(string s) {
+    // Step 1 : If the length is odd, it's impossible to balance
+    int n = s.length();
+    if (n % 2 != 0) return -1;
+
+    stack<char> st;
+    // Step 2 : Process the string using a stack
+    for (int i = 0; i < n; i++) {
+        char ch = s[i];
+        if (ch == '{') {
+            st.push(ch);
+        } else { // ch == '}'
+            if (!st.empty() && st.top() == '{') {
+                st.pop(); // Valid pair found, remove it
+            } else {
+                st.push(ch); // Unmatched closing bracket
+            }
+        }
+    }
+
+    // Step 3 : Count unbalanced brackets
+    int openBrackets = 0, closeBrackets = 0;
+    while (!st.empty()) {
+        if (st.top() == '{') {
+            openBrackets++;
+        } else {
+            closeBrackets++;
+        }
+        st.pop();
+    }
+
+    // Step 4 : Calculate the minimum cost
+    int cost = (openBrackets / 2) + (closeBrackets / 2) + 2 * (openBrackets % 2);
+    // Since openBrackets % 2 and closeBrackets % 2 will always be the same (open == close for an invalid string), we only need to check one of them (openBrackets % 2).
+    return cost;
+}
+
+int main() {
+    string s;
+    cout << "Enter the string of curly brackets: ";
+    cin >> s;
+    
+    int result = minCostToMakeValid(s);
+    
+    if (result == -1) cout << "Not possible to make valid" << endl;
+    else cout << "Minimum cost to make the string valid: " << result << endl;
+    return 0;
+}
+// Time Complexity : O(N) → We traverse the string once and process elements using a stack.
+// Space Complexity : O(1) space → Using only a few integer variables and a stack.
 
 // ---------------------------------------------------------- LECTURE 56 - Largest Rectangular Area in Histogram --------------------------------------------------------------------------------------------------------->
 // Question 1 : Next smaller element!
-// We are given an array and hume uss array me jo elements diye hue hai unke right side ke remaining array me first smaller element konsa hai vo nikalna hai agar koi nhi hai toh -1 retrun krdo! example : [2,1,4,3], iss case me, 2 ke right side window me 1 is the smaller element! then 1 ke right me kuch nhi hai toh -1, then 4 ke right me 3, then 3 ke right me array ki khatam hogya toh -1. toh final answer is [1,-1,3,-1]
-// Approach 1 : Ek tareeka toh ye ki 2 pointer approach me do loops chalaa le and then ek pointer ko ek jagah fix krke dusre pointer se right ki window traverse krke output dede! but iss case me TC : O(n^2) which is not very good! so we will go to the next approach!
-// Approach 2 : Toh iske liye hume number of traversals kam krne hai na taaki TC kam ho! so we will traverse from the right most element! ab we know for our example the right most element is 3, and iske right me isse chhota element hai nhi toh we will print the output -1, toh ek kaam krtee hai ek stack bnaate hai usme already -1 store krke rakhte hai! and jab bhi koi element se chhoti value find kr rhe honge toh hum stack ke top ko dekhenge! agar stack ka top chhota hota hai humare current element se toh hum simply uss top ko ans me store krlenge and jo humara curr element hai usko stack me puch krdenge! but agar stack ka top badaa hai curr element se then hum stack me se pop krte rahenge jab tak hume chhota element na miljaye! and jab hume chhota element mil jaata hai toh hum usko ans me store krdenge and stack me vo current element push krdenge! here our TC : O(n) which is better than previous!
-// Lets code this approach...
+//            : We are given an array and for each element in the array, we need to find the first smaller element to its right. If no such element exists, we return -1 for that position.
+//            : Example : arr = [2, 1, 4, 3], Output : 2 (The first smaller element on its right is 1), 1 (No smaller element on its right, so -1), 4 (The first smaller element on its right is 3) and 3 (No smaller element on its right, so -1).
+//            : Final Output : [1, -1, 3, -1]
+// Approach 1 : Brute Force (Two Loops) : We fix each element one by one. For each element, check all elements on its right side. If we find a smaller element, store it. If no smaller element is found, store -1.
+//                                      : Time Complexity : Since for each element we check all elements on its right, the time complexity is O(n²) (bad for large n).
+// Approach 2 : Stack-Based (Optimized) : Start from the last element (rightmost).
+//                                      : Use a stack to store elements that could be possible answers.
+//                                      : If the stack’s top is smaller than the current element, that is our answer.
+//                                      : Otherwise, pop the stack until we find a smaller element or the stack becomes empty.
+//                                      : If no smaller element is found, store -1.
+//                                      : Push the current element into the stack for future checks.
+//            : Example : Input : [2, 1, 4, 3]
+//                      : Processing from right to left : Start with an empty stack, initialize ans = [].
+//                                                      : Element 3 → No element to its right → Store -1 and push 3 into stack.
+//                                                      : Element 4 → Stack top 3 is smaller → Store 3, push 4 into stack.
+//                                                      : Element 1 → Stack top 4 is bigger → Pop 4, pop 3, stack is empty → Store -1, push 1 into stack.
+//                                                      : Element 2 → Stack top 1 is smaller → Store 1, push 2 into stack.
+//                      : Final Answer : [1, -1, 3, -1]
 #include<iostream>
 #include<stack>
 #include<vector>
@@ -1751,7 +1847,6 @@ int main() {
     }
     cout << endl;
 }
-// try this question for previous smaller element during revision!
 
 // Question 2 : Largest rectangualr area in histogram! imagine you have an histogram with multiple different heights of rectangles all of the same breadth tho! now... jo main question hai vo vdo se hi samajh lena becoz here it is tough to make it understood! so...
 // Approach 1 : First is the brute firce approach where we will try to find the solution using normal tactics and later on we will optimize it! so its like hum harr rectangle ko left ya right side me expand krne ka try kre agar hojaata hai toh kro and then after the maximum expansion possible jiss rectangle ka maximum area hai vo nikal do and then that will our answer!
