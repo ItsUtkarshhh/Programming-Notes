@@ -70,9 +70,10 @@ class Stack {
     }
 };
 
-void solve(Stack& stk, int count, int size) {
+int solve(Stack& stk, int count, int size) {
     if(count == size/2) {
-        return count;
+        
+        return
     }
 }
 
