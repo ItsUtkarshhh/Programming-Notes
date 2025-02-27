@@ -1095,6 +1095,7 @@ class Stack2 {
         }
         NodeforStack2* temp = top; // Store current top
         top = top->next; // Move top to next node
+        temp->next = NULL;
         delete temp; // Delete the old top node
     }
 
