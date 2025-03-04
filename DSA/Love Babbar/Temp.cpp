@@ -2,93 +2,50 @@
 // Implementation of Stack (Using Linked Lists)! [DONE]
 // Implementation of 2 Stacks in an array! [DONE]
 // Reverse a string using a Stack! [DONE]
-// Delete middle element of the Stack!
-// Check whether a valid parenthesis or not!
-// Add an element at the bottom of the Stack!
-// Reverse a Stack!
-// Sort a Stack!
-// Remove redundant brackets!
+// Delete middle element of the Stack! [DONE]
+// Check whether a valid parenthesis or not! [DONE]
+// Add an element at the bottom of the Stack! [DONE]
+// Reverse a Stack! [DONE]
+// Sort a Stack! [DONE]
+// Remove redundant brackets! [DONE]
 // Minimum Cost to Make a String Valid (Bracket Reversal Problem)!
 // Find next smaller element!
 
-// Delete middle element of the Stack!
+// Minimum Cost to Make a String Valid (Bracket Reversal Problem)!
 #include<iostream>
-#include<iostream>
+#include<stack>
+#include<vector>
 using namespace std;
 
-class Stack {
-    private:
-    int size;
-    int* arr;
-    int top;
-
-    public:
-    Stack(int size) {
-        this->size = size;
-        arr = new int[this->size];
-        top = -1;
-    }
-
-    void push(int data) {
-        if(size - top > 1) {
-            top++;
-            arr[top] = data;
+void nextSmallerElement(vector<int> v1) {
+    int size = v1.size();
+    vector<int> ans(size, -1);
+    stack<int> stk;
+    stk.push(-1);
+    for(int i = size-1; i>=0; i--) {
+        int curr = v1[i];
+        while(stk.top() >= curr) {
+            stk.pop();
         }
-        else {
-            cout<<"Stack Overflow!";
-            return;
-        }
+        ans[i] = stk.top();
+        stk.push(curr);
     }
 
-    void pop() {
-        if(top == -1) {
-            cout<<"Stack Underflow!"<<endl;
-            return;
-        }
-        top--;
+    for(int i = 0; i < size; i++) {
+        cout<<ans[i]<<" ";
     }
-
-    int peek() {
-        if(top == -1) {
-            cout<<"Stack Underflow!"<<endl;
-            return -1;
-        }
-        return arr[top];
-    }
-
-    bool empty() {
-        return (top == -1);
-    }
-
-    int getLen() {
-        int len = 0;
-        while(top != -1) {
-            len++;
-            top--;
-        }
-        return len;
-    }
-};
-
-int solve(Stack& stk, int count, int size) {
-    if(count == size/2) {
-        
-        return
-    }
-}
-
-int getMiddleNode(Stack stk, int size) {
-    int count = 0;
-    solve(stk, count, size);
+    cout<<endl;
 }
 
 int main() {
-    Stack stk(5);
-    stk.push(1);
-    stk.push(2);
-    stk.push(3);
-    stk.push(4);
-    stk.push(5);
-    int size = stk.getLen();
-    getMiddle(stk, size);
+    int size;
+    cout<<"Enter size of array : ";
+    cin>>size;
+    vector<int> v1(size);
+    cout<<"Enter elements of the array : ";
+    for(int i = 0; i<size; i++) {
+        cin>>v1[i];
+    }
+    cout<<"Final answer : ";
+    nextSmallerElement(v1);
 }

@@ -1362,6 +1362,11 @@ class Stack3 {
     bool empty() {
         return top == -1;
     }
+
+    // Returns the size of stack
+    int stackSize() {
+        return top + 1;
+    }
 };
 
 // Recursive function to delete the middle element
@@ -1386,6 +1391,7 @@ void solve(Stack3& inputStack, int count, int size) {
 // Function to delete the middle element of the stack
 void deleteMiddle(Stack3& inputStack, int n) {
     int count = 0;
+    // int size = inputStack.stackSize(); // You can also use this stackSize() function instead of passing it as parameter
     solve(inputStack, count, n);
 }
 
@@ -1444,7 +1450,10 @@ bool isValidParantheses(string exp) {
             st1.push(ch);
         }
         else {
-            if(!st1.empty()) {
+            if(st1.empty()) {
+                return false;
+            }
+            else {
                 char top = st1.top();
                 if( (ch == '}' && top == '{') || (ch == ')' && top == '(') || (ch == ']' && top == '[')) {
                     st1.pop();
@@ -1452,9 +1461,6 @@ bool isValidParantheses(string exp) {
                 else {
                     return false;
                 }
-            }
-            else {
-                return false;
             }
         }
     }
@@ -1728,16 +1734,16 @@ int main() {
 //                                                                                                : Otherwise, we push the } onto the stack (it remains unmatched).
 //                                                                : Overall, at the end, the stack will contain only unbalanced brackets (either { or }).
 //          : Step 3 : Calculate the Minimum Cost : Suppose the stack has x { brackets and y } brackets left. We need to reverse pairs of these to balance them.
-//                                                : Formula to calculate cost : (x/2) + (y/2) + 2 * (remainder when x or y is odd)
+//                                                : Formula to calculate cost : (x + y + 1)/2.
 //                                                : Every two unmatched { or } require one reversal. If there's an odd number of { or }, we need one extra reversal (cost = 2).
 // Example Dry Run : Input : "}{{{}}"
 //                 : Check length → Even
-//                 : Stack processing : } → No { in stack → Push }.
-//                                    : { → Push {
-//                                    : { → Push {
-//                                    : { → Push {
-//                                    : } → Matches with { → Pop {
-//                                    : } → Matches with { → Pop {
+//                 : Stack processing : } → No { in stack → Push }. Stack : }
+//                                    : { → Push {. Stack : } {
+//                                    : { → Push {. Stack : } { {
+//                                    : { → Push {. Stack : } { { {
+//                                    : } → Matches with { → Pop {. Stack : } { {
+//                                    : } → Matches with { → Pop {. Stack : } {
 //                                    : Stack now contains: ["}", "{"].
 //                 : Calculate Cost : One { and one } left → Requires one reversal each → Cost = 1 and Output: 1
 #include <iostream>
@@ -1755,7 +1761,8 @@ int minCostToMakeValid(string s) {
         char ch = s[i];
         if (ch == '{') {
             st.push(ch);
-        } else { // ch == '}'
+        }
+        else { // ch == '}'
             if (!st.empty() && st.top() == '{') {
                 st.pop(); // Valid pair found, remove it
             } else {
@@ -1776,8 +1783,7 @@ int minCostToMakeValid(string s) {
     }
 
     // Step 4 : Calculate the minimum cost
-    int cost = (openBrackets / 2) + (closeBrackets / 2) + 2 * (openBrackets % 2);
-    // Since openBrackets % 2 and closeBrackets % 2 will always be the same (open == close for an invalid string), we only need to check one of them (openBrackets % 2).
+    int cost = (openBrackets + closeBrackets + 1) / 2;
     return cost;
 }
 
@@ -1801,7 +1807,7 @@ int main() {
 //            : Example : arr = [2, 1, 4, 3], Output : 2 (The first smaller element on its right is 1), 1 (No smaller element on its right, so -1), 4 (The first smaller element on its right is 3) and 3 (No smaller element on its right, so -1).
 //            : Final Output : [1, -1, 3, -1]
 // Approach 1 : Brute Force (Two Loops) : We fix each element one by one. For each element, check all elements on its right side. If we find a smaller element, store it. If no smaller element is found, store -1.
-//                                      : Time Complexity : Since for each element we check all elements on its right, the time complexity is O(n²) (bad for large n).
+//                                      : Time Complexity : Since for each element we check all elements on its right, the time complexity is O(n^2) (bad for large n).
 // Approach 2 : Stack-Based (Optimized) : Start from the last element (rightmost).
 //                                      : Use a stack to store elements that could be possible answers.
 //                                      : If the stack’s top is smaller than the current element, that is our answer.
@@ -1849,11 +1855,31 @@ int main() {
     cout << endl;
 }
 
-// Question 2 : Largest rectangualr area in histogram! imagine you have an histogram with multiple different heights of rectangles all of the same breadth tho! now... jo main question hai vo vdo se hi samajh lena becoz here it is tough to make it understood! so...
-// Approach 1 : First is the brute firce approach where we will try to find the solution using normal tactics and later on we will optimize it! so its like hum harr rectangle ko left ya right side me expand krne ka try kre agar hojaata hai toh kro and then after the maximum expansion possible jiss rectangle ka maximum area hai vo nikal do and then that will our answer!
-// Approach 2 (optimized approach) : So what we can see is that hum kisi bar ko tab tak extend kr sakte hai left ya right jab tak uske left ya right me usse koi chhota baar nhi mil jaata! jab usse chhota bar miljayega we will not be able to extend! so hume kisi bhi bar ke left ya right me jo chhote bars hai uske index nikalne hai, jisse we will know ki hum humarae curr bar ko kitna extend krna hai! jo right me jo chhota bar milega uske index ko we will call n (next) and left me jo chhota baar milega usko we will call p (previous)!
-// So humari range of extension ban jayegi "n-p-1" which will be the maximum width jo ki vo humari curr bar extend ho sakti hai! agar right me koi bar hi nhi hai toh n = -1 and same for p if left me koi bar nhi hai! and now area nikalne ke liye length * breadth chahiye hoti hai so here we got the width and length toh sabki fixed hai!
-// lets code this approach...
+// Question 2 : You are given a histogram where each bar represents a rectangle of the same width but with different heights. Your task is to find the largest rectangular area that can be formed using one or more consecutive bars.
+//            : Let's say we have the following histogram with heights : heights[] = {2, 1, 5, 6, 2, 3}, visuallize it in form of bar graph! where each value of the array is a height of one bar!
+//                                                                     : The largest rectangle that can be formed is the one covering heights 5 and 6, giving an area of 5 × 2 = 10.
+// Brute Force (Naive Approach) : Steps : Consider each bar as a starting point.
+//                                      : Try expanding left and right as far as possible while keeping the height of the smallest bar.
+//                                      : Calculate the area of the rectangle formed using width × height.
+//                                      : Keep track of the maximum area found.
+//                              : Time Complexity : This approach takes O(N²) time because for every bar, we check its extension possibilities.
+//                              : Example : For heights[] = {2, 1, 5, 6, 2, 3},
+//                                        : Taking height = 5 at index 2 : Extend left until 1 at index 1.
+//                                                                       : Extend right until 2 at index 4.
+//                                                                       : Width = 4 - 1 - 1 = 2. Hence, area = 5 × 2 = 10.
+//                                        : Although correct, this approach is inefficient for large histograms.
+// Optimized Approach Using Stacks : We can only extend a bar until we find a smaller bar in either direction. So, for each bar, we need to find : Nearest Smaller Bar on the Left (Previous Smaller Element - PSE) and Nearest Smaller Bar on the Right (Next Smaller Element - NSE)
+//                                 : Using these indices, we can determine the maximum width for which the current bar remains the minimum.
+//                                 : Steps : Find Previous Smaller Element (PSE) for each bar : Use a monotonic increasing stack to store indices.
+//                                                                                            : If a bar is smaller than the stack’s top, pop it.
+//                                                                                            : The element left in the stack is the nearest smaller element’s index.
+//                                         : Find Next Smaller Element (NSE) for each bar : Again, use a monotonic increasing stack but iterate right to left.
+//                                                                                        : Find the nearest smaller element’s index on the right.
+//                                         : Compute Width and Area : Width of the rectangle = NSE - PSE - 1
+//                                                                  : Area = height[i] × width
+//                                                                  : Keep track of the maximum area found.
+//                                 : Time Complexity : The stack approach reduces the complexity to O(N) since each element is pushed and popped at most once.
+// Implementation!
 #include<iostream>
 #include<vector>
 #include<stack>
