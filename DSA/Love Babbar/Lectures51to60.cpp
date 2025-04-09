@@ -1887,62 +1887,59 @@ int main() {
 using namespace std;
 
 vector<int> nextSmallerElement2(vector<int> arr, int n) {
-        stack<int> s;
-        s.push(-1);
-        vector<int> ans(n);
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(n);
 
-        for(int i=n-1; i>=0 ; i--) {
-            int curr = arr[i];
-            while(s.top() != -1 && arr[s.top()] >= curr)
-            {
-                s.pop();
-            }
-            //ans is stack ka top
-            ans[i] = s.top();
-            s.push(i);
+    for(int i=n-1; i>=0 ; i--) {
+        int curr = arr[i];
+        while(s.top() != -1 && arr[s.top()] >= curr) {
+            s.pop();
         }
-        return ans;
+        //ans is stack ka top
+        ans[i] = s.top();
+        s.push(i);
     }
+    return ans;
+}
 
 vector<int> prevSmallerElement2(vector<int> arr, int n) {
-        stack<int> s;
-        s.push(-1);
-        vector<int> ans(n);
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(n);
 
-        for(int i=0; i<n; i++) {
-            int curr = arr[i];
-            while(s.top() != -1 && arr[s.top()] >= curr)
-            {
-                s.pop();
-            }
-            //ans is stack ka top
-            ans[i] = s.top();
-            s.push(i);
+    for(int i=0; i<n; i++) {
+        int curr = arr[i];
+        while(s.top() != -1 && arr[s.top()] >= curr) {
+            s.pop();
         }
-        return ans; 
+        //ans is stack ka top
+        ans[i] = s.top();
+        s.push(i);
     }
+    return ans; 
+}
 
 int largestRectangularArea(vector<int> &heights) {
     int n = heights.size();
 
     vector<int> next(n);
-        next = nextSmallerElement2(heights, n);
+    next = nextSmallerElement2(heights, n);
             
-        vector<int> prev(n);
-        prev = prevSmallerElement2(heights, n);
-        
-        int area = INT_MIN;
-        for(int i=0; i<n; i++) {
-            int l = heights[i];
-            
-            if(next[i] == -1) {
-                next[i] = n;
-            }
-             int b = next[i] - prev[i] - 1;
-            int newArea = l*b;
-            area = max(area, newArea);
+    vector<int> prev(n);
+    prev = prevSmallerElement2(heights, n);
+    
+    int area = INT_MIN;
+    for(int i=0; i<n; i++) {
+        int l = heights[i];
+        if(next[i] == -1) {
+            next[i] = n;
         }
-        return area;
+        int b = next[i] - prev[i] - 1;
+        int newArea = l*b;
+        area = max(area, newArea);
+    }
+    return area;
 }
 
 int main() {
@@ -2373,281 +2370,540 @@ int main() {
 } // Now here the TC and SC : O(1).
 
 // ---------------------------------------------------------- LECTURE 60 - Queues --------------------------------------------------------------------------------------------------------->
-// Queue is a type of Data Structure that follow FIFO order, which is first in first out!
-// An good example is line in front of an ATM!
-// Jaise list me head and tail tha.. stacks me top and bottom tha.. queue me front and rare hota hai!
-// So like agar humne maanlo 4 elements push krdiye queue me toh push humesha rare me hoga! and jab hum pop krenge toh vo toh FIFO order me hi pop hoga and pop humesha front se hoga!
-// Starting me front and rare same jagah point kr rhe honge and jaise jaise elements aate jayenge vaise vaise rare shift hota rahega queue ke end tak!
-// Lets use queue using STL...
+// Queue (FIFO Data Structure)!
+// A queue is a linear data structure that follows the FIFO (First In, First Out) principle. This means that the first element added to the queue is the first one to be removed, just like a waiting line at an ATM—the person who comes first is served first!
+// Front & Rear : In a queue, elements are added from the rear (back) and removed from the front.
+//              : Initially, both front and rear point to the same position.
+//              : As elements are added, the rear moves forward to accommodate new elements.
+//              : When elements are removed, they are always removed from the front.
+// Queue vs Other Data Structures : In a list, we have head & tail. In a stack, we have top & bottom. In a queue, we have front & rear.
+// Insertion & Deletion in Queue : Enqueue (Push) → Always happens at the rear. Dequeue (Pop) → Always happens from the front.
+// STL Implementation of Queues!
 #include<iostream>
 #include<queue>
 using namespace std;
 
 int main() {
-    queue<int> q1;
-    // pushing elements into queue!
+    queue<int> q1; // Creating a queue
+
+    // Pushing elements into the queue (Enqueue)
     q1.push(1);
     q1.push(2);
     q1.push(3);
     q1.push(4);
     q1.push(5);
 
-    // Queue front :
-    cout<<"Front of the queue : "<<q1.front()<<endl;
+    cout << "Front of the queue : " << q1.front() << endl; // Checking the front element
+    cout << "Back of the queue : " << q1.back() << endl; // Checking the back element
 
-    // popping elements from queue!
-    q1.pop(); // It will remove 1 from the queue front! so now the front will change!
-    cout<<"Front of the queue : "<<q1.front()<<endl;
+    // Removing front element (Dequeue)
+    q1.pop(); // Removes 1, now front will be 2
+    cout << "Front of the queue after popping first element: " << q1.front() << endl;
 
-    // lets check the size of the queue...
-    cout<<"Size of the queue : "<<q1.size()<<endl;
+    // Checking the size of the queue
+    cout << "Size of the queue : " << q1.size() << endl;
 
-    // lets check that whether the queue is empty or not!
-    if(q1.empty()) {
-        cout<<"Queue is empty!"<<endl;
+    // Checking if the queue is empty
+    if (q1.empty()) {
+        cout << "Queue is empty!" << endl;
+    } else {
+        cout << "Queue is not empty!" << endl;
     }
-    else {
-        cout<<"Queue is not empty!"<<endl;
-    }
 
-    // Printing the whole queue...
-    while(!q1.empty()) {
-        cout<<q1.front()<<" ";
-        q1.pop();
+    // Printing and emptying the queue
+    while (!q1.empty()) {
+        cout << q1.front() << " "; // Print front element
+        q1.pop(); // Remove front element
     }
 }
 
-// Now queue can be implemented using arrays and lists both! so we will implement it using arrays, while revising try implementing it using lists!
-// So firstly we will take an array and pehle toh front and rare dono hi index 0 pr honge and then in the push operation hum pehle toh vhi ki queue full toh nhi ho gyi pehle ye check krenge! and then vhi value push krenge uske andar and rare ko update krdenge! full ki condition ye hogi ki jab rare = n hojaye! and empty ki jab front and rare dono equal hojaye!
-// and then in pop() operation we will check ki queue empty hai ya nhi agar empty hai tab toh koi insert ya remove krne ka sense banta nhi! and agar empty nhi hai toh simply front ko aage badhaa denge!
-// But okay lets see the code...
-#include<iostream>
+// Queue Implementation Using Arrays!
+// A queue can be implemented using both arrays and linked lists. Right now, we will implement it using arrays.
+// Understanding Queue Using Arrays : Initial Setup : We will use an array to store the queue elements.
+//                                                  : Two important pointers : front → Points to the first element of the queue. and rear → Points to the last position where an element was inserted.
+//                                                  : Initially, both front and rear are at index 0.
+//                                  : Push Operation (enqueue) : When inserting an element, we follow these steps...
+//                                                             : Step 1 : Check if the queue is full. A queue is full when rear == n (where n is the size of the array). If full, we cannot insert more elements.
+//                                                             : Step 2 : Insert the new value at rear index.
+//                                                             : Step 3 : Update rear by increasing it.
+//                                  : Pop Operation (dequeue) : When removing an element, we follow these steps...
+//                                                            : Step 1 : Check if the queue is empty. A queue is empty when front == rear (both pointers at the same position). If empty, there’s nothing to remove.
+//                                                            : Step 2 : If not empty, move front forward to remove the element.
+//                                  : Queue Full & Empty Conditions : Queue is Full → rear == n (Array is completely occupied)
+//                                                                  : Queue is Empty → front == rear (No elements left)
+#include <iostream>
 using namespace std;
 
-class Queue {
-    int *arr;
-    int queueFront;
-    int queueRear;
-    int size;
+class QueueUsingArrays {
+    int *arr; // Dynamic array for storing queue elements
+    int queueFront; // Points to the front element of the queue
+    int queueRear; // Points to the next available position for inserting an element
+    int size; // Maximum size of the queue
 
-    public :
-    Queue() { // Jab bhi koi object create hoga iss class se tab hi ye default constructor call hojayega and Queue ko create krdega! 
-        size = 10001;
+public:
+    // Constructor to initialize the queue
+    QueueUsingArrays(int size) {
+        this->size = size;
         arr = new int[size];
         queueFront = 0;
         queueRear = 0;
     }
+
+    // Function to insert an element into the queue (enqueue)
     void enQueue(int data) {
-        if(queueRear == size) { // Queue is already full
-            cout<<"Queue is full";
+        if (queueRear == size) { // Check if the queue is full
+            cout << "Queue is full, cannot insert " << data << endl;
+            return;
         }
-        else {
-            arr[queueRear] = data;
-            queueRear++;
-        }
+        arr[queueRear] = data; // Insert element at rear index
+        queueRear++; // Move rear forward
     }
+
+    // Function to remove an element from the queue (dequeue)
     int deQueue() {
-        if(queueFront == queueRear) { // Queue is already empty
+        if (queueFront == queueRear) { // Check if the queue is empty
+            cout << "Queue is empty, cannot dequeue!" << endl;
             return -1;
         }
-        else {
-            int ans = arr[queueFront];
-            arr[queueFront] = -1;
-            queueFront++;
-            if(queueFront == queueRear) { // So this condition means, like jab ek queue ko hum full krdenge toh rear toh out of the array kisi index pr point kr rha hoga toh suppose humara array agar 10 size ka hai toh and 0-9 indexing hai toh rear toh 10th index pr point kr rha hoga kyunki push krte krte aage badh gya hoga! and jab hum pop krte krte jab last element ko pop krne pr ayenge toh front iss time 9th index pr hoga! and rear 10th index pr! and then jab hum last element ko bhi pop krdenge toh rear and front dono hi 10th index pr ajayenge! but iss condition me aur elements insert nhi ho payenge! toh isliye humne front and rear ko 0 par daaldiya taaki firse elements ko insert kr paaye!
-                queueFront = 0;
-                queueRear = 0;
-            }
-            return ans;
+        int ans = arr[queueFront]; // Get front element
+        arr[queueFront] = -1; // Optional: Mark as removed
+        queueFront++; // Move front forward
+
+        // If queue becomes empty after deletion, reset front and rear
+        if (queueFront == queueRear) {
+            queueFront = 0;
+            queueRear = 0;
         }
+        return ans;
     }
+
+    // Function to get the front element of the queue
     int front() {
-        if(queueFront == queueRear) {
+        if (queueFront == queueRear) { // If queue is empty
+            cout << "Queue is empty!" << endl;
             return -1;
         }
-        else {
-            return arr[queueFront];
-        }
+        return arr[queueFront];
     }
+
+    // Function to check if the queue is empty
     bool empty() {
-        if(queueFront == queueRear) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (queueFront == queueRear);
+    }
+
+    // Function to check the current size of the queue
+    int getSize() {
+        return queueRear - queueFront;
+    }
+
+    // Destructor to free allocated memory
+    ~QueueUsingArrays() {
+        delete[] arr;
     }
 };
 
 int main() {
-    Queue q1;
+    QueueUsingArrays q1(5); // Creating a queue of size 5
+
+    // Enqueue elements
     q1.enQueue(1);
     q1.enQueue(2);
     q1.enQueue(3);
     q1.enQueue(4);
     q1.enQueue(5);
-    // Queue front :
-    cout<<"Front of the queue : "<<q1.front()<<endl;
+    q1.enQueue(6); // This should print "Queue is full"
 
-    // popping elements from queue!
-    q1.deQueue(); // It will remove 1 from the queue front! so now the front will change!
-    cout<<"Front of the queue : "<<q1.front()<<endl;
+    // Display front element
+    cout << "Front of the queue: " << q1.front() << endl;
 
-    // lets check that whether the queue is empty or not!
-    if(q1.empty()) {
-        cout<<"Queue is empty!"<<endl;
+    // Dequeue elements
+    q1.deQueue(); // Removes 1
+    cout << "Front of the queue after dequeue: " << q1.front() << endl;
+
+    // Checking if the queue is empty
+    if (q1.empty()) {
+        cout << "Queue is empty!" << endl;
+    } else {
+        cout << "Queue is not empty!" << endl;
     }
-    else {
-        cout<<"Queue is not empty!"<<endl;
-    }
 
-    // Printing the whole queue...
-    while(!q1.empty()) {
-        cout<<q1.front()<<" ";
+    // Printing and emptying the whole queue
+    cout << "Queue elements: ";
+    while (!q1.empty()) {
+        cout << q1.front() << " ";
         q1.deQueue();
     }
-} // TC : O(1)
+    cout << endl;
 
-// Circular Queue!
-// So yahaa ye hota hai ki suppose you have an array with size 6 and usme elements insert krte gye! maanlo at some point in time, humara front index 0 pr hai! and rear index 4 pr hai! and now humne ab pop krdiya! toh front humara index 1 pr ajayega! and then again pop krdiya! toh ab front index 2 pr ajayega!
-// So normal queue me kya hota tha ki agar hum koi aur element push krenge toh vo rear pr jaata tha and rear array ke size ke bahar jaake kisi imaginary 6th index ko point kr rha hota tha! but circular queue me aisa nhi hota hai iss case me jab hum last element push krenge toh rear imaginary index pr jaane ke bajaye seedha 0th index pr chalaa jayega! and then vahaa se push hona shuru hoga!
-// So yaha ajo changes honge vo mostly enQueue me hi honge! so kya kya krna hoga like... pehle toh front and rear = -1 rahenge! and then pehle hum check krenge ki kya front == 0 hai && rear == size-1 hai! agar aisa hai means queue full hai! also agar rear == (front-1)%(size-1) hai tab bhi it means ki queue full hai! means koi bhi insertion possible nhi hai!
-// Then, agar front == -1 hai toh means abhi hum apna first element insert kr rhe hai! toh iss case me hum front and rear ko = 0 krdenge! then, arr[rear] = value; now agar in other case agar rear == size-1 means agar rear end me hai! and front != 0 means agar front 0 pr nhi hai toh! in that case, rear = 0 krdo and arr[rear] = value krdo! and lastly agar rear++ krdo and arr[rear] = val; daaldo! so this will be our enQueue condition!
-// Now, deQueue krne ke liye we will first check ki kya queue kahin empty toh nhi hai! for that we will check ki kya front and rear == -1 hai ya nhi! then, if the queue contains single element (at the starting of the queue) and we want to remove even that one, then in that case jaisa humne enQueue krte time kiya tha ki front = rear = 0 krdiya tha single element ke case me, toh bss vhi krenge ki front and rear kp vapis -1 krdenge! and then agar maanlo pop krte krte hum array ke end me aagye, then in that case simply front = 0 krdena taaki firse elements ko future me insert kr paaye! then in the last case agar aisa kuch hi hai toh simply front++ krdena and return krdena jo element remove kiya hai!
-// Rest everything is same! lets implement it...
-#include<iostream>
+    // Checking if queue is empty after processing
+    if (q1.empty()) {
+        cout << "Queue is now empty!" << endl;
+    }
+
+    return 0;
+} // Time Complexity : O(1).
+
+// Queue Implementation Using Linked List!
+// Unlike an array-based queue, a linked list-based queue does not have a fixed size, so it can grow dynamically as needed.
+// Uses nodes (instead of an array) to store elements.
+// Does not require shifting elements (unlike an array, where shifting might be required after deletions).
+// Understanding Queue Using Arrays : Each node contains : data → stores the value. and next → points to the next node in the queue.
+//                                  : We maintain two pointers : front → Points to the first element of the queue. and rear → Points to the last element of the queue.
+//                                  : Operations : enQueue(data) : Insert at the rear of the queue.
+//                                               : deQueue() : Remove from the front of the queue.
+//                                               : front() : Get the front element.
+//                                               : empty() : Check if the queue is empty.
+#include <iostream>
 using namespace std;
 
-class CircularQueue{
-    int *arr;
-    int front;
-    int rear;
-    int size;
-    
+// Node structure for the linked list queue
+class NodeforQueue {
+public:
+    int data;
+    NodeforQueue* next;
+
+    NodeforQueue(int data) { // Constructor to initialize a node
+        this->data = data;
+        this->next = nullptr;
+    }
+};
+
+// Queue class using a linked list
+class QueueUsingLL {
+    NodeforQueue* front; // Points to the front element
+    NodeforQueue* rear;  // Points to the last element
+    int count;   // Stores the number of elements in the queue
+
     public:
-    // Initialize your data structure.
-    CircularQueue(int n){
-        size = n;
-        arr = new int[size];
-        front = rear = -1;
+    // Constructor to initialize an empty queue
+    QueueUsingLL() {
+        front = nullptr;
+        rear = nullptr;
+        count = 0;
     }
 
-    // Enqueues 'X' into the queue. Returns true if it gets pushed into the stack, and false otherwise.
-    bool enqueue(int value){
-        //to check whether queue is full
-        if( (front == 0 && rear == size-1) || (rear == (front-1)%(size-1) ) ) {
-            //cout << "Queue is Full";
-            return false;
+    // Function to insert (enqueue) an element at the rear of the queue
+    void enQueue(int data) {
+        NodeforQueue* newNode = new NodeforQueue(data); // Create a new node
+        if (rear == nullptr) { // If queue is empty, both front and rear will point to newNode
+            front = rear = newNode;
+        } else {
+            rear->next = newNode; // Link the last node to the new node
+            rear = newNode; // Move rear to the new node
         }
-        else if(front == -1) //first element to push
-        {
-			front = rear = 0;
-            
-        }
-        else if(rear == size-1 && front != 0) {
-            rear = 0; //to maintain cyclic nature
-        }
-        else
-        {//normal flow
-            rear++;
-        }
-        //push inside the queue
-        arr[rear] = value;
-        
-        return true;
+        count++; // Increment queue size
     }
 
-    // Dequeues top element from queue. Returns -1 if the stack is empty, otherwise returns the popped element.
-    int dequeue(){
-        if(front == -1){//to check queue is empty
-            //cout << "Queue is Empty " << endl;
+    // Function to remove (dequeue) an element from the front
+    int deQueue() {
+        if (front == nullptr) { // If queue is empty
+            cout << "Queue is empty! Cannot dequeue." << endl;
             return -1;
         }
-        int ans = arr[front];
-        arr[front] = -1;
-        if(front == rear) { //single element is present
-            front = rear = -1;
+        NodeforQueue* temp = front; // Store the front node
+        int value = temp->data; // Get the data of the front node
+        front = front->next; // Move front to the next node
+
+        if (front == nullptr) { // If queue becomes empty after deletion
+            rear = nullptr;
         }
-        else if(front == size - 1) {
-            front = 0; //to maintain cyclic nature
+
+        delete temp; // Free memory
+        count--; // Decrement queue size
+        return value;
+    }
+
+    // Function to get the front element of the queue
+    int getFront() {
+        if (front == nullptr) {
+            cout << "Queue is empty!" << endl;
+            return -1;
         }
-        else
-        {//normal flow
-            front++;
+        return front->data;
+    }
+
+    // Function to get the rear (back) element of the queue
+    int back() {
+        if (rear == nullptr) {
+            cout << "Queue is empty!" << endl;
+            return -1;
         }
-        return ans;
+        return rear->data;
+    }
+
+    // Function to get the size of the queue
+    int size() {
+        return count;
+    }
+
+    // Function to check if the queue is empty
+    bool empty() {
+        return front == nullptr;
+    }
+
+    // Destructor to free memory when the queue object is destroyed
+    ~QueueUsingLL() {
+        while (!empty()) {
+            deQueue();
+        }
     }
 };
 
 int main() {
-    CircularQueue q1(5);
-    q1.enqueue(1);
-    q1.enqueue(2);
-    q1.enqueue(3);
-    q1.enqueue(4);
-    q1.enqueue(5);
-    cout<<"Removed element : "<<q1.dequeue()<<endl; // It removed 1 from the circular queue!
-} // So this is the logic of the implementation of circular queue! yahaa jo humne kiya hai that is from the question perspective but while actually implementing the circular queue hume krna basically yhi hai! with some changes in it!
+    QueueUsingLL q;
+    q.enQueue(10);
+    q.enQueue(20);
+    q.enQueue(30);
+    q.enQueue(40);
 
-// Now there are two types of queue, one is input restricted queue! jisme input restricted rehta hai and means hum kisi ek hi side se input kr sakte hai! but output dono side se possible hota hai!, so in this queue, there is a push_back() operation which pushes element at the rear end! and a pop_back() and pop_front() operation, where it pops elements from the front or back!
-// Now there is also a queue which is called output restricted queue! isme ulta hota hai! output restricted rehta hai means hum sirf front se hi pop kr sakte hai! and push hum dono side se kr sakte hai! means there are pop_front() function hota hai jo front se pop krta hai! and push_front() and push_back() operations hote hai jo front and rear end se push krte hai elements ko!
-// Another is double ended queue! which says ki hum kahin se bhi pop ya push kr sakte hai queue me!
+    // Display front and back elements
+    cout << "Front of the queue: " << q.getFront() << endl;
+    cout << "Back of the queue: " << q.back() << endl;
 
-// Doubly Ended Queue :
-// These queues are used in CPU Scheduling like what we have studied in OS
-// Now this doubly ended queue is possible through STL and through basic implementation also!
-// In Implementation what we do is, that pehle toh hum ek front and ek rear bnaa dete hai! and then dekha jaaye toh ye circular queue ki tarah hi hai nss ye antar hai ki yahaa push ke do operations hai and pop ke bhi! front se and rear se dono!
-// And isme hum 4 operations create krenge, push_front, push_rear, pop_front and pop_back.. inn sab me se humne push_rear and pop_front toh humne dekh li thi toh bss usko hi yahaa bhi use krenge!
-// So lets talk about push_front and pop_back...
-// Push_front : Here hum kuch inn given conditions me insert krenge... Pehle toh front and rear ko = -1 kiya! and now check kiya ki queue full hai ki nhi! now, agar nhi hai toh insert kr sakte hai vrna nhi!
-//            : Now in case of insertion of first element, iski condition toh ye hogi ki front = -1 hona chahiye which shows ki queue abhi empty tha and ye pehla element hai jo hum insert krne jaa rhe hai! and iss time front and rear dono = 0 hojayenge! and vo element insert jojayega jo krna chah rhe the!
-//            : But now after first element insertion agar hum firse push_front use krenge toh jaise hum normal push jo hota tha that was push_back/rear jisme hum insert krke front++ krdete the! but iss case me as hum push_front kr rhe hai toh hum front-- krenge! and iss case me jahaa abhi hum first element hi insert kr rhe hai, yahaa se hum front ko seedha n-1 pr lejayenge! kyunki yahaa front-- krne pr array se hi bahar chalaa jayega front! isliye hum push_front krne pr front ko next insertion ke liye seedha n-1 pr lejayenge! kyunki logically push_front ka mtlb hi yhi hua ki aage se push kr rhe ho! and isse vo circular queue bhi maintain rahegi!
-//            : Then, kastly in normal cases me normal push hoga and front-- hota rahega!
-// Pop_back : Again vahi ki agar queue hi empty hai toh no pop!
-//          : And agar sirf single element hai queue me toh simply front and rear ko -1 set krdena hoga!
-//          : Agar first element of the queue ko pop_back se remove krna hai toh simply rear ko n-1 pr le jao, jaise normally pop jo hota hai vo pop_front hota hai usme rear aage badhta jaata hai mtlb rear++ hota jaata hai but yahaa pop_rear/back ho rha hai means isme rear-- hota jayega! and agar first element ko pop krna hai toh -- toh ho nhi sakta vrna vo out of range chalaa jayega and cyclic nature maintain nhi rahega! toh rear = n-1 hojayega!
-//          : And then lastly baaki normal conditions me simply rear-- hota rahega
+    // Display queue size
+    cout << "Queue size: " << q.size() << endl;
 
-// Now the above is the implementation of the doubly ended queue! but lets first try STL of it!
+    // Dequeue elements
+    q.deQueue();
+    cout << "Front after dequeue: " << q.getFront() << endl;
+    cout << "Back after dequeue: " << q.back() << endl;
+    cout << "Queue size after dequeue: " << q.size() << endl;
+
+    // Checking if the queue is empty
+    if (q.empty()) {
+        cout << "Queue is empty!" << endl;
+    } else {
+        cout << "Queue is not empty!" << endl;
+    }
+
+    // Printing and emptying the whole queue
+    cout << "Queue elements: ";
+    while (!q.empty()) {
+        cout << q.getFront() << " ";
+        q.deQueue();
+    }
+    cout << endl;
+
+    // Checking size after emptying
+    cout << "Queue size after emptying: " << q.size() << endl;
+
+    return 0;
+}
+
+// Circular Queues!
+// A Circular Queue is a special type of queue where, instead of reaching the end of an array and stopping, it wraps around to the beginning.
+// This solves the issue of wasting space in a normal queue when elements are dequeued from the front.
+// Key Differences from a Normal Queue : In a normal queue, once the rear reaches the last index, no more insertions are possible, even if there is space at the beginning.
+//                                     : In a circular queue, when the rear reaches the last index, it wraps around to index 0 (if space is available).
+// Understanding Circular Queue : Insertion : Step 1 : Check if the queue is full : If (front == 0 && rear == size-1) → Queue is full. OR if (rear == (front - 1) % (size - 1)) → Queue is full.
+//                                          : Step 2 : If the queue is empty (front == -1), set front = rear = 0 and insert the element.
+//                                          : Step 3 : If rear == size - 1 (end of the array) but front ≠ 0, set rear = 0 and insert the element at index 0 (wrap around).
+//                                          : Step 4 : Otherwise, just do rear++ and insert the element.
+//                              : Deletion : Step 1 : Check if the queue is empty (front == -1 && rear == -1).
+//                                         : Step 2 : If there's only one element left (front == rear), after removing it, set front = rear = -1.
+//                                         : Step 3 : If front is at the last index (size-1), wrap it to front = 0.
+//                                         : Step 4 : Otherwise, just do front++.
+// Why is Circular Queue Better : Efficiently uses space by reusing emptied slots. Prevents unnecessary shifting of elements. Works like a circular track, improving performance.
+// Implementation!
+#include <iostream>
+using namespace std;
+
+class CircularQueue {
+    int *arr; // Array to store elements
+    int front; // Points to the first element
+    int rear;  // Points to the last element
+    int size;  // Maximum size of the queue
+
+public:
+    // Constructor to initialize the queue
+    CircularQueue(int n) {
+        size = n;
+        arr = new int[size];
+        front = rear = -1; // Initially, queue is empty
+    }
+
+    // Destructor to free memory
+    ~CircularQueue() {
+        delete[] arr;
+    }
+
+    // Function to check if the queue is full
+    bool isFull() {
+        return ((front == 0 && rear == size - 1) || (rear == (front - 1) % (size - 1)));
+    }
+
+    // Function to check if the queue is empty
+    bool isEmpty() {
+        return (front == -1);
+    }
+
+    // Function to insert an element into the queue
+    bool enqueue(int value) {
+        if (isFull()) { // If queue is full, return false
+            cout << "Queue is Full. Cannot insert " << value << endl;
+            return false;
+        }
+
+        if (isEmpty()) { // If inserting the first element
+            front = rear = 0;
+        }
+        else if (rear == size - 1 && front != 0) { // Circular condition: wrap around to 0
+            rear = 0;
+        }
+        else { // Normal case: increment rear
+            rear++;
+        }
+
+        arr[rear] = value; // Insert the element
+        cout << "Inserted: " << value << endl;
+        return true;
+    }
+
+    // Function to remove an element from the queue
+    int dequeue() {
+        if (isEmpty()) { // If queue is empty, return -1
+            cout << "Queue is Empty. Cannot dequeue." << endl;
+            return -1;
+        }
+
+        int removedElement = arr[front]; // Element to be removed
+        arr[front] = -1; // Mark it as removed
+
+        if (front == rear) { // If single element was present, reset queue
+            front = rear = -1;
+        }
+        else if (front == size - 1) { // Circular condition: wrap around to 0
+            front = 0;
+        }
+        else { // Normal case: increment front
+            front++;
+        }
+
+        cout << "Removed: " << removedElement << endl;
+        return removedElement;
+    }
+
+    // Function to display the queue elements
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+
+        cout << "Queue elements: ";
+        if (rear >= front) { // Case when rear is ahead of front
+            for (int i = front; i <= rear; i++)
+                cout << arr[i] << " ";
+        }
+        else { // Circular case: print from front to size-1 and 0 to rear
+            for (int i = front; i < size; i++)
+                cout << arr[i] << " ";
+            for (int i = 0; i <= rear; i++)
+                cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q(5); // Create a Circular Queue of size 5
+
+    // Enqueue elements
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50);
+
+    q.display(); // Display queue contents
+
+    // Trying to insert into a full queue
+    q.enqueue(60);
+
+    // Dequeue some elements
+    q.dequeue();
+    q.dequeue();
+
+    q.display(); // Display queue after deletions
+
+    // Inserting again after removing elements
+    q.enqueue(60);
+    q.enqueue(70);
+
+    q.display(); // Display final queue
+    return 0;
+}
+
+// Circular Queue and its Variants!
+// Circular Queue : A Circular Queue is a special type of queue where, The last position is connected to the first position, forming a circle. It avoids wastage of space when elements are removed. It uses modular arithmetic to maintain cyclic behavior.
+//                : Operations in Circular Queue : enqueue(value) → Inserts an element at the rear. dequeue() → Removes an element from the front. Circular Movement : If the rear reaches the last position, it wraps around to the first position.
+// Input Restricted Queue : An Input Restricted Queue allows insertion at only one end (rear), but deletion from both ends (front & rear).
+//                        : Operations in Input Restricted Queue : push_back(value) → Insert an element at the rear (only way to insert).
+//                                                               : pop_front() → Remove an element from the front.
+//                                                               : pop_back() → Remove an element from the rear.
+//                                                               : Insertion at the front is not allowed.
+//                        : Use Case : Used when input should be regulated from one side only, but processing can be done from either end.
+// Output Restricted Queue : An Output Restricted Queue allows removal of elements only from the front, but insertion at both ends (front & rear).
+//                         : Operations in Output Restricted Queue : push_back(value) → Insert an element at the rear.
+//                                                                 : push_front(value) → Insert an element at the front.
+//                                                                 : pop_front() → Remove an element from the front (only way to remove).
+//                                                                 : Deletion from the rear is not allowed.
+//                                                                 : Use Case : Used when only the front is allowed for processing (removal), but elements can be added from both ends.
+// Double-Ended Queue (Deque) : A Double-Ended Queue (Deque) is the most flexible queue, where insertion and deletion are allowed from both ends.
+//                            : Operations in Deque : push_back(value) → Insert at the rear.
+//                                                  : push_front(value) → Insert at the front.
+//                                                  : pop_back() → Remove from the rear.
+//                                                  : pop_front() → Remove from the front.
+//                            : Use Case : Used in scheduling, undo operations, and efficient caching mechanisms (like LRU Cache).
+
+// Double Ended Queue!
+// A Deque (Double-Ended Queue) is a queue where insertion and deletion can happen from both ends (front and rear). It is useful in CPU Scheduling, Sliding Window problems, and OS process management.
+// Operations in Deque : push_front() → Inserts an element at the front, push_rear() → Inserts an element at the rear, pop_front() → Removes an element from the front and pop_back() → Removes an element from the rear.
+// Key Differences from Circular Queue : In Circular Queue, we only have enqueue() (rear insert) and dequeue() (front remove). In Deque, we have two ways to insert and delete elements.
+//                                     : push_front() Logic : If the queue is empty, set front = rear = 0.
+//                                                          : If front == 0, shift front to n-1 (circular nature). Else, simply front-- and insert.
+//                                     : pop_back() Logic : If only one element is present, reset front = rear = -1.
+//                                                        : If rear == 0, shift rear to n-1 (circular nature). Else, simply rear-- and remove.
+// STL Implementation!
 #include<iostream>
 #include<queue>
 using namespace std;
 
 int main() {
-    deque<int> q1; // Doubly ended queue ke liye library vhi hoti hai queue vaali hi bss isme deque keyword use krte hai doubly ended queue bnane ke liye!
-    q1.push_front(12); // Here front = 0 hojayega and array me ek single element push hojayega! which is 12
-    q1.push_back(14); // Isme humne back se push kiya hai toh yaha simply front ek aage badh jayega and front = 1 hojayega and 14 push hojayega!
+    deque<int> q1; // Deque container from STL
 
-    cout<<"Front of the queue : "<<q1.front()<<endl; // Will print 12
-    cout<<"Back of the queue : "<<q1.back()<<endl; // Will print 14
+    q1.push_front(12); // Insert 12 at the front
+    q1.push_back(14);  // Insert 14 at the rear
 
-    q1.pop_front(); // Ye array me se 12 hataa dega! and front ek aage badh jayega! and iss time front and rear dono hi 14 pr honge! and array will something like this, [  | 14 |   |   |....], toh first place khaali hai! and sirf 1st index pr ek value padi hai 14
-    cout<<"Front of the queue : "<<q1.front()<<endl; // Will print 14
-    cout<<"Back of the queue : "<<q1.back()<<endl; // Will print 14
-    // both will print same values!
+    cout<<"Front of the queue: "<<q1.front()<<endl; // Prints 12
+    cout<<"Back of the queue: "<<q1.back()<<endl;   // Prints 14
 
-    q1.pop_back(); 
-    // q1.pop_front(); // Dono me se koi bhi use kro vo 14 vaala element pop ho hi jayega! its just about ki hum front and rear ko correct way me idhar udhar ghumaye!
+    q1.pop_front(); // Removes 12, leaving only 14
+
+    cout<<"Front of the queue: "<<q1.front()<<endl; // Prints 14
+    cout<<"Back of the queue: "<<q1.back()<<endl;   // Prints 14
+
+    q1.pop_back(); // Removes 14, making the queue empty
 
     if(q1.empty()) {
         cout<<"Queue empty!";
-    }
-    else {
+    } else {
         cout<<"Queue not empty!";
     }
 }
 
-// Now, lets implement it...
+// Class Implementation!
 #include<iostream>
 using namespace std;
 
 class Deque {
-    int *arr;
-    int front;
-    int rear;
-    int size;
+    int *arr;  // Array to store deque elements
+    int front; // Front index
+    int rear;  // Rear index
+    int size;  // Maximum capacity
 
-    public :
+public:
+    // Constructor to initialize deque of given size
     Deque(int n) {
         size = n;
         arr = new int[n];
@@ -2655,17 +2911,20 @@ class Deque {
         rear = -1;
     }
 
+    // Insert an element at the front
     bool push_front(int x) {
-        // Checking whether the queue is empty or not...
-        if( (front == 0 && rear == size-1) || (rear == (front-1)%(size-1) ) ) {
-            return false;
-        }
-        else if(front == -1) { // Insertion of first element
+        // Check if deque is full
+        if (isFull()) return false;
+
+        // If deque is empty, insert first element
+        if (front == -1) {
             front = rear = 0;
         }
-        else if(front == 0 && rear != size-1) {
-            front = size-1;
+        // If front is at first position, move it to end (circular behavior)
+        else if (front == 0) {
+            front = size - 1;
         }
+        // Normal case: Move front backward
         else {
             front--;
         }
@@ -2673,17 +2932,20 @@ class Deque {
         return true;
     }
 
+    // Insert an element at the rear
     bool push_rear(int x) {
-        // Checking whether the queue is empty or not...
-        if( (front == 0 && rear == size-1) || (rear == (front-1)%(size-1) ) ) {
-            return false;
-        }
-        else if(front == -1) { // Insertion of first element
+        // Check if deque is full
+        if (isFull()) return false;
+
+        // If deque is empty, insert first element
+        if (front == -1) {
             front = rear = 0;
         }
-        else if(rear == size-1 && front != 0) {
+        // If rear is at the last position, move it to start (circular behavior)
+        else if (rear == size - 1) {
             rear = 0;
         }
+        // Normal case: Move rear forward
         else {
             rear++;
         }
@@ -2691,102 +2953,104 @@ class Deque {
         return true;
     }
 
+    // Remove and return an element from the front
     int pop_front() {
-        if(front == -1){ //to check queue is empty
-            //cout << "Queue is Empty " << endl;
-            return -1;
-        }
+        // Check if deque is empty
+        if (isEmpty()) return -1;
+
         int ans = arr[front];
         arr[front] = -1;
-        if(front == rear) { //single element is present
+
+        // If only one element was present, reset deque
+        if (front == rear) {
             front = rear = -1;
         }
-        else if(front == size - 1) {
-            front = 0; //to maintain cyclic nature
+        // If front reaches the last position, wrap around
+        else if (front == size - 1) {
+            front = 0;
         }
-        else
-        {//normal flow
+        // Normal case: Move front forward
+        else {
             front++;
         }
         return ans;
     }
 
+    // Remove and return an element from the rear
     int pop_rear() {
-        if(front == -1){//to check queue is empty
-            //cout << "Queue is Empty " << endl;
-            return -1;
-        }
+        // Check if deque is empty
+        if (isEmpty()) return -1;
+
         int ans = arr[rear];
         arr[rear] = -1;
-        if(front == rear) { //single element is present
+
+        // If only one element was present, reset deque
+        if (front == rear) {
             front = rear = -1;
         }
-        else if(rear == 0) {
-            rear = size-1; //to maintain cyclic nature
+        // If rear is at the first position, move it to the end
+        else if (rear == 0) {
+            rear = size - 1;
         }
-        else
-        {//normal flow
+        // Normal case: Move rear backward
+        else {
             rear--;
         }
         return ans;
     }
 
+    // Get the front element without removing it
     int getFront() {
-        if(isEmpty()) {
-            return -1;
-        }
-        return arr[front];
+        return isEmpty() ? -1 : arr[front];
     }
 
+    // Get the rear element without removing it
     int getRear() {
-        if(isEmpty()) {
-            return -1;
-        }
-        return arr[rear];
+        return isEmpty() ? -1 : arr[rear];
     }
 
+    // Check if deque is empty
     bool isEmpty() {
-        if(front == -1) {
-            return true;
-        }
-        return false;
+        return (front == -1);
     }
 
+    // Check if deque is full
     bool isFull() {
-        if((front == 0 && rear == size-1) || (front != 0 && rear == (front-1)%(size-1) )) {
-            return true;
-        }
-        return false;
+        return ((front == 0 && rear == size - 1) || (front != 0 && rear == (front - 1) % size));
     }
 };
 
+// Main function to test deque operations
 int main() {
-    Deque q1(10);
-    q1.push_front(12);
-    q1.push_rear(14);
+    Deque q1(10); // Create a deque of size 10
 
-    cout<<"Front of the queue : "<<q1.getFront()<<endl; // Will print 12
-    cout<<"Back of the queue : "<<q1.getRear()<<endl; // Will print 14
+    q1.push_front(12); // Insert 12 at the front
+    q1.push_rear(14);  // Insert 14 at the rear
 
-    q1.pop_front(); // Ye array me se 12 hataa dega! and front ek aage badh jayega! and iss time front and rear dono hi 14 pr honge! and array will something like this, [  | 14 |   |   |....], toh first place khaali hai! and sirf 1st index pr ek value padi hai 14
-    cout<<"Front of the queue : "<<q1.getFront()<<endl; // Will print 14
-    cout<<"Back of the queue : "<<q1.getRear()<<endl; // Will print 14
-    // both will print same values!
+    cout<<"Front of the queue:"<<q1.getFront()<<endl; // Prints 12
+    cout<<"Back of the queue: "<<q1.getRear()<<endl;   // Prints 14
 
-    q1.pop_rear(); 
-    // q1.pop_front(); // Dono me se koi bhi use kro vo 14 vaala element pop ho hi jayega! its just about ki hum front and rear ko correct way me idhar udhar ghumaye!
+    q1.pop_front(); // Removes 12, front moves forward
 
-    if(q1.isEmpty()) {
-        cout<<"Queue empty!";
+    cout<<"Front of the queue: "<<q1.getFront()<<endl; // Prints 14
+    cout<<"Back of the queue: "<<q1.getRear()<<endl;   // Prints 14
+
+    q1.pop_rear(); // Removes 14, making the queue empty
+
+    // Check if queue is empty
+    if (q1.isEmpty()) {
+        cout<<"Queue is empty!"<<endl;
     }
     else {
-        cout<<"Queue not empty!";
+        cout<<"Queue is not empty!"<<endl;
     }
 
-    if(q1.isFull()) {
-        cout<<"Queue is Full!";
+    // Check if queue is full
+    if (q1.isFull()) {
+        cout<<"Queue is full!"<<endl;
     }
     else {
-        cout<<"Queue is not Full!";
+        cout<<"Queue is not full!"<<endl;
     }
-} // Explaination is same as STL one!
+    return 0;
+}
