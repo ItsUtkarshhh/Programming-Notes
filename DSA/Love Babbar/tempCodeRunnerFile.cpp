@@ -1,36 +1,49 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-int printArray(int arr[], int n) {
-    for(int i = 0; i<n; i++) {
-        cout<<arr[i]<<" ";
+int partition(int arr[], int s, int e) {
+    int pivot = arr[s];
+    int cnt = 0;
+    for (int i = s + 1; i <= e; i++) {
+        if (arr[i] <= pivot) {
+            cnt++;
+        }
     }
+    int pivotIndex = s + cnt; // Place pivot at right position
+    swap(arr[pivotIndex], arr[s]);
+
+    // Sorting Left and Right sub arrays!
+    int i = s, j = e;
+
+    while (i < pivotIndex && j > pivotIndex) {
+        while (arr[i] <= pivot) {
+            i++;
+        }
+        while (arr[j] > pivot) {
+            j--;
+        }
+        if (i < pivotIndex && j > pivotIndex) {
+            swap(arr[i++], arr[j--]);
+        }
+    }
+    return pivotIndex;
 }
 
-int bubbleSort(int arr[], int n) {
-    for(int i = 1; i<n; i++) {
-        bool swapped = false;
-        for(int j = 0; j<n-i; j++) {
-            if(arr[j]>arr[j+1]) {
-                swap(arr[j], arr[j+1]);
-                swapped = true;
-            }
-        }
-        if(swapped = false) {
-            // Agar yahaa ye condition sahi hojaati hai means koi element swap nhi hua hai means ye array already sorted hai means hum yahaa pr loop exit kr sakte hai!
-            break;
-        }
-    }
-    printArray(arr, n);
+// So yahaa toh humne recursion call krdiye! ki jo cheez humne partition function me kri hai pivot element ke saath original array me vhi same cheez tum baaki saari jo sub arrays banegi unn sab me krdo thru recursion!
+void quickSort(int arr[], int s, int e) {
+    if (s >= e) return;
+    int p = partition(arr, s, e); // For partitioning and sorting!
+    quickSort(arr, s, p - 1); // Sorting Left sub array!
+    quickSort(arr, p + 1, e); // Sorting Right sub array!
 }
 
 int main() {
-    int size;
-    cin>>size;
-
-    int arr1[500];
-    for(int i = 0; i<size; i++) {
-        cin>>arr1[i];
+    int arr[5] = {3, 1, 4, 5, 2};
+    int n = 5;
+    quickSort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
     }
-    bubbleSort(arr1, size);
+    cout << endl;
+    return 0;
 }

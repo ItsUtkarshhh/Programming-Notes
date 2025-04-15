@@ -8,26 +8,44 @@ void printArray(int arr[], int n) {
     cout<<endl;
 }
 
-void insertionSortRec(int arr[], int i, int n) {
-    if(i == n) {
+int partition(int arr[], int s, int e) {
+    int pivot = arr[s];
+    int count = 0;
+    for(int i = s+1; i<e; i++) {
+        if(arr[i] <= pivot) {
+            count++;
+        }
+    }
+
+    int pivotIndex = s + count;
+    swap(arr[s], arr[pivotIndex]);
+
+    int i = s; int j = e-1;
+    while(i < pivotIndex && j > pivotIndex) {
+        while(arr[i] <= arr[pivotIndex]) {
+            i++;
+        }
+        while(arr[j] > arr[pivotIndex]) {
+            j--;
+        }
+        if(i < pivotIndex && j > pivotIndex) {
+            swap(arr[i++], arr[j--]);
+        }
+    }
+    return pivotIndex;
+}
+
+void quickSort(int arr[], int s, int e) {
+    if(s >= e-1) {
         return;
     }
-    int temp = arr[i];
-    int j;
-    for(j = i-1; j>=0; j--) {
-        if(arr[j] > temp) {
-            arr[j+1] = arr[j];
-        }
-        else {
-            break;
-        }
-    }
-    arr[j+1] = temp;
-    insertionSortRec(arr, i+1, n);
+    int p = partition(arr, s, e);
+    quickSort(arr, s, p);
+    quickSort(arr, p+1, e);
 }
 
 int main() {
     int arr[10] = {5,4,6,10,62,34,12,3,2,1};
-    insertionSortRec(arr, 0, 10);
-    printArray(arr,10);
+    quickSort(arr, 0, 10);
+    printArray(arr, 10);
 }
