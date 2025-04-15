@@ -906,16 +906,16 @@ int printArray(int arr[], int n) {
     }
 }
 
-int BubbleSort(int arr[], int n) {
+int bubbleSort(int arr[], int n) {
     for(int i = 1; i<n; i++) {
-        int swapped = false;
+        bool swapped = false;
         for(int j = 0; j<n-i; j++) {
             if(arr[j]>arr[j+1]) {
                 swap(arr[j], arr[j+1]);
                 swapped = true;
             }
         }
-        if(swapped = false) {
+        if(swapped == false) {
             // Agar yahaa ye condition sahi hojaati hai means koi element swap nhi hua hai means ye array already sorted hai means hum yahaa pr loop exit kr sakte hai!
             break;
         }
@@ -988,7 +988,7 @@ int printArray(int arr[], int n) {
     }
 }
 
-int insertionSort1(int arr[], int n) {
+void insertionSort1(int arr[], int n) {
     int j;
     for(int i = 1; i<n; i++) { // Ye loop hum i = 1 se chalaa he hai reason being, hum rounds ke according iterate kr rhe hai! and also kyunki hum first element ko toh sorted hi man rhe hai na!
         int temp = arr[i];
@@ -1015,8 +1015,6 @@ int main() {
         cin>>arr1[i];
     }
     insertionSort1(arr1, size);
-    cout<<endl;
-    insertionSort2(arr1, size);
 }
 // Some characteristics of this algorithms are : It is very Adaptable, It is a stable Algorithm and yes it works well when size of the array is small! or the array is partially sorted tab zyada achi performance aati hai!
 // Time Complexity : Here it will be O(n^2), kyunki again becoz of the same reason as of above!
