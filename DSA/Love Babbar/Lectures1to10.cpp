@@ -35,7 +35,7 @@
 // Preprocessing -> Compilation -> Assembler -> Linker
 // Preprocessor : Isme ye hota hai ki jo bhi pre processor directives hote hai, like file inclusion, macros expansion and all! ye sab hota hai like jo bhi hum likhte hai #include me vo saari directories and files include hoti hai file me! and saare macros expand hote hai like #define and all! and then iss step me humari ".cpp" file ".i" or ".ii" file me convert hoti hai!
 // Compilation : Isme jo humari preprocessed file hai vo ".i" se ".s" me convert hoti hai! and jo humara C++ ka code hai vo assembly code me convert hota hai! also iss process me saare errors and all check hote hai!
-// Assembler : Isme jo humari compiled file hoti hai ".s" vaali ye ".o" object file me convert hoti hai! means isme jo assembly code hai vo machine language code me convert hota hai! and the object file contains machine-level code, along with other information necessary for linking. 
+// Assembler : Isme jo humari compiled file hoti hai ".s" vaali ye ".o" object file me convert hoti hai! means isme jo assembly code hai vo machine language code me convert hota hai! and the object file contains machine-level code, along with other information necessary for linking.
 // Linker : Isme saari object files include hoti hai and then ek final ".exe" file banti hai, jo final executable file hoti hai!
 
 #include <iostream>
@@ -188,7 +188,7 @@ int main() {
     // Hence, When we print an unsigned integer, the leftmost bit is NOT treated as a sign bit. The entire binary sequence is read as a positive number.
     // In this case, 11111111 11111111 11111111 10000101 is interpreted as: 2^32 - 123 = 4,294,967,173 (which is why we get this output).
     // Unsigned Equivalent = 2^32 - 123, in more general form : 2^32 - |X| where, X is an unsigned value passed! (This formula is not mathematically determined, its is just analysed that this happens!)
-    // What actually happens is : 1 * 2^31 + 1 * 2^30 + 1 * 2^29 + 1 * 2^28 ... 1 * 2^32 + 0 * 2^32 + 1 * 2^32. (For 11111111 11111111 11111111 10000101)
+    // What actually happens is : 1 * 2^31 + 1 * 2^30 + 1 * 2^29 + ... + 1 * 2^7 + 0 * 2^6 + 1 * 2^2 + 0 * 2^1 + 1 * 2^0 (For 11111111 11111111 11111111 10000101)
 
     // Summary :
     // - Negative numbers are always stored in memory using 2's complement representation.
@@ -330,7 +330,7 @@ int main() {
 }
 
 // Question 2 : Find the GCD of 2 numbers input by the user!
-// Method 1, Brute Force Method (Simple + Easy + Logical Approach) :
+// Method 1: Brute Force Method (Simple + Easy + Logical Approach) :
 #include<iostream>
 using namespace std;
 
@@ -649,32 +649,13 @@ int main() {
     cin>>n;
     int i = 1;
     while(i<=n) {
-        int j = 1;
-        while(j<=i) {
-            cout<<i-j+1;
+        int j = 0;
+        while(j<i) {
+            cout<<i-j<<" ";
             j++;
         }
         cout<<endl;
         i++;
-    }
-}
-
-// My Approach, it is similar to without using extra variable, but in a more understanding way
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    int row =  1;
-    while(row<=n) {
-        int col = 1;
-        while(col<=row) {
-            cout<<row-(col-1)<<" ";
-            col++;
-        }
-        cout<<endl;
-        row++;
     }
 }
 
@@ -1656,7 +1637,7 @@ int main() {
 //      : Vaise agar jab hum thore aur concepts padh lenge tab hum strings ko use krke binary se decimal convert kr sakte hai! taaki jo number hum input kr rhe hai vo bit by bit krke string ke harr ek entry me store hojaye! and that's how thing will proceed!
 
 // ---------------------------------------------------------- LECTURE 7 - Leetcode Questions --------------------------------------------------------------------------------------------------------->
-// Practice Question 1 : Reverse an Integer! but if it goes out of the range of int them print 0! 
+// Practice Question 1 : Reverse an Integer! but if it goes out of the range of int them print 0!
 #include<iostream>
 #include<math.h>
 #include<climits>
@@ -1669,7 +1650,7 @@ int main() {
     int ans = 0;
     while(n!=0) {
         int digit = n%10;
-        if((ans*10 >INT_MAX || ans*10 < INT_MIN)) {
+        if((ans*10 > INT_MAX || ans*10 < INT_MIN)) {
             cout<<0;
         }
         ans = (ans * 10) + digit;
@@ -2293,7 +2274,7 @@ int main() {
     return 0;
 }
 
-// Logic is same, but you also solve like this...
+// Same logic just a different approach...
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -2755,7 +2736,7 @@ int main() {
 // So, yes it depends on your use case!
 
 // Dynamic Memory Allocation! in C/C++.
-// It is a way of allocating the memory to the data structure during the runtime! and we do this using some functions like, calloc(), malloc(), realloc() and free()
+// It is a way of allocating the memory to the data structure during the runtime! and we do this using some functions like, calloc(), malloc(), realloc() and free().
 // malloc() : Malloc() ek function hai jo C programming language mein dynamic memory allocate karne ke kaam aata hai. Iska full form hai "memory allocation". Isko use karke hum runtime par memory allocate kar sakte hain, jo humein flexibility aur efficiency deta hai.
 //          : Takes the number of bytes to allocate & return a pointer of the type void!
 //          : Syntax : int *ptr; ptr = (int*)malloc(10*sizeof(int)); Here we have allocated 10 int size of uninitiallized memory and returned the address of first index of that memory to the pointer ptr, so that it can be accessed easily! and while returning we have type casted it into int, kyunki vrna bina typecast ke krte toh ek void pointer return hota 1st index ka! so that is why we have type casted it into int!
@@ -2975,7 +2956,7 @@ int main() {
 // Structures (struct) : A structure is a user-defined data type that groups related data elements of different types under a single name! Each element in a structure is called a member/field, Members can be accessed using the dot (.) operator
 // Unions : A union is a special data type that allows storing different data types in the same memory location. Only one member can hold a value at a time since all members share the same memory space. The size of a union is determined by its largest member
 // Key Differences : Memory : Structures allocate separate memory for each member, while unions share memory among members
-//                 : Size : Structure size ≥ sum of member sizes; union size = size of largest member
+//                 : Size : Structure size ≥ sum of member sizes; union size = size of largest member.
 //                 : Access : In structures, all members can hold values simultaneously; in unions, only one member can hold a valid value at a time
 #include <stdio.h>
 #include <string.h>

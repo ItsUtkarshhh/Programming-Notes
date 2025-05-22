@@ -197,6 +197,7 @@ int main() {
     cout<<"The index of the peak element of the arr4 is : "<<peakElement(arr4, 5)<<endl;
 } // This method does not include the conditions or test cases where, edge elements might be the peak element! also this method assumes that mid+1 and mid-1 always exists! also if the size of the array = 1, then also it won't print the peak value! kyunki usme toh na mid-1 and na mid+1 exist krta hai!
 // To resolve this issue! we will proceed with this... pehle toh, if(size==1) return 0; kyunki agar size = 1 hogya toh simply peak element 0th index pr hi hoga!
+
 // And if iske alawa... lets see in code...
 #include<iostream>
 using namespace std;
@@ -269,9 +270,9 @@ int main() {
     cout<<"The index of the peak element of the arr3 is : "<<peakElement(arr3, 5)<<endl;
     cout<<"The index of the peak element of the arr4 is : "<<peakElement(arr4, 5)<<endl;
     cout<<"The index of the peak element of the arr5 is : "<<peakElement(arr5, 1)<<endl;
-}
+} // Now an array can contain multiple peaks and above methods are just to find any one of them! whether its in the last or start or middle! everyone is a valid peak!
 
-// Now what if the array has multiple peaks! then in that case...
+// Now if the array has multiple peaks! then in that case...
 // Here first lets clear our motive, and that is ki we are not going to find all the peaks! we know that there will be multiple peaks in the array! but we just need to find any one of them! and to find this we only need to add one change into our previous code!
 // Lets analyse! suppose your array is like, [1,2,3,4,3,2,1,5,6,7,6,5,3,4,5,6,7,6,5,4]; like here we can ses that here we have 3 peaks! "4" on the index 3, "7" on the index 9, and then "7" on the index 16!, and along with peaks there are multiple valleys also, like "1" at index 6 and similarly, so now we find mid, and mid can lie any where, it can lie on the increasing slope, decreasing slope, peak or valley! in the above approaches of single peaks, we have handled all the cases except valleys! kyunki hume output me toh koi ek hi peak return krna hai bhale hi array me multiple peaks ho! toh vo cases humne already upar handle krliye hai! so for the valley hume ek line aur handle krni padegi kyunki pehle vaale approach me saare if and else if false hojayenge and it will become infinite loop! so we will add add an else statement, ki agar saare cases false ho jaaye toh in the end, jo mid hai usko dono me se kisi bhi direction me le jao, kyunki dono hi direction me peaks mil jayenge!
 // Lets code this approach...
@@ -323,7 +324,7 @@ using namespace std;
 
 int findPivot(int arr[], int n) {
     int s = 0; int e = n-1; 
-    int mid = s +(e-s)/2;
+    int mid = s + (e-s)/2;
     while(s<e) {
         if(arr[mid]>=arr[0]) {
             s = mid+1;

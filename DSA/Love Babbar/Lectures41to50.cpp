@@ -109,7 +109,7 @@ int main() {
     cout<<"Utkarsh's age is : "<<Utkarsh.Age<<endl;
 
     // Lets calculate size of the data members...
-    cout<<"Size of Utkarsh : "<<sizeof(Utkarsh)<<endl; // Output : 16, jabki dekha jaye toh 13 aani chahiye, kyunki Health + Level + Age = 12, and then Name is of one byte so it should be 13, but answer is 16 aisa kyu? so aisa isliye beoz of Padding and Greedy alignment!
+    cout<<"Size of Utkarsh : "<<sizeof(Utkarsh)<<endl; // Output : 16, jabki dekha jaye toh 13 aani chahiye, kyunki Health + Level + Age = 12, and then Name is of one byte so it should be 13, but answer is 16 aisa kyu? so aisa isliye becoz of Padding and Greedy alignment!
     // Padding : Padding involves inserting empty bytes between the members of a structure or class to ensure that each member is properly aligned in memory. The goal of padding is to ensure that each data member starts at an address that's a multiple of its size, which can improve memory access performance, especially on architectures that require aligned memory accesses.
     // Alignment : Alignment refers to the requirement that data types should start at particular memory addresses. For example, many architectures require that int variables start at memory addresses that are multiples of 4 (for 32-bit integers) or 8 (for 64-bit integers). Similarly, char variables can usually start at any address. Alignment can be influenced by the size of the data type. For example, if an int requires 4-byte alignment, and a char requires 1-byte alignment, the compiler may insert padding bytes between the members of a structure to ensure proper alignment.
     // Greedy Alignment : Greedy alignment is a strategy used by some compilers to minimize padding. In greedy alignment, the compiler tries to align each member of a structure or class to the largest alignment requirement of any member in the structure. This strategy helps reduce padding by minimizing the number of empty bytes inserted between members.
@@ -136,7 +136,7 @@ class Student1 {
 
 void Student1 :: scan(int a, int b, int c) {
     // cin>>this->a>>this->b>>this->c; // To take input from the user!
-    // Some obvious considerations : Remove the paramsters, as the method will no longer depend on parameters being passed to it. Instead, it will prompt the user for input directly!
+    // Some obvious considerations : Remove the parameters, as the method will no longer depend on parameters being passed to it. Instead, it will prompt the user for input directly!
     //                             : You may want to do anyone of the two way of assigning values to a, b, c.
     this->a = a;
     this->b = b;
@@ -211,9 +211,9 @@ class Hero {
     int Age;
     int Level;
     char Name;
-    Hero() {
-        cout<<"Constructor Called!"<<endl;
-    }
+    // Hero() {
+    //     cout<<"Constructor Called!"<<endl;
+    // }
     void print() {
         cout<<Level<<endl;
     }
@@ -234,8 +234,12 @@ int main() {
     Hero *Utkarsh1 = new Hero; // Dono hi case me same constructor call hoga! kyunki class toh same hi hai dono objects ka!
     // Hero *Utkarsh2 = new Hero(); // Aise bhi likh sakte hai
 }
-// Note : If you define a constructor (default or parameterized) : The compiler-generated default constructor (implicit constructor) is no longer provided.
-//      : If you later remove your custom constructor and try to create an object without explicitly defining a constructor again, it will result in an error because the compiler doesn't auto-generate the default constructor anymore.
+// C++ Constructor Behaviour Note : Implicit Default Constructor : If no constructor is defined in a class, the compiler automatically provides a default constructor (called the implicit default constructor).
+//                                                               : This allows you to create objects without passing any arguments.
+//                                : User-Defined Default Constructor : You can explicitly define a default constructor yourself. Whether you define it or not, the object creation using ClassName obj; works the same.
+//                                : Effect of Defining a Parameterized Constructor : As soon as you define any constructor (like a parameterized one), the compiler stops generating the default constructor. Now, if you try to create an object without arguments, it results in a compilation error unless you manually define a default constructor.
+//                                : Fix : Define Both Constructors If Needed : If you want to allow both types of object creation (with and without arguments), you need to define both constructors explicitly.
+//                                : Removing Parameterized Constructor : If you remove the parameterized constructor, the compiler will again start providing the implicit default constructor, and object creation without parameters will work fine again.
 
 // Example (Creating constructor outside the class)!
 #include<iostream>
@@ -443,7 +447,7 @@ int main() {
     // Isliye jab humne name ki value me koi bhi change kiya toh vo change dono objects me reflect hua!
 }
 
-// Ab agar ye cheez hone se rokni hai toh usko hum deep copy kehte hai! and hume apne copy constructor ko deep copy banana tha!
+// Ab agar ye cheez hone se rokni hai toh usko hum deep copy krte hai!
 // so we need to do the changes in the copy constructor's defintion!
 #include<iostream>
 #include<string>
@@ -812,7 +816,7 @@ int main() {
     Preyansh.get_data();
     employee :: getCount();
 } // Without static keyword it won't increament the count becoz a normal data member is valid only till end of the block whereas a static data member will be valid for the entire program.
-// Final Crux : Static Variables/Data Members and Static Member Functions are primarly associated with classes! but they can also be used aprt from classes!
+// Final Crux : Static Variables/Data Members and Static Member Functions are primarly associated with classes! but they can also be used apart from classes!
 
 // Array of Objects!
 #include"iostream"

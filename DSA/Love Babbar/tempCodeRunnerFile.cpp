@@ -1,49 +1,19 @@
-#include <iostream>
+#include<iostream>
+#include<typeinfo> // To check type related info
 using namespace std;
 
-int partition(int arr[], int s, int e) {
-    int pivot = arr[s];
-    int cnt = 0;
-    for (int i = s + 1; i <= e; i++) {
-        if (arr[i] <= pivot) {
-            cnt++;
-        }
-    }
-    int pivotIndex = s + cnt; // Place pivot at right position
-    swap(arr[pivotIndex], arr[s]);
-
-    // Sorting Left and Right sub arrays!
-    int i = s, j = e;
-
-    while (i < pivotIndex && j > pivotIndex) {
-        while (arr[i] <= pivot) {
-            i++;
-        }
-        while (arr[j] > pivot) {
-            j--;
-        }
-        if (i < pivotIndex && j > pivotIndex) {
-            swap(arr[i++], arr[j--]);
-        }
-    }
-    return pivotIndex;
-}
-
-// So yahaa toh humne recursion call krdiye! ki jo cheez humne partition function me kri hai pivot element ke saath original array me vhi same cheez tum baaki saari jo sub arrays banegi unn sab me krdo thru recursion!
-void quickSort(int arr[], int s, int e) {
-    if (s >= e) return;
-    int p = partition(arr, s, e); // For partitioning and sorting!
-    quickSort(arr, s, p - 1); // Sorting Left sub array!
-    quickSort(arr, p + 1, e); // Sorting Right sub array!
-}
-
 int main() {
-    int arr[5] = {3, 1, 4, 5, 2};
-    int n = 5;
-    quickSort(arr, 0, n - 1);
-    for (int i = 0; i < n; i++) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    float x = 34.4f; // "f" or "F" is used to specify float number
+    long double y = 34.4l; // "l" or "L" is used to specify long double number
+
+    // By default in C++ floating point numbers are treated as double, to convert them into float we have to use type casting
+    // 34.4 -> its a double, to convert it into float we will write f after it
+    // 34.4f now its a floating point number
+    cout<<"the value of x is : "<<x<<endl<<"the value of y is : "<<y<<endl;
+
+    float i = 3.14;
+    cout<<sizeof(i)<<endl;
+    cout<<typeid(i).name()<<endl; // It will print float! as it was already declared and initiallized using float! so it will print float!
+    cout<<typeid(3.14).name()<<endl; // It will print double! as decimals are treated as double by default in C++
     return 0;
 }

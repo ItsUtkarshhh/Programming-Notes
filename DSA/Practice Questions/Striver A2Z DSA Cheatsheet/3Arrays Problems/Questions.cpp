@@ -500,3 +500,169 @@ int main() {
     }
     return 0;
 }
+
+// Question 10 : Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int missingNumber(vector<int> v) {
+    for(int i = 1; i<=v.size(); i++) {
+        bool flag = 0;
+        for(int j = 0; j<v.size(); j++) {
+            if(v[j] == i) {
+                flag = 1;
+                break;
+            }
+        }
+        if(flag == 0) return i;
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    cout<<missingNumber(v);
+}
+
+// Better Method : By storing frequency of each element! and the one with 0 frequency that is the missing element!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int missingNumber(vector<int> v) {
+    int n = v.size();
+    vector<bool> exist(n + 1, false);
+
+    for(int i = 0; i<n; i++) {
+        exist[v[i]] = true;
+    }
+    for(int i = 0; i<exist.size(); i++) {
+        if(exist[i] == false) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    cout<<missingNumber(v);
+}
+
+// Best Optimal Approach :
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int missingNumber(vector<int> v) {
+    int n = v.size();
+    int actualSum = n*(n+1)/2;
+    int vectorSum = 0;
+    for(int i = 0; i<n; i++) {
+        vectorSum += v[i];
+    }
+    return actualSum - vectorSum;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    cout<<missingNumber(v);
+}
+
+// Question 11 : Given a binary array nums, return the maximum number of consecutive 1's in the array.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int consecOnes(vector<int> v) {
+    int count1 = 0; int maxCount1 = 0;
+    for(int i = 0; i<v.size(); i++) {
+        if(v[i] == 1) {
+            count1++;
+            maxCount1 = max(count1, maxCount1);
+        }
+        else {
+            count1 = 0;
+        }
+    }
+    return maxCount1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    cout<<consecOnes(v);
+}
+
+// Question 12 : Given a non-empty array of integers nums, every element appears twice except for one. Find that single one. You must implement a solution with a linear runtime complexity and use only constant extra space.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int singleOne(vector<int> v) {
+    int val = 0;
+    for(int i = 0; i<v.size(); i++) {
+        val = val ^ v[i];
+    }
+    return val;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    cout<<singleOne(v);
+} // TC : O(n) and SC : O(1)
+// There are more approaches like : Using hashing using arrays, hashing using maps and brute force approach!
+
+// Question 13 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubArraySumK(vector<int> v, int k) {
+    int i = 0; int j = 0;
+    count = 0;
+    while(i < v.size() && j < v.size()) {
+        if(v[i] + v[j] == k) {
+                    
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    int k;
+    cin>>k;
+    longestSubArraySumK(v, k);
+}
