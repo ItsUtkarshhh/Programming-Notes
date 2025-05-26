@@ -3315,7 +3315,7 @@ int main() {
 // Practice Question 33 : Power of 3, display yes if a number can be represented in form of power of 3, and if no then print no!
 // Practice Question 34 : Power of 4, display yes if a number can be represented in form of power of 4, and if no then print no!
 
-// Arrays basic to not-so-basic Questions :
+// Arrays basic to good Questions :
 // Practice Question 35 : Standard input/output using arrays!
 // Practice Question 36 : Finding maximum and minimum elements in an Array!
 // Practice Question 37 : Take input in an array and then find the sum of all of its elements!
