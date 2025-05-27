@@ -767,63 +767,7 @@ int main() {
     }
 }
 
-// Practice Question 13 : Print A B C in every row as input by the user!
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    int i = 1;
-    while(i<=n) {
-        int j = 1;
-        char val = 'A';
-        while(j<=n) {
-            cout<<val;
-            val++;
-            j++;
-        }
-        cout<<endl;
-        i++;
-    }
-}
-
-// Another Approach :
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    int row = 1;
-    while(row<=n) {
-        int col = 1;
-        while(col<=n) {
-            char ch = 'A'+ col - 1;
-            cout<<ch<<" ";
-            col++;
-        }
-        cout<<endl;
-        row++;
-    }
-}
-
-// Another simplest and best approach :
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 0; i<n; i++) {
-        for(int j = 0; j<n; j++) {
-            cout<<char('A'+j)<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-// Practice Question 14 : Print A B C and then D E F in the next line and so on...
+// Practice Question 15 : Print A B C and then D E F in the next line and so on...
 #include<iostream>
 using namespace std;
 
@@ -860,7 +804,7 @@ int main() {
     return 0;
 }
 
-// Practice Question 15 : Print A B C, B C D in next row, C D E in next row and so on...
+// Practice Question 16 : Print A B C, B C D in next row, C D E in next row and so on...
 // My Solution #1 :
 #include<iostream>
 using namespace std;
@@ -961,7 +905,7 @@ int main() {
     }
 }
 
-// Practice Question 16 : Print A, B B then C C C and so on...
+// Practice Question 17 : Print A, B B then C C C and so on...
 // My Solution :
 #include<iostream>
 using namespace std;
@@ -1018,7 +962,7 @@ int main() {
     }
 }
 
-// Practice Question 17 : Print A, B C, D E F, G H I J and so on....
+// Practice Question 18 : Print A, B C, D E F, G H I J and so on....
 // My Solution :
 #include<iostream>
 using namespace std;
@@ -1056,7 +1000,7 @@ int main() {
     return 0;
 }
 
-// Practice Question 18 : Print A, B C, C D E, D E F G and so on...
+// Practice Question 19 : Print A, B C, C D E, D E F G and so on...
 // Love babbar solution :
 #include<iostream>
 using namespace std;
@@ -1094,7 +1038,7 @@ int main() {
     }
 }
 
-// Practice Question 19 : Print a pattern like D, C D, B C D, A B C D and so on...
+// Practice Question 20 : Print a pattern like D, C D, B C D, A B C D and so on...
 #include<iostream>
 using namespace std;
 
@@ -1151,7 +1095,7 @@ int main() {
     }
 }
 
-// Practice Question 20 : Print this ___* in first row, __** in 2nd row, _***, in 3rd row and so on...
+// Practice Question 21 : Print this ___* in first row, __** in 2nd row, _***, in 3rd row and so on...
 #include<iostream>
 using namespace std;
 
@@ -1178,7 +1122,7 @@ int main() {
     }
 }
 
-// Practice Question 21 : Print this **** in 1st row, ***_ in 2nd row, **__ in 3rd row and so on...
+// Practice Question 22 : Print this **** in 1st row, ***_ in 2nd row, **__ in 3rd row and so on...
 #include<iostream>
 using namespace std;
 
@@ -1231,7 +1175,7 @@ int main() {
     }
 }
 
-// Practice Question 22 : Print this ****, _***, __**, ___* and so on...
+// Practice Question 23 : Print this ****, _***, __**, ___* and so on...
 #include<iostream>
 using namespace std;
 
@@ -3292,16 +3236,15 @@ int main() {
 // Practice Question 12 : Print 1 in 1st row, 2 1 in 2nd row, 3 2 1 in 3rd row and so on...
 // Practice Question 13 : Print ABCDE in each row as input by the user.
 // Practice Question 14 : Print A three times in 1st row, B three times in 2nd row, C three times in 3rd row and so on...
-// Practice Question 15 : Print A B C in every row as input by the user!
-// Practice Question 16 : Print A B C and then D E F in the next line and so on...
-// Practice Question 17 : Print A B C, B C D in next row, C D E in next row and so on...
-// Practice Question 18 : Print A, B B then C C C and so on...
+// Practice Question 15 : Print A B C and then D E F in the next line and so on...
+// Practice Question 16 : Print A B C, B C D in next row, C D E in next row and so on...
+// Practice Question 17 : Print A, B B then C C C and so on...
+// Practice Question 18 : Print A, B C, D E F, G H I J and so on...
 // Practice Question 19 : Print A, B C, D E F, G H I J and so on...
-// Practice Question 20 : Print A, B C, D E F, G H I J and so on...
-// Practice Question 21 : Print a pattern like D, C D, B C D, A B C D and so on...
-// Practice Question 22 : Print this ___* in first row, __** in 2nd row, _***, in 3rd row and so on...
-// Practice Question 23 : Print this **** in 1st row, ***_ in 2nd row, **__ in 3rd row and so on...
-// Practice Question 24 : Print this ****, _***, __**, ___* and so on...
+// Practice Question 20 : Print a pattern like D, C D, B C D, A B C D and so on...
+// Practice Question 21 : Print this ___* in first row, __** in 2nd row, _***, in 3rd row and so on...
+// Practice Question 22 : Print this **** in 1st row, ***_ in 2nd row, **__ in 3rd row and so on...
+// Practice Question 23 : Print this ****, _***, __**, ___* and so on...
 
 // Basic Maths, Bit-Manipulation + Logic Questions :
 // Practice Question 25 : Subtract the product and sum of all the digits of an Integer!

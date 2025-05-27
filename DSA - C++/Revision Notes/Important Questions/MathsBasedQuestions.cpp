@@ -429,3 +429,71 @@ int main() {
     cin>>lowerB>>upperB;
     cout<<FibBetweenAandB(min(lowerB, upperB), max(lowerB, upperB));
 }
+
+// --------------------------------------------------------- Part 2 : LCM/HCF Based Questions! ----------------------------------------------------------------->
+// Question 1 : Find Greatest Common Divisor (GCD)/ Highest Common Factor (HCF) of two numbers!
+// Thinking : The Greatest Common Divisor (GCD) or Highest Common Factor (HCF) of two numbers is the largest number that divides both numbers without leaving a remainder.
+//          : To find the GCD, we know that it cannot be greater than the smaller of the two numbers, otherwise it wont be able to divide one of them or both of them. So, we first find the minimum of the two input numbers.
+//          : Then, we start checking from that number down to 1. For each number in this decreasing loop, we check if it divides both numbers exactly (i.e., remainder is 0).
+//          : As soon as we find such a number, we break the loop and return it as the GCD.
+//          : Note : This is a brute-force approach and works fine for small numbers. However, for larger numbers, a more efficient method is the Euclidean algorithm.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    int potentialDiv = min(n1, n2);
+    int finalDiv = -1;
+    while(potentialDiv > 0) {
+        if(n1 % potentialDiv == 0 && n2 % potentialDiv == 0) {
+            finalDiv = potentialDiv;
+            break;
+        }
+        potentialDiv--;
+    }
+    cout<<finalDiv<<endl;
+}
+
+// Better Approach : Euclidean Algorithm : The Euclidean Algorithm efficiently finds the GCD (Greatest Common Divisor) of two numbers using the division method.
+//                 : In the long division method, we work with two numbers : the dividend and the divisor. We repeatedly divide the dividend by the divisor and take the remainder. Then we replace : The dividend with the current divisor. The divisor with the current remainder.
+//                                                                         : This process continues until the remainder becomes 0. At that point, the current divisor is the GCD of the original two numbers.
+//                 : Note: There's no need to manually find the minimum of the two numbers at the beginning, because the modulo operator (%) naturally adjusts for it.
+//                 : Another approach can be recursion also, but will go through it later once we reach there!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    while(n2 != 0) {
+        int temp = n2;
+        n2 = n1 % n2;
+        n1 = temp;
+    }
+    cout<<n1;
+}
+
+// Question 2 : Find Least Common Multiple (LCM) of two numbers!
+// Thinking : We can solve this in two ways : Method 1 : Using the formula with GCD (Euclidean Algorithm)
+//                                                     : First, calculate the GCD (Greatest Common Divisor) of the two numbers. Then use the formula: LCM = (a * b) / GCD. This method is efficient and widely used.
+//                                          : Method 2 : Brute-force approach using LCM logic
+//                                                     : The LCM is the smallest number that is a multiple of both given numbers. It must be divisible by both numbers without leaving a remainder. Start checking from max(a, b) (since LCM cannot be smaller than this). In each iteration, increment the number by 1 and check divisibility.The first number that is divisible by both is the LCM.
+//          : Note : The first method is preferred for performance. The second method is conceptually simple and helps understand the meaning of LCM. Make sure to handle edge cases like zero or negative input gracefully.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    int potentialLCM = max(n1, n2);
+    int finalLCM = -1;
+    while(true) {
+        if(potentialLCM % n1 == 0 && potentialLCM % n2 == 0) {
+            finalLCM = potentialLCM;
+            break;
+        }
+        potentialLCM++;
+    }
+    cout<<finalLCM;
+}
