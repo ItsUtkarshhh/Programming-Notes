@@ -2,14 +2,14 @@
 using namespace std;
 
 int main() {
-    int nr, nc;
-    cin>>nr>>nc;
+    int num;
+    cin>>num;
+    int val = num;
     int count = 0;
-    for(int i = 1; i<=nr; i++) {
-        for(int j = 0; j<nc; j++) {
-            cout<<char('A' + count)<<" ";
-            count++;
-        }
-        cout<<endl;
+    int mask = 0;
+    while(val != 0) {
+        mask = (mask << 1) | 1;
+        val = val >> 1;
     }
+    cout<<((~num) & (val));
 }

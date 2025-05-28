@@ -497,3 +497,205 @@ int main() {
     }
     cout<<finalLCM;
 }
+
+// --------------------------------------------------------- Part 3 : Mathematical Questions and Bit Manipulation! ----------------------------------------------------------------->
+// Question 1 : Subtract the product and sum of all the digits of an Integer!
+// Thinking : We can do it without creating function and also with functions, and creating function will increase the code readability so we will use it!
+//          : One function to find the sum of all the digits of the number and one to find the product of all the digits of the number! and then simply call them and subtract them!
+#include<iostream>
+using namespace std;
+
+int sumofNum(int n) {
+    int sum = 0;
+    while(n != 0) {
+        int digits = n % 10;
+        sum = sum + digits;
+        n = n / 10;
+    }
+    return sum;
+}
+
+int prodofNum(int n) {
+    int prod = 1;
+    while(n != 0) {
+        int digits = n % 10;
+        prod = prod * digits;
+        n = n / 10;
+    }
+    return prod;
+}
+
+int main() {
+    int num;
+    cin>>num;
+    int sum = sumofNum(num);
+    int prod = prodofNum(num);
+    cout<<"Final Answer : "<<max(sum, prod) - min(sum, prod)<<endl;
+}
+
+// Question 2 : Number of 1 Bits, find the number of 1 bits in the unsigned integer input by the user!
+// Thinking : Every number in memory is stored in binary (0s and 1s). So, the task is to go through each bit and count how many are set to 1
+//          : To work at the bit level, we need : & (bitwise AND): Used to check whether the least significant bit (LSB) is 1 or 0. >> (right shift): Used to move to the next bit by discarding the current LSB.
+//          : Initialize a counter variable (e.g. count = 0).
+//          : Loop until the number becomes 0 : Perform n & 1 : If result is 1, it means the current bit is set → increment count. If result is 0, do nothing.
+//                                            : Perform n = n >> 1 to shift all bits right by 1, removing the current bit.
+//          : Repeat the process until all bits are checked. Output the final count.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int val = num;
+    int count = 0;
+    while(val != 0) {
+        if(val & 1) {
+            count++
+        }
+        val = val >> 1;
+    }
+    cout<<count;
+}
+
+// Question 3 : Decimal to Binary Conversion!
+// Thinking : We have two approaches to solve this...
+//          : Approach 1 : Every number in binary is represented as a sum of powers of 2 (like 1, 2, 4, 8...).
+//                       : When you divide a number by 2 : The remainder is either 0 or 1. -> This remainder is the current least significant bit (LSB). -> Keep dividing by 2 and storing the remainders until the number becomes 0. -> Reverse the stored remainders to get the binary number.
+//                       : We will extract digits using "n % 2" and will form a number using those extracted digits and then finally will reverse it! But in our case we can use a formula which takes the extracted digits and will reverse it step by step on its own!
+//          : Approach 2 : At bit level, we can extract the last bit using n & 1 : If n is odd → n & 1 = 1 , If n is even → n & 1 = 0
+//                       : Then shift the bits to the right using n >> 1 to remove the last bit.
+// Approach 1 :
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int ans = 0;
+    int i = 0;
+    while(num != 0) {
+        int lsb = num % 2;
+        ans = (ceil(pow(10,i++)) * lsb) + ans;
+        num = num / 2;
+    }
+    cout<<ans;
+}
+
+// Approach 2 :
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int ans = 0;
+    int i = 0;
+    while(num != 0) {
+        int lsb = num & 1;
+        ans = (ceil(pow(10,i++)) * lsb) + ans;
+        num = num >> 1;
+    }
+    cout<<ans;
+}
+
+// Question 4 : Print all 32-bits of a binary number! (also applicable for converting a -ve number into a binary!)
+// Thinking : We know how the numbers are stored in memory in 32 bits format! so we will simply print all the bits starting the MSB (leftmost bit) for that we need to start right shift the bit representation of the number 31 times towards right and then & it with 1 to get the bit at that place!
+//          : And then starting i with 31 we will decrease it one by one! to print all the bits till LSB.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int32_t num;
+    cin>>num;
+    for(int i = (sizeof(num)*8) - 1; i >= 0; i--) {
+        cout<<((num >> i) & 1);
+    }
+}
+
+// Question 5 : Binary to Decimal Conversion!
+// Thinking : To convert binary to decimal, we utilize the fact that each bit in a binary number represents a power of 2, starting from the right (least significant bit). So, we take the binary number as input (typically in integer form), and in each step, extract the last digit using % 10. This digit (which is either 0 or 1) is then multiplied by 2^power, where power starts from 0 and increases with each digit processed.
+//          : We keep adding these values to a running total (ans). The number is then updated using / 10 to remove the last digit, and the process continues until the number becomes 0. This way, each binary digit is correctly converted and added to form the equivalent decimal number.
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int ans = 0;
+    int i = 0;
+    while(num != 0) {
+        int digit = num % 10;
+        ans = (ceil(pow(2,i++)) * digit) + ans;
+        num = num / 10;
+    }
+    cout<<ans;
+}
+
+// Thinking 2 : Here, we will learn a new technique...
+//            : In any number system (binary, decimal, etc.), numbers are constructed using place values, where each position represents a power of the base. In decimal (base 10), it's powers of 10. In binary (base 2), it's powers of 2.
+//            : In decimal : For example, the number 347 is calculated as 3×100 + 4×10 + 7×1.
+//                         : But we can build it iteratively like : 0 * 10 + 3 = 3, → 3 * 10 + 4 = 34, → 34 * 10 + 7 = 347.
+//            : Similarly, in binary : Let’s say the binary string is 1011 → we process from left to right :
+//                                   : 0 * 2 + 1 = 1, → 1 * 2 + 0 = 2, → 2 * 2 + 1 = 5, → 5 * 2 + 1 = 11.
+//            : So, this method takes each digit (or bit), multiplies the result so far by the base (2 or 10), and adds the current digit — this is equivalent to how we build numbers using positional values.
+//            : This works because multiplying by the base shifts digits left in their place value, and adding the digit inserts the current one at the lowest place. It mirrors how our brain naturally builds numbers in everyday decimal usage.
+//            : It avoids using pow() or precomputing powers like 2^0, 2^1,..., making it more efficient and cleaner, especially in programming logic.
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main() {
+    string num;
+    cin>>num;
+    int res = 0;
+    for(char bit : num) {
+        res = res * 2 + (bit - '0');
+    }
+    cout<<res;
+}
+
+// Question 6 : Reverse an Integer! but if it goes out of the range of int them print 0!
+// Thinking : Its same as like you first extract the last digit from the number and then you combine them using a formula ans = (10 * ans) + digit.
+//          : As this formula merges the number in the order it was extracted and we can get our final answer!
+//          :  Just one thing that we need to add a check of "ans * 10 > INT_MAX || ans * 10 < INT_MIN" so that it can simply print 0 in overflow condition! 
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int ans = 0;
+    while(num != 0) {
+        int digit = num % 10;
+        if(ans * 10 > INT_MAX || ans * 10 < INT_MIN) {
+            cout<<0;
+        }
+        ans = (10 * ans) + digit;
+        num = num / 10;
+    }
+    cout<<ans;
+}
+
+// Question 7 : Complement of an Integer!
+// Thinking : First we need to analyse how actually a complement of an integer works (Its not how a number is stored in the memory its simple complement)! suppose a number 5 and you want its complement (~5), so first we will write it in binary form : 00000000 00000000 00000000 00000101.
+//          : Then, its complement will be : 111111111 111111111 111111111 111111010 (which is also a complement), but by complement we mean 010, so to obtain this we need to eliminate all the 1's, for that we will use a bitwise "&" operator
+//          : What we will do we will simply use "&0" with all the 1's and "&1" with the number we want! so first we need to create a number/mask which will we will apply & with!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int num;
+    cin>>num;
+    int val = num;
+    int count = 0;
+    int mask = 0;
+    while(val != 0) {
+        mask = (mask << 1) | 1;
+        val = val >> 1;
+    }
+    cout<<((~num) & (val));
+}
