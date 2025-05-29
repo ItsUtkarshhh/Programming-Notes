@@ -1,15 +1,17 @@
 #include<iostream>
 using namespace std;
 
+bool checkPowerOf2(int num) {
+    return num > 0 && (num & (num - 1)) == 0;
+}
+
 int main() {
     int num;
     cin>>num;
-    int val = num;
-    int count = 0;
-    int mask = 0;
-    while(val != 0) {
-        mask = (mask << 1) | 1;
-        val = val >> 1;
+    if(checkPowerOf2(num)) {
+        cout<<"Yes "<<num<<" is a power of 2";
     }
-    cout<<((~num) & (val));
+    else {
+        cout<<"No "<<num<<" is not a power of 2";
+    }
 }

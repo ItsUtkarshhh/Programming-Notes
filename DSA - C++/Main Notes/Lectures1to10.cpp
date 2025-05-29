@@ -3252,7 +3252,7 @@ int main() {
 // Practice Question 28 : Print all 32-bits of a binary number! (also applicable for converting a -ve number into a binary!)
 // Practice Question 29 : Binary to Decimal Conversion
 // Practice Question 30 : Reverse an Integer! but if it goes out of the range of int them print 0!
-// Practice Question 31 : Complement of an Integer!
+// Practice Question 31 : Complement of an Integer! 
 // Practice Question 32 : Power of 2, display yes if a number can be represented in form of power of 2, and if no then print no!
 // Practice Question 33 : Power of 3, display yes if a number can be represented in form of power of 3, and if no then print no!
 // Practice Question 34 : Power of 4, display yes if a number can be represented in form of power of 4, and if no then print no!

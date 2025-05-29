@@ -681,21 +681,163 @@ int main() {
 }
 
 // Question 7 : Complement of an Integer!
-// Thinking : First we need to analyse how actually a complement of an integer works (Its not how a number is stored in the memory its simple complement)! suppose a number 5 and you want its complement (~5), so first we will write it in binary form : 00000000 00000000 00000000 00000101.
-//          : Then, its complement will be : 111111111 111111111 111111111 111111010 (which is also a complement), but by complement we mean 010, so to obtain this we need to eliminate all the 1's, for that we will use a bitwise "&" operator
-//          : What we will do we will simply use "&0" with all the 1's and "&1" with the number we want! so first we need to create a number/mask which will we will apply & with!
+// Concept : First, let's understand complement! A complement simply means flipping the digits: if 0 then 1, and if 1 then 0.
+//         : Now, if we are asked for the complement, why can't we just do cout << ~5; and get it done? The problem is, when we say "complement of an integer", we mean ~5 (which is 101) should give us 2 (which is 010). But if we simply do cout << ~5; (where 5 is 101), it prints -6 (which is 110).
+//         : The reason is: we need to think in 32-bit format, as that's the format in which any number is stored in memory.
+//         : Let's understand it : We can either store and print the stored number, or we can just perform operations and print directly using cout.
+//                               : In the first case : If the number is positive, it simply gets converted into the 32-bit binary representation of that decimal number. While printing, it gets converted back into decimal and is printed as is.
+//                                                   : If the number is negative, it goes through a process of complements : First, a 1's complement is applied (flipping all 32 bits), then 1 is added to make it a 2's complement. This new binary (with MSB = 1) is stored, indicating it's a negative number.
+//                                                   : While printing, the compiler checks the MSB. If it's 0, the number is printed directly. If it's 1, it's interpreted as a negative number and is printed after applying two’s complement logic.
+//                               : In the second case : If we are not storing any number and are just doing operations and printing, the final bit pattern is again checked. If the MSB is 0, it's printed directly. If MSB is 1, then again, two’s complement logic is used and the output is a negative number.
+//         : In such problems, "complement of an integer" means flipping only the meaningful bits (the bits used to represent the number), not the full 32-bit computational form.
+//         : That’s why we can’t use ~5 directly — we need to handle the number carefully to get the mathematical complement, not the computational (bitwise) one.
+// Thinking : We take a number num as input. We want the mathematical complement (only the relevant bits flipped). Simply doing ~num flips all 32 bits → unwanted result.
+//          : So we create a mask that has 1s only where num has meaningful bits. We then do ~num & mask → gives us only the flipped part of original number. Return the result and print it.
 #include<iostream>
 using namespace std;
 
-int main() {
-    int num;
-    cin>>num;
+int complementOfInteger(int num) {
     int val = num;
-    int count = 0;
     int mask = 0;
     while(val != 0) {
         mask = (mask << 1) | 1;
         val = val >> 1;
     }
-    cout<<((~num) & (val));
+    return (mask & (~num));
+}
+
+int main() {
+    int num;
+    cin>>num;
+    cout<<"Complement of num : "<<complementOfInteger(num);
+}
+
+// Question 8 : Power of 2, display yes if a number can be represented in form of power of 2, and if no then print no!
+// Thinking : Take input of the number num. Initialize a variable powerOf2 = 1 to represent 2^0. Use a loop to multiply powerOf2 by 2 in each iteration.
+//          : At every step : If powerOf2 == num, then it's a power of 2 → print "Yes" and stop.
+//                          : If powerOf2 > num, then num is not a power of 2 → print "No" and stop.
+//                          : Continue until either condition is met.
+#include<iostream>
+using namespace std;
+
+void checkPowerOf2(int num) {
+    int powerOf2 = 1;
+    while(powerOf2 <= num) {
+        if(powerOf2 == num) {
+            cout<<"Yes "<<num<<" is a power of 2";
+            return;
+        }
+        powerOf2 *= 2;
+    }
+    cout<<"No "<<num<<" is not a power of 2";
+    return;
+}
+
+int main() {
+    int num;
+    cin>>num;
+    checkPowerOf2(num);
+}
+
+// Thinking 2 : A number is a power of 2 if it has exactly one 1 in its binary representation. Examples : 1 → 01, 2 → 10, 4 → 100, 8 → 1000 and so on. So, we count how many 1s are present in the binary form of the number. If only one 1, then it's a power of 2. Otherwise, it's not.
+//            : Take input num. Create a variable val = num to process. Use a loop to right shift val until it becomes 0. In each iteration, use (val & 1) to check if the last bit is 1. If yes, increment countOf1bit. After the loop, if countOf1bit == 1, it's a power of 2, else not.
+#include<iostream>
+using namespace std;
+
+void checkPowerOf2(int num) {
+    int countOf1bit = 0;
+    int val = num;
+    while(val != 0) {
+        if((val & 1) == 1) {
+            countOf1bit++;
+        }
+        val = val >> 1;
+    }
+    if(countOf1bit == 1) {
+        cout<<"Yes "<<num<<" is a power of 2";
+        return;
+    }
+    cout<<"No "<<num<<" is not a power of 2";
+    return;   
+}
+
+int main() {
+    int num;
+    cin>>num;
+    checkPowerOf2(num);
+}
+
+// Thinking 3 : Binary Counting and Bit Flipping Observation : While counting in binary, each new number is formed by flipping the rightmost bits starting from 0.
+//                                                           : 0 (0000), 1 (0001), 2 (0010), 3 (0011), 4 (0100), 5 (0101), 6 (0110), 7 (0111), 8 (1000), 9 (1001), 10 (1010) and so on... You can see the rightmost bits flipping to generate the next number.
+//            : Property of Powers of 2 : In binary, every power of 2 has only one 1 bit, and all other bits are 0. Like : 1 (0001), 2 (0010), 4 (0100), 8 (1000), 16 (10000) and so on...
+//                                      : So, for any power of 2, if you do : "n & (n - 1)" it will always be 0. Because, Subtracting 1 from a power of 2 flips the only set bit and sets all bits to 1 after it. Doing AND clears all bits → result is 0.
+//                                      : Example : 8 (1000) & 7 (0111) = 0000, 4 (100) & 3 (011) = 000 and similary for others! So we will use the same logic to check if the number is a power of or not!
+#include<iostream>
+using namespace std;
+
+bool checkPowerOf2(int num) {
+    return num > 0 && (num & (num - 1)) == 0;
+}
+
+int main() {
+    int num;
+    cin>>num;
+    if(checkPowerOf2(num)) {
+        cout<<"Yes "<<num<<" is a power of 2";
+    }
+    else {
+        cout<<"No "<<num<<" is not a power of 2";
+    }
+}
+// Key Insight (Not relevant to question) : The bitwise NOT operator ~ in C++ inverts all the bits of a number. This means every 1 becomes 0 and every 0 becomes 1. However, the final result also depends on how integers are stored in memory, specifically two's complement representation.
+//                                        : Mathematical Intuition (High-Level) : When you apply bitwise NOT to a power of 2, you often get : ~(2^n) = -(2^n - 1). Examples : 	~8 = -7, ~4 = -3, ~2 = -1, ~1 = -2.
+//                                        : Computational Perspective (Two's Complement) : In C++, integers are stored in two’s complement form, which causes this pattern : ~(2^n) = -(2^n) - 1. Examples : ~8 = -9, ~4 = -5, ~2 = -3, ~1 = -2.
+//                                        : Special Case : ~1, as ~1 = -2 (in full bit width). The uniqueness lies in how small the number is : If you consider only 1 bit, ~1 would technically be 0 (since 1 becomes 0). But in real systems, integers are stored in at least 8, 16, 32, or 64 bits, so the actual NOT operation flips all bits, not just one.
+
+// Question 9 : Power of 3, display yes if a number can be represented in form of power of 3, and if no then print no!
+// Thinking : Same logic as of powerOf2 will be applied in this problem also! Just replace the calculation from 2 to 3.
+#include<iostream>
+using namespace std;
+
+void checkPowerOf3(int num) {
+    int powerOf3 = 1;
+    while(powerOf3 <= num) {
+        if(powerOf3 == num) {
+            cout<<"Yes "<<num<<" is a power of 3";
+            return;
+        }
+        powerOf3 *= 3;
+    }
+    cout<<"No "<<num<<" is not a power of 3";
+    return;
+}
+
+int main() {
+    int num;
+    cin>>num;
+    checkPowerOf3(num);
+}
+
+// Question 10 : Power of 4, display yes if a number can be represented in form of power of 4, and if no then print no!
+// Thinking : Same logic as of powerOf2 will be applied in this problem also! Just replace the calculation from 3 to 4.
+#include<iostream>
+using namespace std;
+
+void checkPowerOf4(int num) {
+    int powerOf4 = 1;
+    while(powerOf4 <= num) {
+        if(powerOf4 == num) {
+            cout<<"Yes "<<num<<" is a power of 4";
+            return;
+        }
+        powerOf4 *= 4;
+    }
+    cout<<"No "<<num<<" is not a power of 4";
+    return;
+}
+
+int main() {
+    int num;
+    cin>>num;
+    checkPowerOf4(num);
 }
