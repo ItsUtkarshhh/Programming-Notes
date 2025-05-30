@@ -1,0 +1,641 @@
+// --------------------------------------------------------- Part 1 : Arrays Based Questions! ----------------------------------------------------------------->
+// Question 1 : Finding maximum/minimum elements in an Array!
+// Thinking : First, take input and store elements in the array. To find the maximum, initialize a variable with the smallest possible value (INT_MIN).Iterate over the array and update this variable whenever you find a larger value.
+//          : By the end, this variable will hold the maximum value in the array.
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int max = INT_MIN;
+    for(int i = 0; i < n; i++) {
+        if(max < arr[i]) {
+            max = arr[i];
+        }
+    }
+    cout<<"Max value in the array : "<<max;
+}
+
+// Little Optimizations : Instead of using a separate loop, update the maximum while taking input using max() function. This reduces the need for an additional loop and makes the code more efficient.
+// ChatGPT Remarks : the optimization is correct and slightly better in practice, but the performance benefit is minimal. It's mainly a style and readability choice unless you’re dealing with massive datasets.
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    int maxi = INT_MIN;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        maxi = max(maxi, arr[i]); // Also we can use simple if condition!
+    }
+    cout<<"Max value in the array : "<<maxi;
+}
+
+// For minimum value!
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    int mini = INT_MAX;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        mini = min(mini, arr[i]);
+    }
+    cout<<"Max value in the array : "<<mini;
+}
+
+// Question 2 : Find the sum of all of its elements!
+// Thinking : First, take input and store elements in the array. then initiate a sum variable with 0, and iterate over the array and add each element into this sum till the end of array! and then finally print sum!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    int sum = 0;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        sum += arr[i];
+    }
+    cout<<"Sum of all elements in the array : "<<sum;
+}
+
+// Question 3 : Linear Search in an array! and return the index of the key!
+// Thinking : Linear search is the method where we iterate each element of the array to find the key and once we find the element then we simply return its index!
+#include<iostream>
+using namespace std;
+
+void findKeyLS(int* arr, int n, int key) {
+    for(int i = 0; i<n; i++) {
+        if(arr[i] == key) {
+            cout<<"Key is at "<<i<<" index!";
+            return;
+        }
+    }
+    cout<<"Key "<<key<<" not found!";
+    return;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int key;
+    cin>>key;
+    findKeyLS(arr, n, key);
+}
+
+// Question 4: Reverse an Array
+// Thinking : Use two pointers : one at the start (i = 0) and one at the end (j = n-1). Swap the elements at these positions, then increment i and decrement j. Repeat until i >= j. This will reverse the array in-place.
+//                             : You can either : Use a void function and pass the array by reference (it modifies the original array). Or return the array pointer (int*) if needed for further use.
+#include<iostream>
+using namespace std;
+
+int* reverseArray(int* arr, int n) {
+    int i = 0; int j = n-1;
+    while(i < j) {
+        swap(arr[i], arr[j]);
+        i++;
+        j--;
+    }
+    return arr;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int *ans = reverseArray(arr, n); // By the way in this case we dont need to store the output, as it is pass by reference, the array is already got reversed in that case! Its just formality of probably can be helpful in some other usecases! but atleast not here!
+    for(int i = 0; i<n; i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Question 5 : Swap Alternatively in an Array!
+// Thinking : Here we are asked to swap alternatively! so we will just iterate and swap the first element and next element and then normally we move i++, but to swap alternatively we will move the iterator "i + 2", but while doing this we need to keep in mind that this iterator should not go out of bounds, so we need to add a check for that too at every iteration!
+#include<iostream>
+using namespace std;
+
+void swapAlternatively(int* arr, int n) {
+    for(int i = 0; i<n; i = i+2) {
+        if(i+1 < n) {
+            swap(arr[i], arr[i+1]);
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    swapAlternatively(arr, n);
+    for(int i = 0; i<n; i++) {
+        cout<<arr[i]<<" ";
+    }
+}
+
+// Question 6 : Check whether an array contains any unique element or not! and print that unique element!
+// Thinking : First, find the maximum value in the original array, so we know the size needed for the countingArray (size = maxValue + 1 due to 0-based indexing).
+//          : Create a countingArray where each index represents a value from the original array. Traverse the original array and increment the count at the corresponding index in the countingArray.
+//          : After that, check which index has a count of 1 — that index (value) is the unique element. If no such count is found, then no unique element exists.
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    int maxVal = INT_MIN;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        maxVal = max(maxVal, arr[i]);
+    }
+
+    int* countArr = new int[maxVal + 1]();
+    for(int i = 0; i<n; i++) {
+        countArr[arr[i]]++;
+    }
+    int found = false;
+    for(int i = 0; i <= maxVal; i++) {
+        if(countArr[i] == 1) {
+            cout<<"One unique element found : "<<i;
+            found = true;
+            break;
+        }
+    }
+    if(found == false) {
+        cout<<"No unique element found!";
+    }
+    delete[] arr;
+    delete[] countArr;
+}
+// Drawbacks : This method is fine! but there are few drawbacks : Firstly, this method is only for natural numbers!
+//                                                              : Secondly, this method is taking a lot of unneccessary space for even those element who does not exist in the original array!
+
+// Optimized approach : Using of Hashmap!
+// Thinking : This approach saves space by only storing counts for elements present.
+//          : This will solve two major problems : This approach saves space by only storing counts for elements present. It also handles negative numbers and any range of values without extra memory overhead.
+#include<iostream>
+#include<map>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    map<int, int> count;
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+        count[arr[i]]++;
+    }
+    for(auto it : count) {
+        cout<<it.first<<" has "<<it.second<<" occurence in the array!"<<endl;
+    }
+    cout<<endl;
+    int countUnique = 0;
+    for(auto it : count) {
+        if(it.second == 1) {
+            cout<<it.first<<" is the unique element of the array!"<<endl;
+            countUnique++;
+        }
+    }
+    cout<<"The array had total of "<<countUnique<<" unique elements!";
+}
+
+// Question 7 : Check whether an array contains 1 unique element or not, and print that unique element! or contains any odd duplicates (focus on 1 unique element)
+// Thinking : In this question, we are given a special condition, the array either has one element that appears only once (unique), or one element that appears an odd number of times.
+//          : We can solve this using our earlier brute-force method (using frequency counting), which takes O(n) time and space — and it’s totally valid. But here, we can apply a smarter approach based on the XOR operation because of the given condition.
+//          : That is, We know how XOR works : XOR of two same numbers is 0 → a ^ a = 0 and XOR of any number with 0 is the number itself → 0 ^ a = a.
+//                                           : So, if we XOR all elements in the array : All elements that occur an even number of times will cancel out to 0. If one element is unique or has an odd count, it will remain in the result.
+//                                           : So by the end of the XOR process, we’ll be left with the required number, which is either : the unique element, or the element that occurred an odd number of times.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    // Doing XOR of all elements with each other!
+    int unique = 0;
+    for(int i = 0; i<n; i++) {
+        unique = unique ^ arr[i];
+    }
+    cout<<"Unique number is : "<<unique<<endl;
+    delete[] arr;
+}
+
+// Question 8 : You are given an array, and it contains each element between 1 -> n-1 at least once, there is a single integer value that present in the array twice, Your task is to find the duplicate value integer value present in the array! (2 methods)
+// Thinking : Now, this question is reversed of unique element questions, here we need to find the duplicate element in the array! We can use a basic brute-force method where we count the frequency of each element. If any number appears twice (i.e., count == 2), that’s our answer. However, this takes extra space — O(n) — for storing counts.
+//          : But, we are also given a condition, We're told the numbers range from 1 to n-1. This is a key hint for an optimized solution using XOR. XOR Properties : x ^ x = 0 (XOR of two same numbers is 0), x ^ 0 = x (XOR with 0 gives the number itself)
+//          : Logic : First, take XOR of all elements in the array. Let’s call it xorAll. Then, take XOR of all numbers from 1 to n-1. Call this xorRange. Now do: xorAll ^ xorRange. All the elements from 1 to n-1 cancel out, and you're left with the duplicate number.
+//          : This approach is efficient with : Time Complexity: O(n) Space Complexity: O(1)
+//          : Example : arr = [1,2,3,4,5,6,6,7], XORall = 1^2^3^4^5^6^6^7 and then iterating again from 1 to n-1, and doing the XOR of all those values with already stored one! ans = 1^2^3^4^5^6^6^7^1^2^3^4^5^6^7 = 6 (duplicate element)
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    int XORall = 0;
+    for(int i = 0; i < n; i++) {
+        XORall = XORall ^ arr[i];
+    }
+    for(int i = 1; i <= n-1; i++) {
+        XORall = XORall ^ i;
+    }
+    cout<<"Only Duplicate element is : "<<XORall<<endl;
+}
+
+// Question 9 : Find intersection of two arrays!
+// Pre-Thinking : Here we need to first consider some cases like : Case 1 : Both arrays are unsorted
+//                                                               : Case 2 : Both arrays are sorted
+//                                                               : Case 3 : One array is unsorted, the other is sorted — unsorted is the main reference
+//                                                               : Case 4 : One array is unsorted, the other is sorted — sorted is the main reference
+// Hence, there are multiple approaches to solve this based on different cases!
+// Approach 1 : Basic Brute Force : Works for : All cases!
+//                                : First we are asked about to find the intersection of two arrays! means we need to find the common of all elements from both arrays! like if arr1 = {1,2,3,3,4,5} and arr2 = {6,4,1,3,5,4} we need ans = {1,3,4,5}
+//                                : Idea : For each element in arr1, check if it exists in arr2. If found, store it in the result and mark the matched element in arr2 (e.g., as INT_MIN) so it won’t match again (helps handle duplicates correctly). This ensures each element from one array is only counted once in the intersection, even if duplicates are present.
+//                                : Time : O(n^2) — due to nested loops (for each element in arr1, we may traverse arr2). Space: O(n) — to store the intersection results (in worst case if all are common).
+// Approach 2 : Optimized Brute Force 1 : Works for : Case 2 and Case 3!
+//                                      : Idea : Its mostly same like the basic brute force! suppose that you have two arrays and one is unsorted (call it arr1) and one is sorted (call it arr2), Take each element from the first array (arr1).Compare it with each element of the second array (arr2), which is sorted.
+//                                             : Use this sorted nature to skip unnecessary checks : If element < arr2[j] → break early because no match will be found afterward. and If element == arr2[j] → element is common, add to answer and mark arr2[j] = INT_MIN to avoid duplicates.
+//                                             : Repeat for all elements in arr1.
+//                                      : This approach is just slightly better than the basic brute force, but with that it comes with some restrictions that it works for only Case 2 and 3!
+// Approach 3 : Best Optimized Brute Force Approach : Works for : Case 2 only!
+//                                                  : Idea : As both the arrays are sorted, Use the Two Pointers Technique
+//                                                         : Initialize two pointers : i = 0 for arr1 and j = 0 for arr2. While both pointers are within bounds : If arr1[i] < arr2[j] → move pointer i ahead. If arr1[i] > arr2[j] → move pointer j ahead.
+//                                                                                   : If arr1[i] == arr2[j] → it's a common element : Add it to the result. Move both pointers forward.
+//                                                         : This approach works because arrays are sorted, so we never miss any element and always move forward smartly.
+//                                                  : This approach is best brute force, but with that it comes with some restrictions that it works for only for Case 2 also it provides way better time complexity O(n) and space complexity O(1)
+// Approach 4 : Smart Approach (Using Hashmaps/Unordered_maps) : Work for : All cases!
+//                                                             : Idea : First, store all the elements of one array as keys in a hashmap, along with their frequencies as values. Then, traverse the second array and for each element, check if it exists in the map and its frequency is greater than 0.
+//                                                                    : If so, add that element to the result array and decrease its frequency in the map by 1. This way, we only traverse each array once, significantly reducing the time complexity. To optimize space, always create the map using the smaller array.
+//                                                             : This is best general approach for all cases! even with better time complexity of O(n) and slightly higher time complexity of O(n), but even that can be minimized using smaller array to store elements in the map! Apart from this you can use unordered maps to reduce the time complexity to O(1) in best and average cases and worst case will be O(n).
+// Approach 5 : Smart Approach 2 (Using sets) : Works for : When both the arrays contain only unique elements and no duplicate ones! And useful for all the cases mentioned above, just its efficiency varies based upon cases!
+//                                            : Idea : Sets store unique elements. Sets support fast lookup and insertion (average time O(1) for unordered_set, O(log n) for set).
+//                                                   : Hence, we can Store all elements of one array in a set. Traverse the second array and for each element : If it's present in the set → it's part of the intersection. Optional : Then remove it from the set (to handle duplicates properly).
+//                                            : Hence this approach also is good within the uniqueness condition! and for all the cases!
+// Final Note : All the approaches are valid for there specific cases and there efficiencies varies based upon the cases and conditions!
+// Approach 1 : Implementation!
+//            : Conditions : None!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersectionOfArrays1(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    for(int i = 0; i<v1.size(); i++) {
+        for(int j = 0; j<v2.size(); j++) {
+            if(v1[i] == v2[j]) {
+                ans.push_back(v1[i]);
+                v2[j] = INT_MIN;
+                break;
+            }
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = intersectionOfArrays1(v1, v2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Note : We can put this logic into one single loop! So for that we can see that, we are using the arr1's loop as the guide or dictator (or wtvr the right word for it is) to traverse over the inner loop to compare the elements of the inner loop!
+//      : Hence, the whole camparison is primarily depends on arr1's outer loop! hence, we can simply iterate over the arr1 and compare elements in the other array without adding it in the condition of iteration or loop!
+//      : But it won't affect the time complexity it's just another way of doing the same thing! just that how you can try to think differently and play with it!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersectionOfArrays2(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    int i = 0; int j = 0;
+    while(i < v1.size()) {
+        if(v1[i] == v2[j]) {
+            ans.push_back(v1[i]);
+            v2[j] = INT_MIN;
+            i++; j = 0;
+        }
+        else if(v1[i] != v2[j] && j < v2.size()) {
+            j++;
+        }
+        else {
+            i++; j = 0;
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = intersectionOfArrays2(v1, v2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 2 : Implementation!
+//            : Conditions : Works for Case 2 and Case 3! and can have duplicates!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersectionOfArrays3(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    for(int i = 0; i<v1.size(); i++) {
+        for(int j = 0; j<v2.size(); j++) {
+            if(v1[i] < v2[j]) {
+                i++;
+            }
+            if(v1[i] == v2[j]) {
+                ans.push_back(v1[i]);
+                v2[j] = INT_MIN;
+                break;
+            }
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = intersectionOfArrays3(v1, v2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 3 : Implementation!
+//            : Conditions : Works for Case 2 only! and unique and duplicates both are eligible!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+vector<int> intersectionOfArrays4(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    int i = 0; int j = 0;
+    bool commonPresent = false;
+    while(i < v1.size() && j < v2.size()) {
+        if(v1[i] == v2[j]) {
+            commonPresent = true;
+            ans.push_back(v2[j]);
+            i++; j++;
+        }
+        else if(v1[i] < v2[j]) {
+            i++;
+        }
+        else {
+            j++;
+        }
+    }
+    if(commonPresent) {
+        return ans;
+    }
+    else {
+        ans.push_back(-1);
+        return ans;
+    }
+    
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = intersectionOfArrays4(v1, v2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 4 : Using Hashmaps/Unordered_maps!
+//            : Conditions : Works for, all the cases and unique and duplicates both areas also!
+#include<iostream>
+#include<map>
+#include<vector>
+using namespace std;
+
+vector<int> intersectionOfArrays5(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    map<int, int> count;
+    for(int i = 0; i<v1.size(); i++) {
+        count[v1[i]]++;
+    }
+    for(int i = 0; i<v2.size(); i++) {
+        if(count[v2[i]] > 0) {
+            ans.push_back(v2[i]);
+            count[v2[i]]--;
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    if(v1.size() <= v2.size()) {
+        vector<int> ans = intersectionOfArrays5(v1, v2);
+        for(int i = 0; i < ans.size(); i++) {
+            cout<<ans[i]<<" ";
+        }
+    }
+    else {
+        vector<int> ans = intersectionOfArrays5(v2, v1);
+        for(int i = 0; i < ans.size(); i++) {
+            cout<<ans[i]<<" ";
+        }
+    }
+}
+
+// Approach 5 : Using sets!
+//            : Conditions : Works for, all cases but only unique elements in both arrays!
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+
+vector<int> intersectionOfArrays6(vector<int> v1, vector<int> v2) {
+    set<int> setV1(v1.begin(), v1.end());
+    vector<int> ans;
+    bool commonPresent = false;
+    for(int x : v2) {
+        if(setV1.count(x)) {
+            ans.push_back(x);
+            commonPresent = true;
+            setV1.erase(x);
+        }
+    }
+    if(commonPresent) {
+        return ans;
+    }
+    else {
+        ans.push_back(-1);
+        return ans;
+    }
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    if(v1.size() <= v2.size()) {
+        vector<int> ans = intersectionOfArrays6(v1, v2);
+        for(int i = 0; i < ans.size(); i++) {
+            cout<<ans[i]<<" ";
+        }
+    }
+    else {
+        vector<int> ans = intersectionOfArrays6(v2, v1);
+        for(int i = 0; i < ans.size(); i++) {
+            cout<<ans[i]<<" ";
+        }
+    }
+}
+
+// Question 10 : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
+// Thinking : We can think of multiple ways to solve this problem depending on the conditions and situation.
+//          : Approach 1 : Brute force approach : First, we will create a 2D vector (or a vector of pairs) to store the result. Then we will run two nested loops to check all possible pairs in the array. For each pair, we will check if the sum is equal to the given value S.
+//                                              : If the sum matches, we will : Store that pair in the result, But before storing, we will sort the pair in ascending order, like (min, max).
+//                                              : After collecting all the valid pairs, we will sort the final 2D vector : First by the first element of each pair. If the first elements are the same, then by the second element.
+//                                              : This approach will work in any case : Whether the array is sorted or unsorted or whether it has duplicate values or unique values. No extra data structures are required in this brute force method.
+//                                              : It will even contain duplicate pairs too! So we need to optimize it in further attempts!
+//                       : Time complexity : Checking all pairs → O(n²) and Sorting the result → O(k log k) (where k = number of valid pairs)
+//                       : Space complexity : Space Complexity : O(k) for storing the result pairs.
+//          : Approach 2 : Brute force optimized using sets : In this, you just need to introduce the 2D sets, rather than 2D vector! rest all will be more or less same, just need to handle sets correctly!
+// Approach 1 : Basic Brute Force!
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<vector<int>> findPairSum(vector<int> v, int sum) {
+    vector<vector<int>> valPair;
+    for(int i = 0; i < v.size(); i++) {
+        for(int j = i + 1; j < v.size(); j++) {
+            if(v[i] + v[j] == sum) {
+                vector<int> valSum;
+                valSum.push_back(min(v[i], v[j]));
+                valSum.push_back(max(v[i], v[j]));
+                valPair.push_back(valSum);
+            }
+        }
+    }
+    sort(valPair.begin(), valPair.end());
+    return valPair;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    int sum;
+    cin>>sum;
+    vector<vector<int>> ans = findPairSum(v, sum);
+    if (ans.size() == 1 && ans[0].size() == 1 && ans[0][0] == -1) {
+        cout << "[-1]";
+    }
+    else {
+        cout << "[";
+        for (int i = 0; i < ans.size(); i++) {
+            cout << "[";
+            for (int j = 0; j < ans[i].size(); j++) {
+                cout << ans[i][j];
+                if (j != ans[i].size() - 1) cout << ", ";
+            }
+            cout << "]";
+            if (i != ans.size() - 1) cout << ", ";
+        }
+        cout << "]";
+    }
+}
