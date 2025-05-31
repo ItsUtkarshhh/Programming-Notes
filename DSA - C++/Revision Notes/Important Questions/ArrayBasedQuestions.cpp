@@ -581,6 +581,7 @@ int main() {
 }
 
 // Question 10 : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
+// Output Expected : The best expected output could when the we get all the unique pairs, but also with optimized time and space complexity!
 // Thinking : We can think of multiple ways to solve this problem depending on the conditions and situation.
 //          : Approach 1 : Brute force approach : First, we will create a 2D vector (or a vector of pairs) to store the result. Then we will run two nested loops to check all possible pairs in the array. For each pair, we will check if the sum is equal to the given value S.
 //                                              : If the sum matches, we will : Store that pair in the result, But before storing, we will sort the pair in ascending order, like (min, max).
@@ -589,7 +590,24 @@ int main() {
 //                                              : It will even contain duplicate pairs too! So we need to optimize it in further attempts!
 //                       : Time complexity : Checking all pairs → O(n²) and Sorting the result → O(k log k) (where k = number of valid pairs)
 //                       : Space complexity : Space Complexity : O(k) for storing the result pairs.
-//          : Approach 2 : Brute force optimized using sets : In this, you just need to introduce the 2D sets, rather than 2D vector! rest all will be more or less same, just need to handle sets correctly!
+//          : Approach 2 : Brute force optimized using sets : In this, approach first we need to know how sets actually work! and what are those features of sets we need to use to get to our solution as per this approach!
+//                                                          : We need to use, Use a set<pair<int, int>> instead of vector<vector<int>>. Reason being, Set automatically removes duplicates, Set maintains sorted order by default (by first element, then second) and We can directly insert (min(a, b), max(a, b)) into the set without needing manual sorting later.
+//                                                          : Step wise approach : Create a set<pair<int, int>> to store unique valid pairs.
+//                                                                               : Use two nested loops (just like brute force).
+//                                                                               : For each pair (i, j) such that arr[i] + arr[j] == sum : Insert min(arr[i], arr[j]), max(arr[i], arr[j]) into the set.
+//                                                                               : Convert the final set into a 2D vector to match the required output format.
+//                                                          : Time complexity : Looping: O(n²), Inserting into set: O(log k) per insert (where k = number of unique pairs) Total = O(n² log k) in worst case
+//                                                          : Space Complexity: O(k), where k = number of unique valid pairs
+//                                                          : Note : The log factor comes due to balanced BST structure of std::set.
+//          : Approach 3 : Optimized Approach (Using maps) : In this optimized approach, we take advantage of a hash map to quickly check for the presence of required elements and a set to store unique pairs.
+//                                                         : Main Idea : We traverse the array once to store the occurrence of each number in a map (can be a count or simply a bool). Then, we iterate again and for each number x, we check whether sum - x also exists in the map.
+//                                                                     : If it does, we form a valid pair and insert it into a set (to automatically handle uniqueness). We also mark both numbers as used (e.g., set their map values to false) so we don’t process the same pair again in reverse (like (3, 7) and (7, 3)).
+//                                                         : Process : Store Element Presence : Traverse the array and insert each element into a map with a bool flag or count to track its availability.
+//                                                                                            : Check for Complement Pairs : Iterate through the array again.
+//                                                                                            : For each element x, calculate its complement as y = sum - x.
+//                                                                                            : If both x and y exist and are marked as available in the map, then : Create a pair using min(x, y) and max(x, y) to ensure consistent ordering. Insert this pair into a set to ensure all pairs are unique. Mark both x and y as used to avoid duplicates.
+//                                                                                            : Convert Set to Result : Convert the set of pairs into a 2D vector for the final output.
+//                                                         : Time Complexity: O(n) for scanning the array and checking pairs. and Space Complexity: O(n) for the map and set.
 // Approach 1 : Basic Brute Force!
 #include<iostream>
 #include<vector>
@@ -637,5 +655,152 @@ int main() {
             if (i != ans.size() - 1) cout << ", ";
         }
         cout << "]";
+    }
+}
+
+// Approach 2 : Brute Force but using Sets!
+//            : Advantage : It atleast gives our desired results! which is unique pairs!
+#include<iostream>
+#include<vector>
+#include<set>
+#include<algorithm>
+using namespace std;
+
+vector<vector<int>> findPairSum2(vector<int> v, int sum) {
+    set<pair<int,int>> valPair;
+    for(int i = 0; i < v.size(); i++) {
+        for(int j = i + 1; j < v.size(); j++) {
+            if(v[i] + v[j] == sum) {
+                valPair.insert({min(v[i], v[j]), max(v[i], v[j])});
+            }
+        }
+    }
+    vector<vector<int>> result;
+    for(auto &p : valPair) {
+        result.push_back({p.first, p.second});
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    int sum;
+    cin>>sum;
+    vector<vector<int>> ans = findPairSum2(v, sum);
+    if (ans.size() == 1 && ans[0].size() == 1 && ans[0][0] == -1) {
+        cout << "[-1]";
+    }
+    else {
+        cout << "[";
+        for (int i = 0; i < ans.size(); i++) {
+            cout << "[";
+            for (int j = 0; j < ans[i].size(); j++) {
+                cout << ans[i][j];
+                if (j != ans[i].size() - 1) cout << ", ";
+            }
+            cout << "]";
+            if (i != ans.size() - 1) cout << ", ";
+        }
+        cout << "]";
+    }
+}
+
+// Approach 3 : Optimized Approach (using maps)
+#include<iostream>
+#include<map>
+#include<set>
+#include<vector>
+using namespace std;
+
+vector<vector<int>> findPairSum3(vector<int> v, int sum) {
+    map<int,bool> exist;
+    set<pair<int,int>> valPair;
+    for(int i = 0; i<v.size(); i++) {
+        exist[v[i]] = true;
+    }
+    for(int i = 0; i<v.size(); i++) {
+        if(exist[v[i]] && exist[sum - v[i]] && (v[i] != sum - v[i])) {
+            valPair.insert({min(v[i], sum - v[i]), max(v[i], sum - v[i])});
+            exist[v[i]] = false;
+            exist[sum - v[i]] = false;
+        }
+    }
+    vector<vector<int>> result;
+    for(auto &i : valPair) {
+        result.push_back({i.first, i.second});
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int sum;
+    cin>>sum;
+    vector<vector<int>> ans = findPairSum3(v, sum);
+    if (ans.size() == 1 && ans[0].size() == 1 && ans[0][0] == -1) {
+        cout << "[-1]";
+    }
+    else {
+        cout << "[";
+        for (int i = 0; i < ans.size(); i++) {
+            cout << "[";
+            for (int j = 0; j < ans[i].size(); j++) {
+                cout << ans[i][j];
+                if (j != ans[i].size() - 1) cout << ", ";
+            }
+            cout << "]";
+            if (i != ans.size() - 1) cout << ", ";
+        }
+        cout << "]";
+    }
+}
+
+// Question 11 : Sort 0, 1
+// Thinking : Approach 1 : Brute Force : Just the sort the array using any optimized sorting algorithms like merge or quick sort and get the result! TC : O(nlogn) and SC : O(1) for in-place sort
+//          : Approach 2 : Logical Approach : Just count the number of 0's and 1's and just re-write them in the original array only! TC : O(n) and SC : O(1)
+//          : Approach 3 : Optimized Approach : Use two pointer approach! Where start a pointer at the start with 0 and one at the end with "size - 1".
+//                                            : And keep moving start forward and end backward until start value = 0 and end value = 1. and whenever wherever both of them breaks, just swap the values at that point and then again move start forward and end backward!
+//                                            : TC : O(n) and SC : O(1)
+// Approach 3 : Optimized Approach using Two Pointer!
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void sort01(vector<int> &v) {
+    int start = 0; int end = v.size() - 1;
+    while(start < end) {
+        while(v[start] == 0 && start < end) {
+            start++;
+        }
+        while(v[end] == 1 && start < end) {
+            end--;
+        }
+        if(v[start] == 1 && v[end] == 0) {
+            swap(v[start], v[end]);
+            start++; end--;
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    sort01(v);
+    for(int i = 0; i<v.size(); i++) {
+        cout<<v[i]<<" ";
     }
 }

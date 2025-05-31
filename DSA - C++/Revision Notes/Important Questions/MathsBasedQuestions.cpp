@@ -841,3 +841,5 @@ int main() {
     cin>>num;
     checkPowerOf4(num);
 }
+
+// Question 11 : Display all the prime numbers in interval of a to b!
