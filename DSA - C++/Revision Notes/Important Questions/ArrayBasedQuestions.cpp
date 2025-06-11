@@ -23,7 +23,7 @@ int main() {
 }
 
 // Little Optimizations : Instead of using a separate loop, update the maximum while taking input using max() function. This reduces the need for an additional loop and makes the code more efficient.
-// ChatGPT Remarks : the optimization is correct and slightly better in practice, but the performance benefit is minimal. It's mainly a style and readability choice unless you’re dealing with massive datasets.
+// ChatGPT Remarks : The optimization is correct and slightly better in practice, but the performance benefit is minimal. It's mainly a style and readability choice unless you’re dealing with massive datasets.
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -138,7 +138,7 @@ using namespace std;
 
 void swapAlternatively(int* arr, int n) {
     for(int i = 0; i<n; i = i+2) {
-        if(i+1 < n) {
+        if(i + 1 < n) {
             swap(arr[i], arr[i+1]);
         }
     }

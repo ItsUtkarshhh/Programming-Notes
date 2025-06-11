@@ -456,7 +456,7 @@ int main() {
 }
 
 // Better Approach : Euclidean Algorithm : The Euclidean Algorithm efficiently finds the GCD (Greatest Common Divisor) of two numbers using the division method.
-//                 : In the long division method, we work with two numbers : the dividend and the divisor. We repeatedly divide the dividend by the divisor and take the remainder. Then we replace : The dividend with the current divisor. The divisor with the current remainder.
+//                 : In the long division method, we work with two numbers : The dividend and the divisor. We repeatedly divide the dividend by the divisor and take the remainder. Then we replace : The dividend with the current divisor. The divisor with the current remainder.
 //                                                                         : This process continues until the remainder becomes 0. At that point, the current divisor is the GCD of the original two numbers.
 //                 : Note: There's no need to manually find the minimum of the two numbers at the beginning, because the modulo operator (%) naturally adjusts for it.
 //                 : Another approach can be recursion also, but will go through it later once we reach there!

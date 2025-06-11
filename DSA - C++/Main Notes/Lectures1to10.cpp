@@ -1,9 +1,21 @@
 // Data Structures and Algorithms
-// Data Structures : They are way to arrange data in main memory for efficient usage and they are ingredients to make good algorithms. Example : Arrays, Stacks, Linked List, Queue, Binary Search Trees.
-// Algorithms : Sequence of steps to solve a given problem. Eg : Sorting an Array
-// Database : Collection of information in permanent storage for faster retrieval and updation.
-// Data warehouse : Management of huge amount of legacy data for better analysis. Legacy data is that data which is stored for analysis purposes and now it has no use. like facebook stores some data like how many times you viewed one profile and how many times you commented a particular comment, these data are of no use but they are being stored to analyse and create algorithms, this is data warehouse.
-// Big Data : Analysis of too large complex data which cannot be deal with traditional data processing application, like making a search engine will require you a lotttt of data that a normal or general processing computer can't even store.
+// Data Structures : Data structures are systematic ways to organize and store data in a computer's main memory.
+//                 : So that it can be used efficiently. They are the building blocks for designing efficient algorithms. Examples: Arrays, Stacks, Linked Lists, Queues, Trees, Graphs, Hash Tables.
+
+// Algorithms : An algorithm is a finite sequence of well-defined instructions to solve a specific problem.
+//            : Algorithms are designed using data structures. Example: Sorting an array using Bubble Sort or Merge Sort.
+
+// Database : A database is an organized collection of structured information stored electronically, usually in permanent storage (like a hard drive), designed for efficient retrieval, modification, and management.
+//          : It allows CRUD operations: Create, Read, Update, Delete. Example: MySQL, PostgreSQL, MongoDB.
+
+// Data Warehouse : A data warehouse is a central repository designed to store **large volumes of historical and analytical data**.
+//                : It helps in decision-making and business intelligence. The data often comes from multiple sources (including operational databases).
+//                : Legacy data refers to historical data that is not used in day-to-day operations but is valuable for analytics. Example: Facebook may store data such as how many times a user viewed a particular profile or liked a post.
+//                : While not useful immediately, this data helps in trend analysis, building recommendation engines, and A/B testing.
+
+// Big Data : Big Data refers to extremely large and complex datasets that cannot be processed or analyzed using traditional tools or software. It is characterized by the **3 V's**: Volume (massive size), Velocity (fast generation), and Variety (structured, semi-structured, unstructured).
+//          : Example : Building a search engine like Google involves storing and processing petabytes of data from websites, user behavior, etc.
+//          : Big Data tools and frameworks: Hadoop, Spark, Kafka, Hive.
 
 // ---------------------------------------------------------- LECTURE 1 - Basics --------------------------------------------------------------------------------------------------------->
 // To solve a problem we do the following steps like, understand the problem, look for the given values, analyse the approach to be taken to solve the problem and then start programming!
