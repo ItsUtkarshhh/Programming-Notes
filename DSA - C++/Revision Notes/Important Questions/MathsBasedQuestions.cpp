@@ -843,3 +843,310 @@ int main() {
 }
 
 // Question 11 : Display all the prime numbers in interval of a to b!
+// Thinking : Brute Force Approach : We know a number x is prime if no number from 2 to x - 1 divides it. So, we can check all numbers from 2 to x - 1 and see if any divides x.
+//                                 : And, if it divides "x", then we will simply print it, and move forward to check other number in the range [a,b]
+//          : Brute Force (Little Optimization) : Any factor of x must be ≤ x/2. No number greater than x/2 can divide x (except x itself).
+//                                              : Using this, we just traverse half way through. It doesn't reduce the time complexity so much!
+//          : Optimization 1 : Any number x can be written as a product : x = a * b
+//                           :  If both a and b were greater than √x, their product would be greater than x. So, at least one factor must be ≤ √x.
+//                           : Therefore, if x is divisible by any number from 2 to √x, it is not prime. If no such divisor is found, then it is prime.
+//                           : It significantly improved time complexity to : O(root(x)).
+//                           : Weakness : If b is very large (like 10⁶ or 10⁷), repeatedly calling isPrime(x) still takes too long.
+//          : Optimization 2 : The Sieve of Eratosthenes is an ancient and efficient algorithm used to find all prime numbers up to a given number n.
+//  	                     : It works by repeatedly eliminating the multiples of each prime number, starting from 2. The numbers that remain unmarked after the process are prime numbers.
+//                           : Thought Process : Create a list from 2 to 30 (we skip 1 because it's not prime).
+//                                             : Start with the first prime number, which is 2 -> Mark all multiples of 2 (except 2 itself) as not prime: 4, 6, 8, 10, -> Move to the next unmarked number in the list (which is 3) — it’s prime -> Mark all multiples of 3 as not prime: 6, 9, 12, 15.
+//                                             : Repeat this process for the next unmarked numbers (5, 7, etc.) & Stop when you reach √n (square root of the given number), because any non-prime number greater than √n will already be marked by smaller prime factors.
+//                                             : All numbers which are not marked at the end are prime numbers!
+//                           : Why its efficient : Instead of checking each number individually whether it's prime or not, we mark out the multiples in bulk. The algorithm has Time Complexity: O(n log log n) — much faster than checking each number one by one.   
+// Approach 1 : Brute Force!
+#include<iostream>
+using namespace std;
+
+bool isPrime(int x) {
+    for(int i = 2; i <= x - 1; i++) {
+        if(x % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void printPrime(int a, int b) {
+    for(int i = a; i <= b; i++) {
+        if(isPrime(i)) {
+            cout<<i<<" ";
+        }
+    }
+}
+
+int main() {
+    int fnum; int lnum;
+    cin>>fnum>>lnum;
+    printPrime(fnum, lnum);
+}
+
+// Approach 2 : Brute Force (Little Optimization)
+#include<iostream>
+using namespace std;
+
+bool isPrime(int x) {
+    for(int i = 2; i < x/2; i++) {
+        if(x % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void printPrime(int a, int b) {
+    for(int i = a; i <= b; i++) {
+        if(isPrime(i)) {
+            cout<<i<<" ";
+        }
+    }
+}
+
+int main() {
+    int fnum; int lnum;
+    cin>>fnum>>lnum;
+    printPrime(fnum, lnum);
+}
+
+// Approach 3 : Optimized Approach!
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+bool isPrime(int x) {
+    for(int i = 2; i * i <= x; i++) { // sqrt(x) is less efficient!
+        if(x % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void printPrime(int a, int b) {
+    for(int i = a; i <= b; i++) {
+        if(isPrime(i)) {
+            cout<<i<<" ";
+        }
+    }
+}
+
+int main() {
+    int fnum; int lnum;
+    cin>>fnum>>lnum;
+    printPrime(fnum, lnum);
+}
+
+// Approach 4 : Sieve of Eratosthenes!
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main() {
+    int a, b;
+    cin>>a>>b;
+    vector<bool> isPrime(b + 1, true);
+    isPrime[0] = isPrime[1] = false;
+
+    for(int i = 2; i * i <= b; i++) {
+        if(isPrime[i]) {
+            for(int j = i * i; j <= b; j = j + i) {
+                isPrime[j] = false;
+            }
+        }
+    }
+
+    int count = 0;
+    cout<<"All the prime number upto "<<b<<" are : ";
+    for(int i = a; i <= b; i++) {
+        if(isPrime[i]) {
+            cout<<i<<" ";
+            count++;
+        }
+    }
+    cout<<endl;
+    cout<<"Count : "<<count;
+}
+
+// Question 12 : Find all the prime numbers from a to b where their sum is equal to a particular number!
+// Thinking : First simply find all the prime numbers pairs of 2 between a & b. And then save it in a vector or array! Then iterate over that vector or array to find the pairs one by one!
+//          : So we already know how to find prime numbers using sieve of erasthenes! So we will simply use the sliding window approach to iterate over the array to find the prime pairs!
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> isPrime(int a, int b) {
+    vector<int> finalPrime;
+    vector<bool> isprime(b + 1, true);
+    isprime[0] = isprime[1] = false;
+
+    for (int i = 2; i * i <= b; i++) {
+        if (isprime[i]) {
+            for (int j = i * i; j <= b; j += i) {
+                isprime[j] = false;
+            }
+        }
+    }
+
+    for (int i = a; i <= b; i++) {
+        if (isprime[i]) {
+            finalPrime.push_back(i);
+        }
+    }
+
+    return finalPrime;
+}
+
+void primePairSum(int a, int b, int sum) {
+    vector<int> finalPrime = isPrime(a, b);
+    bool pairFound = false;
+
+    for (int i = 0; i < finalPrime.size() - 1; i++) {
+        if (finalPrime[i] + finalPrime[i + 1] == sum) {
+            pairFound = true;
+            cout << "Pair: " << finalPrime[i] << " and " << finalPrime[i + 1] << endl;
+        }
+    }
+    if (!pairFound) {
+        cout << "No Pair Found!" << endl;
+    }
+}
+
+int main() {
+    int a, b, sum;
+    cout << "Enter range a and b: ";
+    cin >> a >> b;
+    cout << "Enter target sum: ";
+    cin >> sum;
+    primePairSum(a, b, sum);
+
+    return 0;
+}
+
+// Question 13 : Check if an year is a leap year or not!
+// Thinking : An year is a leap year if it is either divisible by 4 & 100 or 400!
+#include <iostream>
+using namespace std;
+
+bool isLeapYear(int year) {
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int main() {
+    int year;
+    cout << "Enter year: ";
+    cin >> year;
+
+    if (isLeapYear(year)) {
+        cout << year << " is a leap year." << endl;
+    } else {
+        cout << year << " is not a leap year." << endl;
+    }
+}
+
+// Question 14 : Find roots of a quadratic equation!
+// Thinking : Simple maths questions using basic knowledge of C++
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int a, b, c;
+    cin>>a>>b>>c;
+
+    cout<<"Formed Quadratic Equation : "<<a<<"x^2"<<" + "<<b<<"x"<<" + "<<c<<endl;
+    float determinant = (b * b) - (4 * a * c);
+    if(determinant == 0) {
+        cout<<"Equal Roots : ";
+        cout<<"- "<<b/(2*a)<<" and "<<"- "<<b/(2*a)<<endl;
+    }
+    if(determinant > 0) {
+        cout<<"Rational Roots : "<<endl;
+        cout<<"Root 1 : "<<(- b + sqrt(determinant))/(2*a)<<endl;
+        cout<<"Root 2 : "<<(- b - sqrt(determinant))/(2*a)<<endl;
+    }
+    else {
+        cout<<"Irrational Roots : "<<endl;
+        cout<<"Root 1 : "<<"-"<<b<<" + "<<determinant<<"i / "<<(2*a)<<endl;
+        cout<<"Root 2 : "<<"-"<<b<<" - "<<determinant<<"i / "<<(2*a)<<endl;
+    }
+}
+
+// Question 15 : Find average of number till n
+#include<iostream>
+using namespace std;
+
+double average(int* arr, int n) {
+    int sum = 0;
+    for(int i = 0; i<n; i++) {
+        sum += arr[i];
+    }
+    return static_cast<double>(sum)/n; // Here, static_cast is a C++ type casting operator used for safe and well-defined type conversions.
+    // It is preferred over C-style casts ((double)sum) because : It is more explicit and type-safe. And, It helps catch unintended or unsafe casts during compilation.
+}
+
+int main() {
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0; i<n; i++) {
+        cin>>arr[i];
+    }
+    cout<<average(arr,n);
+}
+
+// Question 16 : Given an array/vector of integers, determine whether the number formed by combining the units (ones place) digits of all the elements is divisible by 10.
+// Thinking : Brute Force Approach : Extract the last digit from each number in the array, combine all digits to form a single number, and then check if this number is divisible by 10.
+//          : Optimized Approach: Instead of forming the entire number, simply check whether the last digit of the last element in the array is divisible by 10, since only the final digit affects divisibility by 10.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int ans = 0;
+    for(int i = 0; i < n; i++) {
+        int digit = v[i]%10;
+        ans = (ans * 10) + digit;
+    }
+    cout<<ans<<endl;
+    if(ans % 10 != 0) {
+        cout<<"Not divisible by 10!";
+    }
+    else {
+        cout<<"Divisible by 10!";
+    }
+}
+
+// Optimized Approach :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    if((v[n-1] % 10) == 0) {
+        cout<<"Divisible by 10";
+    }
+    else {
+        cout<<"Not divisible by 10";
+    }
+}

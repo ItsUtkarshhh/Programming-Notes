@@ -1,5 +1,5 @@
 // ------------------------------------------------------------- Mathematical Problem Solving Questions ------------------------------------------------------------------------------------------------------------------------->
-// Question 1 : Display all the prime numbers in interval of a to b
+// Question 1 : Display all the prime numbers in interval of a to b!
 #include <iostream>
 using namespace std;
 
