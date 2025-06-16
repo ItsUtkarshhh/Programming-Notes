@@ -758,7 +758,7 @@ void checkPowerOf2(int num) {
         return;
     }
     cout<<"No "<<num<<" is not a power of 2";
-    return;   
+    return;
 }
 
 int main() {

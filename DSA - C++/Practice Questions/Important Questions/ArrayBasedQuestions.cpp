@@ -301,7 +301,7 @@ int main() {
 // Approach 4 : Smart Approach (Using Hashmaps/Unordered_maps) : Work for : All cases!
 //                                                             : Idea : First, store all the elements of one array as keys in a hashmap, along with their frequencies as values. Then, traverse the second array and for each element, check if it exists in the map and its frequency is greater than 0.
 //                                                                    : If so, add that element to the result array and decrease its frequency in the map by 1. This way, we only traverse each array once, significantly reducing the time complexity. To optimize space, always create the map using the smaller array.
-//                                                             : This is best general approach for all cases! even with better time complexity of O(n) and slightly higher time complexity of O(n), but even that can be minimized using smaller array to store elements in the map! Apart from this you can use unordered maps to reduce the time complexity to O(1) in best and average cases and worst case will be O(n).
+//                                                             : This is best general approach for all cases! even with better time complexity of O(n) and slightly higher space complexity of O(n), but even that can be minimized using smaller array to store elements in the map! Apart from this you can use unordered maps to reduce the time complexity to O(1) in best and average cases and worst case will be O(n).
 // Approach 5 : Smart Approach 2 (Using sets) : Works for : When both the arrays contain only unique elements and no duplicate ones! And useful for all the cases mentioned above, just its efficiency varies based upon cases!
 //                                            : Idea : Sets store unique elements. Sets support fast lookup and insertion (average time O(1) for unordered_set, O(log n) for set).
 //                                                   : Hence, we can Store all elements of one array in a set. Traverse the second array and for each element : If it's present in the set → it's part of the intersection. Optional : Then remove it from the set (to handle duplicates properly).
@@ -804,3 +804,8 @@ int main() {
         cout<<v[i]<<" ";
     }
 }
+
+// Re-solve these questions!
+// Question : Check whether an array contains any unique element or not! and print that unique element!
+// Question : Find intersection of two arrays!
+// Question : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
