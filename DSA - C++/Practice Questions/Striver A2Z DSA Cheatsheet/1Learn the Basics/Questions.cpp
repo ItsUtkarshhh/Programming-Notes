@@ -1,5 +1,9 @@
 // --------------------------------------------------------------- Lec 2 : Patterns ---------------------------------------------------------------------------------------------------------------------------------------------->
-// Pattern 1 : Simple square/rectangle * pattern! * * * * * -> * * * * * -> * * * * * -> * * * * * ...
+// Pattern 1 : * * * * *
+//           : * * * * *
+//           : * * * * *
+//           : * * * * *
+//           : * * * * *
 #include<iostream>
 using namespace std;
 
@@ -14,7 +18,11 @@ int main() {
     }
 }
 
-// Pattern 2 : One sided * triangle pattern! * -> * * -> * * * -> * * * * ...
+// Pattern 2 : *
+//           : * *
+//           : * * *
+//           : * * * *
+//           : * * * * *
 #include<iostream>
 using namespace std;
 
@@ -29,7 +37,11 @@ int main() {
     }
 }
 
-// Pattern 3 : One sided triangle number pattern! 1 -> 1 2 -> 1 2 3 -> 1 2 3 4 ...
+// Pattern 3 : 1
+//           : 1 2
+//           : 1 2 3
+//           : 1 2 3 4
+//           : 1 2 3 4 5
 #include<iostream>
 using namespace std;
 
@@ -44,7 +56,11 @@ int main() {
     }
 }
 
-// Pattern 4 : One sided triangle number pattern! 1 -> 2 2 -> 3 3 3 -> 4 4 4 4 ...
+// Pattern 4 : 1
+//           : 2 2
+//           : 3 3 3
+//           : 4 4 4 4
+//           : 5 5 5 5 5
 #include<iostream>
 using namespace std;
 
@@ -59,7 +75,11 @@ int main() {
     }
 }
 
-// Pattern 5 : Horizontally Reverse * traingle pattern! * * * * -> * * * -> * * -> * ...
+// Pattern 5 : * * * * *
+//           : * * * *
+//           : * * *
+//           : * *
+//           : *
 #include<iostream>
 using namespace std;
 
@@ -74,7 +94,11 @@ int main() {
     }
 }
 
-// Pattern 6 : Horizontally Reverse counting traingle pattern! 1 2 3 4 -> 1 2 3 -> 1 2 -> 1 ...
+// Pattern 6 : 1 2 3 4 5
+//           : 1 2 3 4
+//           : 1 2 3
+//           : 1 2
+//           : 1
 #include<iostream>
 using namespace std;
 
@@ -89,7 +113,9 @@ int main() {
     }
 }
 
-// Pattern 7 : * pyramid!
+// Pattern 7 :     *
+//           :   * * *
+//           : * * * * *
 #include<iostream>
 using namespace std;
 
@@ -112,7 +138,9 @@ int main() {
     }
 }
 
-// Pattern 8 : Reverse * pyramid!
+// Pattern 8 : * * * * *
+//           :   * * *
+//           :     *
 #include<iostream>
 using namespace std;
 
@@ -135,7 +163,12 @@ int main() {
     }
 }
 
-// Pattern 9 : Mixture of reverse and un-reverse * pyramid! - Diamond Shape!
+// Pattern 9 :     *
+//           :   * * *
+//           : * * * * *
+//           : * * * * *
+//           :   * * *
+//           :     *
 #include<iostream>
 using namespace std;
 
@@ -172,7 +205,11 @@ int main() {
     }
 }
 
-// Pattern 10 : 90 deg rotated Pyramid!
+// Pattern 10 : *
+//            : * *
+//            : * * *
+//            : * *
+//            : *
 #include<iostream>
 using namespace std;
 
@@ -193,7 +230,11 @@ int main() {
     }    
 }
 
-// Pattern 11 : Print pattern like 1 -> 0 1 -> 1 0 1 -> 0 1 0 1...
+// Pattern 11 : 1
+//            : 0 1
+//            : 1 0 1
+//            : 0 1 0 1
+//            : 1 0 1 0 1
 #include<iostream>
 using namespace std;
 
@@ -219,7 +260,11 @@ int main() {
     }
 }
 
-// Pattern 12 : Print a pattern like 1 _ _ _ _ 1 -> 1 2 _ _ 2 1 -> 1 2 3 3 2 1 and similarly!
+// Pattern 12 : 1                 1
+//            : 1 2             2 1
+//            : 1 2 3         3 2 1
+//            : 1 2 3 4     4 3 2 1
+//            : 1 2 3 4 5 5 4 3 2 1
 #include<iostream>
 using namespace std;
 
@@ -242,7 +287,11 @@ int main() {
     }
 }
 
-// Pattern 13 : Print a pattern counting 1 to n.
+// Pattern 13 : 1
+//            : 2 3
+//            : 4 5 6
+//            : 7 8 9 10
+//            : 11 12 13 14 15
 #include<iostream>
 using namespace std;
 
@@ -259,7 +308,11 @@ int main() {
     }
 }
 
-// Pattern 14 : Print a pattern A -> A B -> A B C -> A B C D and so on
+// Pattern 14 : A
+//            : A B
+//            : A B C
+//            : A B C D
+//            : A B C D E
 #include<iostream>
 using namespace std;
 
@@ -274,7 +327,11 @@ int main() {
     }
 }
 
-// Pattern 15 : Print a pattern A B C D E -> A B C D -> A B C -> A B -> A.
+// Pattern 15 : A B C D E
+//            : A B C D
+//            : A B C
+//            : A B
+//            : A
 #include<iostream>
 using namespace std;
 
@@ -289,7 +346,11 @@ int main() {
     }
 }
 
-// Pattern 16 : Print a pattern A -> B B  -> C C C and so on...
+// Pattern 16 : A
+//            : B B
+//            : C C C
+//            : D D D D
+//            : E E E E E
 #include<iostream>
 using namespace std;
 
@@ -304,7 +365,9 @@ int main() {
     }
 }
 
-// Pattern 17 : Print a pattern pytramid A -> A B A -> A B C B A and so on...
+// Pattern 17 : _ _ A _ _
+//            : _ A B A _
+//            : A B C B A
 #include<iostream>
 using namespace std;
 
@@ -334,7 +397,11 @@ int main() {
     }
 }
 
-// Pattern 18 : Print a pattern right angled pytramid E -> D E -> C D E and so on...
+// Pattern 18 : E
+//            : D E
+//            : C D E
+//            : B C D E
+//            : A B C D E
 #include<iostream>
 using namespace std;
 
@@ -351,7 +418,16 @@ int main() {
     }
 }
 
-// Pattern 19 : Print a pattern Anti-diamond!
+// Pattern 19 : * * * * * * * * * * 
+//            : * * * *     * * * * 
+//            : * * *         * * * 
+//            : * *             * * 
+//            : *                 * 
+//            : *                 * 
+//            : * *             * * 
+//            : * * *         * * * 
+//            : * * * *     * * * * 
+//            : * * * * * * * * * *
 #include<iostream>
 using namespace std;
 
@@ -388,7 +464,15 @@ int main() {
     }
 }
 
-// Pattern 20 : Print a butterfly pattern!
+// Pattern 20 : *                 *
+//            : * *             * *
+//            : * * *         * * * 
+//            : * * * *     * * * * 
+//            : * * * * * * * * * * 
+//            : * * * *     * * * * 
+//            : * * *         * * * 
+//            : * *             * * 
+//            : *                 *
 #include<iostream>
 using namespace std;
 
@@ -437,7 +521,10 @@ int main() {
     }
 }
 
-// Pattern 21 : Print square stroke patterns!
+// Pattern 21 : * * * *
+//            : *     *
+//            : *     *
+//            : * * * *
 #include<iostream>
 using namespace std;
 
@@ -492,7 +579,15 @@ int main() {
     }
 }
 
-// Pattern 22 : Print a unique numerical pattern, go to sheet to see the pattern!
+// Pattern 22 : 5 5 5 5 5 5 5 5 5
+//            : 5 4 4 4 4 4 4 4 5 
+//            : 5 4 3 3 3 3 3 4 5 
+//            : 5 4 3 2 2 2 3 4 5 
+//            : 5 4 3 2 1 2 3 4 5 
+//            : 5 4 3 2 2 2 3 4 5 
+//            : 5 4 3 3 3 3 3 4 5 
+//            : 5 4 4 4 4 4 4 4 5 
+//            : 5 5 5 5 5 5 5 5 5
 #include<iostream>
 using namespace std;
 

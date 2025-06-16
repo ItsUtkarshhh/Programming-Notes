@@ -1150,3 +1150,9 @@ int main() {
         cout<<"Not divisible by 10";
     }
 }
+
+// Re-solve these questions!
+// Question : Find Greatest Common Divisor (GCD)/ Highest Common Factor (HCF) of two numbers!
+// Question : B to D & D to B conversion!
+// Question : Complement of an Integer!
+// Question : Display all the prime numbers in interval of a to b!
