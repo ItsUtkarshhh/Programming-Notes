@@ -116,6 +116,14 @@ int main() {
 // Pattern 7 :     *
 //           :   * * *
 //           : * * * * *
+// Thought Process : To solve any pattern-related question in programming, the first step is to understand the relationship between rows and columns. But for pyramid patterns, things are a bit special — you need to understand three important components : Rows (Size), Spaces & Stars
+//                 : Star Logic : In a pyramid pattern, stars are printed in the center of each row and their count increases as we go down.
+//                              : One common observation is : Number of stars in any row "i" is = (2 * i) - 1. This means the number of stars depends only on the row number, not on the total size n.
+//                 : Space Logic : Before the stars, we print spaces to push the stars to the center, creating the pyramid shape. The spaces depend on both the current row number i and the total number of rows n. Two simple ways to calculate spaces...
+//                               : Method 1 : Spaces in row "i" : n - i
+//                                          : This is the easiest and most intuitive — as the row increases, the number of leading spaces decreases.
+//                               : Method 2 (alternative perspective) : Spaces in row "i" : (2 * (n - i + 1)) - 2)/2
+//                                                                    : This formula comes from total characters in a line and evenly splitting the remaining spaces. But this is more complex — use only if needed.
 #include<iostream>
 using namespace std;
 
@@ -141,6 +149,7 @@ int main() {
 // Pattern 8 : * * * * *
 //           :   * * *
 //           :     *
+// Thought Process : Its mostly similar to previous logic, just in reverse!
 #include<iostream>
 using namespace std;
 
@@ -169,6 +178,7 @@ int main() {
 //           : * * * * *
 //           :   * * *
 //           :     *
+// // Thought Process : Here again you can just simply combine the logic of inverted & non-inverted pyramids!
 #include<iostream>
 using namespace std;
 
@@ -210,6 +220,7 @@ int main() {
 //            : * * *
 //            : * *
 //            : *
+// Thought Process : Here, what we can simply do is, just use the combination of previous patterns and modify them according to the output rows!
 #include<iostream>
 using namespace std;
 
@@ -1346,4 +1357,52 @@ int main() {
     cout << "Min frequency element(s): ";
     for(auto val : minFE) cout << val << " ";
     cout << "\n";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Pattern 7 :       *
+//           :     * * *
+//           :   * * * * *
+//           : * * * * * * *
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        int space = ((2 * (n - i + 1)) - 2)/2;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+        
+        int stars = (2 * i) - 1;
+        while(stars) {
+            cout<<"*"<<" ";
+            stars--;
+        }
+
+        space = ((2 * (n - i + 1)) - 2)/2;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+        cout<<endl;
+    }
 }
