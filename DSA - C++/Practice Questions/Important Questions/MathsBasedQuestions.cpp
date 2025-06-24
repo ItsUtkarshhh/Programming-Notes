@@ -574,9 +574,11 @@ int main() {
     cin>>num;
     int ans = 0;
     int i = 0;
+    int multiplier = 1;
     while(num != 0) {
         int lsb = num % 2;
-        ans = (ceil(pow(10,i++)) * lsb) + ans;
+        ans = (multiplier * lsb) + ans; // Instead of pow() and ceil() funcs use this!
+        multiplier = multiplier * 10;
         num = num / 2;
     }
     cout<<ans;
@@ -592,9 +594,11 @@ int main() {
     cin>>num;
     int ans = 0;
     int i = 0;
+    int multiplier = 1;
     while(num != 0) {
         int lsb = num & 1;
-        ans = (ceil(pow(10,i++)) * lsb) + ans;
+        ans = (multiplier * lsb) + ans; // Instead of pow() and ceil() funcs use this!
+        multiplier = multiplier * 10;
         num = num >> 1;
     }
     cout<<ans;
@@ -626,9 +630,11 @@ int main() {
     cin>>num;
     int ans = 0;
     int i = 0;
+    int multiplier = 1;
     while(num != 0) {
         int digit = num % 10;
-        ans = (ceil(pow(2,i++)) * digit) + ans;
+        ans = (multiplier * digit) + ans; // Instead of pow() and ceil() funcs use this!
+        multiplier = multiplier * 2;
         num = num / 10;
     }
     cout<<ans;
@@ -1152,7 +1158,4 @@ int main() {
 }
 
 // Re-solve these questions!
-// Question : Find Greatest Common Divisor (GCD)/ Highest Common Factor (HCF) of two numbers!
-// Question : B to D & D to B conversion!
-// Question : Complement of an Integer!
 // Question : Display all the prime numbers in interval of a to b!
