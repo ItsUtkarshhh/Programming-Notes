@@ -394,23 +394,29 @@ int main() {
 #include<iostream>
 #include<vector>
 #include<climits>
+#include<algorithm>
 using namespace std;
 
 vector<int> intersectionOfArrays3(vector<int> v1, vector<int> v2) {
-    vector<int> ans;
-    for(int i = 0; i<v1.size(); i++) {
-        for(int j = 0; j<v2.size(); j++) {
-            if(v1[i] < v2[j]) {
-                i++;
-            }
+    sort(v2.begin(), v2.end());
+    vector<int> intersect;
+    for(int i = 0; i < v1.size(); i++) {
+        int j = 0;
+        while(j < v2.size()) {
             if(v1[i] == v2[j]) {
-                ans.push_back(v1[i]);
+                intersect.push_back(v2[j]);
                 v2[j] = INT_MIN;
+                break;
+            }
+            else if(v1[i] > v2[j]) {
+                j++;
+            }
+            else {
                 break;
             }
         }
     }
-    return ans;
+    return intersect;
 }
 
 int main() {
@@ -438,30 +444,33 @@ int main() {
 using namespace std;
 
 vector<int> intersectionOfArrays4(vector<int> v1, vector<int> v2) {
-    vector<int> ans;
-    int i = 0; int j = 0;
+    sort(v2.begin(), v2.end());
+    sort(v1.begin(), v1.end());
+    
+    vector<int> intersect;
     bool commonPresent = false;
+
+    int i = 0; int j = 0;
     while(i < v1.size() && j < v2.size()) {
         if(v1[i] == v2[j]) {
             commonPresent = true;
-            ans.push_back(v2[j]);
+            intersect.push_back(v2[j]);
             i++; j++;
         }
-        else if(v1[i] < v2[j]) {
-            i++;
+        else if(v1[i] > v2[j]) {
+            j++;
         }
         else {
-            j++;
+            i++;
         }
     }
     if(commonPresent) {
-        return ans;
+        return intersect;
     }
     else {
-        ans.push_back(-1);
-        return ans;
+        intersect.push_back(-1);
+        return intersect;
     }
-    
 }
 
 int main() {
@@ -580,7 +589,10 @@ int main() {
     }
 }
 
-// Question 10 : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
+// Question 10 : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions :
+//             : 1) Each pair should be sorted in ascending order.
+//             : 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
+//             : 3) Each unique valid pair should appear only once, even if duplicates exist in the array. For example, if S = 4 and the array is {2, 2}, the output should include the pair {2, 2} only once.
 // Output Expected : The best expected output could when the we get all the unique pairs, but also with optimized time and space complexity!
 // Thinking : We can think of multiple ways to solve this problem depending on the conditions and situation.
 //          : Approach 1 : Brute force approach : First, we will create a 2D vector (or a vector of pairs) to store the result. Then we will run two nested loops to check all possible pairs in the array. For each pair, we will check if the sum is equal to the given value S.
@@ -603,10 +615,16 @@ int main() {
 //                                                         : Main Idea : We traverse the array once to store the occurrence of each number in a map (can be a count or simply a bool). Then, we iterate again and for each number x, we check whether sum - x also exists in the map.
 //                                                                     : If it does, we form a valid pair and insert it into a set (to automatically handle uniqueness). We also mark both numbers as used (e.g., set their map values to false) so we don’t process the same pair again in reverse (like (3, 7) and (7, 3)).
 //                                                         : Process : Store Element Presence : Traverse the array and insert each element into a map with a bool flag or count to track its availability.
-//                                                                                            : Check for Complement Pairs : Iterate through the array again.
-//                                                                                            : For each element x, calculate its complement as y = sum - x.
-//                                                                                            : If both x and y exist and are marked as available in the map, then : Create a pair using min(x, y) and max(x, y) to ensure consistent ordering. Insert this pair into a set to ensure all pairs are unique. Mark both x and y as used to avoid duplicates.
-//                                                                                            : Convert Set to Result : Convert the set of pairs into a 2D vector for the final output.
+//                                                                                            : Iterate through the array again : For each element x, compute its complement y = S - x.
+//                                                                                                                              : If x == y, make sure there are at least 2 occurrences of x (i.e., {2, 2} with sum 4).
+//                                                                                                                              : If x != y, check if both exist in the map.
+//                                                                                                                              : Insert {min(x, y), max(x, y)} into a set and mark both elements as used (e.g., set their count or flag to 0/false).
+//                                                         : Why it's better : Reduces unnecessary checks using hashing. Guarantees unique pairs. Automatically handles the {2, 2} case only when both 2s are present.
+//                                                         : Pros : Most optimized for time: O(n) on average. Correctly includes valid pairs like {2, 2} once only, and avoids {3, 7} and {7, 3} both showing up. Clean separation of logic using hashing and sets.
+//                                                         : Cons : Slightly more logic to write and maintain.
+//                                                         : Important note : If we use map<int, bool> instead of map<int, int> (i.e., tracking presence instead of frequency), it will fail for cases like {2} and sum = 4, because it will wrongly assume {2, 2} is valid.
+//                                                                          : That’s why using frequency (map<int, int>) is important — it lets us confirm that a number appears at least twice before forming pairs like {2, 2}.
+//                                                                          : If you want to use map<int, bool>, then you either somehow have to make sure either of the two things : 1) There should be no duplicate/repeating elements, or 2) The index of element != index of complement
 //                                                         : Time Complexity: O(n) for scanning the array and checking pairs. and Space Complexity: O(n) for the map and set.
 // Approach 1 : Basic Brute Force!
 #include<iostream>
@@ -627,6 +645,10 @@ vector<vector<int>> findPairSum(vector<int> v, int sum) {
         }
     }
     sort(valPair.begin(), valPair.end());
+    valPair.erase(unique(valPair.begin(), valPair.end()), valPair.end());
+    if (valPair.empty()) {
+        return {{-1}};
+    }
     return valPair;
 }
 
@@ -718,23 +740,36 @@ int main() {
 using namespace std;
 
 vector<vector<int>> findPairSum3(vector<int> v, int sum) {
-    map<int,bool> exist;
-    set<pair<int,int>> valPair;
-    for(int i = 0; i<v.size(); i++) {
-        exist[v[i]] = true;
+    map<int, int> freq;
+    set<pair<int, int>> valPair;
+
+    for (int num : v) {
+        freq[num]++;
     }
-    for(int i = 0; i<v.size(); i++) {
-        if(exist[v[i]] && exist[sum - v[i]] && (v[i] != sum - v[i])) {
-            valPair.insert({min(v[i], sum - v[i]), max(v[i], sum - v[i])});
-            exist[v[i]] = false;
-            exist[sum - v[i]] = false;
+
+    for (int i = 0; i < v.size(); i++) {
+        int complement = sum - v[i];
+
+        // Case 1: Pair of same elements (like 2 + 2 = 4)
+        if (v[i] == complement && freq[v[i]] >= 2) {
+            valPair.insert({v[i], v[i]});
+            freq[v[i]] = 0; // mark both used
+        }
+
+        // Case 2: Normal case with two different values
+        else if (v[i] != complement && freq[v[i]] > 0 && freq[complement] > 0) {
+            valPair.insert({min(v[i], complement), max(v[i], complement)});
+            freq[v[i]] = 0;
+            freq[complement] = 0;
         }
     }
+
     vector<vector<int>> result;
-    for(auto &i : valPair) {
+    for (auto &i : valPair) {
         result.push_back({i.first, i.second});
     }
-    return result;
+
+    return result.size() > 0 ? result : vector<vector<int>>{{-1}};
 }
 
 int main() {
@@ -785,7 +820,7 @@ void sort01(vector<int> &v) {
         while(v[end] == 1 && start < end) {
             end--;
         }
-        if(v[start] == 1 && v[end] == 0) {
+        if(start < end) { // Better than to check v[start] == 1 && v[end] == 0, as it will be redundant
             swap(v[start], v[end]);
             start++; end--;
         }
@@ -798,14 +833,13 @@ int main() {
     vector<int> v(n);
     for(int i = 0; i<n; i++) {
         cin>>v[i];
+        if(v[i] != 0 && v[i] != 1) { // Just an extra check! (optional in practice, but can be important as in real world you can't rely on user to always put correct value! Same for other questions!)
+            cout<<"Restart the program and enter value 0/1";
+            exit(0);
+        }
     }
     sort01(v);
     for(int i = 0; i<v.size(); i++) {
         cout<<v[i]<<" ";
     }
 }
-
-// Re-solve these questions!
-// Question : Check whether an array contains any unique element or not! and print that unique element!
-// Question : Find intersection of two arrays!
-// Question : Find all pairs of elements in an array such that the sum of each pair equals a given value S. The pairs should satisfy the following conditions : 1) Each pair should be sorted in ascending order. 2) The list of pairs should be sorted primarily by the first value of the pairs, and if two pairs have the same first value, they should be sorted by the second value.
