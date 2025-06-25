@@ -113,16 +113,115 @@ int main() {
     }
 }
 
-// Pattern 7 :     *
-//           :   * * *
-//           : * * * * *
+// Pattern 7 : 1
+//          : 2 3
+//          : 4 5 6
+//          : 7 8 9 10
+//          : 11 12 13 14 15
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    int count = 1;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=i; j++) {
+            cout<<count<<" ";
+            count++;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 8 : A
+//           : A B
+//           : A B C
+//           : A B C D
+//           : A B C D E
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 0; j<i; j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 9 : A B C D E
+//           : A B C D
+//           : A B C
+//           : A B
+//           : A
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 0; j<=(n-i); j++) {
+            cout<<char('A'+j)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 10 : A
+//            : B B
+//            : C C C
+//            : D D D D
+//            : E E E E E
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<n; i++) {
+        for(int j = 0; j<=i; j++) {
+            cout<<char('A'+i)<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 11 : E
+//            : D E
+//            : C D E
+//            : B C D E
+//            : A B C D E
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        char ch = 'A'+(n-i);
+        for(int j = 1; j<=i; j++) {
+            cout<<ch<<" ";
+            ch++;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 12 :     *
+//            :   * * *
+//            : * * * * *
 // Thought Process : To solve any pattern-related question in programming, the first step is to understand the relationship between rows and columns. But for pyramid patterns, things are a bit special — you need to understand three important components : Rows (Size), Spaces & Stars
 //                 : Star Logic : In a pyramid pattern, stars are printed in the center of each row and their count increases as we go down.
 //                              : One common observation is : Number of stars in any row "i" is = (2 * i) - 1. This means the number of stars depends only on the row number, not on the total size n.
 //                 : Space Logic : Before the stars, we print spaces to push the stars to the center, creating the pyramid shape. The spaces depend on both the current row number i and the total number of rows n. Two simple ways to calculate spaces...
 //                               : Method 1 : Spaces in row "i" : n - i
 //                                          : This is the easiest and most intuitive — as the row increases, the number of leading spaces decreases.
-//                               : Method 2 (alternative perspective) : Spaces in row "i" : (2 * (n - i + 1)) - 2)/2
+//                               : Method 2 (alternative perspective) : Spaces in row "i" : (2 * (n - i + 1)) - 2)/2 (which is eqla to "n - i" but okay nvm)
 //                                                                    : This formula comes from total characters in a line and evenly splitting the remaining spaces. But this is more complex — use only if needed.
 #include<iostream>
 using namespace std;
@@ -146,9 +245,9 @@ int main() {
     }
 }
 
-// Pattern 8 : * * * * *
-//           :   * * *
-//           :     *
+// Pattern 13 : * * * * *
+//            :   * * *
+//            :     *
 // Thought Process : Its mostly similar to previous logic, just in reverse!
 #include<iostream>
 using namespace std;
@@ -172,12 +271,41 @@ int main() {
     }
 }
 
-// Pattern 9 :     *
-//           :   * * *
-//           : * * * * *
-//           : * * * * *
-//           :   * * *
-//           :     *
+// Alternate Approach! As this time stars are depending upon both "n & i" but spaces are only depending upon "i".
+#include<iostream>
+using namespace std;
+
+int main() {
+    int nr;
+    cin>>nr;
+    for(int i = 1; i <= nr; i++) {
+        int spaces = i - 1;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+
+        int stars = 2*nr - (2*i - 1);
+        while(stars) {
+            cout<<"*"<<" ";
+            stars--;
+        }
+
+        spaces = i - 1;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 14 :     *
+//            :   * * *
+//            : * * * * *
+//            : * * * * *
+//            :   * * *
+//            :     *
 // // Thought Process : Here again you can just simply combine the logic of inverted & non-inverted pyramids!
 #include<iostream>
 using namespace std;
@@ -215,12 +343,55 @@ int main() {
     }
 }
 
-// Pattern 10 : *
+// Pattern 15 : *
 //            : * *
 //            : * * *
 //            : * *
 //            : *
 // Thought Process : Here, what we can simply do is, just use the combination of previous patterns and modify them according to the output rows!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout<<"Enter an odd number : ";
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        if(i < (n/2 + 1)) {
+            for(int j = 1; j <= i; j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
+        }
+        else {
+            for(int j = 1; j <= (n - i + 1); j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
+        }
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; 2*i <= n; i++) {
+        for(int j = 1; j <= i; j++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n - 1; i >= 1; i--) {
+        for(int j = i; j >= 1; j--) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 #include<iostream>
 using namespace std;
 
@@ -241,7 +412,7 @@ int main() {
     }    
 }
 
-// Pattern 11 : 1
+// Pattern 16 : 1
 //            : 0 1
 //            : 1 0 1
 //            : 0 1 0 1
@@ -271,11 +442,39 @@ int main() {
     }
 }
 
-// Pattern 12 : 1                 1
+// Pattern 17 : 1                 1
 //            : 1 2             2 1
 //            : 1 2 3         3 2 1
 //            : 1 2 3 4     4 3 2 1
 //            : 1 2 3 4 5 5 4 3 2 1
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int num = 1;
+        while(num <= i) {
+            cout<<num<<" ";
+            num++;
+        }
+
+        int spaces = 2*(n - i);
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        } 
+
+        num = i;
+        while(num >= 1) {
+            cout<<num<<" ";
+            num--;
+        }
+        cout<<endl;
+    }
+}
+
 #include<iostream>
 using namespace std;
 
@@ -298,87 +497,43 @@ int main() {
     }
 }
 
-// Pattern 13 : 1
-//            : 2 3
-//            : 4 5 6
-//            : 7 8 9 10
-//            : 11 12 13 14 15
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    int count = 1;
-    for(int i = 1; i<=n; i++) {
-        for(int j = 1; j<=i; j++) {
-            cout<<count<<" ";
-            count++;
-        }
-        cout<<endl;
-    }
-}
-
-// Pattern 14 : A
-//            : A B
-//            : A B C
-//            : A B C D
-//            : A B C D E
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 1; i<=n; i++) {
-        for(int j = 0; j<i; j++) {
-            cout<<char('A'+j)<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-// Pattern 15 : A B C D E
-//            : A B C D
-//            : A B C
-//            : A B
-//            : A
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 1; i<=n; i++) {
-        for(int j = 0; j<=(n-i); j++) {
-            cout<<char('A'+j)<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-// Pattern 16 : A
-//            : B B
-//            : C C C
-//            : D D D D
-//            : E E E E E
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 0; i<n; i++) {
-        for(int j = 0; j<=i; j++) {
-            cout<<char('A'+i)<<" ";
-        }
-        cout<<endl;
-    }
-}
-
-// Pattern 17 : _ _ A _ _
+// Pattern 18 : _ _ A _ _
 //            : _ A B A _
 //            : A B C B A
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        int spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+
+        char ch = 'A';
+        for(int j = 0; j <= (2*i - 1)/2; j++) {
+            cout<<ch<<" ";
+            ch++;
+        }
+
+        ch = 'A' + i - 2;
+        for(int j = 0; j < i-1; j++) {
+            cout<<ch<<" ";
+            ch--;
+        }
+
+        spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+        cout<<endl;
+    }
+}
+
 #include<iostream>
 using namespace std;
 
@@ -403,27 +558,6 @@ int main() {
         while(space) {
             cout<<" "<<" ";
             space--;
-        }
-        cout<<endl;
-    }
-}
-
-// Pattern 18 : E
-//            : D E
-//            : C D E
-//            : B C D E
-//            : A B C D E
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 1; i<=n; i++) {
-        char ch = 'A'+(n-i);
-        for(int j = 1; j<=i; j++) {
-            cout<<ch<<" ";
-            ch++;
         }
         cout<<endl;
     }
@@ -477,12 +611,12 @@ int main() {
 
 // Pattern 20 : *                 *
 //            : * *             * *
-//            : * * *         * * * 
-//            : * * * *     * * * * 
-//            : * * * * * * * * * * 
-//            : * * * *     * * * * 
-//            : * * *         * * * 
-//            : * *             * * 
+//            : * * *         * * *
+//            : * * * *     * * * *
+//            : * * * * * * * * * *
+//            : * * * *     * * * *
+//            : * * *         * * *
+//            : * *             * *
 //            : *                 *
 #include<iostream>
 using namespace std;
@@ -616,6 +750,32 @@ int main() {
         cout<<endl;
     }
 } // Re-solve this again, after sometime!
+
+// Pattern 23 : ___*___
+//            : __*_*__
+//            : _*_*_*_
+//            : *_*_*_*
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = 1; j<=i; j++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
 
 // --------------------------------------------------------------- Lec 4 : Know Basic Maths ---------------------------------------------------------------------------------------------------------------------------------------------->
 // Question 1 : Count Digits!
