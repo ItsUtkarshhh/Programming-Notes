@@ -872,3 +872,38 @@ int main() {
         cout<<v[i]<<" ";
     }
 }
+
+// Question 13 : Reverse a array after a particular index!
+// Thinking & Approach : We already know how to reverse an array! Where we used to start from index = 0. But this time we will just give start from where the reverse is intended!
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> reverseAfterK(vector<int> &v, int k) {
+    int start = k;
+    int end = v.size() - 1;
+    while(start <= end) {
+        swap(v[start], v[end]);
+        start++;
+        end--;
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int index;
+    cin>>index;
+    reverseAfterK(v, index);
+    for(int i = 0; i < n; i++) {
+        cout<<v[i]<<" ";
+    }
+}
+
+// Question 14 : Merge 2 sorted arrays!
+// Thinking & Approach : Here we can think for multiple cases about the two arrays! Just as intersection of two arrays!
+//                     : 

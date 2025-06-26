@@ -1,25 +1,28 @@
 #include<iostream>
 #include<vector>
-#include<algorithm>
 using namespace std;
 
-void rotatebyK_F(vector<int> &v, int steps) {
-    reverse(v.begin(), v.end());
-    reverse(v.begin(), v.begin() + steps);
-    reverse(v.begin() + steps, v.end());
+vector<int> reverseAfterK(vector<int> &v, int k) {
+    int start = k;
+    int end = v.size() - 1;
+    while(start <= end) {
+        swap(v[start], v[end]);
+        start++;
+        end--;
+    }
 }
 
 int main() {
     int n;
     cin>>n;
-    int steps;
-    cin>>steps;
     vector<int> v(n);
-    for(int i = 0; i < v.size(); i++) {
+    for(int i = 0; i < n; i++) {
         cin>>v[i];
     }
-    rotatebyK_F(v, steps);
-    for(int i = 0; i < v.size(); i++) {
+    int index;
+    cin>>index;
+    reverseAfterK(v, index);
+    for(int i = 0; i < n; i++) {
         cout<<v[i]<<" ";
     }
 }

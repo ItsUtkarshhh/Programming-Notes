@@ -1027,265 +1027,336 @@ int main() {
 // Worst Case TC : O(n^2), ye tab hoga when the array is reversed, tab saare elements se comparison hoga and then TC will become, O(n^2)!
 
 // ---------------------------------------------------------- LECTURE 19 - C++ STL (Standard Template Library) --------------------------------------------------------------------------------------------------------->
-// STL is like a short way of using some of the functionlaties jinko hum entirely code krte hai! like, jaise koi binary search hogyi uske liye abhi tak hum poora code likh rhe the pr using STL hum simple ek line add krke hi binary serch ki saari functionlaties include kr sakte hai!
-// C++ STL do tarah ke hote hai, ek toh hota hai Containers (which are used to store data) and ek hota hai algorithms (which are used to apply algorithms).
-// So lets first start with containers : They are : Arrays, Vectors, Deque, Queue, Priority Queue, Lists, Stack, Sets, Maps!
-// 1) Arrays :
+// The C++ STL (Standard Template Library) provides a set of ready-to-use classes and functions 
+// that simplify many common programming tasks. Instead of writing complete implementations 
+// (like binary search or sorting) from scratch, STL allows us to use them with just a single line of code.
+
+// The STL is mainly divided into two categories:
+// Containers – These are data structures used to store collections of data.
+// Algorithms – These are functions that perform operations like searching, sorting, etc., 
+// on the elements stored in containers.
+
+// Let's begin with containers. The most commonly used STL containers are:
+// - Arrays
+// - Vectors
+// - Deques
+// - Queues
+// - Priority Queues
+// - Lists
+// - Stacks
+// - Sets
+// - Maps
+
+// 1) Arrays in C++ STL
 #include<iostream>
-#include<array> // To implement arrays using STL we include this library!
+#include<array> // Required to use the STL array container
 using namespace std;
 
 int main() {
-    int arr1[5] = {1,2,3,4,5}; // This is a static array.
-    array<int,5> arr2 = {6,7,8,9,10}; // This is also a static array, just implemeted using STL!
-    int size = arr2.size(); // This .size() is used to find the size of the STL array.
-    for(int i = 0; i<size; i++) { // Printing all the elements of the STL array!
-        cout<<arr2[i]<<" ";
-    }
-    cout<<"Element at Index 2 : "<<arr2.at(2)<<endl; // It will tell the value at index 2 in the STL array!
-    cout<<"Empty or not : "<<arr2.empty()<<endl; // It returns a boolean value that whether the array is empty or not.
-    cout<<"First element of the array : "<<arr2.front()<<endl; // It tells the first element of the array.
-    cout<<"Last element of the array : "<<arr2.back()<<endl; // It returns the last element of the array.
-} // In short the most usable methods are : .size() .at() .front() .back() .empty() .sort() 
+    int arr1[5] = {1, 2, 3, 4, 5}; // Traditional static array
+    
+    array<int, 5> arr2 = {6, 7, 8, 9, 10}; // STL array (also static in size, but comes with helpful member functions)
 
-// 2) Vector : Vectors are the dynamic arrays, they increase their length according to the number of elements! Now maanlo humne ek vector banaya and uska size 4 tha and jaise hi hum 5th element daalenge vaise hi uska size double hojayega!
-// And ye vectors kaam aise krte hai ki like jab 4 se zyada elements humne daale toh ye vector apne se double size ka ek dynamic array bnaa dega kisi aur memory location pr and usme saare elements copy krdega and jo humne add kiya hai usko bhi add krdega and saath saath jo pooraana vaala tha array usko bhi remove and delete krdega!
+    int size = arr2.size(); // Getting the size of the array using .size()
+
+    for(int i = 0; i < size; i++) { // Printing all elements of the STL array
+        cout << arr2[i] << " ";
+    }
+    cout << endl;
+
+    // Useful STL array functions :
+    cout << "Element at index 2: " << arr2.at(2) << endl; // Access element at index 2 safely
+    cout << "Is the array empty? " << arr2.empty() << endl; // Check if the array is empty (returns true or false)
+    cout << "First element: " << arr2.front() << endl; // Get the first element
+    cout << "Last element: " << arr2.back() << endl; // Get the last element
+
+    // Summary of commonly used STL array methods :
+    // - .size()      → returns the number of elements
+    // - .at(index)   → safely accesses element at a given index (with bounds checking)
+    // - .front()     → returns the first element
+    // - .back()      → returns the last element
+    // - .empty()     → returns true if the array is empty, false otherwise
+}
+
+// 2) Vectors in C++ STL
+// Vectors are dynamic arrays provided by the STL. Unlike static arrays, vectors can automatically resize themselves when elements are added or removed.
+// How resizing works : If the current capacity is full and a new element is added using `push_back()`, the vector internally creates a new array of double the current capacity.
+//                    : It copies all existing elements to the new array and then deletes the old one.
 #include<iostream>
 #include<vector>
 using namespace std;
 
 int main() {
     vector<int> v1;
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and "; // Capacity is the total amount of space available in the vector!
-    cout<<"Size of the vector : "<<v1.size()<<endl; // And size is the number of elements present in the vector!
+
+    cout << "Initial capacity: " << v1.capacity() << " | Size: " << v1.size() << endl;
 
     v1.push_back(20);
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and ";
-    cout<<"Size of the vector : "<<v1.size()<<endl;
-
     v1.push_back(21);
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and ";
-    cout<<"Size of the vector : "<<v1.size()<<endl;
-
     v1.push_back(22);
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and ";
-    cout<<"Size of the vector : "<<v1.size()<<endl;
 
-    cout<<"Elements at Index 2 is : "<<v1.at(2)<<endl;
+    cout << "After inserting elements:\n";
+    cout << "Capacity: " << v1.capacity() << " | Size: " << v1.size() << endl;
 
-    // int size = v1.size(); // Aise size declare krdoge toh size pop ke baat toh change hoga na, pr kyunki tumne isko aise initiallize kiya hua hai, and after the popping ke baad bhi tum iss hi size variable ko use kr rhe ho iss chakkar me size change hi nhi hua after popping ke iteration me!
-    for(int i = 0; i<v1.size(); i++) {
-        cout<<v1[i]<<" ";
+    cout << "Element at index 2: " << v1.at(2) << endl;
+
+    cout << "Current vector: ";
+    for (int i = 0; i < v1.size(); i++) {
+        cout << v1[i] << " ";
     }
-    cout<<endl;
+    cout << endl;
 
-    cout<<"Before popping the last element, ";
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and ";
-    cout<<"Size of the vector : "<<v1.size();
-    cout<<" And the current array is : ";
-    for(int i = 0; i<v1.size(); i++) {
-        cout<<v1[i]<<" ";
+    // Demonstrating pop_back()
+    cout << "Before pop_back:\n";
+    cout << "Capacity: " << v1.capacity() << " | Size: " << v1.size() << "\nElements: ";
+    for (int i : v1) {
+        cout << i << " ";
     }
+    cout << endl;
 
     v1.pop_back();
 
-    cout<<endl;
-
-    cout<<"After popping the last element, ";
-    cout<<"Capacity of the vector : "<<v1.capacity()<<" and ";
-    cout<<"Size of the vector : "<<v1.size();
-    cout<<" And the new array is : ";
-    for(int i = 0; i<v1.size(); i++) {
-        cout<<v1[i]<<" ";
+    cout << "After pop_back:\n";
+    cout << "Capacity: " << v1.capacity() << " | Size: " << v1.size() << "\nElements: ";
+    for (int i : v1) {
+        cout << i << " ";
     }
-    cout<<endl;
+    cout << endl;
 
-    // Another way of iterating this for loop is the below one, jahaa hum range-based for loop ko use kr rhe hai! jisme i bss harr element ke paas jaata hai and uss value ko print krdeta hai! yahaa index se kuch lena dena nhi hai!
-    // cout<<"Before Pop : "<<endl;
-    // for(int i:v1) {
-    //     cout<<i<<" ";
-    // }
-    // cout<<endl;
-
-    // v1.pop_back();
-    // cout<<"After Pop : "<<endl;
-    // for(int i:v1) {
-    //     cout<<i<<" ";
-    // }
-    // cout<<endl;
-
-    // Now lets clear the vector and then again inspect...
-    cout<<"Vector before clear command : ";
-    for(int i:v1) {
-        cout<<i<<" ";
-    }
-    cout<<", And the size of vector is : "<<v1.size();
-    cout<<endl;
+    // Demonstrating clear()
+    cout << "Before clear(): ";
+    for (int i : v1) cout << i << " ";
+    cout << " | Size: " << v1.size() << endl;
 
     v1.clear();
-    
-    cout<<"Vector after clear command : ";
-    for(int i:v1) {
-        cout<<i<<" ";
-    }
-    cout<<", And the size of vector is : "<<v1.size();
-    cout<<endl;
 
-    // Another way of intiallizing the vector is...
-    vector<int> v2(5,1); // It means that ek vector bnao 5 size ka and uske saare places pr 1 daaldo!
-    cout<<"Vector v2 is : ";
-    for(int i:v2) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    cout << "After clear(): ";
+    for (int i : v1) cout << i << " ";
+    cout << " | Size: " << v1.size() << endl;
 
-    // Another way is when you already has a vector and bss hume usko copy paste krna hai, then...
+    // Different ways to initialize a vector
+    vector<int> v2(5, 1); // Creates a vector of size 5, all elements initialized to 1
+    cout << "Vector v2: ";
+    for (int i : v2) cout << i << " ";
+    cout << endl;
+
+    // Copying a vector
     vector<int> v2copy(v2);
-    cout<<"Vector v2copy is : ";
-    for(int i:v2copy) {
-        cout<<i<<" ";
-    }
-} // In short all the methods for vectors here are : .push_back() .pop_back() .capacity() .size() .clear() .at() .sort(), then we have things like : Range-based for loop, copying one vector to another, initiallizing vector by just providing size and the value with which we want to initiallize it!
+    cout << "Copied vector (v2copy): ";
+    for (int i : v2copy) cout << i << " ";
+    cout << endl;
 
-// 3) Deque : It has an open end and start, isme hum deletion and insertion dono end pr kr sakte hai! Deque is a dynamic array! Deque means a doubly ended queue!
+    // Useful vector methods : .push_back(val) → adds a new element to the end
+    //                       : .pop_back() → removes the last element
+    //                       : .capacity() → returns the current allocated storage (may be more than the size)
+    //                       : .size() → returns the number of elements currently in the vector
+    //                       : .clear() → removes all elements from the vector
+    //                       : .at(index) → safely accesses an element at the given index
+    //                       : Range-based for loop → a simpler syntax for iterating over elements
+    //                       : Vector initialization and copying
+}
+
+// 3) Deque in C++ STL
+// A `deque` (double-ended queue) is a dynamic container that allows insertion and deletion of elements from both the front and the back. It's more flexible than vectors or arrays in this regard.
+// Key Properties : Allows push and pop operations from both ends.
+//                : Provides random access to elements like vectors.
+//                : Resizes dynamically.
 #include<iostream>
 #include<deque>
 using namespace std;
 
 int main() {
-    // Initiallizing deque
+    // Initializing a deque
     deque<int> d1;
 
-    // Pushing elements into deque
-    d1.push_front(1);
-    d1.push_back(2);
+    // Adding elements
+    d1.push_front(1);  // Adds to the front
+    d1.push_back(2);   // Adds to the back
     d1.push_back(3);
     d1.push_back(4);
 
-    // Printing the deque :
-    cout<<"Elements of the Deque are : ";
-    for(int i : d1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
-    cout<<"Size of the deque are : "<<d1.size()<<endl;
+    // Displaying deque contents
+    cout << "Elements of the deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << endl;
 
-    // Popping elements from the deque.
-    cout<<"Before popping from back : ";
-    for(int i : d1) {
-        cout<<i<<" ";
-    }
-    cout<<",And size of deque before popping : "<<d1.size()<<endl;
+    cout << "Size of deque: " << d1.size() << endl;
+
+    // Demonstrating pop_back()
+    cout << "\nBefore pop_back:\n";
+    cout << "Deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << "| Size: " << d1.size() << endl;
 
     d1.pop_back();
-    
-    cout<<"After popping from back : ";
-    for(int i : d1) {
-        cout<<i<<" ";
-    }
-    cout<<",And size of deque after popping : "<<d1.size()<<endl;
-    // Just like pop_back we have pop_front! jo aage se elements pop krta hai in the similar way!
 
-    // Printing a particular element at a particular index.
-    cout<<"Element at index 2 : "<<d1.at(2)<<endl;
+    cout << "After pop_back:\n";
+    cout << "Deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << "| Size: " << d1.size() << endl;
 
-    // Printing front and back elements
-    cout<<"Element from front : "<<d1.front()<<endl;
-    cout<<"Element from back : "<<d1.back()<<endl;
+    // Demonstrating pop_front() (optional)
+    d1.pop_front(); // Removing from the front
 
-    // Empty command in deque
-    cout<<"Is the deque empty? : "<<d1.empty()<<endl; // It will return 0 means no the deque is not empty!
+    cout << "\nAfter pop_front:\n";
+    cout << "Deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << "| Size: " << d1.size() << endl;
 
-    // Erase command in deque
-    cout<<"Size of deque before erase function : "<<d1.size()<<endl;
-    d1.erase(d1.begin()); // Parameter ke according decide hota hai ki konsa element erase krna hai, agar .end() likha hota toh end se 3 delete hojaata! agar .begin() + 1 likha hota toh 2 erase hojaata
-    cout<<"Size of deque after erase function : "<<d1.size()<<endl;
+    // Accessing elements
+    cout << "\nElement at index 1: " << d1.at(1) << endl;
+    cout << "Front element: " << d1.front() << endl;
+    cout << "Back element: " << d1.back() << endl;
 
-    cout<<"The final deque : ";
-    for(int i : d1) {
-        cout<<i<<" ";
-    }
-} // In short all the methods that deque has are : .push_front() .push_back() .pop_front() .pop_back() .size() .at() .front() .back() .empty() .erase() .begin() .end() .sort() and along with these it include things like range-based for loop and copying deque from the already existing deque!
+    // Checking if deque is empty
+    cout << "Is deque empty? " << (d1.empty() ? "Yes" : "No") << endl;
 
-// 4) Lists : Lists are implemented using doubly linked lists, ye hum baad me padhenge! abhi ke liye bss STL ke through samajhte hai! and isme koi indexes nhi hote toh yahaa ".at()" jaise functions kaam nhi krenge!
-// Its not python vaala list, it is linked-list vaala lists!
+    // Using erase to remove elements
+    cout << "\nBefore erase:\n";
+    cout << "Deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << "| Size: " << d1.size() << endl;
+
+    // Erasing the first element
+    d1.erase(d1.begin());
+
+    cout << "After erase:\n";
+    cout << "Deque: ";
+    for (int i : d1) cout << i << " ";
+    cout << "| Size: " << d1.size() << endl;
+
+    // Summary of commonly used deque methods : .push_front(val) → inserts element at front
+    //                                        : .push_back(val) → inserts element at back
+    //                                        : .pop_front() → removes element from front
+    //                                        : .pop_back() → removes element from back
+    //                                        : .size() → returns current number of elements
+    //                                        : .at(index) → accesses element at a given index
+    //                                        : .front() → returns front element
+    //                                        : .back() → returns last element
+    //                                        : .empty() → checks if deque is empty
+    //                                        : .erase(pos) → erases element at the given position
+    //                                        : .begin(), .end() → iterators to the start and end of the deque
+    //                                        : Range-based for loop → used for clean iteration
+    //                                        : Deques can also be copied and sorted just like vectors
+}
+
+// 4) List in C++ STL
+// In C++, `list` is a container implemented as a doubly linked list. It is not the same as Python's list or C++ array/vector.
+// Common use cases : When frequent insertion/deletion from anywhere in the list is needed.
+// Key Characteristics : Allows efficient insertion and deletion from both ends as well as the middle.
+//                     : No random access (you can't use index-based access like `.at()` or `[]`).
+//                     : Operates using iterators instead of indices.
 #include<iostream>
 #include<list>
 using namespace std;
 
 int main() {
-    // Initiallizing lists
+    // Initializing a list
     list<int> l1;
 
-    // Pushing elements into lists
-    l1.push_front(1);
-    l1.push_back(2);
+    // Adding elements to the list
+    l1.push_front(1);  // Add at front
+    l1.push_back(2);   // Add at back
     l1.push_back(3);
     l1.push_back(4);
     l1.push_back(5);
 
-    // Printing all the elements of the list
-    cout<<"All the elements of the lists are : ";
-    for(int i:l1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    // Printing elements using range-based loop
+    cout << "Elements of the list: ";
+    for (int i : l1) cout << i << " ";
+    cout << endl;
 
-    // There are more functions like .begin(), .empty(), .back(), jaise push_back hai toh push_front bhi hai vaise hi pop_front and back bhi hai and all jo humne upar padh liye hai!
-    cout<<"Elements of the list before erase : ";
-    for(int i:l1) {
-        cout<<i<<" ";
-    }
-    cout<<",and size of the list before erase : "<<l1.size()<<endl;
+    // Demonstrating erase()
+    cout << "\nBefore erase:\n";
+    cout << "List: ";
+    for (int i : l1) cout << i << " ";
+    cout << "| Size: " << l1.size() << endl;
 
+    // Erasing the first element using an iterator
     l1.erase(l1.begin());
-    
-    cout<<"Elements of the list after erase : ";
-    for(int i:l1) {
-        cout<<i<<" ";
-    }
-    cout<<",and size of the list after erase : "<<l1.size()<<endl;
-} // It has methods like : .begin() .end() .size() .empty() .front() .back() .push_back() .push_front() .pop_front() .pop_back() .erase() .insert() .clear() .sort() .merge() and then there are some things like, range-based for loop and copying one list from already pre-existing!
 
-// 5) Stack : Jaise ek ke upar ek rakhne vaale system ko stack kehte hai, so isme LIFO principle follow hota hai, mtlb jo sabse last me jayega vo sabse pehle niklega and vice versa!
+    cout << "After erase:\n";
+    cout << "List: ";
+    for (int i : l1) cout << i << " ";
+    cout << "| Size: " << l1.size() << endl;
+
+    // Demonstrating front and back access
+    cout << "\nFront element: " << l1.front() << endl;
+    cout << "Back element: " << l1.back() << endl;
+
+    // Checking if the list is empty
+    cout << "Is the list empty? " << (l1.empty() ? "Yes" : "No") << endl;
+
+    // Summary of commonly used list methods : .push_front(val) / .push_back(val) → insert elements at either end
+    //                                       : .pop_front() / .pop_back() → remove elements from either end
+    //                                       : .front() / .back() → access first and last elements
+    //                                       : .empty() → check if list is empty
+    //                                       : .size() → number of elements
+    //                                       : .begin() / .end() → return iterators to start/end
+    //                                       : .erase(pos) → erase element at given position
+    //                                       : .clear() → removes all elements
+    //                                       : .insert(pos, val) → insert element at a position
+    //                                       : .sort() / .merge() → sort or merge lists
+    //                                       : Range-based for loop → easy iteration
+    //                                       : List copy constructor → copy one list to another
+}
+
+// 5) Stack in C++ STL
+// In C++, `stack` is a container adapter that follows the LIFO (Last In, First Out) principle. It means the element that is inserted last will be removed first.
+// Real-life example : A stack of books or plates where you add and remove from the top.
+// Key Characteristics : Direct access to only the top element
+//                     : Fast insertion and deletion (only at the top)
+//                     : No random access to middle elements
+//                     : Internally uses other containers like `deque` or `vector` for implementation
 #include<iostream>
 #include<stack>
 using namespace std;
 
 int main() {
-    // Initiallizing stack
+    // Initializing a stack of strings
     stack<string> s1;
 
-    // pushing into the stack
+    // Pushing elements onto the stack
     s1.push("Utkarsh");
     s1.push("The");
     s1.push("King");
     s1.push("Verma");
 
-    // top command in stack
-    cout<<"Top most element of the stack is : "<<s1.top()<<endl; // Jo sabse end me gya hai vo sabse top pr hoga! so yahaa pr verma print hoga!
+    // Accessing the top element
+    cout << "Topmost element of the stack: " << s1.top() << endl;
 
-    // popping from stack, jo sabse upar hoga vo sabse pehle pop hoga!
-    cout<<"top most element before popping from stack : "<<s1.top()<<endl;
+    // Popping the top element
+    cout << "Top element before pop: " << s1.top() << endl;
     s1.pop();
-    cout<<"top most element after popping from stack : "<<s1.top()<<endl;
+    cout << "Top element after pop: " << s1.top() << endl;
 
     // Size of the stack
-    cout<<"Size of the stack : "<<s1.size()<<endl;
+    cout << "Size of the stack: " << s1.size() << endl;
 
-    // Empty stack or not
-    cout<<"Stack is empty or not : "<<s1.empty()<<endl;
+    // Checking if stack is empty
+    cout << "Is the stack empty? " << (s1.empty() ? "Yes" : "No") << endl;
 
-    // Stack has no clear or erase methods!
-} // It has methods like : .push() .pop() .top() .empty() .size()
+    // Note: stack does not support clear(), erase(), or random access
 
-// 6) Queue : It is based on the first in and first out! FIFO!
+    // Summary of commonly used stack methods : .push(val) → adds an element to the top of the stack
+    //                                        : .pop() → removes the topmost element
+    //                                        : .top() → returns the topmost element
+    //                                        : .empty() → checks if the stack is empty
+    //                                        : .size() → returns the number of elements in the stack
+
+    // Limitations : No random access (no .at(), [], or iterators)
+    //             : No clear() or erase() method
+}
+
+// 6) Queue in C++ STL
+// In C++, `queue` is a container adapter that follows the FIFO (First In, First Out) principle.
+// The element inserted first will be removed first, just like a real-world queue system.
 #include<iostream>
 #include<queue>
 using namespace std;
 
 int main() {
-    // Initiallizing queue
+    // Initializing a queue of strings
     queue<string> q1;
 
     // Pushing elements into the queue
@@ -1294,24 +1365,44 @@ int main() {
     q1.push("Kinshuk");
     q1.push("Paresh");
     q1.push("Vansi");
-    cout<<"Original size of the Queue : "<<q1.size()<<endl;
-    // So here Utkarsh entered first in the queue so he will exit first also!
 
-    cout<<"First person in the queue : "<<q1.front()<<endl;
-    q1.pop(); // Utkarsh nikal gya queue se...
-    cout<<"First person in the queue : "<<q1.front()<<endl; // Now sabse aage palak hogi toh iss case me Palak print hoga! Now also jaise front hota hai vaise hi back bhi hota hai!
-    
-    cout<<"Size after popping first person from the queue : "<<q1.size()<<endl;
-} // It has methods like : .push() .pop() .front() .back() .empty() .clear() .size(), here also you can use range-based for loops! Here you can't directly copy one queue from already existing one! 
+    cout << "Original size of the queue: " << q1.size() << endl;
 
-// 7) Priority Queue : Priority queue ek aisa data structure hai like ek baar humne agar isme data daal diya randomly jo bhi humaare paas hai, and now jab hum uss data ko nikalenge, toh humaare paas sirf do hi tareeke hai! yaa toh max_heap ya toh min_heap...means agar humne priority queue ko humne max_heap ke form me banaya hai toh sabse largest value sabse pehle niklegi and so on...
-// Otherwise agar humne min_heap banaya hai tab sabse smallest value sabse pehle niklegi! Now lets see ki priority queue me max and min heap kaise banaate hai! By default agar hum koi priority_queue bnaate hai toh vo max_heap hota hai!
+    // Accessing the front element
+    cout << "First person in the queue: " << q1.front() << endl;
+
+    // Popping the front element
+    q1.pop(); // Utkarsh is removed
+
+    cout << "First person in the queue after popping: " << q1.front() << endl;
+
+    // Size after popping
+    cout << "Size after popping first person: " << q1.size() << endl;
+
+    // Summary of commonly used queue methods : .push(val) → adds element at the end of the queue
+    //                                        :  .pop() → removes element from the front
+    //                                        :  .front() → returns the front element
+    //                                        :  .back() → returns the last element
+    //                                        :  .empty() → checks if the queue is empty
+    //                                        :  .size() → returns number of elements
+
+    // Notes : No .clear() method is available directly in queue
+    //       : No random access (no .at(), [], or iterators)
+    //       : Range-based for loop can't be used directly
+    //       : queue cannot be directly copied from another queue like vector or list
+}
+
+// 7) Priority Queue in C++ STL
+// A `priority_queue` is a special type of queue where each element has a priority. When we remove (pop) elements, they come out in a specific order:
+// Max Heap: largest element comes out first (default behavior)
+// Min Heap: smallest element comes out first (needs custom comparator)
+// By default, `priority_queue` in C++ behaves like a max heap.
 #include<iostream>
 #include<queue>
 using namespace std;
 
 int main() {
-    // max heap : yahaa humne jo priority queue banaya hai ye ek max heap hai, kyunki agar isme hum agar kuch data push kre and then unko bahar nikaale toh vo humesha pehle greatest bahar ayega!
+    // Max Heap : Default priority queue (greatest element comes out first)
     priority_queue<int> maxi;
 
     maxi.push(11);
@@ -1322,13 +1413,13 @@ int main() {
     maxi.push(14);
 
     int n1 = maxi.size();
-    for(int i = 0; i<n1; i++) {
-        cout<<maxi.top()<<" "; // Sabse pehle sabse largest element print hua, then usko jab pop kiya gya, then uske baad usse second largest element nikla and then so on!
+    for (int i = 0; i < n1; i++) {
+        cout << maxi.top() << " "; // Largest to smallest order
         maxi.pop();
     }
-    cout<<endl;
+    cout << endl;
 
-    // min heap : It is just ulta of that max heap!
+    // Min Heap : Smallest element comes out first
     priority_queue<int, vector<int>, greater<int>> mini;
 
     mini.push(1);
@@ -1339,29 +1430,40 @@ int main() {
     mini.push(5);
 
     int n2 = mini.size();
-    for(int i = 0; i<n2; i++) {
-        cout<<mini.top()<<" "; // Isme kya ho rha hai ki as becoz ye ek queue hai and vo bhi priority queue and vo bhi mini heap vaala, toh pehle toh sabse chhota element jo bhi hoga vo print hojayega and then vo nikal jayega! and then remaining p_queue me jo sabse chhota element hoga vo print hoga and then vo bhi nikal jayega and so on, and thats how it works!
+    for (int i = 0; i < n2; i++) {
+        cout << mini.top() << " "; // Smallest to largest order
         mini.pop();
     }
-    cout<<endl;
+    cout << endl;
 
-    // Ab as becoz humne upar vaale dono queues me pop kr kr ke khaali krdiya hai toh ab empty check krne pr dono hi queues me true dikhayega!
-    cout<<"maxi is empty? : "<<maxi.empty()<<endl;
-    cout<<"mini is empty? : "<<mini.empty()<<endl;
-    // they both are printing 1 means they both are empty!
-} // For both max and min heap, it will have same methods, .size() .empty() .top() .push() .pop(), here you cannot use range_based for loop! but it has max_heap and min_heap!
+    // Checking if the queues are empty (after popping all elements)
+    cout << "maxi is empty? : " << maxi.empty() << endl;
+    cout << "mini is empty? : " << mini.empty() << endl;
 
-// 8) Sets : Sets me sirf unique elements hi hote hai, like agar aapne 5 baar 5 daal diya toh sirf ek hi baar 5 store hoga!
-// Iski implementation BST ka use krke hoti hai and isme agar koi aap element daal dete hai toh uske baad usko aap modify nhi kr sakte hai, toh yaa toh aap daale ya naa daale (means delete krde)! chaahe kaise bhi daaldo elements but jab nikaloge tab isme se sorted order me elements retrieve ho rhe hote hai!
+    // Summary of commonly used priority_queue methods : .push(val) → insert element into the heap
+    //                                                 : .pop() → remove the topmost (highest/lowest) element
+    //                                                 : .top() → access the top element
+    //                                                 : .empty() → check if the queue is empty
+    //                                                 : .size() → get the number of elements
+
+    // Notes : Max heap by default: priority_queue<int>
+    //       : Min heap: priority_queue<int, vector<int>, greater<int>>
+    //       : No range-based for loop
+    //       : No direct clear(), at(), or erase() methods
+}
+
+// 8) Set in C++ STL
+// `set` is a container that stores **only unique elements** in sorted order (ascending by default). Internally implemented using **Balanced BST (Red-Black Tree)**.
+// Elements once added cannot be modified — only inserted or erased. Duplicate elements are automatically discarded.
 #include<iostream>
 #include<set>
 using namespace std;
 
 int main() {
-    // Initiallization of sets
+    // Initializing a set
     set<int> s1;
 
-    // Pushing element into the set
+    // Inserting elements (duplicates will be ignored)
     s1.insert(11);
     s1.insert(12);
     s1.insert(13);
@@ -1370,138 +1472,157 @@ int main() {
     s1.insert(14);
     s1.insert(15);
 
-    // Printing all the elements of the set
-    cout<<"Elements of the set s1 are : ";
-    for(int i:s1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    // Printing elements (auto-sorted & unique)
+    cout << "Elements of the set s1 are: ";
+    for (int i : s1) cout << i << " ";
+    cout << endl;
 
-    // Using erase method
-    s1.erase(s1.begin()); // It will remove the first element of the set!
-    cout<<"Elements of the set after removing the first element : ";
-    for(int i:s1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    // Erasing the first element using iterator
+    s1.erase(s1.begin());
+    cout << "Set after erasing first element: ";
+    for (int i : s1) cout << i << " ";
+    cout << endl;
 
-    // Inserting a new element again... Jab bhi element insert kroge vo insert ho toh jayega pr jab usko print kraoge set ko toh vo sorted form me print hoga, kyunki memory me vaise hi array stored hota hai, and then set me iteration different type se hoti hai isme ek normal iterator use nhi hota hai!
-    s1.insert(10); // 10 add kiya toh ye sabse aage gya set ke
-    s1.insert(19); // 19 add kiya toh ye sabse last me gya set ke, reason being ofc kyunki isko sorted form me print hona tha!
-    cout<<"Elements of the set after adding a new element : ";
-    for(int i:s1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    // Inserting more elements
+    s1.insert(10);
+    s1.insert(19);
+    cout << "Set after adding 10 and 19: ";
+    for (int i : s1) cout << i << " ";
+    cout << endl;
 
-    cout<<"Elements of the set after removing the 2nd element of the set : ";
-    // erase ko use krne ke liye hum ek alag type se bhi likh sakte hai, like suppose hume set ka 2nd element delete krna hai toh we will write...
-    set<int>::iterator it = s1.begin(); // This is a special type of iterator, which is used for sets! so what is special about this iterator, "std::set<T>::iterator" is a bidirectional iterator, meaning you can move it forward and backward. This allows you to easily navigate through the elements of the set, std::set<T>::iterator provides a convenient way to iterate over the unique, sorted elements of a std::set. It adheres to the characteristics of the set container, ensuring ordered traversal and uniqueness of elements. Ye iterator khud hi dhyaan rakhta hai sets ki properties ka, like agar set me kisi element ka copy hai toh ye uspr iterate nhi krta!
+    // Erasing the 2nd element using iterator
+    set<int>::iterator it = s1.begin();
     it++;
     s1.erase(it);
-    for(int i:s1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    cout << "Set after erasing 2nd element: ";
+    for (int i : s1) cout << i << " ";
+    cout << endl;
 
-    // Understanding the set's iterator in a little more detail...like hum iterate ek normal for loop se bhi kr sakte hai! but aise hi nhi, lets understand...isme hum kya krte hai ki hum s1.begin() se shuru krte hai and condition daal dete hai ki jab tak !=s1.end() naa hojaye tab tak elements ko print krte raho and isme catch ye hai ki jo iterator hoga vo starting of the for loop me s.begin() mtlb starting of the set ko point, toh hum fir usme derefernce krke cout ke through print kareyenge!
-    cout<<"All Elements of the set s1 : ";
-    for(auto i = s1.begin(); i!=s1.end(); i++) { // Auto ka means ki the iterator is open to iterate over any data type of the set!
-        cout<<*i<<" ";
-    } // So this is the traditional way of using the for loop using iterator to dereference
-    cout<<endl;
+    // Iterating using traditional iterator loop
+    cout << "Set using traditional iterator: ";
+    for (auto i = s1.begin(); i != s1.end(); i++) cout << *i << " ";
+    cout << endl;
 
-    // Count Method of sets, isme what happens is that ki hume ye toh ptaa hi hai ki set me duplicate values hote hi nhi hai toh isko use kyu kr rhe hai? so that we can see that if an element exist or not in the set! like agar count 0 aaya means nhi krta exist and 1 aaya means krta hai exist!
-    cout<<"Does 5 exist in the set : "<<s1.count(5)<<endl;
-    cout<<"Does 13 exist in the set : "<<s1.count(13)<<endl;
+    // Using count() method to check if an element exists
+    cout << "Does 5 exist in the set? : " << s1.count(5) << endl;
+    cout << "Does 13 exist in the set? : " << s1.count(13) << endl;
 
-    // Find method
-    set<int>::iterator it2 = s1.find(13); // Ab ye kya krega ki pehle element find krega and then it2 me uss element ka iterator return krdega! and then hum it2 ko dereference krke uss iterator ki value nikal lenge ki jisse hume ptaa chal jayega ki vo element kis position pr hai!
-    cout<<"Value at iterator it2 : "<<(*it2)<<endl;
-    // Now lets just print the set once again...
-    for(auto it=it2; it!=s1.end(); it++) { // Humne it2 ko intiallize krne ke time pr usme jo element daala tha vo first element tha isliye usme first element ka iterator stored tha and iss hi kaaran jab print kiye saari values set s1 ki iss baar toh 13 se print hona chaalu hua, agar yhi uss time agar hum  set<int>::iterator it2 = s1.find(14); likh diye hote toh 14 se value print hona shuru hoti!
-        cout<<*it<<" ";
-    }
-    cout<<endl;
-    // So what happens in find method is jab hum use krte hai find function ko toh response me hume uss value ka refernce mil jaata hai!
+    // Using find() to get iterator to an element
+    set<int>::iterator it2 = s1.find(13);
+    cout << "Value at iterator it2 (pointing to 13): " << *it2 << endl;
 
-    // Baaki rest is clear & empty method!
-    s1.clear(); // It will clear all the elements in the set!
-    for(auto i:s1) {
-        cout<<i<<" ";
-    } // Isme kuch print nhi hoga kyunki set iss baar poora khaali hai!
-    cout<<endl;
-    bool empty = s1.empty();
-    cout<<"is the set s1 empty? : "<<empty;
-} // Here we have methods like : .insert() .erase() .clear() .size() .empty() .begin() .end() .find() .count() .upper_bound() .lower_bound(), it supports range-based for loops! and most importantly it has a special iterator to traverse over its elements! "set<int>::iterator it"
-// TC of insert find erase and count : O(logn)
-// TC of size begin end empty : O(1)
+    // Printing from 13 to end
+    cout << "Printing from 13 onward: ";
+    for (auto it = it2; it != s1.end(); it++) cout << *it << " ";
+    cout << endl;
 
-// 9) Maps : In this DS the value are stored in form of Key Value pairs! and same key multiple values ko point nhi kr sakti but ek value ko point krne ke liye multiple keys ho sakti hai, Like Name1, Rolls Royce and another key value pair can be Name2, Rolls Royce. Now Name1 and Name2 are the keys but they are pointing at the same car value that is Rolls Royce, and Rolls Royce is being pointed by 2 different keys that is Name1 and Name2!
+    // Clearing the set and checking if empty
+    s1.clear();
+    cout << "After clearing, is the set empty? : " << s1.empty() << endl;
+
+    // Summary of commonly used set methods : .insert(val) → insert an element (unique only)
+    //                                      : .erase(it or val) → remove by iterator or value
+    //                                      : .clear() → remove all elements
+    //                                      : .size() → return number of elements
+    //                                      : .empty() → check if set is empty
+    //                                      : .begin() / .end() → return iterators
+    //                                      : .find(val) → returns iterator to the element or s.end() if not found
+    //                                      : .count(val) → returns 1 if exists, else 0
+    //                                      : .lower_bound(val) → first element >= val
+    //                                      : .upper_bound(val) → first element > val
+
+    // Notes : Supports range-based for loop
+    //       : Iterators : set<int>::iterator
+    //       : Time Complexity : insert, erase, find, count: O(log n)
+    //                         : size, begin, end, empty: O(1)
+}
+
+// 9) Map in C++ STL
+// A `map` is an associative container that stores elements as **key-value pairs** with unique keys. Each key maps to a single value (1 key → 1 value), but multiple keys can map to the same value.
+// There are two types : `map` → Ordered map (stores keys in sorted order using Red-Black Tree)
+//                     : `unordered_map` → Unordered map (stores keys using hashing, no specific order)
 #include<iostream>
 #include<map>
 #include<unordered_map>
 using namespace std;
 
 int main() {
-    map<int,string> m1;
+    // Ordered map
+    map<int, string> m1;
+    m1[1] = "Utkarsh";
+    m1[2] = "The";
+    m1[3] = "King";
+    m1[4] = "Verma";
 
-    m1[1]="Utkarsh";
-    m1[2]="The";
-    m1[3]="King";
-    m1[4]="Verma";
+    // Alternate way of inserting
+    // m1.insert({1, "Utkarsh"});
+    // m1.insert({2, "The"});
+    // m1.insert({3, "King"});
+    // m1.insert({4, "Verma"});
 
-    // Another way of inserting values into the ordered map m1
-    // m1.insert({1,"Utkarsh"});
-    // m1.insert({2,"The"});
-    // m1.insert({3,"King"});
-    // m1.insert({4,"Verma"});
+    cout << "Ordered map (m1):" << endl;
+    for (auto i : m1) {
+        cout << i.first << " → " << i.second << endl;
+    }
+    cout << endl;
 
-    cout<<"Key Value pairs of ordered map m1 : "; // It will print the key value pair of the ordered map m1
-    for(auto i:m1) {
-        cout<<i.first<<" "<<i.second<<endl; // First will print the integer key and second will print the string value!
-    } // Ab dekho yahaa toh hum ordered map ke key value pairs ko print kraa rhe hai! toh yahaan toh sorted hi milega output! bhale hi humne initiallize upar neeche kiya hua ho! But yhi agar unordered map hota toh vahaa order ka kuch ptaa nhi, vo random hota hai, like uski koi guarantee nhi hai kismat achi ho toh sorted bhi ajayega output! but vaise koi pakka nhi hai!
-    cout<<endl;
+    // Unordered map
+    unordered_map<int, string> m2;
+    m2.insert({1, "Palak"});
+    m2.insert({2, "is"});
+    m2.insert({4, "Bestfriend"});
+    m2.insert({3, "my"});
 
-    unordered_map<int,string> m2;
-    m2.insert({1,"Palak"});
-    m2.insert({2,"is"});
-    m2.insert({4,"Bestfriend"});
-    m2.insert({3,"my"});
+    cout << "Unordered map (m2):" << endl;
+    for (auto i : m2) {
+        cout << i.first << " → " << i.second << endl;
+    }
+    cout << endl;
 
-    cout<<"Key Value pairs of ordered map m1 : "; // It will print the key value pair of the unordered map m1
-    for(auto i:m2) {
-        cout<<i.first<<" "<<i.second<<endl;
-    } // Isme order reverse me print ho rha hai iss time but ye bhi koi fix nhi hai but haa random order hota hai, mtlb koi order nhi hota!
+    // count() method → checks if a key exists (returns 1 or 0)
+    cout << "Does key 12 exist in ordered map? : " << m1.count(12) << endl;
+    cout << "Does key 2 exist in unordered map? : " << m2.count(2) << endl;
 
-    // Count method in maps
-    cout<<"Does 12 exist in the ordered map? : "<<m1.count(12)<<endl; // Iska mtlb ek tarah se ye hua ki koi aisa key value pair hai? jiska key 12 ho!
-    cout<<"Does 2 exist in unordered map? : "<<m2.count(2)<<endl;
-
-    // Now lets carry forward with ordered map, unordered ke liye same hi cheez hogi...
-    // Erase method in Maps
-    cout<<"Key value pairs of ordered map m1 before erase : "<<endl;
-    for(auto i:m1) {
-        cout<<i.first<<" "<<i.second<<endl;
+    // erase() method → removes key-value pair by key
+    cout << "\nOrdered map (before erase):" << endl;
+    for (auto i : m1) {
+        cout << i.first << " → " << i.second << endl;
     }
 
     m1.erase(4);
-    cout<<"Key value pairs of ordered map m1 after erase : "<<endl;
-    for(auto i:m1) {
-        cout<<i.first<<" "<<i.second<<endl;
+
+    cout << "Ordered map (after erase):" << endl;
+    for (auto i : m1) {
+        cout << i.first << " → " << i.second << endl;
     }
-    cout<<endl;
 
-    // Find method, returns the iterator of that element (key value pair) ka!
-    auto it = m1.find(1);
-    for(auto i = it; i!=m1.end(); i++) {
-        cout<<(*i).first<<" "<<(*i).second<<endl;
-    } // Yahaa bhi same logic ki agar yahaa pe auto it = m1.find(1); me find ke andar me 1 ki jagah 2 hota toh iteration for loop me 2 se start hoti! and tab print hota sirf "The King"!
-} // Here we have methods like : .insert() .begin() .end() .clear() .size() .empty() .at() .find() .count() .lower_bound() .upper_bound() .erase() .first .second and then we have things like range-based for loops! and ordered and unordered_maps!
-// TC of erase, insert, find and count methods for ordered maps is : O(logn), becoz iski implementation hoti hai red-black tree se ya balanced tree ka use krke
-// TC of erase, insert, find and count methods for unordered maps is : O(1), but iski implementation hoti hai hash table se isliye yahaa pr complexity is O(1)
+    // find() → returns iterator to the key (or m.end() if not found)
+    auto it = m1.find(1);  // Find key = 1
+    cout << "\nPrinting from key 1 onward in m1:" << endl;
+    for (auto i = it; i != m1.end(); i++) {
+        cout << i->first << " → " << i->second << endl;
+    }
 
-// Sorting Algorithms : Jo abhi tak hum kr rhe the ki binary search, and sorting ke jo algos the hume agar unka code yaad nhi hai pr hume usko use krna hai and even poora code likhna takes time, so hum seedha unke methods ko use kr sakte hai!
+    // Summary of commonly used map/unordered_map methods : .insert({key, val}) → add a key-value pair
+    //                                                    : .at(key) → access value at a given key (throws if not found)
+    //                                                    : .[] (operator) → access/insert value (auto-inserts if key doesn't exist)
+    //                                                    : .count(key) → check if key exists (returns 1 or 0)
+    //                                                    : .find(key) → returns iterator to key or end()
+    //                                                    : .erase(key or iterator) → removes key or by iterator
+    //                                                    : .size() / .empty() → check size or if map is empty
+    //                                                    : .clear() → removes all elements
+    //                                                    : .begin() / .end() → iterators for traversal
+    //                                                    : .first / .second → access key and value from a pair
+
+    // Time Complexity : For map (ordered) : insert, erase, find, count → O(log n) → implemented using Red-Black Tree
+    //                 : For unordered_map : insert, erase, find, count → O(1) average case → implemented using Hash Table
+}
+
+// 10) STL Algorithms – Sorting & Utility Functions
+// C++ STL provides powerful built-in algorithms to save time from writing full logic ourselves. 
+// Header : <algorithm>
+// Some common functions include : binary_search(), lower_bound(), upper_bound(), swap(), min(), max(), reverse(), rotate(), sort()
+
 #include<iostream>
 #include<algorithm>
 #include<vector>
@@ -1515,51 +1636,53 @@ int main() {
     v1.push_back(14);
     v1.push_back(15);
 
-    // Binary search using STL
-    cout<<"Does 5 exist in the vector v1? : "<<binary_search(v1.begin(), v1.end(), 5)<<endl;
-    cout<<"Does 11 exist in the vector v1? : "<<binary_search(v1.begin(), v1.end(), 11)<<endl;
+    // Binary Search → returns true if element exists in sorted container
+    cout << "Does 5 exist in vector v1?  : " << binary_search(v1.begin(), v1.end(), 5) << endl;
+    cout << "Does 11 exist in vector v1? : " << binary_search(v1.begin(), v1.end(), 11) << endl;
 
-    // Lower and Upper Bound Methods : finding the iterator using two methods that are lower bound and upper bound
-    // Lower Bound is the smallest index such that the number at that index is more than or equal to the given number!
-    // Upper Bound is the smallest index such that the number at that index is more than to the given number!
-    cout<<"Lower Bound of the vector v1 is : "<<lower_bound(v1.begin(), v1.end(), 13)-v1.begin()<<endl;
-    cout<<"Upper Bound of the vector v1 is : "<<upper_bound(v1.begin(), v1.end(), 13)-v1.begin()<<endl;
-    // Then we have did "-v1.begin()" taaki hum 0 indexing ke form me laa sake! also removing "-v1.begin()" is showing error kyunki what happens is, this "lower_bound(v1.begin(), v1.end(), 13);" returns an iterator of type, "std::vector<int>::iterator", Using the iterator directly, such as by dereferencing (*it), allows you to access the value it points to. If you do not use the iterator, the compiler does not know what you intend to do with it, leading to an error.
-    // so, doing this "lower_bound(v1.begin(), v1.end(), 13) - v1.begin();" "v1.begin()" returns an iterator to the first element. Subtracting "v1.begin()" from the iterator returned by lower_bound gives the distance (index) from the beginning of the vector. This is a valid operation because subtracting two iterators of the same container gives their distance as an integer.
-    
-    // Swap, Min and Max methods
+    // lower_bound() → iterator to first element >= target
+    // upper_bound() → iterator to first element > target
+    cout << "Lower bound of 13: " << lower_bound(v1.begin(), v1.end(), 13) - v1.begin() << endl;
+    cout << "Upper bound of 13: " << upper_bound(v1.begin(), v1.end(), 13) - v1.begin() << endl;
+
+    // Utility functions: swap, min, max
     int a = 2, b = 3;
-    cout<<"Before swap : a = "<<a<<" and b = "<<b<<endl;
-    swap(a,b);
-    cout<<"Before swap : a = "<<a<<" and b = "<<b<<endl;
-    cout<<max(a,b)<<endl;
-    cout<<min(a,b)<<endl;
+    cout << "\nBefore swap: a = " << a << ", b = " << b << endl;
+    swap(a, b);
+    cout << "After swap:  a = " << a << ", b = " << b << endl;
+    cout << "Max of a and b: " << max(a, b) << endl;
+    cout << "Min of a and b: " << min(a, b) << endl;
 
-    // Reverse method
+    // Reverse a string
     string abcd = "ABCD";
     reverse(abcd.begin(), abcd.end());
-    cout<<"Reversed string : "<<abcd<<endl;
+    cout << "\nReversed string: " << abcd << endl;
 
-    // Rotate the vector
-    cout<<"Before rotate : ";
-    for(auto i : v1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
-    rotate(v1.begin(), v1.begin()+2, v1.end()); // Isme ek tarah se humne start, mid and end input diya hai as paramters!
-    cout<<"After rotate : ";
-    for(auto i : v1) {
-        cout<<i<<" ";
-    }
-    cout<<endl;
+    // Rotate vector → rotates elements left by 2 positions
+    cout << "\nBefore rotate: ";
+    for (auto i : v1) cout << i << " ";
+    cout << endl;
 
-    // Sort method : It sorts the elements in ascending order and isme jo sorting use ho rhi hai usko kehte hai intro sort and this intro sort is based on the combination of Quick sort, Insertion sort and Heap sort!
+    rotate(v1.begin(), v1.begin() + 2, v1.end());  // Left rotate by 2
+    cout << "After rotate: ";
+    for (auto i : v1) cout << i << " ";
+    cout << endl;
+
+    // Sort → sorts vector in ascending order using IntroSort (QuickSort + HeapSort + InsertionSort)
     sort(v1.begin(), v1.end());
-    cout<<"Vector v1 after sorting the elements : ";
-    for(auto i : v1) {
-        cout<<i<<" ";
-    }
-} // Here we have methods like : binarySearch() upper_bound() lower_bound() swap() min() max() reverse() rotate() sort(), these are the most usable methods in algorithm headerfile!
+    cout << "\nAfter sorting vector: ";
+    for (auto i : v1) cout << i << " ";
+    cout << endl;
+
+    // Summary of Useful STL <algorithm> Functions : binary_search(start, end, val) → returns true if val exists (sorted container required)
+    //                                             : lower_bound(start, end, val) → returns iterator to first element >= val
+    //                                             : upper_bound(start, end, val) → returns iterator to first element > val
+    //                                             : swap(a, b) → swaps two values
+    //                                             : min(a, b) / max(a, b) → return smaller / larger of the two
+    //                                             : reverse(start, end) → reverses elements in range
+    //                                             : rotate(start, mid, end) → rotates range such that mid becomes the first element
+    //                                             : sort(start, end) → sorts the container in ascending order
+}
 
 // ---------------------------------------------------------- LECTURE 20 - LeetCode/CodeStudio Questions --------------------------------------------------------------------------------------------------------->
 // CodeStudio Question : Reverse a array after a particular index! pehle lets do it normally, ki normally kaise reverse krte hai!

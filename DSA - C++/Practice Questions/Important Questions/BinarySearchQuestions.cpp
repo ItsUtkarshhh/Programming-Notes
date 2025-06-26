@@ -1,4 +1,4 @@
-// --------------------------------------------------------- Part 2 : Binary Search Questions! ----------------------------------------------------------------->
+// --------------------------------------------------------- Part 1 : Binary Search Questions! ----------------------------------------------------------------->
 // Question 1 : Finding a key in an array!
 // Thinking : Approach 1 (Linear Search) : The linear search approach has a time complexity of O(n), as it may need to traverse the entire array to find the target element.
 //          : Approach 2 (Binary Search) : In contrast, using binary search is a more efficient alternative for sorted arrays, as it reduces the time complexity to O(log n) by repeatedly dividing the search interval in half.
