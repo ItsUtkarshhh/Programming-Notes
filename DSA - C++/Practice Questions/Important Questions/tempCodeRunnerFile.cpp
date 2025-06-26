@@ -1,26 +1,25 @@
 #include<iostream>
+#include<vector>
+#include<algorithm>
 using namespace std;
 
-bool isPrime(int val) {
-    if(val == 1) return false;
-    for(int i = 2; i < val; i++) {
-        if(val % i == 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void printPrime(int ll, int ul) {
-    for(int i = ll; i <= ul; i++) {
-        if(isPrime(i)) {
-            cout<<i<<" ";
-        }
-    }
+void rotatebyK_F(vector<int> &v, int steps) {
+    reverse(v.begin(), v.end());
+    reverse(v.begin(), v.begin() + steps);
+    reverse(v.begin() + steps, v.end());
 }
 
 int main() {
-    int ll, ul;
-    cin>>ll>>ul;
-    printPrime(ll, ul);
+    int n;
+    cin>>n;
+    int steps;
+    cin>>steps;
+    vector<int> v(n);
+    for(int i = 0; i < v.size(); i++) {
+        cin>>v[i];
+    }
+    rotatebyK_F(v, steps);
+    for(int i = 0; i < v.size(); i++) {
+        cout<<v[i]<<" ";
+    }
 }

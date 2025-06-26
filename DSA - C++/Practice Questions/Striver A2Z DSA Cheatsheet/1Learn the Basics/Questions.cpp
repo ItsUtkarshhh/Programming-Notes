@@ -751,6 +751,7 @@ int main() {
     }
 } // Re-solve this again, after sometime!
 
+// Extra Patterns :
 // Pattern 23 : ___*___
 //            : __*_*__
 //            : _*_*_*_
@@ -992,6 +993,44 @@ int main() {
 }
 
 // Question 5 : Check whether the given number is armstrong or not! TC : O(log10(x)) and SC : O(1)
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+bool isArmstrong(int n) {
+    int ogNum = n;
+    int sum = 0;
+    int digitCount = log10(n) + 1;
+    while(n != 0) {
+        int digit = n % 10;
+
+        int val = 1;
+        for(int i = 0; i < digitCount; i++) {
+            val = val * digit;
+        }
+
+        sum = sum + val;
+        n = n / 10;
+    }
+    if(ogNum == sum) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int main() {
+    int n;
+    cin>>n;
+    if(isArmstrong(n)) {
+        cout<<"Yes it is!";
+    }
+    else {
+        cout<<"Nope!";
+    }
+}
+
 #include<iostream>
 #include<math.h>
 using namespace std;
@@ -1491,6 +1530,7 @@ int main() {
     int maxF = INT_MIN;
     vector<int> minFE;
     int minF = INT_MAX;
+    
     for(auto i : freq) {
         if(i.second > maxF) {
             maxF = i.second;
@@ -1517,52 +1557,4 @@ int main() {
     cout << "Min frequency element(s): ";
     for(auto val : minFE) cout << val << " ";
     cout << "\n";
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Pattern 7 :       *
-//           :     * * *
-//           :   * * * * *
-//           : * * * * * * *
-#include<iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin>>n;
-    for(int i = 1; i <= n; i++) {
-        int space = ((2 * (n - i + 1)) - 2)/2;
-        while(space) {
-            cout<<" "<<" ";
-            space--;
-        }
-        
-        int stars = (2 * i) - 1;
-        while(stars) {
-            cout<<"*"<<" ";
-            stars--;
-        }
-
-        space = ((2 * (n - i + 1)) - 2)/2;
-        while(space) {
-            cout<<" "<<" ";
-            space--;
-        }
-        cout<<endl;
-    }
 }

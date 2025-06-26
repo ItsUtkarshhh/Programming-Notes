@@ -2,19 +2,46 @@
 using namespace std;
 
 int main() {
-    int n;
-    cin>>n;
-    for(int i = 1; i<=n; i++) {
-        for(int space = 0; space<n-i; space++) {
+    int numR;
+    cin>>numR;
+    int n = numR / 2;
+    for(int i = 1; i <= n; i++) {
+        int spaces = n - i;
+        while(spaces) {
             cout<<" "<<" ";
+            spaces--;
         }
 
-        for(int j = 1; j<=i; j++) {
+        int stars = (2 * i) - 1;
+        while(stars) {
             cout<<"*"<<" ";
+            stars--;
         }
 
-        for(int space = 0; space<n-i; space++) {
+        spaces = n - i;
+        while(spaces) {
             cout<<" "<<" ";
+            spaces--;
+        }
+        cout<<endl;
+    }
+    for(int i = n; i >= 1; i--) {
+        int spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+
+        int stars = (2 * i) - 1;
+        while(stars) {
+            cout<<"*"<<" ";
+            stars--;
+        }
+
+        spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
         }
         cout<<endl;
     }

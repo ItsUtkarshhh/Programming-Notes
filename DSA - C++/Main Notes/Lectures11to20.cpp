@@ -451,6 +451,7 @@ int main() {
     cin>>n;
     cout<<mySqrt(n);
 }
+
 // But the above code has one very interesting mistake and that is, what if agar mid*mid int ki range se bahar chlaa gya toh? tab toh humara code sahi hone ke baad bhi error dedega! so hume int ka size badhaana hoga, and for that we will use long long data type!
 #include<iostream>
 using namespace std;
