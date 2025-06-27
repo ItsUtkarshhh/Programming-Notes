@@ -905,5 +905,350 @@ int main() {
 }
 
 // Question 14 : Merge 2 sorted arrays!
-// Thinking & Approach : Here we can think for multiple cases about the two arrays! Just as intersection of two arrays!
-//                     : 
+// Thinking & Approach : Goals of a Good Solution : It should cover most of the common use-cases/test-cases!
+//                                                : It should take less time!
+//                                                : It should take less space!
+//                     : Some most common use-cases could be : Both Unsorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : One Sorted + Another Unsorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : Both Sorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : This case is mixture of any of the above! But no duplicates allowed in output! - (Want sorted/unsorted output)
+//                     : And based on that, some solutions are proposed below!
+// Approach 1 : Merge both arrays and sort the final array using sort() function as it implements quick-sort and takesless time to sort!
+//            : Conditions : Arrays can be sorted/unsorted - duplicates allowed/not-allowed - final merged array sorted/unsorted.
+//            : Time : O((n + m) * log(n + m))
+//            : Space : O(n + m) (for result)
+//            : Works for all cases. Most versatile and safe approach.
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<int> mergeTheTwo(vector<int> v1, vector<int> v2) {
+    if(v1.size() == 0) {
+        sort(v2.begin(), v2.end());
+        return v2;
+    }
+    else if(v2.size() == 0){
+        sort(v1.begin(), v1.end());
+        return v1;
+    }
+
+    vector<int> result;
+    for(int val : v1) result.push_back(val);
+    for(int val : v2) result.push_back(val);
+
+    // OR DO THIS
+
+    // vector<int> result = v1;
+    // result.insert(result.end(), v2.begin(), v2.end());
+    
+    sort(result.begin(), result.end()); // Used here as it implements quick-sort! and takes less time! Otherwise you can use normal sorting algorithms like insertion, bubble and selection!
+    return result;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = mergeTheTwo(v1, v2);
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 2 : When both input arrays are already sorted, we can take advantage of their order to optimize the merging process. By using the two-pointer technique, we traverse both arrays simultaneously and build the merged result in a single pass.
+//            : It avoids the overhead of sorting and is more efficient than merging followed by a sort. This approach works whether or not duplicates are present. 
+//            : Time : O(n + m) — each element is visited exactly once
+//            : Space : O(n + m) — to store the final merged array
+//             Use case : For the specific scenario where both arrays are sorted, this is the most efficient approach possible. There are no better general-purpose methods unless you’re dealing with very specific constraints.
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<int> mergeTheTwo(vector<int> v1, vector<int> v2) {
+    vector<int> ans;
+    int i = 0;
+    int j = 0;
+    while(i < v1.size() && j < v2.size()) {
+        if(v1[i] < v2[j]) {
+            ans.push_back(v1[i]);
+            i++;
+        }
+        else {
+            ans.push_back(v2[j]);
+            j++;
+        }
+    }
+    while(i < v1.size()) {
+        ans.push_back(v1[i]);
+        i++;
+    }
+    while(j < v2.size()) {
+        ans.push_back(v2[i]);
+        j++;
+    }
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = mergeTheTwo(v1, v2);
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 3 : Simple Append Without Sorting
+//            : This method is ideal when sorted order is not required in the final result. It works whether the input arrays are sorted or unsorted.
+//            : Simply copy the first array to the result vector. Then, append the second array to it.
+//            : Note : This is one of the simplest and fastest methods. It avoids unnecessary sorting, making it efficient for cases where order doesn't matter.
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<int> mergeTheTwo(vector<int> v1, vector<int> v2) {
+    if(v1.size() == 0) return v2;
+    if(v2.size() == 0) return v1;
+
+    vector<int> ans = v1;
+    ans.insert(ans.end(), v2.begin(), v2.end());
+
+    // or simply
+    // v1.insert(v1.end(), v2.begin(), v2.end());
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = mergeTheTwo(v1, v2);
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Approach 4 : Using unordered_set for Unique Elements
+//            : If both arrays are expected to contain only unique elements, and the final result doesn't need to be sorted, you can use an unordered_set to efficiently merge them.
+//            : Since unordered_set automatically removes duplicates and allows average O(1) insertion time, it's highly efficient for this use case. Any element present in both arrays will appear only once in the final result.
+//            : Use case : You want to eliminate duplicates across both arrays.
+//                       : Order of elements in the result does not matter.
+//                       : Arrays may be sorted or unsorted, but final sorted order is not needed.
+//            : Note : If you want the result to be sorted and unique, use set instead of unordered_set.
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<unordered_set>
+using namespace std;
+
+vector<int> mergeTheTwo(vector<int> v1, vector<int> v2) {
+    unordered_set<int> ans;
+    for(int val : v1) ans.insert(val); 
+    for(int val : v2) ans.insert(val); 
+    return vector<int>(ans.begin(), ans.end());
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = mergeTheTwo(v1, v2);
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+}
+
+// Question 15 : Move Zeroes to the left!
+// Thinking & Approach : Here we will first analyse different situations that can arise in this question!
+//                     : 1) An array with no zeroes OR that array has only one zero and that too at the index 0. In this case we dont need to do anything just print the array as it is!
+//                     : 2) Apart from this we need to solve it!
+// Approach 1 : We will use simply two pointers approach here! where one will be 'i' starting at index = 0 and 'j' at index = size - 1
+//            : Now we will check some cases like : 1) if value at i = 0 but j != 0 then we will move i++ & j--
+//                                                : 2) if value at i = 0 but j = 0 then we will move i++;
+//                                                : 3) if value at i != 0 but j = 0 then we will swap values at i & j then will do i++ & j--
+//                                                : 4) if value at i != 0 but j != 0 then we will move j--
+// Approach 2 : We will use the same logic which we have used in case of solving the "sort 0 1" problem earlier!
+
+// Approach 1 :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> moveZeroesLeft(vector<int> &v) {
+    int i = 0;
+    int j = v.size() - 1;
+    while(i < j) {
+        if(v[i] == 0 && v[j] != 0) {
+            i++; j--;
+        }
+        else if(v[i] == 0 && v[j] == 0) {
+            i++;
+        }
+        else if(v[i] != 0 && v[j] == 0) {
+            swap(v[i], v[j]);
+            i++; j--;
+        }
+        else {
+            j--;
+        }
+    }
+    return v;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    int zeroFound = false;
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+        if(v[i] == 0) {
+            zeroFound = true;
+        }
+    }
+    if(zeroFound) {
+        moveZeroesLeft(v);
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+    else {
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+}
+
+// Approach 2 :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> moveZeroesLeft(vector<int> &v) {
+    int i = 0;
+    int j = v.size() - 1;
+    while(i < j) {
+        while(i < v.size() && v[i] == 0) i++;
+        while(j >= 0 && v[j] != 0) j--;
+
+        if(i < j) {
+            swap(v[i], v[j]);
+            i++; j--;
+        }
+    }
+    return v;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    int zeroFound = false;
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+        if(v[i] == 0) {
+            zeroFound = true;
+        }
+    }
+    if(zeroFound) {
+        moveZeroesLeft(v);
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+    else {
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+}
+
+// However, here's the catch: The above solutions do not preserve the relative order of the non-zero elements. While this wasn't an issue in problems like "Sort 0s and 1s," it is important here—so we need a better approach that maintains the original order.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> moveZeroesLeft(vector<int>& v) {
+    int write = v.size() - 1;
+    for (int i = v.size() - 1; i >= 0; i--) { // Step 1: Move non-zeroes to the end while maintaining their order
+        if (v[i] != 0) {
+            v[write] = v[i];
+            write--;
+        }
+    }
+
+    while (write >= 0) { // Step 2: Fill remaining elements with 0
+        v[write] = 0;
+        write--;
+    }
+
+    return v;
+}
+
+// Alternative to assigning values, you can also use swap() function!
+vector<int> moveZeroesLeft(vector<int>& v) {
+    int write = v.size() - 1;
+    for (int i = v.size() - 1; i >= 0; i--) {
+        if (v[i] != 0) {
+            swap(v[write],v[i]);
+            write--;
+        }
+    }
+    return v;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    int zeroFound = false;
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+        if(v[i] == 0) {
+            zeroFound = true;
+        }
+    }
+    if(zeroFound) {
+        moveZeroesLeft(v);
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+    else {
+        for(int i = 0; i < n; i++) {
+            cout<<v[i]<<" ";
+        }
+    }
+}
