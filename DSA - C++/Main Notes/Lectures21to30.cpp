@@ -1115,7 +1115,6 @@ int main() {
     cout << endl;
 } // Time Complexity will be O(n*m) and it can't be decreased further!
 
-// Binary search in 2D arrays!
 // Binary search in a 2D array is similar to binary search in a 1D array, with the key difference being how we calculate the mid element. 2D array structure: Even though it's a 2D matrix, it is stored linearly in memory (row-major order). If the array is sorted, we can apply binary search.
 // Steps : Initialize start, end, and mid : start = 0, end = row * col - 1 (total number of elements - 1), mid = start + (end - start) / 2
 //       : Accessing the mid element : To map the linear mid index back to a 2D matrix element, Row : "row = mid / number of columns" and Column : "col = mid % number of columns"!
@@ -2185,44 +2184,6 @@ int main() {
     printArr(arr, size, 3); // Iss case me array 3 index se print hojayega end tak!
 } // But remember default arguments sirf right to left hi bante hai, mtlb pehle sabse right vaala argument banega uske baad hi koi left vaala argument default ban sakta hai, mtlb ki agar aisa hota, printArr(int arr[], int size, int start, int end), toh pehle end ko default banaate then start ko and so on...agar size ko default banana hai toh pehle start and end ko default hona zaruri hai!
 
-// ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->
-// Question 1 : Rotating an Array!
-// Question 2 : Check if an array is sorted and rotated or not!
-// Question 3 : Addition of 2 Arrays
-
-// Question 4 : Find the length of the character array!
-// Question 5 : Reverse a string
-// Question 6 : Check for a palindrome
-// Question 7 : Find the maximum occuring characters in a string!
-// Question 8 : You have a line of text and you have to replace all the spaces with the @40
-// Question 9 : Remove all the occurences of a sub string in a parent string!
-// Question 10 : Permutation in string!
-// Question 11 : Removing all adjacent duplicates! Actual question number 1047 on LeetCode!
-// Question 12 : String Compression! Ques number 443 on Leetcode
-
-// Question 13 : Linear Search in 2D Array!
-// Question 14 : Row sum! printing sum of all the rows in the 2D array!
-// Question 15 : Find the largest rowsum and which row has it!
-// Question 16 : Wave Print Problem
-// Question 17 : Spiral Print Problem!
-// Question 18 : Binary Search in 2D arrays!
-
-// Question 19 : Check prime!
-// Question 20 : Count primes in a range! (Sieve of Eratosthenes)
-// Question 21 : Fast Exponentitation!
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Extra Questions!
 // ------------------------------------------------------------- 2D Array Questions ------------------------------------------------------------------------------------------------------------------------->
 // Question 1 : Addition of two matrices!
@@ -2658,3 +2619,29 @@ int main() {
     string ans = largestword(s);
     cout<<ans;
 }
+
+// ------------------------------------------------------------ Summary Questions Lists -------------------------------------------------------------------------------------------------------------------------------------------------------------->
+// Question 1 : Rotating an Array!
+// Question 2 : Check if an array is sorted and rotated or not!
+// Question 3 : Addition of 2 Arrays
+
+// Question 4 : Find the length of the character array!
+// Question 5 : Reverse a string
+// Question 6 : Check for a palindrome
+// Question 7 : Find the maximum occuring characters in a string!
+// Question 8 : You have a line of text and you have to replace all the spaces with the @40
+// Question 9 : Remove all the occurences of a sub string in a parent string!
+// Question 10 : Permutation in string!
+// Question 11 : Removing all adjacent duplicates! Actual question number 1047 on LeetCode!
+// Question 12 : String Compression! Ques number 443 on Leetcode
+
+// Question 13 : Linear Search in 2D Array!
+// Question 14 : Row sum! printing sum of all the rows in the 2D array!
+// Question 15 : Find the largest rowsum and which row has it!
+// Question 16 : Wave Print Problem
+// Question 17 : Spiral Print Problem!
+// Question 18 : Binary Search in 2D arrays!
+
+// Question 19 : Check prime!
+// Question 20 : Count primes in a range! (Sieve of Eratosthenes)
+// Question 21 : Fast Exponentitation!

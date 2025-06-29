@@ -1,21 +1,31 @@
 #include<iostream>
-#include<vector>
 using namespace std;
-
-int singleOne(vector<int> v) {
-    int val = 0;
-    for(int i = 0; i<v.size(); i++) {
-        val = val ^ v[i];
-    }
-    return val;
-}
 
 int main() {
     int n;
     cin>>n;
-    vector<int> v(n);
-    for(int i = 0; i<n; i++) {
-        cin>>v[i];
+    int* arr = new int[n];
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
     }
-    cout<<singleOne(v);
+    bool sortedAsc = true;
+    bool sortedDesc = true;
+    for(int i = 0; i < n-1; i++) {
+        if(arr[i] > arr[i+1]) {
+            sortedAsc = false;
+            // break;
+        }
+        if(arr[i] < arr[i+1]) {
+            sortedDesc = false;
+            // break;
+        }
+    }
+    if(sortedAsc) {
+        cout<<"Sorted array in ascending order!";
+    } else if(sortedDesc) {
+        cout<<"Sorted array in descending order!";
+    }
+    else {
+        cout<<"Not sorted!";
+    }
 }

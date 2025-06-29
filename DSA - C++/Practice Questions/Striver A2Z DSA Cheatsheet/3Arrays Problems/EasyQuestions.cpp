@@ -1,5 +1,5 @@
 // ------------------------------------------------------------ Lec 1 : Easy ---------------------------------------------------------------------------------------------->
-// Question 1 : Largest element in the array!
+// Question 1 : Find the largest element in the array!
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -20,7 +20,7 @@ int main() {
     cout<<"Max value of the array : "<<maxVal;
 } // TC : O(n) and SC : O(1) rest all methods will be overkill.
 
-// Question 2 : Find the largest element in the array!
+// Question 2 : Find the second largest element in the array!
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -148,7 +148,7 @@ int main() {
 using namespace std;
 
 int removeDuplicates(vector<int> &v) {
-    int i = 0; int j = 1;
+    int i = 0;
     for(int j = 1; j<v.size(); j++) {
         if(v[i] != v[j]) {
             i++;
