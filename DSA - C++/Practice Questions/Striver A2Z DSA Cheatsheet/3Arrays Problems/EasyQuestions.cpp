@@ -762,4 +762,45 @@ int main() {
 } // TC : O(n) and SC : O(1)
 // There are more approaches like : Using hashing using arrays, hashing using maps and brute force approach!
 
-// Question 13 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k.
+// Question 13 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k!
+// Thinking & Approach : Some most common use-cases could be : The array contains only positive numbers! (duplicate or unique)
+//                                                           : The arrays contains both positive & negative numbers! (duplicate or unique)
+//                                                           : And some edge cases like : single element, all same numbers.
+//                     : Starting to find solution for the most generic case with the most generic approach and will keep optimizing it based on situation!
+// Approach 1 (Brute Force) : Traverse the whole array using the outer loop
+//                          : Working : Keep finding sum/running-total using inner loop! If the running total equals == K (given sum). Then just update the maxLen value!
+//                                    : If the sum > k, then just break, to prevent unneccessary iterations!
+//                          : Works for : When all the values are non-negative!
+// Approach 2 (Sliding Window) : 
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int largestSum(vector<int> v, int k) {
+    int maxLen = 0;
+    for(int i = 0; i < v.size(); i++) {
+        int sum = 0;
+        for(int j = i; j < v.size(); j++) {
+            sum += v[j];
+            if(sum == k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+            else if(sum > k) {
+                break;
+            }
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<largestSum(v, sum);
+}
