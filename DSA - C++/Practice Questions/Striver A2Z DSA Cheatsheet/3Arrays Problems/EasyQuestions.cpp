@@ -380,13 +380,14 @@ int main() {
 //            : The final array should contain : One instance of each element of both arrays in the final array!
 //                                             : If there is a common element in both array, then one of the instance will be in the final array!
 //                                             : Example : If array1 = [1,2,3,3,4] & array2 = [1,2,3,3,4,5,6]. Then final array should contain array3 = [1,2,3,3,4,5,6]
-// Thinking & Approach : Solution will be applied based on various factors, conditions & test cases like...
-//                     : Conditions like : Both sorted! (contains duplicates or not)
-//                                       : Both unsorted! (contains duplicates or not)
-//                                       : One sorted & one unsorted! (contains duplicates or not)
-//                     : Goals of a Good Solution : It should cover most of the common use-cases/test-cases!
+// Thinking & Approach : Goals of a Good Solution : It should cover most of the common use-cases/test-cases!
 //                                                : It should take less time!
 //                                                : It should take less space!
+//                     : Some most common use-cases could be : Both Unsorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : One Sorted + Another Unsorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : Both Sorted arrays! - (Handling 'contains duplicates' and 'doesn't contains duplicates' cases!) - (Want sorted/unsorted output)
+//                                                           : This case is mixture of any of the above! But no duplicates allowed in output! - (Want sorted/unsorted output)
+//                     : And based on that, some solutions are proposed below!
 // Approach 1 (Brute Force Approach) : Working : Traverse the first array and push all elements to final.
 //                                             : For every element in v1, look in v2 for a match. If found, mark that in v2 as INT_MIN to avoid repeating it.
 //                                             : Finally, push remaining unmarked (!= INT_MIN) elements from v2.
