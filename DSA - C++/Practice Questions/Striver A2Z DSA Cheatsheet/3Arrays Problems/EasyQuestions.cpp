@@ -771,12 +771,20 @@ int main() {
 //                          : Working : Keep finding sum/running-total using inner loop! If the running total equals == K (given sum). Then just update the maxLen value!
 //                                    : If the sum > k, then just break, to prevent unneccessary iterations!
 //                          : Works for : When all the values are non-negative!
-// Approach 2 (Sliding Window) : 
+//                          : Time Complexity : Worst-case: O(n²) : Outer loop: n times & Inner loop: up to n times (But inner loop breaks early if sum exceeds k)
+//                          : Space Complexity : O(1) — Only using a few variables (sum, maxLen), no extra space.
+// Approach 2 (Sliding Window) : Working : Use two pointers s (start) and e (end) to represent a window.
+//                                       : Expand the window to the right (e++) and add to sum.
+//                                       : If sum > k, shrink the window from the left (s++).
+//                                       : If sum == k, update maxLen.
+//                             : Time Complexity : O(n) : Each element is added and removed from the sum at most once. Total operations proportional to n.
+//                             : Space Complexity : O(1) — No extra data structures used.
+// Approach 1 :
 #include<iostream>
 #include<vector>
 using namespace std;
 
-int largestSum(vector<int> v, int k) {
+int largestSum1(vector<int> v, int k) {
     int maxLen = 0;
     for(int i = 0; i < v.size(); i++) {
         int sum = 0;
@@ -788,6 +796,74 @@ int largestSum(vector<int> v, int k) {
             else if(sum > k) {
                 break;
             }
+        }
+    }
+    return maxLen;
+}
+
+// Approach 2 :
+int largestSum2(vector<int> v, int k) {
+    int sum = 0;
+    int maxLen = 0;
+    int s = 0; int e = 0;
+    while(e < v.size()) {
+        sum += v[e];
+        while(sum > k && s <= e) {
+            sum -= v[s];
+            s++;
+        }
+        if(sum == k) {
+            maxLen = max(maxLen, e - s + 1);
+        }
+        e++;
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) {
+        cin>>v[i];
+    }
+    int sum;
+    cin>>sum;
+    // cout<<largestSum1(v, sum);
+    cout<<largestSum2(v, sum);
+}
+
+// Question 13.2 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k! The arrays contains both positive & negative numbers!
+// Thinking : First we will prepare our prefix sum array! And once we get this, we will kind of have the sum of all the subarrays possible in the original array!
+//          : We will start our i & j with the first index of the array! And will keep moving our right index forward, if the sum <= k and will keep updating our maxLen while doing this!
+//          : And if any moment we get our sum > k, we will shrink the window!
+#include<iostream>
+#include<climits>
+#include<vector>
+using namespace std;
+
+int largestSum(vector<int> v, int k) {
+    int n = v.size();
+
+    // Prepare Prefix sum array!
+    vector<int> pref(n + 1);
+    pref[0] = 0;
+    for(int i = 1; i < n + 1; i++) {
+        pref[i] = pref[i - 1] + v[i-1];
+    }
+
+    int s = 0;
+    int e = 0;
+    int maxLen = 0;
+    int sum = INT_MIN;
+    while(e < n) {
+        sum = pref[e + 1] - pref[s];
+        if(sum <= k) {
+            maxLen = max(maxLen, e - s + 1);
+            e++;
+        }
+        else {
+            s++;
         }
     }
     return maxLen;

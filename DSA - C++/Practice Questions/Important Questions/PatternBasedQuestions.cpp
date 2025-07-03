@@ -277,7 +277,7 @@ int main() {
     }
 } // Note : You can try eliminate the count variable by using rows and columns relationships! And these relationships we can form by analysing each element of the matrix and then can create a formula!
 
-// Pattern 15 : A
+// Pattern 14 : A
 //            : B B
 //            : C C C
 //            : D D D D

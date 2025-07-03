@@ -1,40 +1,52 @@
 #include<iostream>
+#include<stack>
 #include<vector>
-#include<unordered_set>
-#include<climits>
 using namespace std;
-// -8 2 3 -6 11
-vector<int> firstNegativeBF(vector<int> arr, int k) {
-    vector<int> ans;
-    for(int i = 0; i <= arr.size() - k; i++) {
-        int index = INT_MAX;
-        int found = false;
-        for(int j = i; j < i + k; j++) {
-            if(arr[j] < 0) {
-                index = j;
-                found = true;
-                ans.push_back(arr[index]);
-                break;
-            }
+
+vector<int> prevSmallerElem(vector<int> v) {
+    stack<int> st;
+    int n = v.size();
+    vector<int> result(n);
+    
+    for(int i = 0; i < n; i++) {
+        while(!st.empty() && st.top() >= v[i]) {
+            st.pop();
         }
-        if(found == false) {
-            ans.push_back(0);
-        }
+        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
+        st.push(v[i]);
     }
-    return ans;
+    return result;
+}
+
+vector<int> nextSmallerElem(vector<int> v) {
+    stack<int> st;
+    int n = v.size();
+    vector<int> result(n);
+    
+    for(int i = n - 1; i >= 0; i--) {
+        while(!st.empty() && st.top() >= v[i]) {
+            st.pop();
+        }
+        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
+        st.push(v[i]);
+    }
+    return result;
 }
 
 int main() {
     int n;
     cin>>n;
-    vector<int> v(n);
-    for(int i = 0; i<n; i++) {
-        cin>>v[i];
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
     }
-    int windowSize;
-    cin>>windowSize;
-    vector<int> res = firstNegativeBF(v, windowSize);
-    for(int i = 0; i < res.size(); i++) {
-        cout<<res[i]<<" ";
+    vector<int> ans1 = prevSmallerElem(arr);
+    for(int i = 0; i < ans1.size(); i++) {
+        cout<<ans1[i]<<" ";
+    }
+
+    vector<int> ans2 = nextSmallerElem(arr);
+    for(int i = 0; i < ans2.size(); i++) {
+        cout<<ans2[i]<<" ";
     }
 }

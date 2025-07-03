@@ -2,47 +2,21 @@
 using namespace std;
 
 int main() {
-    int numR;
-    cin>>numR;
-    int n = numR / 2;
+    int n;
+    cout<<"Enter an odd number : ";
+    cin>>n;
     for(int i = 1; i <= n; i++) {
-        int spaces = n - i;
-        while(spaces) {
-            cout<<" "<<" ";
-            spaces--;
+        if(i < (n/2 + 1)) {
+            for(int j = 1; j <= i; j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
         }
-
-        int stars = (2 * i) - 1;
-        while(stars) {
-            cout<<"*"<<" ";
-            stars--;
+        else {
+            for(int j = 1; j <= (n - i + 1); j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
         }
-
-        spaces = n - i;
-        while(spaces) {
-            cout<<" "<<" ";
-            spaces--;
-        }
-        cout<<endl;
-    }
-    for(int i = n; i >= 1; i--) {
-        int spaces = n - i;
-        while(spaces) {
-            cout<<" "<<" ";
-            spaces--;
-        }
-
-        int stars = (2 * i) - 1;
-        while(stars) {
-            cout<<"*"<<" ";
-            stars--;
-        }
-
-        spaces = n - i;
-        while(spaces) {
-            cout<<" "<<" ";
-            spaces--;
-        }
-        cout<<endl;
     }
 }

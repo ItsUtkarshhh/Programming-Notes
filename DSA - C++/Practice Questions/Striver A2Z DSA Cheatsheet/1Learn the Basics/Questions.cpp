@@ -114,10 +114,10 @@ int main() {
 }
 
 // Pattern 7 : 1
-//          : 2 3
-//          : 4 5 6
-//          : 7 8 9 10
-//          : 11 12 13 14 15
+//           : 2 3
+//           : 4 5 6
+//           : 7 8 9 10
+//           : 11 12 13 14 15
 #include<iostream>
 using namespace std;
 
@@ -212,9 +212,11 @@ int main() {
     }
 }
 
-// Pattern 12 :     *
-//            :   * * *
-//            : * * * * *
+// Pattern 12 :         *
+//            :       * * *
+//            :     * * * * *
+//            :   * * * * * * *
+//            : * * * * * * * * *
 // Thought Process : To solve any pattern-related question in programming, the first step is to understand the relationship between rows and columns. But for pyramid patterns, things are a bit special — you need to understand three important components : Rows (Size), Spaces & Stars
 //                 : Star Logic : In a pyramid pattern, stars are printed in the center of each row and their count increases as we go down.
 //                              : One common observation is : Number of stars in any row "i" is = (2 * i) - 1. This means the number of stars depends only on the row number, not on the total size n.
@@ -245,9 +247,11 @@ int main() {
     }
 }
 
-// Pattern 13 : * * * * *
-//            :   * * *
-//            :     *
+// Pattern 13 : * * * * * * * * *
+//            :   * * * * * * *
+//            :     * * * * *
+//            :       * * *
+//            :         *
 // Thought Process : Its mostly similar to previous logic, just in reverse!
 #include<iostream>
 using namespace std;
@@ -300,12 +304,16 @@ int main() {
     }
 }
 
-// Pattern 14 :     *
-//            :   * * *
-//            : * * * * *
-//            : * * * * *
-//            :   * * *
-//            :     *
+// Pattern 14 :         *
+//            :       * * *
+//            :     * * * * *
+//            :   * * * * * * *
+//            : * * * * * * * * *
+//            : * * * * * * * * *
+//            :   * * * * * * *
+//            :     * * * * *
+//            :       * * *
+//            :         *
 // // Thought Process : Here again you can just simply combine the logic of inverted & non-inverted pyramids!
 #include<iostream>
 using namespace std;
@@ -345,6 +353,8 @@ int main() {
 
 // Pattern 15 : *
 //            : * *
+//            : * * *
+//            : * * * *
 //            : * * *
 //            : * *
 //            : *
@@ -497,9 +507,10 @@ int main() {
     }
 }
 
-// Pattern 18 : _ _ A _ _
-//            : _ A B A _
-//            : A B C B A
+// Pattern 18 : _ _ _ A _ _ _
+//            : _ _ A B A _ _
+//            : _ A B C B A _
+//            : A B C D C B A
 #include<iostream>
 using namespace std;
 
