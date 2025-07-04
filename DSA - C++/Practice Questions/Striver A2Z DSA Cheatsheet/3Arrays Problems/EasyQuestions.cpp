@@ -762,38 +762,36 @@ int main() {
 } // TC : O(n) and SC : O(1)
 // There are more approaches like : Using hashing using arrays, hashing using maps and brute force approach!
 
-// Question 13 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k!
-// Thinking & Approach : Some most common use-cases could be : The array contains only positive numbers! (duplicate or unique)
-//                                                           : The arrays contains both positive & negative numbers! (duplicate or unique)
-//                                                           : And some edge cases like : single element, all same numbers.
-//                     : Starting to find solution for the most generic case with the most generic approach and will keep optimizing it based on situation!
-// Approach 1 (Brute Force) : Traverse the whole array using the outer loop
-//                          : Working : Keep finding sum/running-total using inner loop! If the running total equals == K (given sum). Then just update the maxLen value!
-//                                    : If the sum > k, then just break, to prevent unneccessary iterations!
-//                          : Works for : When all the values are non-negative!
-//                          : Time Complexity : Worst-case: O(n²) : Outer loop: n times & Inner loop: up to n times (But inner loop breaks early if sum exceeds k)
-//                          : Space Complexity : O(1) — Only using a few variables (sum, maxLen), no extra space.
-// Approach 2 (Sliding Window) : Working : Use two pointers s (start) and e (end) to represent a window.
-//                                       : Expand the window to the right (e++) and add to sum.
-//                                       : If sum > k, shrink the window from the left (s++).
-//                                       : If sum == k, update maxLen.
-//                             : Time Complexity : O(n) : Each element is added and removed from the sum at most once. Total operations proportional to n.
-//                             : Space Complexity : O(1) — No extra data structures used.
-// Approach 1 :
+// Question 13 : A) Given an array and a sum k, we need to print the length of the longest subarray that sums to k! (Only +ve numbers)
+//             : B) Given an array and a sum k, we need to print the length of the longest subarray that sums to k! (Both +ve/-ve numbers)
+//             : C) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Only +ve numbers)
+//             : D) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Both +ve/-ve numbers)
+// A) Given an array and a sum k, we need to print the length of the longest subarray that sums to k! (Only +ve numbers)
+// Approach (Brute Force) : Since the array consists of only positive numbers and zeros!
+//                        : We can safely : Iterate through every possible subarray using a nested loop.
+//                                        : Maintain a running sum (sum) while expanding the subarray.
+//                                        : If sum < k, continue expanding (i.e., add next element).
+//                                        : If sum == k, update the maxLen and continue to check for longer valid subarrays.
+//                                        : If sum > k, no need to continue — break the inner loop, as the sum will only grow further with more positive numbers.
+//                       : Important Edge Cases to Consider : Single Element Equal to k : e.g., arr = [1, 3, 7, 5, 5], k = 7 → subarray [7] must be considered valid. So subarrays of length 1 should not be ignored.
+//                                                          : Zeros in the Array : Zero doesn't affect the sum, but it can increase the length of a subarray whose sum is already equal to k. For example: arr = [1, 1, 1, 1, 1, 1, 0], k = 3 → subarray [1, 1, 1, 0] has sum 3 and length 4.
+//                       : Time Complexity : O(n^2) in the worst case, where n is the size of the array. Early termination using break helps optimize slightly when sum > k.
+//                       : Even all other cases A, B, C & D, will give O(n^2) time complexity! So we need to optimize this solution!
 #include<iostream>
 #include<vector>
 using namespace std;
 
-int largestSum1(vector<int> v, int k) {
+int longestSubarrayA1(vector<int> v, int k) {
+    int n = v.size();
     int maxLen = 0;
-    for(int i = 0; i < v.size(); i++) {
+    for(int i = 0; i < n; i++) {
         int sum = 0;
-        for(int j = i; j < v.size(); j++) {
+        for(int j = i; j < n; j++) {
             sum += v[j];
             if(sum == k) {
                 maxLen = max(maxLen, j - i + 1);
             }
-            else if(sum > k) {
+            if(sum > k) {
                 break;
             }
         }
@@ -801,69 +799,45 @@ int largestSum1(vector<int> v, int k) {
     return maxLen;
 }
 
-// Approach 2 :
-int largestSum2(vector<int> v, int k) {
-    int sum = 0;
-    int maxLen = 0;
-    int s = 0; int e = 0;
-    while(e < v.size()) {
-        sum += v[e];
-        while(sum > k && s <= e) {
-            sum -= v[s];
-            s++;
-        }
-        if(sum == k) {
-            maxLen = max(maxLen, e - s + 1);
-        }
-        e++;
-    }
-    return maxLen;
-}
-
 int main() {
     int n;
     cin>>n;
-    vector<int> v(n);
-    for(int i = 0; i<n; i++) {
-        cin>>v[i];
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
     }
     int sum;
     cin>>sum;
-    // cout<<largestSum1(v, sum);
-    cout<<largestSum2(v, sum);
+    cout<<longestSubarrayA1(arr, sum);
 }
 
-// Question 13.2 : Given an array and a sum k, we need to print the length of the longest subarray that sums to k! The arrays contains both positive & negative numbers!
-// Thinking : First we will prepare our prefix sum array! And once we get this, we will kind of have the sum of all the subarrays possible in the original array!
-//          : We will start our i & j with the first index of the array! And will keep moving our right index forward, if the sum <= k and will keep updating our maxLen while doing this!
-//          : And if any moment we get our sum > k, we will shrink the window!
+// Approach (Prefix Sum & Two Pointers) :
 #include<iostream>
-#include<climits>
 #include<vector>
 using namespace std;
 
-int largestSum(vector<int> v, int k) {
+int longestSubarrayA1(vector<int> v, int k) {
     int n = v.size();
-
-    // Prepare Prefix sum array!
     vector<int> pref(n + 1);
     pref[0] = 0;
     for(int i = 1; i < n + 1; i++) {
-        pref[i] = pref[i - 1] + v[i-1];
+        pref[i] = pref[i - 1] + v[i - 1];
     }
-
-    int s = 0;
-    int e = 0;
+    
+    int s = 0; int e = 0;
+    int diff = 0;
     int maxLen = 0;
-    int sum = INT_MIN;
-    while(e < n) {
-        sum = pref[e + 1] - pref[s];
-        if(sum <= k) {
-            maxLen = max(maxLen, e - s + 1);
+    while(e < pref.size()) {
+        diff = pref[e] - pref[s];
+        if(diff == k) {
+            maxLen = max(maxLen, e - s);
             e++;
         }
-        else {
+        else if(diff > k) {
             s++;
+        }
+        else {
+            e++;
         }
     }
     return maxLen;
@@ -872,11 +846,124 @@ int largestSum(vector<int> v, int k) {
 int main() {
     int n;
     cin>>n;
-    vector<int> v(n);
-    for(int i = 0; i<n; i++) {
-        cin>>v[i];
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
     }
     int sum;
     cin>>sum;
-    cout<<largestSum(v, sum);
+    cout<<longestSubarrayA1(arr, sum);
+}
+
+// B) Given an array and a sum k, we need to print the length of the longest subarray that sums to k! (Both +ve/-ve numbers)
+// Approach (Brute Force) : The brute force idea remains similar to the approach used for arrays with only positive numbers.
+//                        : For every possible starting index i, we calculate the subarray sum by expanding up to every j ≥ i
+//                        : Whenever we find a subarray whose sum equals k, we update the maximum length.
+//                        : However, the critical difference here is that we cannot break the inner loop early when sum > k — unlike in the positive-only case — because the presence of negative numbers means the sum can still decrease later.
+//                        : Therefore, we must continue checking all possible subarrays starting from every index i.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayB1(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    for(int i = 0; i < n; i++) {
+        int sum = 0;
+        for(int j = i; j < n; j++) {
+            sum += v[j];
+            if(sum == k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayB1(arr, sum);
+}
+
+// C) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Only +ve numbers)
+// Approach (Brute Force) : Since the array contains only positive numbers, the brute force logic is almost identical to the case where we check for subarrays with sum exactly equal to k.
+//                        : The only change is that, instead of checking only sum == k, we now check for sum ≤ k.
+//                        : For every subarray starting at index i, we extend it forward while updating the sum, and whenever the sum is less than or equal to k, we update the maximum length.
+//                        : All other logic and conditions remain the same — including the early break when sum > k, since the sum can only increase in an array with only positive values.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayC1(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    for(int i = 0; i < n; i++) {
+        int sum = 0;
+        for(int j = i; j < n; j++) {
+            sum += v[j];
+            if(sum <= k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+            if(sum > k) {
+                break;
+            }
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayC1(arr, sum);
+}
+
+// D) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Both +ve/-ve numbers)
+// Approach (Brute Force) : Since the array may contain both positive and negative numbers (and possibly zeros), we cannot rely on early termination strategies.
+//                        : The brute-force logic involves evaluating every possible subarray by fixing a starting index i and extending to all possible ending indices j ≥ i. For each subarray [i...j], we maintain a running sum.
+//                        : If at any point the subarray sum is less than or equal to k, we consider it valid and update the maximum subarray length.
+//                        : Unlike the case with only positive numbers, we must not break the inner loop even when sum > k, because future elements (being negative) may reduce the sum and still lead to a valid subarray later.
+//                        : Thus, we explore all subarrays thoroughly to ensure correctness.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayD1(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    for(int i = 0; i < n; i++) {
+        int sum = 0;
+        for(int j = i; j < n; j++) {
+            sum += v[j];
+            if(sum <= k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayD1(arr, sum);
 }
