@@ -2,41 +2,27 @@
 #include<vector>
 using namespace std;
 
-int longestSubarrayA1(vector<int> v, int k) {
+pair<int, int> twoSum2_V2(vector<int> v, int k) {
     int n = v.size();
-    vector<int> pref(n + 1);
-    pref[0] = 0;
-    for(int i = 1; i < n + 1; i++) {
-        pref[i] = pref[i - 1] + v[i - 1];
+    int i = 0; int j = n - 1;
+    while(i < j) {
+        int sum = v[i] + v[j];
+        if(sum == k) return {i, j};
+        if(sum > k) j--;
+        else i++;
     }
-    
-    int s = 0; int e = 0;
-    int diff = 0;
-    int maxLen = 0;
-    while(e < pref.size()) {
-        diff = pref[e] - pref[s];
-        if(diff == k) {
-            maxLen = max(maxLen, e - s);
-            e++;
-        }
-        else if(diff > k) {
-            s++;
-        }
-        else {
-            e++;
-        }
-    }
-    return maxLen;
+    return {-1, -1};
 }
 
 int main() {
     int n;
     cin>>n;
-    vector<int> arr(n);
+    vector<int> v(n);
     for(int i = 0; i < n; i++) {
-        cin>>arr[i];
+        cin>>v[i];
     }
-    int sum;
-    cin>>sum;
-    cout<<longestSubarrayA1(arr, sum);
+    int k;
+    cin>>k;
+    pair<int, int> ans = twoSum2_V2(v, k);
+    cout<<"["<<ans.first<<", "<<ans.second<<"]"<<endl;
 }

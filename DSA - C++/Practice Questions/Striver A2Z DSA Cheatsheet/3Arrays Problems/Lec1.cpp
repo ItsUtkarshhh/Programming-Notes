@@ -811,12 +811,35 @@ int main() {
     cout<<longestSubarrayA1(arr, sum);
 }
 
-// Approach (Prefix Sum & Two Pointers) :
+// Approach (Prefix Sum & Two Pointers) : To solve this efficiently, we use two main tools : Prefix Sum Array & Two Pointers (Sliding Window)
+//                                      : Prefix Sum Array : pref[i] = sum of elements from v[0] to v[i-1].
+//                                                         : Why is this useful? Because once we have the prefix sum array, we can quickly find the sum of any subarray v[s] to v[e-1] using : sum = pref[e] - pref[s]
+//                                                         : This trick helps us avoid summing elements repeatedly. It reduces our time complexity.
+//                                      : Two Pointers : We use two pointers s (start) and e (end) to slide through the prefix sum array and find a subarray with sum = k.
+//                                                     : We initialize : s = 0, e = 0.
+//                                                     : Then we run a loop : while (e < pref.size())
+//                                                     : At each step, we calculate : diff = pref[e] - pref[s], Which is actually the sum of subarray v[s] to v[e-1].
+//                                      : How the loop works : If diff == k, we’ve found a valid subarray. Update maxLen = max(maxLen, e - s) (as e-s is the length), and move e forward to find a possibly longer one.
+//                                                           : If diff < k, the current subarray sum is too small. So we increase e to include more elements and increase the sum.
+//                                                           : If diff > k, the subarray is too big. So we increase s to remove elements from the front and reduce the sum.
+//                                                           : We continue this until e reaches the end.
+//                                      : Why We Keep Prefix Sum Array of Size n + 1 and Initialize pref[0] = 0 : Let’s say you have an array : v = [1, 2, 3, 4]
+//                                                                                                              : If you create a prefix sum array of same size n = 4, it would look like : pref = [1, 3, 6, 10].
+//                                                                                                              : Now, the general idea behind prefix sums is that : The difference between two prefix sums gives us the sum of a subarray between the two corresponding positions.
+//                                                                                                              : To get the sum of subarray from index 1 to 3 (i.e., [2, 3, 4]) : sum = pref[3] - pref[0] = 10 - 1 = 9 (Correct)
+//                                                                                                              : That works fine because the difference gives : Includes the element at index 3, Excludes the element just before index 1 (i.e., at 0), So it correctly gives you the sum of v[1] + v[2] + v[3].
+//                                                                                                              : Now let’s say you want the sum of subarray from index 0 to 3 (i.e., [1, 2, 3, 4]) : If you follow the same logic, you would try to do : sum = pref[3] - pref[-1] Invalid! Index -1 doesn't exist!
+//                                                                                                              : So here the standard formula breaks when the subarray starts at index 0.
+//                                      : The Fix : Extra 0 at the Start : To handle this case cleanly, we create a prefix sum array of size n + 1, and set : pref[0] = 0
+//                                                : Then build the prefix sum as : pref[i + 1] = pref[i] + v[i]
+//                                                : This gives us : v = [1,2,3,4]. prefsum = [0, 1, 3, 6, 10]
+//                                                : To get the sum of subarray from l to r (inclusive) : sum = pref[r + 1] - pref[l]. This works perfectly even if l = 0, because pref[0] = 0 exists.
+//                                      : Why does this subtraction logic work? : Because subtraction naturally behaves as : Include the upper bound & Exclude the lower bound.
 #include<iostream>
 #include<vector>
 using namespace std;
 
-int longestSubarrayA1(vector<int> v, int k) {
+int longestSubarrayA2(vector<int> v, int k) {
     int n = v.size();
     vector<int> pref(n + 1);
     pref[0] = 0;
@@ -852,7 +875,52 @@ int main() {
     }
     int sum;
     cin>>sum;
-    cout<<longestSubarrayA1(arr, sum);
+    cout<<longestSubarrayA2(arr, sum);
+}
+
+// Approach (Two Pointers) : Now here's the intuition : Since all elements are non-negative, the sum of a window increases when you add more elements (move right).
+//                                                    : Similarly, the sum decreases when you remove elements from the front (move left).
+//                                                    : So, we can apply the sliding window (two pointers) technique.
+//                         : How it works : We maintain a window defined by two pointers : i (start of the window) & j (end of the window). We keep track of the sum of elements between i and j.
+//                                        : At every step : Add v[j] to the current sum.
+//                                                        : While the sum > k, shrink the window from the left by increasing i and subtracting v[i] from sum.
+//                                                        : If sum == k, update maxLen to j - i + 1.
+//                                                        : Move j forward to continue checking the next window. 
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayA3(vector<int> v, int k) {
+    int i = 0; int j = 0;
+    int sum = 0;
+    int maxLen = 0;
+    while(j < v.size()) {
+        sum += v[j];
+        while(sum > k) {
+            sum -= v[i];
+            i++;
+        }
+        if(sum == k) {
+            maxLen = max(maxLen, j - i + 1);
+            j++;
+        }
+        else {
+            j++;
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayA3(arr, sum);
 }
 
 // B) Given an array and a sum k, we need to print the length of the longest subarray that sums to k! (Both +ve/-ve numbers)
@@ -890,6 +958,57 @@ int main() {
     int sum;
     cin>>sum;
     cout<<longestSubarrayB1(arr, sum);
+}
+
+// Approach (Prefix Sum + Hashing) : We use the concept of prefix sum to track the cumulative sum of elements as we move through the array.
+//                                 : Let : sum = prefix sum till current index i.
+//                                       : We want to check if there’s any earlier prefix sum such that : prev_sum = sum - k
+//                                       : That means : The subarray from just after that earlier prefix to the current index i will have sum = k
+//                                       : So we store all prefix sums with their first occurrence index in a map preSumMap.
+//                                 : Works for : Only positive numbers, including zeroes. But with negatives, is where this approach shines! where other methods fails!
+//                                 : Why Two Pointers Approach Fails for Negatives : Two pointers (sliding window) only works if elements are non-negative because, Increasing j increases sum & Increasing i reduces sum
+//                                                                                 : But if negative numbers exist, the sum can increase/decrease unexpectedly. So you can't greedily slide the window — it will miss valid subarrays.
+//                                 : This Prefix Sum + Map approach solves that : It doesn’t rely on window shrinking/expanding. It tracks all prefix sums and finds any previous sum such that : current_sum - previous_sum = k
+//                                 : So it covers all valid subarrays, even when the array has Negative numbers, Zeros & Mixture of everything.
+//                                 : TC : O(n * logn) & SC : O(n)
+//                                 : This TC can be optimized if you use unordered_map, then the average case TC will become O(n) and worst case will have a risk of O(n^2).
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+
+int longestSubarrayB2(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    int sum = 0;
+    map<int, int> preSumMap;
+    for(int i = 0; i < n; i++) {
+        sum += v[i];
+        if(sum == k) {
+            maxLen = max(maxLen, i + 1);
+        }
+        int rem = sum - k;
+        if(preSumMap.find(rem) != preSumMap.end()) {
+            int len = i - preSumMap[rem];
+            maxLen = max(maxLen, len);
+        }
+        if(preSumMap.find(sum) == preSumMap.end()) {
+            preSumMap[sum] = i;
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayB2(arr, sum);
 }
 
 // C) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Only +ve numbers)
@@ -931,6 +1050,87 @@ int main() {
     cout<<longestSubarrayC1(arr, sum);
 }
 
+// Approach (Sliding Window) : Use two pointers i and j to form a window.
+//                           : Expand the window by adding v[j] to the sum.
+//                           : If sum > k, shrink the window from the left (i++) until sum ≤ k.
+//                           : If sum ≤ k, update max length of the valid window.
+//                           : Move j to explore the next element.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayC2(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    int i = 0; int j = 0;
+    int sum = 0;
+    while(j < n) {
+        sum += v[j];
+        while(sum > k) {
+            sum -= v[i];
+            i++;
+        }
+        if(sum <= k) {
+            maxLen = max(maxLen, j - i + 1);
+            j++;
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayC2(arr, sum);
+}
+
+// Approach (Sliding Window - Little Optimisation) : We can slightly improve the basic sliding window approach by realizing one key point : Since the question only asks for the length of the longest subarray with sum ≤ k, we don’t need to check or shrink the window once we already found a longer valid one.
+//                                                 : In the normal sliding window, we keep shrinking the window (using a while loop) every time the sum goes above k.
+//                                                 : But here, once we find a valid subarray of some length (say maxLen), we don’t need to shrink the window below that size anymore — because smaller windows won’t help in increasing the max length.
+//                                                 : So we avoid unnecessary shrinking, and in doing so, we can eliminate the inner while loop.
+//                                                 : The earlier approach had a time complexity of O(2n) due to frequent shrinking (i++ in a loop). With this optimization, we bring the time complexity down to a clean O(n).
+//                                                 : This trick only works when : You're asked for maximum length, not the actual subarrays. The array contains only positive integers (since shrinking guarantees sum reduces). If you're asked to find all valid subarrays, this won’t work — because it skips over many possibilities.
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int longestSubarrayC3(vector<int> v, int k) {
+    int n = v.size();
+    int maxLen = 0;
+    int i = 0; int j = 0;
+    int sum = 0;
+    while(j < n) {
+        sum += v[j];
+        if(sum > k) {
+            sum -= v[i];
+            i++;
+        }
+        if(sum <= k) {
+            maxLen = max(maxLen, j - i + 1);
+            j++;
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayC3(arr, sum);
+}
+
 // D) Given an array and a sum k, we need to print the length of the longest subarray that sums <= k! (Both +ve/-ve numbers)
 // Approach (Brute Force) : Since the array may contain both positive and negative numbers (and possibly zeros), we cannot rely on early termination strategies.
 //                        : The brute-force logic involves evaluating every possible subarray by fixing a starting index i and extending to all possible ending indices j ≥ i. For each subarray [i...j], we maintain a running sum.
@@ -966,4 +1166,44 @@ int main() {
     int sum;
     cin>>sum;
     cout<<longestSubarrayD1(arr, sum);
+}
+
+// Approach (Prefix Sum + Hashing) : 
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int longestSubarrayD2(vector<int> v, int k) {
+    int n = v.size();
+    map<int, int> mp;
+    int sum = 0, maxLen = 0;
+
+    mp[0] = -1;
+    for(int i = 0; i < n; i++) {
+        sum += v[i];
+
+        auto it = mp.lower_bound(sum - k);
+        if(it != mp.end()) {
+            int j = it->second;
+            maxLen = max(maxLen, i - j);
+        }
+
+        if(mp.find(sum) == mp.end()) {
+            mp[sum] = i;
+        }
+    }
+    return maxLen;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) {
+        cin>>arr[i];
+    }
+    int sum;
+    cin>>sum;
+    cout<<longestSubarrayD2(arr, sum);
 }

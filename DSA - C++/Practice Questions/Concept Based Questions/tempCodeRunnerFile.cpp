@@ -1,52 +1,33 @@
 #include<iostream>
-#include<stack>
 #include<vector>
+#include<climits>
 using namespace std;
 
-vector<int> prevSmallerElem(vector<int> v) {
-    stack<int> st;
+int maxSubarraySum(vector<int> v, int k) {
+    int i = 0; int j = 0;
     int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = 0; i < n; i++) {
-        while(!st.empty() && st.top() >= v[i]) {
-            st.pop();
+    int maxSum = INT_MIN;
+    while(i <= n - k) {
+        int sum = 0;
+        while(j < i + k) {
+            sum += v[j];
+            j++;
         }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
+        maxSum = max(maxSum, sum);
+        i++;
+        j = i;
     }
-    return result;
-}
-
-vector<int> nextSmallerElem(vector<int> v) {
-    stack<int> st;
-    int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = n - 1; i >= 0; i--) {
-        while(!st.empty() && st.top() >= v[i]) {
-            st.pop();
-        }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
-    }
-    return result;
+    return maxSum;
 }
 
 int main() {
     int n;
     cin>>n;
-    vector<int> arr(n);
+    vector<int> v(n);
     for(int i = 0; i < n; i++) {
-        cin>>arr[i];
+        cin>>v[i];
     }
-    vector<int> ans1 = prevSmallerElem(arr);
-    for(int i = 0; i < ans1.size(); i++) {
-        cout<<ans1[i]<<" ";
-    }
-
-    vector<int> ans2 = nextSmallerElem(arr);
-    for(int i = 0; i < ans2.size(); i++) {
-        cout<<ans2[i]<<" ";
-    }
+    int k;
+    cin>>k;
+    cout<<maxSubarraySum(v, k);
 }
