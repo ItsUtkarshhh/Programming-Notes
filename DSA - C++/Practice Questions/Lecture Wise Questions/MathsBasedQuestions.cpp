@@ -968,7 +968,7 @@ int main() {
 
     int count = 0;
     cout<<"All the prime number upto "<<b<<" are : ";
-    for(int i = a; i <= b; i++) {
+    for(int i = max(2, a); i <= b; i++) {
         if(isPrime[i]) {
             cout<<i<<" ";
             count++;
@@ -985,41 +985,40 @@ int main() {
 #include <vector>
 using namespace std;
 
-vector<int> isPrime(int a, int b) {
-    vector<int> finalPrime;
-    vector<bool> isprime(b + 1, true);
-    isprime[0] = isprime[1] = false;
-
+vector<pair<int, int>> primePairSum(int a, int b, int val) {
+    vector<bool> isPrime(b + 1, true);
+    isPrime[0] = isPrime[1] = false;
     for (int i = 2; i * i <= b; i++) {
-        if (isprime[i]) {
+        if (isPrime[i]) {
             for (int j = i * i; j <= b; j += i) {
-                isprime[j] = false;
+                isPrime[j] = false;
             }
         }
     }
 
-    for (int i = a; i <= b; i++) {
-        if (isprime[i]) {
-            finalPrime.push_back(i);
+    vector<int> primeNums;
+    for (int i = max(2, a); i <= b; i++) {
+        if (isPrime[i]) {
+            primeNums.push_back(i);
         }
     }
 
-    return finalPrime;
-}
-
-void primePairSum(int a, int b, int sum) {
-    vector<int> finalPrime = isPrime(a, b);
-    bool pairFound = false;
-
-    for (int i = 0; i < finalPrime.size() - 1; i++) {
-        if (finalPrime[i] + finalPrime[i + 1] == sum) {
-            pairFound = true;
-            cout << "Pair: " << finalPrime[i] << " and " << finalPrime[i + 1] << endl;
+    vector<pair<int, int>> result;
+    int i = 0, j = primeNums.size() - 1;
+    while (i <= j) {
+        int sum = primeNums[i] + primeNums[j];
+        if (sum == val) {
+            result.push_back({primeNums[i], primeNums[j]});
+            i++; j--;
+        }
+        else if (sum < val) {
+            i++;
+        }
+        else {
+            j--;
         }
     }
-    if (!pairFound) {
-        cout << "No Pair Found!" << endl;
-    }
+    return result;
 }
 
 int main() {
@@ -1028,7 +1027,10 @@ int main() {
     cin >> a >> b;
     cout << "Enter target sum: ";
     cin >> sum;
-    primePairSum(a, b, sum);
+    vector<pair<int, int>> result = primePairSum(a, b, sum);
+    for(auto it : result) {
+        cout<<"["<<it.first<<", "<<it.second<<"]"<<endl;
+    }
 
     return 0;
 }
@@ -1156,6 +1158,3 @@ int main() {
         cout<<"Not divisible by 10";
     }
 }
-
-// Re-solve these questions!
-// Question : Display all the prime numbers in interval of a to b!
