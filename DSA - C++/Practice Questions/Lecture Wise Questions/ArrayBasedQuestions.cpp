@@ -850,12 +850,23 @@ int main() {
 #include<algorithm>
 using namespace std;
 
-void rotatebyK_F(vector<int> &v, int steps) {
+void rotatebyK_F1(vector<int> &v, int steps) {
     steps = steps % v.size();
-
     reverse(v.begin(), v.end());
     reverse(v.begin(), v.begin() + steps);
     reverse(v.begin() + steps, v.end());
+}
+
+void rotatebyK_F2(vector<int> &v, int steps) {
+    int n = v.size();
+    steps = steps % n;
+    for(int i = 0; i < steps; i++) {
+        int lastVal = v[n-1];
+        for(int j = n - 1; j > 0; j--) {
+            v[j] = v[j-1];
+        }
+        v[0] = lastVal;
+    }
 }
 
 int main() {
@@ -867,7 +878,7 @@ int main() {
     for(int i = 0; i < v.size(); i++) {
         cin>>v[i];
     }
-    rotatebyK_F(v, steps);
+    rotatebyK_F2(v, steps);
     for(int i = 0; i < v.size(); i++) {
         cout<<v[i]<<" ";
     }
@@ -978,7 +989,7 @@ vector<int> mergeTheTwo(vector<int> v1, vector<int> v2) {
     int i = 0;
     int j = 0;
     while(i < v1.size() && j < v2.size()) {
-        if(v1[i] < v2[j]) {
+        if(v1[i] <= v2[j]) {
             ans.push_back(v1[i]);
             i++;
         }
@@ -1251,4 +1262,38 @@ int main() {
             cout<<v[i]<<" ";
         }
     }
+}
+
+// Question 16 : Remove Duplicates from an array! (In-Place)
+// Approach : There can be approaches like Brute Force! using sets or simple array traversal! But we are asked to keep it in-place!
+// Approach : So we are using a similar approach, we have used in the Move zeroes to right/left questions!
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int removeDuplicates(vector<int> &v) {
+    int n = v.size();
+    int i = 0;
+    for(int j = 1; j < n; j++) {
+        if(v[i] != v[j]) {
+            i++;
+            v[i] = v[j];
+        }
+    }
+    return i + 1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int newLen = removeDuplicates(v);
+    cout << "Unique elements: ";
+    for(int i = 0; i < newLen; i++) {
+        cout << v[i] << " ";
+    }
+    cout << "\nLength: " << newLen << endl;
 }

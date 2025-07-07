@@ -1,4 +1,3 @@
-// Intersection of Two arrays!
 #include<iostream>
 #include<vector>
 #include<climits>
@@ -9,29 +8,29 @@
 #include<unordered_set> // For better!
 using namespace std;
 
-void rotatebyK(vector<int> &v, int k) {
-    for(int i = 0; i < k; i++) {
-        int lastVal = v[v.size() - 1];
-        for(int j = 0; j < v.size() - 2; j++) {
-            int temp = v[j+1];
-            v[j+1] = v[j];
-            v[j + 2] = temp;
+int removeDuplicates(vector<int> v) {
+    int n = v.size();
+    int i = 0; int j = n - 1;
+    while(i < j) {
+        if(v[i] == v[i+1]) {
+            swap(v[i+1], v[j]);
+            j--;
+            i++;
         }
-        v[0] = lastVal;
+        i++;
     }
+    return i + 1;
 }
 
 int main() {
-    int n1;
-    cin>>n1;
-    vector<int> v1(n1);
-    for(int i = 0; i < n1; i++) {
-        cin>>v1[i];
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
     }
-    int k;
-    cin>>k;
-    rotatebyK(v1, k);
-    for(int val : v1) {
-        cout<<val<<" ";
+    int newLen = removeDuplicates(v);
+    for(int i = 0; i < newLen; i++) {
+        cout<<v[i]<<" ";
     }
 }
