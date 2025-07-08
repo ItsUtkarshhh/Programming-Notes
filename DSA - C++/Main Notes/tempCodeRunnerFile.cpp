@@ -1,58 +1,13 @@
 #include<iostream>
-#include<vector>
-#include<algorithm>
 using namespace std;
 
-int firstOccurence(vector<int> v, int key) {
-    int start = 0;
-    int end = v.size() - 1;
-    int mid = start + (end - start)/2;
-    int index = 0;
-    while(start < end) {
-        if(key == v[mid]) {
-            index = mid;
-            end = mid - 1;
-        }
-        else if(key > v[mid]) {
-            start = mid + 1;
-        }
-        else {
-            end = mid - 1;
-        }
-    }
-    return index;
-}
-
-int lastOccurence(vector<int> v, int key) {
-    int start = 0;
-    int end = v.size() - 1;
-    int mid = start + (end - start)/2;
-    int index = 0;
-    while(start < end) {
-        if(key == v[mid]) {
-            index = mid;
-            start = mid + 1;;
-        }
-        else if(key > v[mid]) {
-            start = mid + 1;
-        }
-        else {
-            end = mid - 1;
-        }
-    }
-    return index;
-}
-
 int main() {
-    int size;
-    cin>>size;
-    vector<int> v(size);
-    for(int i = 0; i < size; i++) {
-        cin>>v[i];
-    }
-    sort(v.begin(), v.end());
-    int key;
-    cin>>key;
-    cout<<"First occurence at index : "<<firstOccurence(v, key);
-    cout<<"Last occurence at index : "<<lastOccurence(v, key);
+    float x = 34.4f; // "f" or "F" is used to specify float number
+    long double y = 34.4l; // "l" or "L" is used to specify long double number
+
+    cout<<"the size of 34.4 is :"<<sizeof(34.4)<<endl;
+    cout<<"the size of 34.4f is :"<<sizeof(34.4f)<<endl;
+    cout<<"the size of 34.4F is :"<<sizeof(34.4F)<<endl;
+    cout<<"the size of 34.4l is :"<<sizeof(34.4l)<<endl;
+    cout<<"the size of 34.4L is :"<<sizeof(34.4L)<<endl;
 }

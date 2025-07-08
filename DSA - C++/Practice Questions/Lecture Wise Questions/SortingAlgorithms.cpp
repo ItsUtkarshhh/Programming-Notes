@@ -85,13 +85,13 @@ void insertionSort(vector<int> &v) {
         int temp = v[i];
         for(int j = i - 1; j >= 0; j--) {
             if(v[j] > temp) {
-                v[j + 1] = v[j];
+                v[j+1] = v[j];
             }
             else {
                 break;
             }
         }
-        v[j + 1] = temp;
+        v[j+1] = temp;
     }
 }
 

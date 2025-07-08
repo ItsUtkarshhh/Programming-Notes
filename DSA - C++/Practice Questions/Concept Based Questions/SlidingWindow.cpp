@@ -77,7 +77,6 @@ int main() {
     cout<<maxSubarraySum(v, k);
 }
 
-
 // Question 1 : Given an array of both positive and negative integers, the task is to compute the minimum and maximum elements of all sub-array of size k.
 // Thinking : Here, the array provided can be sorted or unsorted + contains duplicates/ or not!
 //          : If sorted, then it becomes pretty simple! As first value of every window will the "min" element for that window! and every "k-1" index of every window will be the "max" value for that window! And it doesn't matter that array contains duplicates or not!

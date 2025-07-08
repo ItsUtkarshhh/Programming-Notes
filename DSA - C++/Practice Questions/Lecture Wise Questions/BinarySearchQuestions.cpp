@@ -2,6 +2,7 @@
 // Question 1 : Finding a key in an array!
 // Thinking : Approach 1 (Linear Search) : The linear search approach has a time complexity of O(n), as it may need to traverse the entire array to find the target element.
 //          : Approach 2 (Binary Search) : In contrast, using binary search is a more efficient alternative for sorted arrays, as it reduces the time complexity to O(log n) by repeatedly dividing the search interval in half.
+// Approach 2 :
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -74,7 +75,7 @@ int lastOccurence(vector<int> v, int key) {
     while(start <= end) {
         if(key == v[mid]) {
             index = mid;
-            start = mid + 1;;
+            start = mid + 1;
         }
         else if(key > v[mid]) {
             start = mid + 1;
@@ -375,14 +376,14 @@ int squareRoot(int n) {
 }
 
 double squareRootAcc(int n, int precision) {
-    int sqrt = squareRoot(n);
+    int IntegerVal = squareRoot(n);
 
     double factor = 1.0;
-    double ans = sqrt;
+    double ans = IntegerVal;
     for(int i = 0; i < precision; i++) {
         factor = factor / 10;
-        for(double j = ans; j * j < n; j = j + factor) {
-            ans = j;
+        for(double root = ans; root * root < n; root = root + factor) {
+            ans = root;
         }
     }
     return ans;

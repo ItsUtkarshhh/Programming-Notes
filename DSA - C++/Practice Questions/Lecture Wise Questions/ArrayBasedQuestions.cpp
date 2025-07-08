@@ -757,7 +757,7 @@ vector<vector<int>> findPairSum3(vector<int> v, int sum) {
         }
 
         // Case 2: Normal case with two different values
-        else if (v[i] != complement && freq[v[i]] > 0 && freq[complement] > 0) {
+        else if (v[i] != complement && freq[v[i]] > 0 && freq[complement] > 0) { // You may remove : v[i] != complement
             valPair.insert({min(v[i], complement), max(v[i], complement)});
             freq[v[i]] = 0;
             freq[complement] = 0;

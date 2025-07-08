@@ -165,7 +165,7 @@ int main() {
 //          : However, there exists an alternate mathematical approach using a formula, which is not as intuitive but significantly more efficient. This formula-based method checks for perfect squares using the expressions 5n² + 4 or 5n² - 4 and operates in constant time O(1), making it far more optimal for larger values or performance-critical applications.
 
 // Improved on Drawbacks!
-// Concept : If the put the input number in the formula 5n² + 4 or 5n² - 4, and it turns out to be a perfect square! then the input number is a fibonacci number!
+// Concept : If the input number in the formula 5n² + 4 or 5n² - 4, and it turns out to be a perfect square! then the input number is a fibonacci number!
 #include<iostream>
 #include<math.h>
 using namespace std;
