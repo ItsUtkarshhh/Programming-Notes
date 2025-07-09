@@ -77,7 +77,75 @@ int main() {
     cout<<maxSubarraySum(v, k);
 }
 
-// Question 1 : Given an array of both positive and negative integers, the task is to compute the minimum and maximum elements of all sub-array of size k.
+// Question 2 : Maximum Sum Subarray of Size K! Return the index!
+//            : You are given an array of integers v of size n, and an integer k. Your task is to find the starting and ending indices (0-based) of the contiguous subarray of size k that has the maximum sum.
+// Approach (Sliding Window) : Start with the first k elements → calculate their sum.
+//                           : This is your initial window → store it as maxSum.
+//                           : Now, slide the window one step at a time : Subtract the element going out (left side) & Add the element coming in (right side)
+//                           : At each step, compare the new sum with maxSum : If it's greater, update maxSum and store the new start & end indices.
+//                           : After checking all windows, return the indices of the window with the max sum.
+//                           : Time Complexity : O(n) – efficient!
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int maxSumSubarray(vector<int> v, int k) {
+    int n = v.size();
+    int sum = 0;
+    int i;
+    for(i = 0; i < k; i++) {
+        sum += v[i];
+    }
+
+    int maxSum = sum;
+    while(i < n) {
+        sum = sum - v[i-k] + v[i];
+        maxSum = max(sum, maxSum);
+        i++;
+    }
+    return maxSum;
+}
+
+pair<int, int> maxSumSubarrayIndices(vector<int> v, int k) {
+    int n = v.size();
+    int sum = 0;
+    int i;
+    for(i = 0; i < k; i++) {
+        sum += v[i];
+    }
+
+    int maxSum = sum;
+    int winStart = 0;
+    int WinEnd = k - 1;
+    while(i < n) {
+        sum = sum - v[i-k] + v[i];
+        if(sum > maxSum) {
+            maxSum = sum;
+            winStart = i - k + 1;
+            WinEnd = i;
+        }
+        i++;
+    }
+    return {winStart, WinEnd};
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int k;
+    cin>>k;
+    int maxSum = maxSumSubarray(v, k);
+    cout<<"Max sum : "<<maxSum<<endl;
+    pair<int,int> window = maxSumSubarrayIndices(v, k);
+    cout<<"Indices : "<<"["<<window.first<<", "<<window.second<<"]";
+}
+
+// Question 3 : Given an array of both positive and negative integers, the task is to compute the minimum and maximum elements of all sub-array of size k.
 // Thinking : Here, the array provided can be sorted or unsorted + contains duplicates/ or not!
 //          : If sorted, then it becomes pretty simple! As first value of every window will the "min" element for that window! and every "k-1" index of every window will be the "max" value for that window! And it doesn't matter that array contains duplicates or not!
 //          : But, if the array is unsorted! Then simply use these following methods!
@@ -90,7 +158,6 @@ int main() {
 //                          : Time Complexity : O(n*k)
 //                          : Space Complexity : O(n - k + 1) = O(n)
 // Approach 2 (Deque with Sliding Window) : 
-
 // Approach 1 :
 #include<iostream>
 #include<vector>
@@ -136,7 +203,24 @@ int main() {
     }
 }
 
-// Question 1 : Given an array of both positive and negative integers, the task is to compute sum of minimum and maximum elements of all sub-array of size k.
+
+#include<iostream>
+#include<vector>
+#include<deque>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    vector<int> ans = 
+}
+
+
+// Question 4 : Given an array of both positive and negative integers, the task is to compute sum of minimum and maximum elements of all sub-array of size k.
 // Approach 1 (Brute Force) : Check if k > n : If yes, it's not possible to form any window of size k, so we return -1 or print "Not possible".
 //                          : Initialize a variable (e.g., maxSum) to store the maximum of all min+max sums.
 //                          : Traverse all sub-arrays of size k using two nested loops : The outer loop picks the starting index of each window
@@ -149,9 +233,10 @@ int main() {
 #include<climits>
 using namespace std;
 
-int maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
-    if(k > v.size()) return -1;
+vector<int> maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
+    if(k > v.size()) return {-1};
     int sum = INT_MIN;
+    vector<int> result;
     for(int i = 0; i <= v.size() - k; i++) {
         int maxi = INT_MIN;
         int mini = INT_MAX;
@@ -160,8 +245,9 @@ int maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
             mini = min(mini, v[j]);
         }
         sum = max(sum, maxi + mini);
+        result.push_back(sum);
     }
-    return sum;
+    return result;
 }
 
 int main() {
@@ -173,5 +259,11 @@ int main() {
     for(int i = 0; i < n; i++) {
         cin>>v[i];
     }
-    cout<<maxOfMinPlusMaxInSubarrays(v, k);
+    vector<int> ans = maxOfMinPlusMaxInSubarrays(v, k);
+    for(int val : ans) {
+        cout<<val<<" ";
+    }
 }
+
+
+// Question 3 : Given an array of both positive and negative integers, the task is to compute the minimum and maximum elements of all sub-array of size k.

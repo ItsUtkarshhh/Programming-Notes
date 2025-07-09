@@ -3,31 +3,34 @@
 #include<climits>
 using namespace std;
 
-int maxSubarraySum(vector<int> v, int k) {
-    int i = 0; int j = 0;
-    int n = v.size();
-    int maxSum = INT_MIN;
-    while(i <= n - k) {
-        int sum = 0;
-        while(j < i + k) {
-            sum += v[j];
-            j++;
+vector<int> maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
+    if(k > v.size()) return {-1};
+    int sum = INT_MIN;
+    vector<int> result;
+    for(int i = 0; i <= v.size() - k; i++) {
+        int maxi = INT_MIN;
+        int mini = INT_MAX;
+        for(int j = i; j < i + k; j++) {
+            maxi = max(maxi, v[j]);
+            mini = min(mini, v[j]);
         }
-        maxSum = max(maxSum, sum);
-        i++;
-        j = i;
+        sum = max(sum, maxi + mini);
+        result.push_back(sum);
     }
-    return maxSum;
+    return result;
 }
 
 int main() {
     int n;
     cin>>n;
+    int k;
+    cin>>k;
     vector<int> v(n);
     for(int i = 0; i < n; i++) {
         cin>>v[i];
     }
-    int k;
-    cin>>k;
-    cout<<maxSubarraySum(v, k);
+    vector<int> ans = maxOfMinPlusMaxInSubarrays(v, k);
+    for(int val : ans) {
+        cout<<val<<" ";
+    }
 }
