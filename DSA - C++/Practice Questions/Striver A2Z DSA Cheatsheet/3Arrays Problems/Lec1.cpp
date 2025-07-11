@@ -1137,6 +1137,19 @@ int main() {
 //                        : If at any point the subarray sum is less than or equal to k, we consider it valid and update the maximum subarray length.
 //                        : Unlike the case with only positive numbers, we must not break the inner loop even when sum > k, because future elements (being negative) may reduce the sum and still lead to a valid subarray later.
 //                        : Thus, we explore all subarrays thoroughly to ensure correctness.
+// Apprpach (Prefix Sum + Hashing) : We use, Prefix Sum (prefixSum) : To calculate sum of any subarray as (subarraySum = prefixSum[i] - prefixSum[j])
+//                                 : Key Logic : To satisfy prefixSum[i] - prefixSum[j] <= k. Then, => prefixSum[j] >= prefixSum[i] - k
+//                                 : Map (mp) : Key = prefix sum value & Value = first index where that prefix sum occurred
+//                                 : C++ map.lower_bound() : Used to find the smallest prefix sum ≥ (prefixSum - k)
+//                                 : Thought Process : At each index i : Keep calculating the cumulative prefixSum. We want to find any earlier prefix sum prefixSum[j] such that : prefixSum[j] >= prefixSum[i] - k (Which means the subarray (j+1 to i) has sum ≤ k.)
+//                                                   : So we do : auto it = mp.lower_bound(prefixSum - k);
+//                                                   : If we find such j, we calculate : maxLength = max(maxLength, i - j);
+//                                                   : Then store the current prefixSum with index i in mp if it’s not already present (to retain earliest occurrence).
+//                                 : mp[0] = -1; : Pretend prefix sum = 0 occurred before the array. & Helps detect subarrays starting from index 0.
+//                                 : prefixSum += arr[i]; : Running prefix sum till current index.
+//                                 : Time Complexity : O(n log n) (map operations)
+//                                 : Space Complexity : O(n) (prefix sums stored)
+// Approach 1 :
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -1168,7 +1181,7 @@ int main() {
     cout<<longestSubarrayD1(arr, sum);
 }
 
-// Approach (Prefix Sum + Hashing) : 
+// Approach 2 : 
 #include<iostream>
 #include<vector>
 #include<climits>
