@@ -373,14 +373,15 @@ int main() {
 }
 
 // Question 3 : Maximum Subarray Sum in an Array (Kadane's Algorithm)
-//            : Given an integer array arr, find the contiguous subarray (containing at least one number) which has the largest sum and returns its sum and prints the subarray.
+//            : Variation 1 : Given an integer array arr, find the contiguous subarray (containing at least one number) which has the largest sum and returns its sum!
+//            : Variation 2 : Given an integer array arr, find the contiguous subarray (containing at least one number) which has the largest sum and returns its sum and prints the subarray!
 // Approach 1 (Brute Force) : Iterate over the nested loop! and simply update maxSum & start & end variables! and lastly print the subarray and return the maxSum!
 // Approach 2 (Kadane's Algorithm) : Imagine going through the array from left to right.
 //                                 : You keep track of a current sum of the subarray (currentSum)
 //                                 : If at any point, this currentSum becomes less than 0, it is useless to continue with this subarray — it’ll only bring down any future sum.
 //                                 : So, reset the current sum to 0 and start fresh from the next index.
 //                                 : This is where the main greedy idea lies : "If the running sum is negative, drop it. It won’t help in getting a larger sum later."
-// Approach 1 :
+// Approach 1 : Solving both V1 & V2.
 #include<iostream>
 #include<climits>
 using namespace std;
@@ -419,7 +420,7 @@ int main() {
     delete[] arr;
 }
 
-// Approach 2 : Just finding the maximum sum!
+// Approach 2 : Solving both V1.
 #include<iostream>
 #include<vector>
 #include<climits>
@@ -449,7 +450,7 @@ int main() {
     cout<<ans;
 }
 
-// Approach 2 : Finding maxSum & subarray that has that maxSum!
+// Approach 2 (Kadane's Algorithm) : Same approach, just few steps of assigning indices to start & end! to mark the subarray and later printing it! Solving both V1 & V2.
 #include<iostream>
 #include<vector>
 #include<climits>
