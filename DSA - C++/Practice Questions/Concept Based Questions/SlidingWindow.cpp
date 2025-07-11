@@ -157,7 +157,18 @@ int main() {
 //                          : After finding min and max for that window : We either print them or store them (e.g., in a vector of pairs or 2D vector) if needed for later use.
 //                          : Time Complexity : O(n*k)
 //                          : Space Complexity : O(n - k + 1) = O(n)
-// Approach 2 (Deque with Sliding Window) : 
+// Approach 2 (Deque with Sliding Window) : A deque allows us to push/pop from both front and back, which helps us : Maintain a monotonic structure (For max: decreasing deque (front has largest), For min: increasing deque (front has smallest))
+//                                                                                                                 : Efficiently update the window as it slides.
+//                                        : Function 1 : maxofSubarrayK(vector<int> v, int k) : We find maximum of each window using a monotonic decreasing deque.
+//                                                     : For each element v[i] : Remove Out-of-Window Indices : Front of deque has index of max so far! But if it's outside the current window, we remove it
+//                                                     : Maintain Decreasing Order : If current value is greater, remove all smaller values from back! Because they can never be max again
+//                                                     : Push Current Index : dq.push_back(i);
+//                                                     : Collect Result Once First Window Ends : The front holds the index of the max element in the current window
+//                                        : Function 2 : Similarly for minofSubarrayK(vector<int> v, int k)
+//                                                     : Change comparison to < to maintain increasing order! Front will now always give minimum
+//                                        : Once we have : ans1 = max of every window & ans2 = min of every window! We combine them using the pair data structure!
+//                                        : Time Complexity : O(n) for both min and max
+//                                        : Space Complexity : O(k) per deque
 // Approach 1 :
 #include<iostream>
 #include<vector>
@@ -203,11 +214,49 @@ int main() {
     }
 }
 
-
+// Approach 2 :
 #include<iostream>
 #include<vector>
 #include<deque>
 using namespace std;
+
+vector<int> maxofSubarrayK(vector<int> v, int k) {
+    deque<int> dq;
+    vector<int> result;
+    int i = 0;
+    for(int i = 0; i < v.size(); i++) {
+        if(!dq.empty() && dq.front() <= i - k) {
+            dq.pop_front();
+        }
+        while(!dq.empty() && v[i] > v[dq.back()]) {
+            dq.pop_back();
+        }
+        dq.push_back(i);
+        if(i >= k - 1) {
+            result.push_back(v[dq.front()]);
+        }
+    }
+    return result;
+}
+
+vector<int> minofSubarrayK(vector<int> v, int k) {
+    deque<int> dq;
+    vector<int> result;
+    int i = 0;
+    for(int i = 0; i < v.size(); i++) {
+        if(!dq.empty() && dq.front() <= i - k) {
+            dq.pop_front();
+        }
+        while(!dq.empty() && v[i] < v[dq.back()]) {
+            dq.pop_back();
+        }
+        dq.push_back(i);
+        if(i >= k - 1) {
+            result.push_back(v[dq.front()]);
+        }
+    }
+    return result;
+}
 
 int main() {
     int n;
@@ -216,26 +265,38 @@ int main() {
     for(int i = 0; i < n; i++) {
         cin>>v[i];
     }
-    vector<int> ans = 
-}
-
+    int k;
+    cin>>k;
+    vector<int> ans1 = maxofSubarrayK(v, k);
+    vector<int> ans2 = minofSubarrayK(v, k);
+    vector<pair<int,int>> maxminPair(ans1.size());
+    for(int i = 0; i < maxminPair.size(); i++) {
+        maxminPair[i].first = ans2[i];
+        maxminPair[i].second = ans1[i];
+    }
+    for(auto it : maxminPair) {
+        cout<<"["<<it.first<<", "<<it.second<<"]"<<" ";
+    }
+} // You can also merge the both functions, if you want!
 
 // Question 4 : Given an array of both positive and negative integers, the task is to compute sum of minimum and maximum elements of all sub-array of size k.
 // Approach 1 (Brute Force) : Check if k > n : If yes, it's not possible to form any window of size k, so we return -1 or print "Not possible".
 //                          : Initialize a variable (e.g., maxSum) to store the maximum of all min+max sums.
 //                          : Traverse all sub-arrays of size k using two nested loops : The outer loop picks the starting index of each window
 //                                                                                     : The inner loop traverses k elements starting from that index to find the min and max in that window
-//                          : For each window : Compute sum = min + max & Update maxSum = max(maxSum, sum)
+//                          : For each window : push the sum into the result vector : result.push_back(maxi + mini);
 //                          : Time Complexity: O(n * k)
 //                          : Space Complexity: O(1)
+// Approach 2 (Sliding Window + Deque) : The approach is the same as in the previous questions! the only difference is that we've combined both functions into one.
+//                                     : And, instead of storing the individual maximum and minimum values, we're directly pushing the sum of the maximum and minimum for each window into the result vector.
 #include<iostream>
 #include<vector>
 #include<climits>
 using namespace std;
 
-vector<int> maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
+vector<int> maxminSumofSubarrayK(vector<int> v, int k) {
     if(k > v.size()) return {-1};
-    int sum = INT_MIN;
+    int sum = 0;
     vector<int> result;
     for(int i = 0; i <= v.size() - k; i++) {
         int maxi = INT_MIN;
@@ -244,8 +305,7 @@ vector<int> maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
             maxi = max(maxi, v[j]);
             mini = min(mini, v[j]);
         }
-        sum = max(sum, maxi + mini);
-        result.push_back(sum);
+        result.push_back(maxi + mini);
     }
     return result;
 }
@@ -253,17 +313,55 @@ vector<int> maxOfMinPlusMaxInSubarrays(vector<int> v, int k) {
 int main() {
     int n;
     cin>>n;
-    int k;
-    cin>>k;
     vector<int> v(n);
     for(int i = 0; i < n; i++) {
         cin>>v[i];
     }
-    vector<int> ans = maxOfMinPlusMaxInSubarrays(v, k);
+    int k;
+    cin>>k;
+    vector<int> ans = maxminSumofSubarrayK(v, k);
     for(int val : ans) {
         cout<<val<<" ";
     }
 }
 
+// Approach 2 : 
+#include<iostream>
+#include<vector>
+#include<deque>
+using namespace std;
 
-// Question 3 : Given an array of both positive and negative integers, the task is to compute the minimum and maximum elements of all sub-array of size k.
+vector<int> sumOfMaxMinInWindowK(vector<int>& v, int k) {
+    deque<int> maxDq, minDq;
+    vector<int> result;
+
+    for(int i = 0; i < v.size(); i++) {
+        if(!maxDq.empty() && maxDq.front() <= i - k) maxDq.pop_front();
+        if(!minDq.empty() && minDq.front() <= i - k) minDq.pop_front();
+
+        while(!maxDq.empty() && v[i] > v[maxDq.back()]) maxDq.pop_back();
+        maxDq.push_back(i);
+
+        while(!minDq.empty() && v[i] < v[minDq.back()]) minDq.pop_back();
+        minDq.push_back(i);
+
+        if(i >= k - 1) {
+            int sum = v[maxDq.front()] + v[minDq.front()];
+            result.push_back(sum);
+        }
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) cin >> v[i];
+    int k;
+    cin >> k;
+    vector<int> result = sumOfMaxMinInWindowK(v, k);
+    for(int val : result) {
+        cout << val << " ";
+    }
+}
