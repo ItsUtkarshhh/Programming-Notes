@@ -372,7 +372,7 @@ int main() {
     findMajorityElement(arr, n);
 }
 
-// Question 3 : Maximum Subarray Sum in an Array (Kadane's Algorithm)
+// Question 4 : Maximum Subarray Sum in an Array (Kadane's Algorithm)
 //            : Variation 1 : Given an integer array arr, find the contiguous subarray (containing at least one number) which has the largest sum and returns its sum!
 //            : Variation 2 : Given an integer array arr, find the contiguous subarray (containing at least one number) which has the largest sum and returns its sum and prints the subarray!
 // Approach 1 (Brute Force) : Iterate over the nested loop! and simply update maxSum & start & end variables! and lastly print the subarray and return the maxSum!
@@ -491,4 +491,98 @@ int main() {
     int ans = maxSumSubarray(v);
     cout<<endl;
     cout<<"Max sum : "<<ans;
+}
+
+// Question 5 : Stock Buy And Sell : You are given an array of prices where prices[i] is the price of a given stock on an ith day.
+//            : You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+// Approach 1 (Brute Force) : Simply iterate in a nested loop and keep tracking maxProfit. And at the end of both the loops, you will get the maxProfit! TC : O(n^2) & SC : O(1)
+// Approach 2 (Better) : Rather, first find the minPrice & minPriceDay for a stock to buy! And then start checking the maximum profit possible after that day by traversing the array again! TC : O(n) & SC : O(1)
+// Approach 3 (Optimal) : Approach 2 privides good time complexity! but it traverses the loop two times! So better put this whole logic into one! Track minimum stock price & maximum prfit simultaneously!
+// Approach 1 :
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int maxProfitStock(vector<int> v) {
+    int maxProfit = 0;
+    int profit = 0;
+    for(int i = 0; i < v.size(); i++) {
+        for(int j = i + 1; j < v.size(); j++) {
+            profit = v[j] - v[i];
+            maxProfit = max(profit, maxProfit);
+        }
+    }
+    return maxProfit;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int ans = maxProfitStock(v);
+    cout<<ans;
+}
+
+// Approach 2 :
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int maxProfitStock(vector<int> v) {
+    int maxProfit = 0;
+    int minPrice = INT_MAX;
+    int minPriceDay = -1;
+    for(int i = 0; i < v.size(); i++) {
+        if(v[i] < minPrice) {
+            minPrice = v[i];
+            minPriceDay = i;
+        }
+    }
+    for(int i = minPriceDay + 1; i < v.size(); i++) {
+        maxProfit = max(v[i] - v[minPriceDay], maxProfit);
+    }
+    return maxProfit;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int ans = maxProfitStock(v);
+    cout<<ans;
+}
+
+// Approach 3 :
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+int maxProfitStock(vector<int> v) {
+    int maxProfit = 0;
+    int minPrice = INT_MAX;
+    for(int i = 0; i < v.size(); i++) {
+        minPrice = min(v[i], minPrice);
+        maxProfit = max(v[i] - minPrice, maxProfit);
+    }
+    return maxProfit;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    int ans = maxProfitStock(v);
+    cout<<ans;
 }
