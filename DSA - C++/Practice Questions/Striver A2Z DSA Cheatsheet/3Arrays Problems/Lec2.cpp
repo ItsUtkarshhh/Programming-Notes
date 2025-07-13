@@ -586,3 +586,141 @@ int main() {
     int ans = maxProfitStock(v);
     cout<<ans;
 }
+
+// Question 6 : Rearrange Array Elements by Sign
+//            : There’s an array ‘A’ of size ‘N’ with an equal number of positive and negative elements. Without altering the relative order of positive and negative elements, you must return an array of alternately positive and negative values.
+//            : Note : Start the array with positive elements.
+//            : Variation : What if number of +ve & -ve elements are not equal!
+// Approach 1 (Brute Force) : We will simply make two arrays : Positive & Negative arrays!
+//                          : Will store all the values into these accordingly! And then will simply merge these two arrays on the basis of an observation...
+//                          : Observation : If the final array start with a positive element : Means all +ve numbers will be at the even indices of the final array!
+//                                                                                           : Means all -ve numbers will be at the odd indices of the final array!
+//                          : Hence, we will use this observation! TC : O(2*n) & SC : O(n)
+// Approach 2 (Optimal) : Rather than traversing the array two times, we can try to just traverse the array once, and can try to get the answer!
+//                      : We will simply track the +ve & -ve indices! and assign the values according to whether the value is +ve or -ve!
+//                      : TC : O(n) & SC : O(n)
+//                      : We will still need an extra space, so we can't compromise with that here! but we tried to reduce the time complexity a little bit!
+// Approach for Variation (Brute Force) : Separate positives and negatives into two arrays: pos[] and neg[].
+//                                      : Count how many positives and negatives we have (That will be done with the help of sizes of pos & neg arrays). Only the minimum of the two counts can be used for strict alternation (Hence we used && operator)
+//                                      : Start building the result array, Alternate elements from pos[] and neg[] one by one & Continue until one of the arrays is exhausted
+//                                      : After alternation, one of the arrays might still have leftover elements. Append all remaining elements from that array to the result.
+//                                      : You can see, here we reverted back to our brute force solution! As optimal solution wouldn't be able to solve it! As it already assumes the equality of +ve & -ve values!
+//                                      : TC : O(n) almost & SC : O(n)
+// Approach 1 :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> rearrangePosNeg(vector<int> v) {
+    int n = v.size();
+    vector<int> pos;
+    vector<int> neg;
+    for(int i = 0; i < v.size(); i++) {
+        if(v[i] >= 0) pos.push_back(v[i]); 
+        else neg.push_back(v[i]);
+    }
+    vector<int> result(n);
+    for(int i = 0; i < n/2; i++) {
+        result[2*i] = pos[i];
+        result[2*i + 1] = neg[i];
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    vector<int> result = rearrangePosNeg(v);
+    for(int val : result) {
+        cout<<val<<" ";
+    }
+}
+
+// Approach 2 :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> rearrangePosNeg(vector<int> v) {
+    int n = v.size();
+    vector<int> result(n);
+    int posIndex = 0; int negIndex = 1;
+    for(int i = 0; i < n; i++) {
+        if(v[i] >= 0) {
+            result[posIndex] = v[i];
+            posIndex += 2;
+        }
+        else {
+            result[negIndex] = v[i];
+            negIndex += 2;
+        }
+    }
+    return result;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    vector<int> result = rearrangePosNeg(v);
+    for(int val : result) {
+        cout<<val<<" ";
+    }
+}
+
+// Variation Approach :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<int> rearrangePosNeg(vector<int> v) {
+    int n = v.size();
+    vector<int> pos, neg;
+
+    for (int i = 0; i < n; i++) {
+        if (v[i] >= 0)
+            pos.push_back(v[i]);
+        else
+            neg.push_back(v[i]);
+    }
+
+    vector<int> result(n);
+    int i = 0, p = 0, q = 0;
+
+    while (p < pos.size() && q < neg.size()) {
+        result[i++] = pos[p++];
+        result[i++] = neg[q++];
+    }
+    while (p < pos.size()) {
+        result[i++] = pos[p++];
+    }
+    while (q < neg.size()) {
+        result[i++] = neg[q++];
+    }
+
+    return result;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+
+    vector<int> result = rearrangePosNeg(v);
+    for (int val : result) {
+        cout << val << " ";
+    }
+    return 0;
+}
+
+// Question 7 : 
