@@ -270,25 +270,83 @@ int main() {
 }
 
 // ---------------------------------------------------------- LECTURE 22 - Character Arrays and Strings --------------------------------------------------------------------------------------------------------->
-// In C, there are two ways to handle strings :
-// Character Arrays : A simple array of characters without any special handling for string operations. It can store individual characters, but if you want to use it as a string, you need to manually add a null character ('\0') at the end to mark the end of the string.
-// C-Type Strings : These are character arrays with a null character ('\0') at the end. This is important because it allows you to use string functions like strlen(str), strcmp(str1,str2), strcat(str1,str2), strcpy(newStr,oldStr) and strrev(str) etc. which require the null character to know where the string ends. To use these methods you need to include a "string.h" library!
-//                : In C, a character array is simply an array that holds individual characters. It does not automatically recognize itself as a string unless a null-terminator ('\0') is explicitly added at the end. For example:
-//                : In C, the size of a character array must be sufficient to hold all the characters plus the null terminator. If you forget to include the null terminator, functions designed to work with strings will behave incorrectly. means It is also important to remember that the null character takes up space in the array. So, when you define an array with 5 characters, you need to allocate space for the null terminator as well, which means an array of 6 elements.
-//                : String Literals in C : When you initialize a string in C using a string literal, the compiler automatically adds the null terminator for you.
+// Fundamental Strings : A string is a sequence of characters ending with a special character '\0' called the null terminator, which tells the system where the string ends in memory.
+// String Handling in C : C offers two main ways : Character Arrays & C-style Strings (with string.h functions)
+//                      : Character Arrays : char name[8] = {'U','t','k','a','r', 's', 'h', '\0'}; You must manually include the \0 if defining character-by-character.
+//                                         : Without \0, string functions like strlen() or printf() will not behave properly (they will keep reading garbage values).
+//                      : C-style Strings (with string.h functions) : char name[] = "Utkarsh"; Compiler adds \0 automatically (Automatically null-terminated)
+//                                                                  : You can now use functions like : strlen(name); - Length of string (excluding \0)
+//                                                                                                   : strcpy(dest, src); - Copy
+//                                                                                                   : strcat(dest, src); - Concatenate
+//                                                                                                   : strcmp(s1, s2); - Compare
+//                                                                                                   : strrev(str); - Reverse (non-standard, works in some compilers)
+//                                                                                                   : These functions come from the <string.h> library
+//                      : Important Notes : Null Terminator - It’s necessary for marking the end of the string.
+//                                        : Array Size - Must include space for \0. Example: "Hello" needs 6 slots. Example : char name[4] = "John"; (Wrong), char name[5] = "John"; (Correct)
+//                                        : Without \0 - String functions will read garbage until they hit a \0.
+//                                        : If you manually specify the size, always add 1 extra for '\0' : char name[100];  // for max 99 chars + '\0'
 
-// In C++, you can use character arrays similarly to C, but C++ also provides the string type, which handles strings more conveniently. You don't need to explicitly add a null character when using the string type. However, you can still use character arrays as strings if needed, but it's not necessary as string in C++ is more flexible.
+// String Handling in C++ : C++ supports everything from C, plus a more powerful tool: std::string
+//                        : C-style Strings Still Work : char name[] = "Utkarsh";
+//                                                     : But you face the same limitations as in C : Cannot resize, Must manage null terminators, Vulnerable to buffer overflow.
+//                        : C++ std::string (Recommended) : #include<string> string name = "Utkarsh Verma";
+//                                                        : Internally handles memory, null terminators, and dynamic size
+//                                                        : Has powerful functions : name.length(); - String length
+//                                                                                 : name.substr(0, 3); - Substring
+//                                                                                 : name + " Sinha"; - Concatenation
+//                                                                                 : name.find("Verma"); - Search
+//                                                                                 : name[0] = 'u'; - Mutable
+//                                                        : No need to worry about \0, size, or copying manually.
 
-// Note : Buffer Overflow : When using C-style strings, be careful about buffer overflow. If you copy or concatenate strings without checking the size of the array, you may accidentally overwrite memory, leading to bugs or crashes.
-//                        : Example : char str[10]; strcpy(str, "Hello, world!"); Buffer overflow : "Hello, world!" is too large
+// Input/Output Differences Between Strings in C and C++ : C++ Style : cin >> name : Works like scanf("%s"), Stops at space, newline, or tab.
+//                                                                                 : Example : Input → "Utkarsh Verma" → Only "Utkarsh" is stored. Whitespace (spaces, tabs) causes the input to stop.
+//                                                                   : cin.getline(charArray, size) : Used to read an entire line into a character array (C-style string).
+//                                                                                                  : Reads input including spaces, until a newline '\n' is encountered. The newline is discarded automatically.
+//                                                                                                  : Example : char name[100]; cin.getline(name, 100); - Reads full line like "Utkarsh Verma".
+//                                                                   : getline(cin, stringVariable) : Works with C++ string objects (std::string).
+//                                                                                                  : Reads the complete line including spaces, until newline is encountered.
+//                                                                                                  : Very safe and preferred in modern C++.
+//                                                                                                  : Example : string name; getline(cin, name); Stores "Utkarsh Verma" in 'name'.
+//                                                                   : cout << variable : Used to print string variables (both char arrays and std::string). Automatically handles formatting for output.
+//                                                       : C Style : scanf("%s", str) : Reads input into a character array. Only reads until the first space, tab, or newline.
+//                                                                                    : Whitespace causes input to stop — exactly like cin >> str in C++.
+//                                                                                    : Example : Input → "Utkarsh Verma" → Only "Utkarsh" is stored in str
+//                                                                 : fgets(str, size, stdin) : Safely reads a full line of input, including spaces, until newline is hit. Unlike scanf, it does not stop at spaces.
+//                                                                                           : However, it also stores the newline '\n' character at the end.
+//                                                                                           : Syntax : char str[100]; fgets(str, sizeof(str), stdin); 
+//                                                                                           : To remove the newline from fgets : str[strcspn(str, "\n")] = '\0'; This removes the '\n' character safely from the string, if present.
+//                                                                 : gets(str); — (DEPRECATED AND UNSAFE) : This function does not check for buffer overflow and may cause security issues. Removed in C11. Avoid using it in any program.
+//                                                                 : printf("%s", str) : Used to print character arrays (C-style strings). Safer than using puts(), as it gives formatting flexibility.
+//                                                                 : puts(str) : Simpler than printf — only prints a string followed by a newline. Automatically appends '\n' after printing the string.
+//                                                                             : Example : char name[] = "Utkarsh"; puts(name); - Output: Utkarsh\n
+//                                                                 : fputs(str, stream) : Used to print a string to a specific output stream (like stdout or a file). Unlike puts(), fputs does NOT append a newline.
+//                                                                                      : Syntax : fputs(str, stdout); - Prints to console
+//                                                                                               : fputs("\n", stdout); - Manually add newline if needed
+//                                                                                      : Example of writing to a file using fputs : FILE *fp = fopen("output.txt", "w"); fputs("Utkarsh Verma", fp); fclose(fp);
 
-// char[] (Character Array) : Mutable : It stores a sequence of characters, with the size defined at compile time. It includes a null terminator (\0) to mark the end of the string, ensuring the string functions properly when processed.
-// char* (Character Pointer) : A pointer to a sequence of characters in memory. It can point to modifiable or read-only memory, depending on where it points. Can be used to traverse a string or manage memory dynamically.
-// const char* (Constant Character Pointer) : A pointer to a read-only sequence of characters. Commonly used for string literals (like "Hello"), ensuring that the contents of the string cannot be modified accidentally.
-// std::string (C++ Standard Library) : A class in the C++ Standard Library for handling strings. Dynamic size : Memory is managed automatically as the string grows or shrinks. Offers built-in functions (like length(), substr(), find()) and operators (like + for concatenation) for easier and safer string manipulation. No need to manually handle memory or null terminators.
-// Double Quotes (" ") : Used to represent string literals in C/C++ and many other languages. A string literal is an array of characters ending with the null terminator (\0). Example : "Hello".
-// Single Quotes (' ') : Used to represent single characters (not strings) in C/C++. Example : 'A', which is a single character, not a string.
-// Null Character ('\0') : A special character used to indicate the end of a C-style string. Marks where a string terminates in memory, ensuring functions like strlen() know where the string ends. Every C-style string ends with this character, but it's invisible and not part of the visible content.
+// Understanding Pointers vs Arrays in String Handling : char[] — Character Array : char str[] = "Hello";
+//                                                                                : Allocates writable memory, You can modify characters: str[0] = 'h'; But you cannot reassign the whole array later.
+//                                                     : char* — Pointer to Character (Can Point Anywhere) : char* ptr = "Hello"; - Points to string literal in read-only memory
+//                                                                                                         : You can reassign it : ptr = "World!" - But modifying its content: ptr[0] = 'W'; → Undefined behavior (read-only memory)
+//                                                     : const char* — Pointer to Constant Characters : const char* str = "Hello";
+//                                                                                                    : Ensures you can't accidentally change the string, Useful for function parameters or when using string literals safely
+//                                                                                                    : Example : const char* str = "Utkarsh"; Now you neither can str[0] = "K" nor *str = 'H'. But you can str = "Verma"
+//                                                                                                              : As it is pointer to constant data! So you can't update the value where the pointer is pointing, but you can update the pointer itself to point to some other location!
+
+// Common Mistakes & Safety Tips : char str[10]; strcpy(str, "This is a very long string!"); : Buffer Overflow → Crashes or overwrites memory
+//                                                                                           : Safer alternative : char str[100]; fgets(str, 100, stdin); and getline() for C++.
+
+// Double vs Single Quotes : "Hello" - String Literal - char str[] = "Hello";
+//                         : 'H' - Single Character - char ch = 'H';
+
+// Note : Character Arrays Are Just Like Normal Arrays
+//      : You can think of char arr[] exactly like int arr[], float arr[], etc.
+//      : You can use : Indexing (arr[i]), Loops (for, while), Swapping, Sorting (ASCII-based), Searching.
+
+// Note 2 : When Do Things Get Interesting? → When You Treat char[] as a String
+//        : A character array becomes a string only when it has a null character ('\0') at the end.
+//        : char name[] = {'U', 't', 'k', 'a', 'r', 's', 'h'}; - Not a string
+//        : char name2[] = "Utkarsh"; - String → compiler adds '\0' automatically - So without '\0', it's just an array of characters, not a string!
 
 // Lets understand further thru code...
 #include<iostream>
@@ -296,12 +354,10 @@ using namespace std;
 
 int main() {
     char name[20];
-    cout<<"Enter you name : "<<endl;
+    cout<<"Enter you name : "<<endl; // Input : Utkarsh Verma
     cin>>name;
-
-    cout<<"Your name is "<<name<<endl;
-    // Now here what happened is Utkarsh input dene pr vo toh as it is print hogya but jab "Utkarsh Verma" input diya tab poori string print nhi hui, aisa isliye kyunki space, new line character and tab inn sab se input band ho jaata hai!
-} // cin is designed the way that will read the input until it do not encounters a new line, space or tab! and toh cin se hum characters bhi read kraa sakte hai and read kraa ke uss char variable me store kr sakte hai! and hum strings bhi read kraa sakte hai! but in C, read operations ke liye we use scanf, so ye scanf character read krega ya string, ye iss baat pr depend krega ki humne format specifiers %c use kiya hai ya %s, agar %c toh sirf ek character read krega chaahe kaisi bhi string ho! but %s ek string read krega jab tak koi space, tab ya new line na aajaye!
+    cout<<"Your name is "<<name<<endl; // Output : Utkarsh
+}
 
 #include<iostream>
 using namespace std;
@@ -309,9 +365,9 @@ using namespace std;
 int main() {
     char name[20];
     cout<<"Enter you name : "<<endl;
-    cin>>name;
-    name[2] = '\0'; // Humne bss name ke 2nd index pr ek null character daal diya ab as our logic says ki pehle user input krega and then uss input ke 2nd index pr \0 humne daal diya and toh jab cout hoga name, tab pooraa name nhi print hoga sirf index 0,1 print honge kyunki 2nd pr execution ruk gya! toh like agar Utkarsh input doge toh iss naam ke 2nd index pr \0 ajayega and it will look like Ut\0karsh and then print sirf Ut hoga!
-    cout<<"Your name is "<<name<<endl;
+    cin>>name; // Input : "Utkarsh" - \0 automatically appended at last.
+    name[2] = '\0';
+    cout<<"Your name is "<<name<<endl; // Output "Ut"
 }
 
 // Question 1 : Find the length of the character array!

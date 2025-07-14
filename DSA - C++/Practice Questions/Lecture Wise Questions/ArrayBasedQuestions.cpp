@@ -1365,47 +1365,60 @@ int main() {
 
 // Question 3 : Addition of 2 Arrays!
 //            : When adding two arrays, you are essentially adding two numbers digit by digit, just like normal mathematical addition.
-//            : There are two ways to handle the result : 1) Return the Final Sum as a Number, where Add all digits starting from the end (units place) and calculate the total sum. and Simply return the sum as a single number.
-//                                                      : 2) Return the Result as an Array, where Add the digits starting from the end (units place), storing each digit in reverse order in a new array. and At the end, reverse the array to get the final result in correct order.
-// Approach (Handling result as a number) :
+//            : There are two ways to handle the result : Variation 1 : Return the Final Sum as a Number, where Add all digits starting from the end (units place) and calculate the total sum. and Simply return the sum as a single number.
+//                                                      : Variation 2 : Return the Result as an Array, where Add the digits starting from the end (units place), storing each digit in reverse order in a new array. and At the end, reverse the array to get the final result in correct order.
+// Approach (Variation 1) : Same digit-wise addition as above (use i, j, carry, sum).
+//                        : Instead of pushing to a vector : Keep building the final number using ans += digit * multiplier; & multiplier *= 10;
+//                        : Return ans as the final number.
+//                        : Limitations : Works only when the result fits in int or long long. Will fail for very large numbers like 10^18+.
+// Approach Variation 2) : Initialize : Two pointers i = v1.size() - 1, j = v2.size() - 1. carry = 0. result vector to store the answer in reverse order.
+//                       : While both arrays have digits : Add v1[i] + v2[j] + carry. Store sum % 10 in result. Update carry = sum / 10. Decrement i and j
+//                       : If any digits remain in either v1 or v2 : Add remaining digits with carry
+//                       : If carry still exists : Push carry to result & Reverse the result vector to get the final number
+//                       : Pros : Works for very large numbers (like 100+ digits) & Used in competitive programming
+// Variation 1 :
 #include<iostream>
 #include<vector>
-#include<algorithm>
 using namespace std;
 
-vector<int> additionOfArrays(vector<int> v1, vector<int> v2) {
+long long additionOfArrays(vector<int> v1, vector<int> v2) {
     int carry = 0;
     int sum = 0;
     int i = v1.size() - 1;
     int j = v2.size() - 1;
-    vector<int> result;
+    int digit = -1;
+    long ans = 0;
+    long multiplier = 1;
     while(i >= 0 && j >= 0) {
         sum = v1[i] + v2[j] + carry;
         carry = sum/10;
-        sum = sum%10;
-        result.push_back(sum);
+        digit = sum%10;
+        ans = (multiplier * digit) + ans;
+        multiplier *= 10;
         i--; j--;
     }
     while(i >= 0) {
         sum = v1[i] + carry;
         carry = sum/10;
-        sum = sum%10;
-        result.push_back(sum);
+        digit = sum%10;
+        ans = (multiplier * digit) + ans;
+        multiplier *= 10;
         i--;
     }
     while(j >= 0) {
         sum = v2[j] + carry;
         carry = sum/10;
-        sum = sum%10;
-        result.push_back(sum);
+        digit = sum%10;
+        ans = (multiplier * digit) + ans;
+        multiplier *= 10;
         j--;
     }
     while(carry != 0) {
-        result.push_back(carry);
+        ans = (multiplier * carry) + ans;
+        multiplier *= 10;
         carry = carry/10;
     }
-    reverse(result.begin(), result.end());
-    return result;
+    return ans;
 }
 
 int main() {
@@ -1419,12 +1432,10 @@ int main() {
     for(int i = 0; i < n2; i++) {
         cin>>v2[i];
     }
-    vector<int> ans = additionOfArrays(v1, v2);
-    for(int val : ans) cout<<val;
+    cout<<additionOfArrays(v1, v2);
 }
 
-
-// Approach (Handling result as an array) :
+// Variation 2 :
 #include<iostream>
 #include<vector>
 #include<algorithm>
