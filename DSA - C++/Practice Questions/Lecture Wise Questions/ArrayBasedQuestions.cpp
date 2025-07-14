@@ -1297,3 +1297,185 @@ int main() {
     }
     cout << "\nLength: " << newLen << endl;
 }
+
+// Question 17 : Check if an array is sorted and rotated or not!
+// Approach 1 (Brute Force) : We need to take care about few conditions : If the array is sorted & rotated! Then there will be a break point in the array where arr[i] > arr[i + 1]. That point will be named as pivot index!
+//                                                                      : Now, array should be sorted before and after this pivot index!
+//                                                                      : Lastly, arr[size - 1] < arr[0], If it's not true... means array can be sorted but not rotated!
+// Approach 2 (Count Breaks) : Count the number of times arr[i] > arr[i+1] : If it's more than one → Not sorted and rotated.
+//                                                                         : If it's exactly one → Yes, sorted and rotated.
+//                                                                         : For circular check, compare arr[n-1] > arr[0].
+// Approach 1 :
+#include<iostream>
+#include<vector>
+using namespace std;
+
+bool sortedRotated1(vector<int> v) {
+    int n = v.size();
+    int pivot = -1;
+    for(int i = 0; i < n - 1; i++) {
+        if(v[i] > v[i + 1]) {
+            pivot = i + 1;
+            break;
+        }
+    }
+    
+    if(pivot == -1) {
+        cout<<"Sorted but not rotated!";
+        return false;
+    }
+
+    for(int i = 0; i < pivot - 1; i++) {
+        if(v[i] > v[i + 1]) {
+            return false;
+        }
+    }
+
+    for(int i = pivot; i < n - 1; i++) {
+        if(v[i] > v[i + 1]) {
+            return false;
+        }
+    }
+    
+    if(v[0] < v[n - 1]) return false;
+    return true;
+}
+
+// Approach 2 :
+bool sortedRotated2(vector<int> v) {
+    int n = v.size();
+    int countBreaks = 0;
+    for(int i = 0; i < n; i++) {
+        if(v[i] > v[(i + 1) % n]) {
+            countBreaks++;
+        }
+    }
+    return countBreaks == 1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    cout<< (sortedRotated(v) ? "True" : "false");
+}
+
+// Question 3 : Addition of 2 Arrays!
+//            : When adding two arrays, you are essentially adding two numbers digit by digit, just like normal mathematical addition.
+//            : There are two ways to handle the result : 1) Return the Final Sum as a Number, where Add all digits starting from the end (units place) and calculate the total sum. and Simply return the sum as a single number.
+//                                                      : 2) Return the Result as an Array, where Add the digits starting from the end (units place), storing each digit in reverse order in a new array. and At the end, reverse the array to get the final result in correct order.
+// Approach (Handling result as a number) :
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<int> additionOfArrays(vector<int> v1, vector<int> v2) {
+    int carry = 0;
+    int sum = 0;
+    int i = v1.size() - 1;
+    int j = v2.size() - 1;
+    vector<int> result;
+    while(i >= 0 && j >= 0) {
+        sum = v1[i] + v2[j] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        i--; j--;
+    }
+    while(i >= 0) {
+        sum = v1[i] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        i--;
+    }
+    while(j >= 0) {
+        sum = v2[j] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        j--;
+    }
+    while(carry != 0) {
+        result.push_back(carry);
+        carry = carry/10;
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = additionOfArrays(v1, v2);
+    for(int val : ans) cout<<val;
+}
+
+
+// Approach (Handling result as an array) :
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+vector<int> additionOfArrays(vector<int> v1, vector<int> v2) {
+    int carry = 0;
+    int sum = 0;
+    int i = v1.size() - 1;
+    int j = v2.size() - 1;
+    vector<int> result;
+    while(i >= 0 && j >= 0) {
+        sum = v1[i] + v2[j] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        i--; j--;
+    }
+    while(i >= 0) {
+        sum = v1[i] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        i--;
+    }
+    while(j >= 0) {
+        sum = v2[j] + carry;
+        carry = sum/10;
+        sum = sum%10;
+        result.push_back(sum);
+        j--;
+    }
+    while(carry != 0) {
+        result.push_back(carry);
+        carry = carry/10;
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    for(int i = 0; i < n1; i++) {
+        cin>>v1[i];
+    }
+    vector<int> v2(n2);
+    for(int i = 0; i < n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = additionOfArrays(v1, v2);
+    for(int val : ans) cout<<val;
+}

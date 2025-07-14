@@ -1160,7 +1160,6 @@ int main() {
     }
 } // Time complexity : O(log(nm))
 
-
 // ---------------------------------------------------------- LECTURE 24 - Maths for DSA --------------------------------------------------------------------------------------------------------->
 // Prime Numbers : Normally what we used to do is if we get an input n and then hum 1 to n tak ke saare numbers se n ko divide krke check krte the agar kahin bhi output 0 aajaye then vo prime nhi hai otherwise vo prime hai! lets write a small code for it...
 #include<iostream>
