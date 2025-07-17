@@ -1,25 +1,28 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
-char* reverseString(char* str, int size) {
-    int i = 0; int j = size - 2;
-    while(i < j) {
-        swap(str[i], str[j]);
-        i++; j--;
+string removeOccurence(string strMain, string strSub) {
+    string res = "";
+    int subLen = strSub.length();
+
+    for(int i = 0; i < strMain.length(); i++) {
+        res += strMain[i]; // Simulate stack push
+
+        // If last part of res matches strSub, remove it
+        if(res.size() >= subLen && res.substr(res.size() - subLen) == strSub) {
+            res.erase(res.size() - subLen); // Simulate stack pop
+        }
     }
-    return str;
+    return res.empty() ? "Empty String" : res;
 }
 
 int main() {
-    int n;
-    cin>>n;
-    char* str = new char[n + 1];
-    for(int i = 0; i < n; i++) {
-        cin>>str[i];
-    }
-    str[n] = '\0';
-    char* revString = reverseString(str, n + 1);
-    for(int i = 0; i <= n; i++) {
-        cout<<revString[i];
-    }
+    string strMain;
+    cin>>strMain;
+    string strSub;
+    cin>>strSub;
+    string result = removeOccurence(strMain, strSub);
+    if(result != "") cout<<result;
+    else cout<<"Empty string";
 }

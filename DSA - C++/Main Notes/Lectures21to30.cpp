@@ -479,7 +479,7 @@ int main() {
     return 0;
 } // But yes as we have discussed we have a problem with this approach ki yahaa pr ek extra space le rha hai s1_reversed! so we will move forward with another method!
 
-// Approach 1 (Reverse and Compare) :
+// Approach 2 (End to End comparison) :
 #include<iostream>
 #include<cstring>
 using namespace std;
@@ -756,7 +756,9 @@ int main() {
     string substr;
     getline(cin, str);
     getline(cin, substr);
-    cout<<"The final string is : "<<removeOcc(str, substr);
+    string result = removeOcc(str, substr);
+    if(result != "") cout<<"The final string is : "<<result;
+    else cout<<"Empty string";
 }
 
 // Question 8 : Permutation in string! agar s1 vaali string ka koi bhi permutation (arrangement) agar s2 me exist krta hai toh hum uss case me true return krenge!
@@ -902,27 +904,64 @@ int main() {
     }
 }
 
-// Note 1 : If you write something like this, char* canChange = "Hello World"; and updates canChange to canChange = "Hello"; then it will have no issue! because This is valid because canChange is a pointer. It stores the address of the string literal "Hello World". You can reassign the pointer canChange to point to another string literal (Ex: "Hello"). 
-//        : String literals are stored in read-only memory in most compilers. Modifying the content of the string literal via the pointer (*canChange) is undefined behavior. The pointer canChange points to the memory location where the string literal "Hello World" is stored. This memory is read-only.
-//        : If you attempt to modify the string literal directly through the pointer, it will have some undefined behaviour!
-//        : Why is it undefined behaviour : The behavior depends on the compiler and system. Some compilers protect the memory where string literals are stored to prevent accidental modification. Other compilers might not, but modifying string literals is never guaranteed to work correctly.
-//        : Safe alternatives : If you need a modifiable string, you should declare it as an array, char canChange[] = "Hello World"; It Creates a copy in writable memory, canChange[0] = 'h'; This is valid
-//        : Why does it happen : Its an optimization choice! Storing string literals in read-only memory saves space since multiple instances of the same string literal can share the same memory.
+// What is <sstream> in C++ : sstream stands for String Stream.
+//                          : It's a part of the C++ Standard Library used to perform input/output operations on std::string objects (like you do with cin and cout for console).
+//                          : It provides 3 main types of stream classes : std::istringstream - Input from a string
+//                                                                       : std::ostringstream - Output to a string
+//                                                                       : std::stringstream - Both input and output from/to a string
+//                          : The >> and << Operators in sstream : These are extraction (>>) and insertion (<<) operators.
+//                                                               : >> is used to extract (read) data from the stream.
+//                                                               : << is used to insert (write) data into the stream.
+//                                                               : These work similar to cin and cout but act on strings instead of the console.
 
-// Note 2 : If you write something like this, char canChange[] = "Hello World"; canChange[] = "Hello"; It shows Error! This is invalid because canChange[] is an array. When you write char canChange[] = "Hello World";, the array is initialized with the string's contents, and its size is fixed (in this case, 12 including the null character \0).\
-//        : You cannot reassign the entire array using = after initialization.
-//        : char canChange[] = "Hello World"; canChange[0] = 'H'; Works, modifies individual elements. strcpy(canChange, "Hello"); Works, modifies the content using a function like strcpy.
+// Example : Using >> with istringstream
+#include <iostream>
+#include <sstream>
+using namespace std;
 
-// Input/Output methods with Spaces in C Strings : Using scanf : char str[100]; scanf("%s", str); Input: "Hello World" and Output in str: "Hello" (scanf stops at the first space)
-//                                               : Using fgets : char str[100]; fgets(str, 100, stdin); Input: "Hello World" and Output in str: "Hello World" (including spaces, up to a newline or size limit)
-//                                                             : scanf cannot read strings with spaces; use fgets() for input with spaces. 
-//                                                             : Reads the entire line, including spaces, until a newline (\n) or the specified character limit (n). Appends a null character (\0) at the end.
-//                                                             : If you press Enter, the newline (\n) is stored in the string. To remove it : str[strcspn(str, "\n")] = '\0'; Removes '\n' safely
-//                                               : Using puts : puts outputs a string with a newline added at the end. char str[] = "Hello World"; puts(str); Outputs: Hello World\n... So as you can see puts is adding another extra \n at the end of the string!
-//Hence, to get a proper input/output of strings with spaces in C, one should use fgets for input and printf for output!
+int main() {
+    string line = "100 200 300";
+    istringstream iss(line);
 
-// Note 3 : gets() is unsafe and should not be used because it does not check for buffer overflow, which can cause security vulnerabilities. For safer alternatives use fgets()!
-//        : It has been deprecated in C99 and removed in C11.
+    int x;
+    while (iss >> x) {
+        cout << "Read: " << x << endl;
+    }
+}
+// What’s Happening Here? : istringstream iss(line); - Creates a stream that can read from the string line.
+//                        : iss >> x; - Reads the next whitespace-separated word/token from line and stores it in x.
+//                        : while (iss >> x) - Continues reading until no more data is available (like cin does with input).
+
+// Example : Using << with ostringstream
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+int main() {
+    ostringstream oss;
+    oss << "Today is " << 17 << " July " << 2025;
+
+    string result = oss.str();  // get the final string
+    cout << "Resulting string: " << result;
+}
+// What’s Happening Here? : ostringstream oss; - Creates an in-memory stream buffer.
+//                        : oss << ...; - Writes into this buffer — nothing is printed yet.
+//                        : string result = oss.str(); - Converts the full stream buffer into a single string. And then final output using cout.
+
+// Example : stringstream — Both Input and Output
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+int main() {
+    stringstream ss;
+    ss << "500 600 700";  // insert data
+
+    int val;
+    while (ss >> val) {
+        cout << "Extracted: " << val << endl;
+    }
+} // Acts as both ostringstream and istringstream. First we inserted a string, then we extracted integers.
 
 // ---------------------------------------------------------- LECTURE 23 - 2D Arrays --------------------------------------------------------------------------------------------------------->
 // To create a matrix with n rows and m columns, you would initially think of making n separate arrays. However, this approach becomes impractical for large matrices like 1000x1000. Instead, we use 2D arrays.
