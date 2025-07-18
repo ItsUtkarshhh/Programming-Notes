@@ -102,14 +102,14 @@ int main() {
 }
 
 // Question 3 : Check for a palindrome
-// Problem Statement : To check a string is a palindrome, it totally depends, upto what extent we are ready to consider a string a palindrome.
-//                   : For example : We will consider to check if a string is palindrome or not if it contains only alphabets & numbers, if other characters are present we will simply remove them and find our valid string, and then check palindrome.
-//                                 : Are we considering a strings like "Noon" a palindrome or not.
-//                                 : Or, are we ready to keep all the characters inside the string, whether they are any 255 characters, for a valud string to check palindrome.
-//                   : As of for this question, we will be considering any string contains big/small alphabets & numbers, as a valid string for palindrome check, if other characters are there just remove them. Also our palindrome check will not be case-sensitive.
-// Note : Will be using C++ string now onwards! Keep re-solve questions while revision using C style strings! But for learning purpose will use C++ strings!
-// Approach 1 (Reverse & Check) : Simply reverse the string, and compare it with the original string! If true then Palindrome, otherwise not. Here you can apply case-insensitivity.
-// Approach 2 (Compare end to end) : Simply start two pointers, start & end. And compare each character, if at any given moment they turn out to be unequal, simply return false, else true. Here you can apply case-insensitivity.
+// Note : We'll use C++ strings for solving this. Try re-solving with C-style strings during revision for better practice.
+// Problem Statement : To determine if a string is a palindrome, it depends on what we choose to consider as valid characters.
+//                   : For this problem, we will : Only consider alphanumeric characters (i.e., letters and digits)
+//                                               : Ignore case sensitivity
+//                                               : Remove all other characters like spaces, punctuation, or symbols before checking
+//                   : For example, "Noon" or "A man, a plan, a canal: Panama" will be treated as valid palindromes after cleaning and normalization.
+// Approach 1 (Reverse & Check) : Clean the string, convert it to lowercase, reverse it, and compare it with the cleaned original. If both match, it's a palindrome.
+// Approach 2 (Compare end to end) : Use two pointers (start and end), move inward while skipping non-alphanumeric characters, and compare characters in a case-insensitive way. If all characters match, return true; otherwise, return false.
 #include<iostream>
 #include<string>
 using namespace std;
@@ -305,32 +305,27 @@ int main() {
 }
 
 // Question 9 : Remove all the occurences of a sub string in a parent string!
-// Apprach 1 (Using string methods) : Look inside the string (str) to see if the substring (substr) exists.
-//                                  : If it does exist, find its position/index in the main string.
-//                                  : Erase that substring from the main string.
-//                                  : Repeat this process until no more such substrings are found.
-//                                  : Note : What is size_t : size_t is an unsigned integer type.
-//                                                          : It is guaranteed to be big enough to represent the size of any object in memory, so it is widely used in C++ for sizes, indexes, and lengths (e.g., in strings, arrays, containers).
-//                                                          : Under the hood : On 32-bit systems: it’s usually unsigned int (4 bytes).
-//                                                                           : On 64-bit systems: it’s usually unsigned long long or unsigned long (8 bytes).
-//                                                                           : "typedef unsigned long size_t;" // simplified version
-//                                                          : Defined as a typedef in the <cstddef> header (automatically included by many standard headers like <string>).
-//                                          : What is string::npos : npos is a static constant member of the std::string class, and it stands for "not position" (i.e., invalid position).
-//                                                                 : Its value is : static const size_t npos = -1;
-//                                                                 : Since size_t is unsigned, assigning -1 to it results in the maximum possible value for that type.
-//                                                                 : Example: On a 64-bit system, size_t(-1) = 18446744073709551615.
-//                                  : Why using int instead of size_t is unsafe : When you write : int pos = str.find("abc");
-//                                                                              : If "abc" is not found, str.find() returns string::npos, which is a very large unsigned value.
-//                                                                              : This gets converted to a negative number (usually -1) due to signed-unsigned conversion when assigned to int.
-//                                                                              : Now imagine you try : str.erase(pos, 3); // pos is -1 here! This would likely cause a runtime error or undefined behavior, because you're accessing an invalid index.
-//                                  : Note : Can any string be that long to reach npos? : No. Physically impossible.
-//                                                                                      : Even the most powerful systems can't allocate memory for a string that's several GBs or exabytes long, which would be required to hit an index like 4294967295.
-//                                                                                      : So in practical usage: npos is always greater than any real string length.
-//                                  : Efficiency check : If, N = length of strMain & M = length of strSub.
-//                                                     : Each call to find() takes O(N) in the worst case (linear search). Each call to erase() may also take up to O(N) since strings in C++ are contiguous and need shifting after erasing characters. Suppose there are k occurrences of strSub in strMain.
-//                                                     : Time Complexity : O(k * N) - Each find + erase may take O(N), repeated k times. In the worst case where strSub occurs repeatedly and overlaps are minimal, this could approach O(N^2).
-//                                                     : Space Complexity : O(1) (excluding input and output) - In-place operation, as strMain is modified directly.
-// Approach 2 (Using idea of stack) : Process : Idea is to simulate string building as we iterate over strMain character-by-character!
+// Approach 1 (Using String Methods) : Keep checking if strSub exists in strMain using .find().
+//                                   : If found, erase it using .erase().
+//                                   : Repeat until strSub is no longer found.
+//                                   : Important Notes : size_t : size_t is a special unsigned integer type used in C++ to represent sizes, lengths, or indexes.
+//                                                              : It's defined to be large enough to hold the maximum size any object (like arrays, strings, etc.) can have. It's used with many functions like string.length(), string.find(), etc.
+//                                                              : Unsigned means it can’t be negative. Defined as a typedef in the <cstddef> header (automatically included by many standard headers like <string>).
+//                                                              : Under the hood : On 32-bit systems: it’s usually unsigned int (4 bytes).
+//                                                                               : On 64-bit systems: it’s usually unsigned long long or unsigned long (8 bytes).
+//                                                     : string::npos : std::string::npos is a constant used to represent "no position" — or simply, "not found".
+//                                                                    : It is returned by methods like .find() when the substring is not found in the main string.
+//                                                                    : Internally : static const size_t npos = -1; - Since size_t is unsigned, assigning -1 to it becomes the maximum possible value for that type. On a 64-bit system: npos = 18446744073709551615
+//                                                     : Why not assign .find() result to an int? : Suppose a case : std::string str = "hello"; int pos = str.find("xyz"); // Dangerous!
+//                                                                                                                 : The .find("xyz") returns std::string::npos because "xyz" is not found.
+//                                                                                                                 : std::string::npos is defined as size_t(-1), which means it holds a very large unsigned value (e.g., 4294967295 on 32-bit systems or 18446744073709551615 on 64-bit).
+//                                                                                                                 : Now, if you assign this large size_t value to a signed int, the value overflows because : int is a smaller type than size_t (especially on 64-bit systems).
+//                                                                                                                                                                                                           : int is signed, so it can represent negative numbers but only up to a certain maximum.
+//                                                                                                                 : Because of this : The value wraps around due to overflow. The large unsigned value gets interpreted as -1 in the signed int using two's complement representation.
+//                                                                                                                 : This can lead to bugs. For example : str.erase(pos, 3); - You are trying to erase from index -1! (invalid access)
+//                                   : Time Complexity : Worst case: O(k × N), where k = number of times strSub appears and N = length of strMain. Because each .find() and .erase() can take O(N).
+//                                   : Space Complexity : O(1) extra space (in-place operation).
+// Approach 2 (Using idea of Stack) : Process : Idea is to simulate string building as we iterate over strMain character-by-character!
 //                                            : At each step, push characters to a stack (or simply build a new string).
 //                                            : After every push, check whether the last few characters on the stack match the strSub.
 //                                            : If they do, we pop them (i.e., remove them).
@@ -399,3 +394,102 @@ int main() {
     if(result != "") cout<<result;
     else cout<<"Empty string";
 }
+
+// Question 10 : Check whether s1 contains a substring that is a permutation (i.e., rearrangement) of string s2. If such a substring exists, return true; otherwise, return false."
+// Approach 1 (Brute Force) : A very basic method is to generate all possible permutations of the string s1, and then check if any of those permutations exist as a substring in s2 using the .find() method.
+//                          : This approach is correct, but highly inefficient — since generating all permutations takes a lot of time and memory (around n! for a string of length n). Then, checking each permutation in s2 adds to the time as well. So, this method is not suitable for large inputs.
+//                          : Time Complexity : O(n! × m), where n is the length of s1, and m is the length of s2. Generating permutations: O(n!) or roughly O(2ⁿ) as you noted. Comparing each with substrings of s2.
+//                          : Space Complexity : O(n!) for storing permutations.
+// Approach 2 (Sliding window + Hashmaps) : Idea : If s2 is of length k, then any permutation of s2 must also be of length k. So, you slide a window of size k over s1 and check whether the frequency of characters in that window matches with the frequency of s2.
+//                                               : Build frequency map of s2 : This stores how many times each character occurs in s2.
+//                                               : Build initial frequency map of first k characters of s1
+//                                               : Compare both maps : Maps in C++ (std::map) support == comparison — which compares both keys and values. So if the current window is a permutation, this will be true. (Can only be done for ordered maps)
+//                                               : Slide the window over s1 : Now, for each character after the first k in s1, slide the window forward by : Adding the new character entering the window
+//                                                                                                                                                         : Removing the character that just left the window
+//                                                                                                                                                         : And check again if the updated map matches freq2.
+//                                                                                                                                                         : If loop ends and no match found : return false;
+//                                        : Time Complexity : Creating freq2 → O(k), First window setup → O(k), Sliding window → O(n - k), Map comparison per slide → O(26) (assuming lowercase only) or up to O(K) (K = distinct characters), So, total time: O(n * K), where K = distinct characters (typically ≤ 26 for lowercase).
+//                                        : Space Complexity : O(K) for each map (where K = number of unique characters)
+//                                        : This approach can be optimal for most general cases! but may not be optimal for "lowercase only" case, for that we can use vectors!
+// Approach 3 (Better Approach 2) : Idea : Since we are only dealing with lowercase English letters (or can convert everything to lowercase), we can use a fixed-size array/vector of size 26 to track character frequencies instead of map<char, int>.
+//                                       : This makes the comparison and updates faster and memory-efficient, as all indices are predefined.
+//                                       : Create a frequency vector of s1. This stores the count of each character in s1.
+//                                       : Initialize window frequency vector from s2 (first window of size s1.length())
+//                                       : Compare freq1 and freq2. If not equal, start sliding the window.
+//                                       : Slide the window : For every index i from s1.length() to s2.length() : Add s2[i] to the frequency, Remove s2[i - s1.length()] from the frequency.
+//                                       : If no match found after all windows : return false;
+//                                : Time Complexity : O(n) where n = s2.length() - Each character is added and removed from the frequency array exactly once.
+//                                : Space Complexity : O(1) - Two vectors of size 26 = constant space.
+//                                : Optimal solution for when both strings contains lowercase letters! - There's always some small optimization you can do in this, but it won't change the core of this approach!
+// Approach 1 (Brute Force) :
+#include<iostream>
+#include<string>
+#include<unordered_set>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+bool checkPermutations1(string s1, string s2) {
+    sort(s2.begin(), s2.end()); // Sorting for next_permutation
+    unordered_set<string> seen; // To avoid duplicate permutations
+
+    do {
+        if (seen.find(s2) != seen.end()) continue; // Skip duplicates
+        seen.insert(s2);
+        if (s1.find(s2) != string::npos) return true;
+    } while (next_permutation(s2.begin(), s2.end()));
+
+    return false;
+}
+
+// Approach 2 (Sliding window + Hashmaps) :
+bool checkPermutations2(string s1, string s2) {
+    int k = s2.length();
+    map<char,int> freq1;
+    map<char,int> freq2;
+    for(int i = 0; i < k; i++) freq2[s2[i]]++;
+    
+    int index = 0;
+    for(index = 0; index < k; index++) freq1[s1[index]]++;
+
+    if(freq1 == freq2) return true; // You can do this only when maps are not unordered!
+    while(index < s1.length()) {
+        freq1[s1[index]]++;
+        freq1[s1[index - k]]--;
+        if (freq1[s1[index - k]] == 0) freq1.erase(s1[index - k]); // Clean up the map to keep it minimal
+        if(freq1 == freq2) return true;
+        index++;
+    }
+    return false;
+}
+
+// Approach 3 (Better Approach 2) :
+bool checkPermutations3(string s1, string s2) {
+    if (s1.length() < s2.length()) return false;
+
+    vector<int> freq1(26, 0), freq2(26, 0);
+
+    for (char c : s2) freq2[c - 'a']++;
+    for (int i = 0; i < s2.length(); i++) freq1[s1[i] - 'a']++;
+
+    if (freq1 == freq2) return true;
+
+    for (int i = s2.length(); i < s1.length(); i++) {
+        freq1[s1[i] - 'a']++;
+        freq1[s1[i - s2.length()] - 'a']--;
+        if (freq1 == freq2) return true;
+    }
+
+    return false;
+}
+
+int main() {
+    string str1, str2;
+    cin>>str1>>str2;
+    if(checkPermutations3(str1, str2)) cout<<"True: A permutation exists in s1."<<endl;
+    else cout<<"False: No permutation found."<<endl;
+}
+
+// Question 11 : Removing all adjacent duplicates! You are given a string s consisting of lowercase English letters. A duplicate removal consists of choosing two adjacent and equal letters and removing them.
+//             : We repeatedly make duplicate removals on s until we no longer can. Return the final string after all such duplicate removals have been made. It can be proven that the answer is unique.
