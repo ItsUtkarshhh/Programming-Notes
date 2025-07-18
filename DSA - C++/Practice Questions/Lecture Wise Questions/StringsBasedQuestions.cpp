@@ -493,3 +493,116 @@ int main() {
 
 // Question 11 : Removing all adjacent duplicates! You are given a string s consisting of lowercase English letters. A duplicate removal consists of choosing two adjacent and equal letters and removing them.
 //             : We repeatedly make duplicate removals on s until we no longer can. Return the final string after all such duplicate removals have been made. It can be proven that the answer is unique.
+// Approach 1 (Brute Force) :  It simulates repeated passes over the string, removing one pair of duplicates per pass (like a human would do manually).
+//                          : Idea : changed = true: To ensure we enter the loop.
+//                                 : For each character in the string : If the current and next character are the same → skip both.
+//                                                                    : Else → keep the character.
+//                                 : If any duplicates were removed, changed = true, and loop runs again.
+//                                 : Continues until no more changes are made in a full pass.    
+//                          : Time Complexity : Worst Case : O(n^2) (since each loop is O(n), and we may do this n times).
+//                          : Space Complexity : O(n), where n is the length of the input string.
+// Approach 2 (In-Place Erase with Backtracking) : We modify the string in-place and handle adjacent duplicate removal as we go, and if a pair is removed, we go back one step to see if a new duplicate formed.
+//                                               : Idea : Use while to iterate.
+//                                                      : If adjacent pair is same: remove both via erase(i, 2).
+//                                                      : Then check back (i--) to re-verify the new adjacent pair formed.
+//                                                      : Repeat until end of string.
+//                                               : More efficient than approach 1 : Doesn't re-loop the whole string every time. Avoids building temp strings again and again.
+//                                               : Warning : Still modifies string during iteration → erase() is O(n) in C++.
+//                                               : Time Complexity : Worst case still O(n^2) (because of repeated erase shifting elements), but usually faster in practice than Method 1.
+//                                               : Space Complexity : O(1) (i.e., constant extra space).
+// Approach 3 (Stack Simulation) - Optimal : Think of this like using a stack. If the top of the stack (last char in temp) matches the current char → pop it (remove pair). Otherwise → push current char.
+//                                         : Idea : Traverse the string from left to right. Use a temp string as a stack. If the last character in temp == current char, remove it (pair found). Else, add it to the temp string.
+//                                         : Time Complexity : O(n) - Only one pass through the string. push_back() and pop_back() are O(1) operations.
+//                                         : Space Complexity : O(n) - In worst case, all characters are unique, so we store them in temp.
+#include<iostream>
+#include<string>
+using namespace std;
+
+string removeAdjacentDup1(string s) {
+    bool changed = true;
+    while(changed) {
+        string temp = "";
+        changed = false;
+        for(int i = 0; i < s.length(); i++) {
+            if(i + 1 < s.length() && s[i] == s[i + 1]) {
+                ++i;
+                changed = true;
+            }
+            else {
+                temp += s[i];
+            }
+        }
+        s = temp;
+    }
+    return s;
+}
+
+string removeAdjacentDup2(string s) {
+    int i = 0;
+    while (i < s.length() - 1) { // Here using while is better than for, as iterator should increase or decrease based on a condition, but for loop increase the iterator at every loop iteration
+        if (s[i] == s[i + 1]) {
+            s.erase(i, 2);
+            if (i > 0) i--;
+        }
+        else i++;
+        if (s.empty()) break;
+    }
+    return s;
+}
+
+string removeAdjacentDup3(string s) {
+    string temp = "";
+    for(char ch : s) {
+        if(!temp.empty() && temp.back() == ch) temp.pop_back();
+        else temp.push_back(ch);
+    }
+    return temp;
+}
+
+int main() {
+    string str;
+    cin>>str;
+    string result = removeAdjacentDup3(str);
+    cout<<result;
+}
+
+// Question 12 : String Compression!
+//             : Problem Statement : Given an array of characters chars, compress it using the following algorithm : Begin with an empty string s. For each group of consecutive repeating characters in chars : If the group's length is 1, append the character to s. Otherwise, append the character followed by the group's length.
+//             : The compressed string s should not be returned separately, but instead, be stored in the input character array chars.
+//             : Note 1 : Group lengths that are 10 or longer will be split into multiple characters in chars. After you are done modifying the input array, return the new length of the array.
+//             : Note 2 : You must write an algorithm that uses only constant extra space.
+// Trial Approach : This solution does not deliver the solution to actual problem statement, It just code compresses a string by counting the frequency of each character using a map, and then creates a new string in the format : <char><count> (only if count > 1).
+//                : Input a string like "aabbbcccaa". Create a map freq to store frequency of each character. Loop over the string and count each character. Then iterate over the map : Add each character once. If its frequency is more than 1, also add its count as a string. Return the final result.
+//                : It doesn’t maintain order or sequence, because map<char,int> sorts keys by default. For example : "aabbbcccaa" → It returns "a5b3c3"
+But correct compressed form (preserving sequence) is "a2b3c3a2" → which is invalid here.
+
+Duplicates not grouped together are not handled properly.
+
+// This approach of solving this questions is very generic, it doesn't solve the above problem statement! also it does not solve the issue when the string would be "aabbbcccaa" Also it uses extra space, which contradicts the problem statement!
+//                : This approach is only valid for cases similar to "aaabbbccccccddd" and more similar cases! where the sequence never disrupts!
+#include<iostream>
+#include<map>
+#include<vector>
+#include<string>
+using namespace std;
+
+string compressString(string str) {
+    map<char,int> freq;
+    for(char ch : str) {
+        freq[ch]++;
+    }
+
+    string result = "";
+    for(auto it : freq) {
+        result += it.first;
+        if(it.second > 1) result += to_string(it.second);
+    }
+    return result;
+}
+
+int main() {
+    string str;
+    cin>>str;
+    string result = compressString(str);
+    cout<<result;
+}
