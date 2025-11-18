@@ -165,7 +165,7 @@ int main() {
 //          : However, there exists an alternate mathematical approach using a formula, which is not as intuitive but significantly more efficient. This formula-based method checks for perfect squares using the expressions 5n² + 4 or 5n² - 4 and operates in constant time O(1), making it far more optimal for larger values or performance-critical applications.
 
 // Improved on Drawbacks!
-// Concept : If the input number in the formula 5n² + 4 or 5n² - 4, and it turns out to be a perfect square! then the input number is a fibonacci number!
+// Concept : If we input the number in the formula 5n² + 4 or 5n² - 4, and it turns out to be a perfect square! then the input number is a fibonacci number!
 #include<iostream>
 #include<math.h>
 using namespace std;
@@ -221,6 +221,62 @@ int main() {
     int n;
     cin>>n;
     cout<<FibLastDigit(n);
+}
+
+// Improved on Drawbacks!
+#include<iostream>
+using namespace std;
+
+int FibLastDigit(int n) {
+    if(n <= 0) {
+        cout<<"Invalid Position!";
+        return -1;
+    }
+    if(n == 1) {
+        return 0;
+    }
+    int first = 0; int second = 1;
+    for(int i = 1; i < n; i++) {
+        int next = (first + second) % 10;
+        first = second;
+        second = next;
+    }
+    return first;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    cout<<FibLastDigit(n);
+}
+
+// Further Optimizations : After every 60 terms, the fibonacci cycle repeats itself (with respect to the last digit of every term). Hence we can do : "n = n % 60", It will easy our computation, & time complexity will reduce from O(n) to O(1).
+#include<iostream>
+using namespace std;
+
+int FibLastDigit(int n) {
+    if(n <= 0) {
+        cout<<"Invalid Position!";
+        return -1;
+    }
+
+    n = n % 60;
+    if(n == 0) return 0;
+    if(n == 1) return 1;
+
+    int first = 0; int second = 1;
+    for(int i = 1; i < n; i++) {
+        int next = (first + second) % 10;
+        first = second;
+        second = next;
+    }
+    return first;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    cout<<FibLastDigit(n); // As we have done the optimization of "n = n % 60", which requires 0-based indexing, so if user wants to input in the 1-based indexing, we need to pass "n - 1" in the function call!
 }
 
 // Question 6 : Print Fibonacci till value <= N
@@ -854,7 +910,7 @@ int main() {
 //          : Brute Force (Little Optimization) : Any factor of x must be ≤ x/2. No number greater than x/2 can divide x (except x itself).
 //                                              : Using this, we just traverse half way through. It doesn't reduce the time complexity so much!
 //          : Optimization 1 : Any number x can be written as a product : x = a * b
-//                           :  If both a and b were greater than √x, their product would be greater than x. So, at least one factor must be ≤ √x.
+//                           : If both a and b were greater than √x, their product would be greater than x. So, at least one factor must be ≤ √x.
 //                           : Therefore, if x is divisible by any number from 2 to √x, it is not prime. If no such divisor is found, then it is prime.
 //                           : It significantly improved time complexity to : O(root(x)).
 //                           : Weakness : If b is very large (like 10⁶ or 10⁷), repeatedly calling isPrime(x) still takes too long.
@@ -1139,7 +1195,7 @@ int main() {
     }
 }
 
-// Optimized Approach :
+// Optimized Approach : O(1)
 #include<iostream>
 #include<vector>
 using namespace std;
