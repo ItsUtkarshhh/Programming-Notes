@@ -87,8 +87,11 @@ int main() {
     return 0;
 }
 
-// All the data types are : int, float, char, long, double, long double, long long!
-// Other than all these data types, there are some ways of declaring data types, signed and unsigned! signed means all +ve and -ve values of that range! then unsigned is only for +ve values range! along with that there is "auto" which decides data type based on the operations jo hum perform kr rhe hote hai!
+// All the base data types : int, float, char, bool, double, void, short (internally "short int"), long (internally "long int"), long long (internally "long long int") & long double.
+// Other than these data types, there are some type modifiers : signed, unsigned, short, long, long long.
+//                                                            : Modifiers cannot work stand alone, they internally uses int data type by default!
+//                                                            : Base types which can use type modifiers : int, char & double.
+// Overall, C++ has base data types like int, char, float, double and all. It also has some type modifiers like signed, unsigned and all, Some modifeirs like short and long can be used without specifying "int", which makes them seem like standalone types, but internally they still refer to modified integer types.
 
 // "const" keyword Use Cases : The const keyword in C and C++ is used to declare constants - variables whose values cannot be changed after initialization!
 // Use case 1 : const int MAX_VALUE = 100; This declares a constant MAX_VALUE with the value 100. Once initialized, its value cannot be modified.
@@ -145,15 +148,16 @@ int main() {
 #include <iostream>
 
 class MyClass {
-private:
-    int value;
-public:
-    MyClass(int val) : value(val) {}
+    private:
+        int value;
 
-    void print() const {
-        // value = 100; // This will cause a compilation error because print() is a constant member function and hence it cannot change the value of "value" variable becoz it is a data member of the class!
-        printf("Value: %d\n", value);
-    }
+    public:
+        MyClass(int val) : value(val) {}
+
+        void print() const {
+            // value = 100; // This will cause a compilation error because print() is a constant member function and hence it cannot change the value of "value" variable becoz it is a data member of the class!
+            printf("Value: %d\n", value);
+        }
 };
 
 int main() {
