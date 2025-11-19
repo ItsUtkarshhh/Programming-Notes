@@ -1353,7 +1353,7 @@ int main() {
     cout << endl << endl;
     {
         cout << "Answer of eighth block : ";
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 5; ++i) {
             cout << i << " ";
         }
     }
@@ -1506,7 +1506,7 @@ int main() {
 //         : To form the binary number from individual bits, use the formula : ans = (10^i * digits) + ans.
 
 // Note : There is another formula, which is : (ans = ans * 10) + digit... Use case discussed below...
-//      : (ans = ans * 10) + digit : It will be used when, you want ki jiss order me digits retrieve hue hai uss hi order me combine krke output aaye! Example : If you got digits 1 2 3, then applying this formula will combine the number in the order they are retreived! means output will be 123.
+//      : ans = (ans * 10) + digit : It will be used when, you want ki jiss order me digits retrieve hue hai uss hi order me combine krke output aaye! Example : If you got digits 1 2 3, then applying this formula will combine the number in the order they are retreived! means output will be 123.
 //      : ans = (10^i * digits) + ans : It will be used when, you want ki jiss order me digits retrieve hue hai uske reverse order me combine krke output aaye! Example : If you got digits 1 2 3, then applying this formula will combine the number in the reverse of the order in which they are retreived! means output will be 321.
 
 // Implementations :
