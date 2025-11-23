@@ -2964,8 +2964,18 @@ int main() {
 //                : Better Code Readability : Using names instead of cryptic numbers makes code self-documenting.
 //                : Type Safety : Like in enum Gender {Male, Female}, it prevents invalid values being used.
 //                : Clean Switch Statements : Makes switch-case blocks more intuitive.
-//                : Replacing Magic Numbers : Instead of using raw numbers like 404 for HTTP errors, you can use descriptive names:
+//                : Replacing Magic Numbers : Instead of using raw numbers like 404 for HTTP errors, you can use descriptive names
 #include <stdio.h>
+
+enum Day {
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
+}; // Has a global scope!
 
 int main() {
     // Enum Declaration - Creating a custom data type that maps names to integers
@@ -3151,7 +3161,7 @@ int main() {
    cout<<"The value of a in float type (using typecasting) : "<<float(a)<<endl;
    cout<<"The value of a in float type (using typecasting) : "<<setprecision(4)<<(float)a<<endl; // In type casting we just write that data type in which we want to print the number with parentheses ().
    printf("The value of a in float type (using typecasting) : %.5f\n", (float)a);
-   return 0; 
+   return 0;
 }
 
 // Constants in C++ : In C++, constants are values that do not change during the execution of a program. They are useful for defining fixed values that have semantic meaning within your code. There are several ways to define constants in C++ :
@@ -3185,6 +3195,7 @@ int main() {
     constexpr int result = factorial(5);
     cout << "Factorial of 5 is: " << result << endl;
     // result = 25; // This cannot be done!
+    // cout<<result;
     return 0;
 }
 

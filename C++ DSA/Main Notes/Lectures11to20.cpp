@@ -15,7 +15,7 @@
 // Cubic Time Complexity "O(n^3)" : Jab teen loop ek ke andar ek 0 - n chal jaye, then that is O(n^3).
 
 // Graphs of BigO notations : refer the notes of DSA in the notebook!
-// But one thing I will add on into this notes, that is order of Time Complexities : O(n!) > O(2^n) > O(n^3) > O(n^2) > O(nlogn) > O(n) > O(logn) > O(1)
+// But one thing I will add on into this notes, that is order of Time Complexities : O(n!) / O(n^n) > O(2^n) > O(n^3) > O(n^2) > O(nlogn) > O(n) > O(logn) > O(1)
 // Note : Jab hum ye bolte hai ki ek loop 0-n tak chal rha hai toh iski time complexity O(n) hogi, ye tab hi hoga jab loop ke andar jo operations perform ho rhe hai unki time complexity is O(1) which is constant, tab hi O(n) bolenge! otherwise loop ke andar jo bhi operations hai unn sabki milaa ke jo time complexity ban rhi hai vo final hogi!
 
 // Now, Lets see how to Solve TLE : So to solve this, we use 10^8 operation rule, which means, ki aaj kal ki modern machines 10^8 operations perform kr sakte hai ek second me! so hume humara length of input dekh ke uske according aisi algo use krni hai jiski time complexity sabse kam ho!, like agar question me diya hua hai ki time limit : 1 sec, means we are asked to perform 10^8 operations in 1 sec! so in that case we will use a table which is drawn in the notebook, kindly refer that!
@@ -28,6 +28,33 @@
 // Sometimes we are given constraints like, 1 < n <= 10^8, is case me hume aisi time complexities use krni hai jo TLE na occur karaye, toh yes according to table those are O(n) and O(logn)!
 // Also, if the values constraints are given like, 1 < arr[i] <= 10^9, then here we can use int as the data type, but suppose if the power gets upto 12 or 13 or above, then we have to use long or long long, becoz int ki range sirf -2^31 -> 2^31-1 hi ho sakti hai! for signed and for unsigned, 0 -> (2^32)-1 tak ho sakti hai!
 // So yess constraints ko dekh ke we decide the algorithm we should choose and data type we should use!
+
+// For Reference, here are the tables :
+// Table 1 :
+// ------------------------------------------------------------------------------------
+// | Time Complexity | Max Input Size It Can Handle | Example                         |
+// | --------------- | ---------------------------- | ------------------------------- |
+// | O(1)            | Any size (up to billions)    | Direct formula                  |
+// | O(log n)        | Up to 10^18 easily           | Binary search                   |
+// | O((log n)^2)    | Up to 10^9 – 10^12           | Segment Trees                   |
+// | O(√n)           | Up to 10^16                  | Square root decomposition       |
+// | O(n)            | ≤ 10⁷ – 10^8                 | Single loop                     |
+// | O(n log n)      | ≤ 10⁶ – 2 × 10^6             | Sorting, priority queue         |
+// | O(n √n)         | ≤ 10^5                       | Sieve-like algorithms           |
+// | O(n^2)          | ≤ 10^4                       | Double nested loops             |
+// | O(n^2 log n)    | ≤ 3×10^3                     | DP with sort inside loops       |
+// | O(n^3)          | ≤ 10^3                       | Triple nested loops / DP        |
+// | O(n^4)          | ≤ 500                        | Quad loops                      |
+// | O(2^n)          | ≤ 20                         | Subset generation, backtracking |
+// | O(3^n)          | ≤ 12                         | Hard backtracking               |
+// | O(n!)           | ≤ 10                         | Permutations / brute force      |
+// ------------------------------------------------------------------------------------
+
+// Quick Reference : n ≤ 10^3 → O(n^3) solutions work
+//                 : n ≤ 10^4 → O(n^2) works
+//                 : n ≤ 10^5 → O(n log n) works
+//                 : n ≤ 10^6 to 10^7 → O(n) or optimized O(n log n)
+//                 : n > 10^7 → Only O(log n) or O(1)
 
 // Interesting case : Find the time complexity of the below code, most people will think that it will be O(n) but no! it will be O(1) kyunki bhyi ye loop poora n tak chlaa hi kahaa, ye toh bss 1 pe hi ruk gya becoz of break statement! so yess be mindfull while finding time complexities!
 // for(int i = 0; i<n; i++) {
@@ -1070,12 +1097,11 @@ int main() {
     cout << "First element: " << arr2.front() << endl; // Get the first element
     cout << "Last element: " << arr2.back() << endl; // Get the last element
 
-    // Summary of commonly used STL array methods :
-    // - .size()      → returns the number of elements
-    // - .at(index)   → safely accesses element at a given index (with bounds checking)
-    // - .front()     → returns the first element
-    // - .back()      → returns the last element
-    // - .empty()     → returns true if the array is empty, false otherwise
+    // Summary of commonly used STL array methods : .size() → returns the number of elements
+    //                                            : .at(index) → safely accesses element at a given index (with bounds checking)
+    //                                            : .front() → returns the first element
+    //                                            : .back() → returns the last element
+    //                                            : .empty() → returns true if the array is empty, false otherwise
 }
 
 // 2) Vectors in C++ STL
@@ -1152,6 +1178,8 @@ int main() {
     //                       : .size() → returns the number of elements currently in the vector
     //                       : .clear() → removes all elements from the vector
     //                       : .at(index) → safely accesses an element at the given index
+    //                       : .front() → returns the first element
+    //                       : .back() → returns the last element
     //                       : Range-based for loop → a simpler syntax for iterating over elements
     //                       : Vector initialization and copying
 }
