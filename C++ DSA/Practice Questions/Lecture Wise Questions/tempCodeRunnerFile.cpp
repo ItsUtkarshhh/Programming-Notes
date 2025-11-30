@@ -1,30 +1,30 @@
 #include<iostream>
-#include<climits>
+#include<vector>
+#include<map>
 using namespace std;
 
-int maxi(int* arr, int n) {
-    int maximum = INT_MIN;
-    for(int i = 0; i < n; i++) {
-        maximum = max(arr[i], maximum);
+int findKeyLS3(vector<int> v, int key) {
+    map<int, int> mp;
+    for(int i = 0; i < v.size(); i++) {
+        if(!mp.count(v[i])) {
+            mp[v[i]] = i;
+        }
     }
-    return maximum;
-}
-
-int mini(int* arr, int n) {
-    int minimum = INT_MAX;
-    for(int i = 0; i < n; i++) {
-        minimum = min(arr[i], minimum);
-    }
-    return minimum;
+    if(!mp.count(key)) return -1;
+    return mp[key];
 }
 
 int main() {
     int n;
     cin>>n;
-    int* arr = new int[n];
+    vector<int> v(n);
+
     for(int i = 0; i < n; i++) {
-        cin>>arr[i];
+        cin>>v[i];
     }
-    cout<<maxi(arr, n)<<endl;
-    cout<<mini(arr, n)<<endl;
+
+    int key;
+    cin>>key;
+
+    cout<<"Index of the key (if exist) : "<<findKeyLS3(v, key);
 }

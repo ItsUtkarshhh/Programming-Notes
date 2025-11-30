@@ -57,6 +57,35 @@ int main() {
     cout<<"Max value in the array : "<<mini;
 }
 
+// Not Recommended method, but just for exploring various methods : TC : O(n logn)
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+
+int maxVal(vector<int> v) {
+    set<int> st;
+    int maxi = INT_MIN;
+    
+    for(int i : v) {
+        st.insert(i);
+    }
+    
+    return *--st.end();
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v1(n);
+
+    for(int i = 0; i < n; i++) {
+        cin>>v1[i];
+    }
+
+    cout<<"Maximum value of array : "<<maxVal(v1);
+}
+
 // Question 2 : Find the sum of all of its elements!
 // Thinking : First, take input and store elements in the array. then initiate a sum variable with 0, and iterate over the array and add each element into this sum till the end of array! and then finally print sum!
 #include<iostream>
@@ -72,6 +101,38 @@ int main() {
         sum += arr[i];
     }
     cout<<"Sum of all elements in the array : "<<sum;
+}
+
+// Another method (not recommended, but just for exploring other methods) :
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+
+int sumOfAll(vector<int> v) {
+    map<int, int> mp;
+    for(int i = 0; i < v.size(); i++) {
+        mp[v[i]]++;
+    }
+
+    int sum = 0;
+    for(auto i : mp) {
+        sum += i.first * i.second;
+    }
+
+    return sum;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+
+    cout<<"Sum of all elements : "<<sumOfAll(v);
 }
 
 // Question 3 : Linear Search in an array! and return the index of the key!
@@ -100,6 +161,69 @@ int main() {
     int key;
     cin>>key;
     findKeyLS(arr, n, key);
+}
+
+// Exploring other methods :
+// Method 1 : Using sets
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+
+bool findKeyLS2(vector<int> v, int key) {
+    set<int> st;
+    for(int i = 0; i < v.size(); i++) {
+        st.insert(v[i]);
+    }
+
+    return st.count(key);
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+
+    int key;
+    cin>>key;
+
+    cout<<"Does this element exist ? : "<<findKeyLS2(v, key);
+}
+
+// Method 2 : Using maps
+#include<iostream>
+#include<vector>
+#include<map>
+using namespace std;
+
+int findKeyLS3(vector<int> v, int key) {
+    map<int, int> mp;
+    for(int i = 0; i < v.size(); i++) {
+        if(!mp.count(v[i])) {
+            mp[v[i]] = i;
+        }
+    }
+    if(!mp.count(key)) return -1;
+    return mp[key];
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> v(n);
+
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+
+    int key;
+    cin>>key;
+
+    cout<<"Index of the key (if exist) : "<<findKeyLS3(v, key);
 }
 
 // Question 4: Reverse an Array
@@ -586,6 +710,50 @@ int main() {
         for(int i = 0; i < ans.size(); i++) {
             cout<<ans[i]<<" ";
         }
+    }
+}
+
+// Approach 6 : Using Maps - Exclusively for : Both arrays unsorted & no duplicates!
+//            : Simply store the count of each element in both the arrays into the map, and keep adding those elements into the final array, who count in the map is 2.
+#include<iostream>
+#include<map>
+#include<vector>
+using namespace std;
+
+vector<int> intersectionOfArrays7(vector<int> v1, vector<int> v2) {
+    map<int, int> occurence;
+    vector<int> ans;
+    for(int i = 0; i < v1.size(); i++) {
+        occurence[v1[i]]++;
+    }
+    
+    for(int i = 0; i < v2.size(); i++) {
+        occurence[v2[i]]++;
+    }
+    
+    for(auto i : occurence) {
+        if(i.second == 2) {
+            ans.push_back(i.first);
+        }
+    }
+    
+    return ans;
+}
+
+int main() {
+    int n1, n2;
+    cin>>n1>>n2;
+    vector<int> v1(n1);
+    vector<int> v2(n2);
+    for(int i = 0; i<n1; i++) {
+        cin>>v1[i];
+    }
+    for(int i = 0; i<n2; i++) {
+        cin>>v2[i];
+    }
+    vector<int> ans = intersectionOfArrays7(v1, v2);
+    for(int i = 0; i<ans.size(); i++) {
+        cout<<ans[i]<<" ";
     }
 }
 
