@@ -221,22 +221,132 @@ void insertNodeByVal(Node* &head, Node* &tail, int val, int data, Occurence occ,
         return;
     }
     else if(pos == BEFORE && occ == EVERY) {
-        
+        Node* start = head;
+        Node* temp = head;
+        do {
+            if(temp->next->data == val) {
+                Node* newNode = new Node(data);
+                newNode->next = temp->next;
+                temp->next = newNode;
+                if(newNode->next == head) head = newNode;
+                temp = newNode->next;
+            }
+            else {
+                temp = temp->next;
+            }
+
+        }while(temp != start);
     }
     else if(pos == AFTER && occ == EVERY) {
-        
+        // Node* start = head;
+        Node* temp = head;
+        do {
+            if(temp->data == val) {
+                Node* newNode = new Node(data);
+                newNode->next = temp->next;
+                temp->next = newNode;
+                if (temp == tail) tail = newNode;
+                temp = newNode->next;
+            }
+            else {
+                temp = temp->next;
+            }
+        }while(temp != head);
     }
     else if(pos == BEFORE && occ == LAST) {
-        int count = occurenceOfVal(val);
+        Node* curr = head;
+        Node* prevLast = NULL;
+        do {
+            if(curr->next->data == val) prevLast = curr;
+            curr = curr->next;
+        }while(curr != head);
+
+        if(prevLast == NULL) {
+            cout<<"No Occurence!";
+        }
+        else {
+            Node* newNode = new Node(data);
+            newNode->next = prevLast->next;
+            prevLast->next = newNode;
+            if(newNode->next == head) head = newNode;
+            return;
+        }
     }
     else if(pos == AFTER && occ == LAST) {
-        int count = occurenceOfVal(val);
+        Node* curr = head;
+        Node* nextLast = NULL;
+        do {
+            if(curr->data == val) nextLast = curr;
+            curr = curr->next;
+        }while(curr != head);
+
+        if(nextLast == NULL) {
+            cout<<"No Occurence!";
+        }
+        else {
+            Node* newNode = new Node(data);
+            newNode->next = nextLast->next;
+            nextLast->next = newNode;
+            if(nextLast == tail) tail = newNode;
+            return;
+        }
     }
-    else if(pos == BEFORE && occ == Nth) {
-        int count = occurenceOfVal(val);
+}
+
+void insertNodeByValNth(Node* &head, Node* &tail, int val, int data, Occurence occ, int nth, Position pos) {
+    if (head == NULL) return;
+
+    if(occ == Nth && pos == BEFORE) {
+        Node* curr = head;
+        int totalOcc = occurenceOfVal(head, val);
+        if(nth > totalOcc) {
+            cout<<"Invalid Position!"<<endl;
+            return;
+        }
+        int count = 0;
+        do {
+            if(curr->next->data == val) {
+                count++;
+                if(count == nth) break;
+            }
+            curr = curr->next;
+        }while(curr != head);
+        if(count < nth) {
+            cout<<"No Occurence"<<endl;
+        }
+        else {
+            Node* newNode = new Node(data);
+            newNode->next = curr->next;
+            curr->next = newNode;
+            if(newNode->next == head) head = newNode;
+        }
     }
-    else if(pos == AFTER && occ == Nth) {
-        int count = occurenceOfVal(val);
+    else if(occ == Nth && pos == AFTER) {
+        Node* curr = head;
+        int totalOcc = occurenceOfVal(head, val);
+        if(nth > totalOcc) {
+            cout<<"Invalid Position!"<<endl;
+            return;
+        }
+        int count = 0;
+        do {
+            if(curr->data == val) {
+                count++;
+            }
+            if(count == nth) {
+                break;
+            }
+            curr = curr->next;
+        }while(curr != head);
+        if(count < nth) {
+            cout<<"No Occurence"<<endl;
+        }
+        else {
+            Node* newNode = new Node(data);
+            newNode->next = curr->next;
+            curr->next = newNode;
+            if(curr == tail) tail = newNode;
+        }
     }
 }
 
@@ -339,95 +449,70 @@ int main() {
     cout<<"Current Tail : "<<tail->data<<endl;
     cout<<getLen(head)<<endl;
     printLL(head);
-}
 
+    cout<<endl;
 
+    // Testing Insert by Val variations!
+    Node* n10 = new Node(2);
+    Node* head2 = n10;
+    Node* tail2 = n10;
+    n10->next = n10;
+    insertAtHead(head2, 2);
+    insertAtHead(head2, 2);
+    insertAtHead(head2, 2);
+    insertAtHead(head2, 2);
+    insertAtHead(head2, 2);
+    cout<<"Current Head : "<<head2->data<<endl;
+    cout<<"Current Tail : "<<tail2->data<<endl;
+    cout<<getLen(head2)<<endl;
+    printLL(head2);
+    insertNodeByVal(head2, tail2, 2, 99, EVERY, BEFORE);
+    cout<<"Current Head : "<<head2->data<<endl;
+    cout<<"Current Tail : "<<tail2->data<<endl;
+    cout<<getLen(head2)<<endl;
+    printLL(head2);
 
-#include <iostream>
-using namespace std;
+    cout<<endl;
 
-class Node {
-public:
-    int data;
-    Node* next;
+    // Testing Insert by Val variations!
+    Node* n11 = new Node(2);
+    Node* head3 = n11;
+    Node* tail3 = n11;
+    n11->next = n11;
+    insertAtHead(head3, 2);
+    insertAtHead(head3, 2);
+    insertAtHead(head3, 2);
+    insertAtHead(head3, 2);
+    insertAtHead(head3, 2);
+    cout<<"Current Head : "<<head3->data<<endl;
+    cout<<"Current Tail : "<<tail3->data<<endl;
+    cout<<getLen(head3)<<endl;
+    printLL(head3);
+    insertNodeByVal(head3, tail3, 2, 99, EVERY, AFTER);
+    cout<<"Current Head : "<<head3->data<<endl;
+    cout<<"Current Tail : "<<tail3->data<<endl;
+    cout<<getLen(head3)<<endl;
+    printLL(head3);
 
-    Node(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
+    cout<<endl;
 
-void printCLL(Node* head) {
-    if (head == NULL) {
-        cout << "Empty List\n";
-        return;
-    }
-
-    Node* temp = head;
-    cout << "CLL: ";
-    do {
-        cout << temp->data << " -> ";
-        temp = temp->next;
-    } while (temp != head);
-    cout << "(back to head)\n";
-}
-
-// 🔥 Insert BEFORE EVERY occurrence of val
-void insertBeforeEvery(Node* &head, int val, int data) {
-    if (head == NULL) return;
-
-    // 🔹 Find last node
-    Node* last = head;
-    while (last->next != head) {
-        last = last->next;
-    }
-
-    // 🔹 Phase 1: Handle consecutive head matches
-    while (head->data == val) {
-        Node* newNode = new Node(data);
-        newNode->next = head;
-        last->next = newNode;
-        head = newNode;
-    }
-
-    // 🔹 Phase 2: Handle remaining nodes
-    Node* prev = head;
-    Node* curr = head->next;
-
-    while (curr != head) {
-        if (curr->data == val) {
-            Node* newNode = new Node(data);
-            prev->next = newNode;
-            newNode->next = curr;
-
-            prev = newNode;
-            curr = curr->next;
-        } else {
-            prev = curr;
-            curr = curr->next;
-        }
-    }
-}
-
-int main() {
-    // Create circular list: 2 → 2 → 3 → 2 → 5 → back
-    Node* head = new Node(2);
-    Node* n2 = new Node(2);
-    Node* n3 = new Node(3);
-    Node* n4 = new Node(2);
-    Node* n5 = new Node(5);
-
-    head->next = n2;
-    n2->next = n3;
-    n3->next = n4;
-    n4->next = n5;
-    n5->next = head;
-
-    printCLL(head);
-
-    insertBeforeEvery(head, 2, 99);
-
-    printCLL(head);
-
-    return 0;
+    // Testing Insert by Val variations!
+    Node* n12 = new Node(2);
+    Node* head4 = n12;
+    Node* tail4 = n12;
+    n12->next = n12;
+    insertAtHead(head4, 2);
+    insertAtHead(head4, 2);
+    insertAtHead(head4, 2);
+    insertAtHead(head4, 2);
+    insertAtHead(head4, 2);
+    cout<<"Current Head : "<<head4->data<<endl;
+    cout<<"Current Tail : "<<tail4->data<<endl;
+    cout<<getLen(head4)<<endl;
+    printLL(head4);
+    insertNodeByValNth(head4, tail4, 2, 99, Nth, 3, BEFORE);
+    cout<<"Current Head : "<<head4->data<<endl;
+    cout<<"Current Tail : "<<tail4->data<<endl;
+    cout<<getLen(head4)<<endl;
+    printLL(head4);
 }
