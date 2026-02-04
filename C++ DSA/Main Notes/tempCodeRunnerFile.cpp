@@ -42,6 +42,29 @@ Node* reverseList(Node* &head, Node* &tail) {
     return head;
 }
 
+void revLL_helper(Node* &head, Node* &tail, Node* curr, Node* prev) {
+    if(curr == NULL) {
+        tail = head;
+        head = prev;
+        return;
+    }
+
+    Node* fwd = curr->next;
+    revLL_helper(head, tail, fwd, curr);
+    curr->next = prev;
+}
+
+Node* revLL(Node* &head, Node* &tail) {
+    if(head == NULL || tail == NULL) {
+        cout<<"Empty List!";
+        return NULL;
+    }
+    Node* curr = head;
+    Node* prev = NULL;
+    revLL_helper(head, tail, curr, prev);
+    return head;
+}
+
 void printLL(Node* head) {
     if(head == NULL) {
         cout<<"Empty List!";
@@ -74,7 +97,8 @@ int main() {
     cout<<"Current LL : ";
     printLL(head);
 
-    Node* newHead = reverseList(head, tail);
+    // Node* newHead = reverseList(head, tail);
+    Node* newHead = revLL(head, tail);
 
     cout<<"New LL : ";
     printLL(newHead);

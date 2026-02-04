@@ -3824,6 +3824,7 @@ NodeSLL3* findMiddleNodeSLL3(NodeSLL3* head) {
 //                                                                 : Stop when fast reaches NULL.
 //                                                                 : Return slow (middle node).
 // Implementation!
+// For Even Number of Nodes!
 NodeSLL3* findMiddleNodeSLL3A(NodeSLL3* head) { // Alternatively : "while(fast != NULL && fast->next != NULL)" for manage even number of nodes differently!
     if(head == NULL || head->next == NULL) {
         return head;
@@ -3840,6 +3841,7 @@ NodeSLL3* findMiddleNodeSLL3A(NodeSLL3* head) { // Alternatively : "while(fast !
     return slow;
 }
 
+// For Odd Number of Nodes!
 NodeSLL3* findMiddleNodeSLL3B(NodeSLL3* head) {
     if(head == NULL || head->next == NULL) {
         return head;
