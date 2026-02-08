@@ -4477,7 +4477,7 @@ GeneralNodeLL3* floydLoopDetectionAlgo(GeneralNodeLL3* head) {
     GeneralNodeLL3* fast = head;
     GeneralNodeLL3* slow = head;
 
-    while(slow != NULL && fast != NULL) {
+    while(fast->next != NULL && fast != NULL) {
         fast = fast->next;
         if(fast != NULL) {
             fast = fast->next;
@@ -5171,7 +5171,7 @@ int main() {
 // Approach 1 (O(n²) Time Complexity, O(1) Space Complexity) : Uses nested loops to check and remove duplicate nodes. No extra space is used, making it space-efficient but time-consuming.
 // Approach 3 (O(n) Time Complexity, O(n) Space Complexity) : Uses an unordered map to track visited nodes, ensuring duplicates are removed in a single pass. More efficient in terms of time but requires additional space.
 
-// ---------------------------------------------------------- LECTURE 49 - Merge 2 Sorted LLs, Sort 0s, 1s, 2s --------------------------------------------------------------------------------------------------------->
+ // ---------------------------------------------------------- LECTURE 49 - Merge 2 Sorted LLs, Sort 0s, 1s, 2s --------------------------------------------------------------------------------------------------------->
 // Question 1 : We are given a singly linked list where each node contains either 0, 1, or 2, but they are not in sorted order. We need to rearrange the linked list such that all 0s come first, followed by 1s, and then 2s, while maintaining the original structure of the linked list.
 // Approach 1 : Count and Replace Method!
 //            : Step 1 : Count the occurrences of 0s, 1s, and 2s by traversing the linked list once.
@@ -5292,7 +5292,8 @@ NodeSLL4* sortList(NodeSLL4* head) {
         }
         temp = temp->next;
     }
-    return head;
+    
+    if
 }
 
 // Function to print the linked list
