@@ -5292,8 +5292,6 @@ NodeSLL4* sortList(NodeSLL4* head) {
         }
         temp = temp->next;
     }
-    
-    if
 }
 
 // Function to print the linked list
@@ -5876,7 +5874,7 @@ int main() {
 //            : Step 3 : Compare Both Halves, We now have two linked list halves : First half: original order and Second half: reversed order, Compare node values one by one.
 //            : Step 4 : Restore the Linked List, Since we reversed the second half, we reverse it back to restore the original list.
 // Implementation!
-##include<iostream>
+#include<iostream>
 #include<vector>
 using namespace std;
 
