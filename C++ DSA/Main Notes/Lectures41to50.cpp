@@ -5999,8 +5999,7 @@ bool isPalindromeSLL8(NodeSLL8* head) {
     }
     
     // Restore the original list
-    temp = temp->next;
-    reverseSLL8(temp);
+    mid->next = reverseSLL8(mid->next);
 
     return true;
 }
@@ -6035,11 +6034,14 @@ int main() {
     printListSLL8(head);
 
     if(isPalindromeSLL8(head)) {
-        cout<<"This Linked List is a Palindrome!";
+        cout<<"This Linked List is a Palindrome!"<<endl;
     }
     else {
-        cout<<"Its not a Palindrome!";
+        cout<<"Its not a Palindrome!"<<endl;
     }
+
+    cout<<"Restoring original LL : ";
+    printListSLL8(head);
 }
 // The time complexity remains O(n) as we traverse the list multiple times : Finding the middle: O(n/2), Reversing the second half: O(n), Comparing halves: O(n) and Restoring the list: O(n)
 // Total: O(n) (ignoring constants). However, space complexity is O(1) since no extra space is used.
