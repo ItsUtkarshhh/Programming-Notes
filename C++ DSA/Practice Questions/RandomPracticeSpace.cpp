@@ -1,66 +1,48 @@
 #include<iostream>
-#include<vector>
-#include<map>
 using namespace std;
 
-void sort01(vector<int> &v) {
-    map<int, int> mp;
-    for(int i = 0; i < v.size(); i++) {
-        mp[v[i]]++;
-    }
+class Node {
+    public:
+    int data;
+    Node* next;
 
-    int i = 0;
-    while(mp[0]) {
-        v[i] = 0;
-        i++;
-        mp[0]--;
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
     }
+};
 
-    while(mp[1]) {
-        v[i] = 1;
-        i++;
-        mp[1]--;
+void insertNode(Node* &head, Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL || tail == NULL) {
+        head = tail = newNode;
+        return;
     }
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void sort01_2(vector<int> &v) {
-    int i = 0;
-    int j = v.size() - 1;
-
-    while(i < j) {
-        if(v[i] == 1 && v[j] == 0) {
-            swap(v[i], v[j]);
-            i++;
-            j--;
-        }
-
-        else if(v[i] == 0 && v[j] == 0) {
-            i++;
-        }
-
-        else if(v[i] == 1 && v[j] == 1) {
-            j--;
-        }
-
-        else {
-            i++;
-            j--;
-        }
+void rev(Node* &head, Node* &tail, Node* prev, Node* curr) {
+    if(curr == NULL) {
+        tail = head;
+        head = prev;
     }
+
+    Node* forward = curr->next;
+    rev(head, tail, curr, forward);
+    curr->next = prev;
+}
+
+Node* revLL(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* prev = NULL;
+    Node* curr = head;
+    rev(head, tail, prev, curr);
+
+    return head;
 }
 
 int main() {
-    int n;
-    cin>>n;
 
-    vector<int> v(n);
-    for(int i = 0; i < n; i++) {
-        cin>>v[i];
-    }
-
-    sort01_2(v);
-
-    for(int i = 0; i < v.size(); i++) {
-        cout<<v[i]<<" ";
-    }
 }
