@@ -3962,7 +3962,19 @@ int main() {
 //         : Output : 3 -> 2 -> 5 -> 4 -> 7 -> 6 -> NULL
 // Approach : Reverse the first K nodes iteratively : Swap links between K nodes.
 //          : Recursively process the remaining list : The head of the next reversed group is obtained using recursion. and Link the reversed K-group to the next recursively solved group.
-// Implementation!
+// Approach 2 : Create a dummy before head and set : prevGroupEnd = dummy - This helps handle the first group easily.
+//            : Check If K Nodes Exist : From prevGroupEnd, move k steps ahead to find kth.
+//                                     : If kth == NULL → break (not enough nodes left).
+//            : Identify & Isolate the Group : groupStart = prevGroupEnd->next. nextGroupStart = kth->next
+//                                           : Cut the group using : kth->next = NULL;
+//            : Reverse the Isolated Group : Using the traditional prev, curr and forward pointers.
+//            : Reconnect & Move Forward : Connect previous part : prevGroupEnd->next = prev;
+//                                       : Connect tail to next group : groupStart->next = nextGroupStart;
+//                                       : Move : prevGroupEnd = groupStart;
+//            : Repeat until no full groups remain, and finally return dummyNode->next;
+// Approach 3 : The most primary difference from the above approach is, that here we wont break the list, we will simply run the inner loop k times and will let it reverse and reorder in-place.
+
+// Implementation Approach 1 :
 #include<iostream>
 using namespace std;
 
@@ -4051,6 +4063,81 @@ int main() {
     return 0;
 } // Time Complexity (TC) : Each node is visited only once, so for n nodes, TC = O(n).
 // Space Complexity (SC) : Recursive calls reverse K nodes at a time, requiring n/K recursive calls. Since each call uses O(K) space, total space used is O(n).
+
+// Implementation Approach 2 :
+Node* revK2(Node* head, Node* tail, int k) {
+    if(head == NULL) return NULL;
+
+    Node* dummy = new Node(-1);
+    dummy->next = head;
+    Node* prevGroupEnd = dummy;
+
+    while(true) {
+        Node* kth = prevGroupEnd; // groupEnd
+        int i = 0;
+        while(i < k && kth != NULL) {
+            kth = kth->next;
+            i++;
+        }
+        
+        if(kth == NULL) break;
+
+        Node* groupStart = prevGroupEnd->next;
+        Node* nextGroupStart = kth->next;
+
+        kth->next = NULL;
+
+        Node* prev = NULL;
+        Node* curr = groupStart;
+
+        while(curr != NULL) {
+            Node* forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forward;
+        }
+
+        prevGroupEnd->next = prev;
+        groupStart->next = nextGroupStart;
+        prevGroupEnd = groupStart;
+    }
+    return dummy->next;
+}
+
+// Implementation Approach 3 :
+Node* revK3(Node* head, Node* tail, int k) {
+    if(head == NULL) return NULL;
+
+    Node* dummy = new Node(-1);
+    dummy->next = head;
+    Node* prevGroupEnd = dummy;
+
+    while(true) {
+        Node* kth = prevGroupEnd; // groupEnd
+        int i = 0;
+        while(i < k && kth != NULL) {
+            kth = kth->next;
+            i++;
+        }
+        
+        if(kth == NULL) break;
+
+        Node* groupStart = prevGroupEnd->next;
+        Node* prev = kth->next;
+        Node* curr = groupStart;
+
+        for(i = 0; i < k; i++) {
+            Node* forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forward;
+        }
+
+        prevGroupEnd->next = prev;
+        prevGroupEnd = groupStart;
+    }
+    return dummy->next;
+}
 
 // Question 2 : Check whether a LinkedList is Circular or Not.
 // Approach : Base Cases : If the list is empty, return true (considered circular). If there is only one node, check head->next. If it's NULL, return false; if it points to head, return true.
