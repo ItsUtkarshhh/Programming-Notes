@@ -4937,7 +4937,7 @@ int main() {
 //                               : Comparison & Deletion : If current->data is equal to current->next->data, it means we have found a duplicate.
 //                                                       : To remove the duplicate, we update the next pointer of current to skip the duplicate node.
 //                                                       : The duplicate node is then deleted to free up memory.
-//                              : Moving Forward : If current->data and current->next->data are not equal, simply move current one step ahead. Continue this process until current->next becomes NULL.
+//                               : Moving Forward : If current->data and current->next->data are not equal, simply move current one step ahead. Continue this process until current->next becomes NULL.
 // Implementation!
 #include<iostream>
 #include<map>
@@ -5023,6 +5023,50 @@ NodeSLL2* removeDuplicatesSLL2(NodeSLL2* head) {
         }
     }
     return head;
+}
+
+// Approach 2 : Using nested loops - Brute Force!
+NodeSLL2* removeDuplicatesSLL2_B(NodeSLL2* head) {
+    if(head == NULL) return NULL;
+
+    NodeSLL2* temp1 = head;
+    while(temp1->next != NULL) {
+        NodeSLL2* temp2 = temp1->next;
+        while(temp2 != NULL) {
+            if(temp2->data == temp1->data) {
+                NodeSLL2* ntd = temp2;
+                temp1->next = temp2->next;
+                temp2 = temp2->next;
+                ntd->next = NULL;
+                delete ntd;
+            }
+            else temp2 = temp2->next;
+        }
+        temp1 = temp1->next;
+    }
+    return head;
+}
+
+// Approach 3 : Dummy Nodes! - Not needed, as dummy node concept is used when the nodes are head node might change.
+//            : But it can be solved here for this use case.
+NodeSLL2* removeDuplicatesSLL2_C(NodeSLL2* head) {
+    if(head == NULL) return NULL;
+
+    NodeSLL2* dummyHead = new NodeSLL2(INT_MIN);
+    NodeSLL2* dummyTail = dummyHead;
+    dummyTail->next = head;
+    dummyTail = head;
+
+    NodeSLL2* temp = head->next;
+    while(temp != NULL) {
+        if(dummyTail->data != temp->data) {
+            dummyTail->next = temp;
+            dummyTail = temp;
+        }
+        temp = temp->next;
+    }
+    dummyTail->next = NULL;
+    return dummyHead->next;
 }
 
 void printListSLL2(NodeSLL2* head) {
@@ -5271,6 +5315,7 @@ int main() {
 //                     : The structure of the linked list remains the same, only the node values are updated.
 // Implementation!
 #include<iostream>
+#include<climits>
 using namespace std;
 
 // Class representing a node in a singly linked list
@@ -5379,6 +5424,46 @@ NodeSLL4* sortList(NodeSLL4* head) {
         }
         temp = temp->next;
     }
+}
+
+// Can also create another list - If we want
+NodeSLL4* sort012(NodeSLL4* head) {
+    if(head == NULL) return NULL;
+
+    int count0 = 0;
+    int count1 = 0;
+    int count2 = 0;
+
+    NodeSLL4* temp = head;
+    while(temp != NULL) {
+        if(temp->data == 0) {
+            count0++;
+        }
+        else if(temp->data == 1) {
+            count1++;
+        }
+        else {
+            count2++;
+        }
+        temp = temp->next;
+    }
+    
+    NodeSLL4* newHead = new NodeSLL4(INT_MIN);
+    NodeSLL4* newTail = newHead;
+
+    while(count0 != 0) {
+        insertNode(newHead, newTail, 0);
+        count0--;
+    }
+    while(count1 != 0) {
+        insertNode(newHead, newTail, 1);
+        count1--;
+    }
+    while(count2 != 0) {
+        insertNode(newHead, newTail, 2);
+        count2--;
+    }
+    return newHead->next;
 }
 
 // Function to print the linked list
@@ -5748,6 +5833,43 @@ NodeSLL6* mergeSortedSLL6B(NodeSLL6* LL1, NodeSLL6* LL2) {
     }
 
     return LL1; // Return head of merged list
+}
+
+// Best & Simpler Approach
+NodeSLL6* mergeSortedSLL6C(NodeSLL6* head1, NodeSLL6* head2) {
+    if(head1 == NULL) return head2;
+    if(head2 == NULL) return head1;
+
+    if(head1->data >= head2->data) {
+        swap(head1, head2);
+    }
+
+    NodeSLL6* dummyHead = new NodeSLL6(INT_MIN);
+    NodeSLL6* dummyTail = dummyHead;
+
+    NodeSLL6* temp1 = head1;
+    NodeSLL6* temp2 = head2;
+
+    while(temp1 != NULL && temp2 != NULL) {
+        if(temp1->data <= temp2->data) {
+            dummyTail->next = temp1;
+            dummyTail = temp1;
+            temp1 = temp1->next;
+        }
+        else {
+            dummyTail->next = temp2;
+            dummyTail = temp2;
+            temp2 = temp2->next;
+        }
+    }
+
+    if(temp1 == NULL) dummyTail->next = temp2;
+    if(temp2 == NULL) dummyTail->next = temp1;
+
+    NodeSLL6* ans = dummyHead->next;
+    delete dummyHead;
+    delete dummyTail;
+    return ans;
 }
 
 // Function to print the linked list
