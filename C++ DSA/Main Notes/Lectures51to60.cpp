@@ -273,38 +273,43 @@ NodeSLL2A* cloneLinkedListSLL2A(NodeSLL2A* head) {
     if (!head) return NULL;  // If the list is empty, return NULL.
 
     // Step 1: Copy the linked list without random pointers
-    NodeSLL2A* original = head;
-    NodeSLL2A* cloneHead = new NodeSLL2A(original->data);
-    NodeSLL2A* cloneTail = cloneHead;
-    original = original->next;
+    Node* originalHead = head;
+    Node* cloneHead = NULL;
+    Node* cloneTail = NULL;
 
-    while (original) {
-        NodeSLL2A* newNode = new NodeSLL2A(original->data);
-        cloneTail->next = newNode;
-        cloneTail = newNode;
-        original = original->next;
+    while(originalHead) {
+        NodeSLL2A* newNode = new NodeSLL2A(originalHead->data);
+        if(cloneHead == NULL || cloneTail == NULL) {
+            cloneHead = cloneTail = newNode;
+        }
+        else {
+            cloneTail->next = newNode;
+            cloneTail = newNode;
+        }
+        originalHead = originalHead->next;
     }
+    originalHead = head; // Restoring originalHead pointer back to head
 
     // Step 2: Assign random pointers
-    original = head;
-    NodeSLL2A* cloned = cloneHead;
+    NodeSLL2A* original = head;
+    NodeSLL2A* clone = cloneHead;
 
     while (original) {
         if (original->random) {
             // Step 3: Find the corresponding node in the cloned list
-            NodeSLL2A* temp = head;
+            NodeSLL2A* tempOrg = head;
             NodeSLL2A* tempClone = cloneHead;
-            while (temp) {
-                if (temp == original->random) {
-                    cloned->random = tempClone;
+            while (tempOrg) {
+                if (tempOrg == original->random) {
+                    clone->random = tempClone;
                     break;
                 }
-                temp = temp->next;
+                tempOrg = tempOrg->next;
                 tempClone = tempClone->next;
             }
         }
         original = original->next;
-        cloned = cloned->next;
+        clone = clone->next;
     }
 
     return cloneHead;

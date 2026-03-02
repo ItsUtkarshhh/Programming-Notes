@@ -7,10 +7,12 @@ class Node {
     public:
     int data;
     Node* next;
+    Node* random;
 
     Node(int data) {
         this->data = data;
         this->next = NULL;
+        this->random = NULL;
     }
 };
 
@@ -24,22 +26,9 @@ void insertNode(Node* &head, Node* &tail, int data) {
     tail = newNode;
 }
 
-Node* getMid(Node* head) {
-    if(head == NULL) return NULL;
-
-    Node* slow = head;
-    Node* fast = head->next;
-
-    while(fast != NULL && fast->next != NULL) {
-        fast = fast->next;
-        if(fast != NULL) fast = fast->next;
-        slow = slow->next;
-    }
-    return slow;
-}
-
 Node* revLL(Node* head) {
     if(head == NULL) return NULL;
+
     Node* prev = NULL;
     Node* curr = head;
     Node* forward = NULL;
@@ -50,28 +39,110 @@ Node* revLL(Node* head) {
         prev = curr;
         curr = forward;
     }
-
     return prev;
 }
 
-bool checkPalindrome(Node* head) {
-    if(head == NULL || head->next == NULL) return true;
+Node* cloneRandom(Node* head) {
+    if(head == NULL) return NULL;
 
-    Node* mid = getMid(head);
-    Node* midHead = mid->next;
-    mid->next = revLL(midHead);
+    Node* originalHead = head;
+    Node* cloneHead = NULL;
+    Node* cloneTail = NULL;
 
-    Node* temp1 = head;
-    Node* temp2 = mid->next;
+    while(originalHead != NULL) {
+        Node* newNode = new Node(originalHead->data);
+        if(cloneHead == NULL || cloneTail == NULL) cloneHead = cloneTail = newNode;
+        else {
+            cloneTail->next = newNode;
+            cloneTail = newNode;
+        }
+        originalHead = originalHead->next;
+    }
+    originalHead = head;
 
-    while(temp2 != NULL) {
-        if(temp1->data != temp2->data) return false;
-        temp1 = temp1->next;
-        temp2 = temp2->next;
+    Node* original = head;
+    Node* clone = cloneHead;
+
+    while(original != NULL) {
+        if(original->random != NULL) {
+            Node* tempOrg = head;
+            Node* tempClone = cloneHead;
+            while(tempOrg != NULL) {
+                if(original->random == tempOrg) {
+                    clone->random = tempClone;
+                    break;
+                }
+                tempOrg = tempOrg->next;
+                tempClone = tempClone->next;
+            }
+        }
+        original = original->next;
+        clone = clone->next;
+    }
+    return cloneHead;
+}
+
+Node* cloneRandom(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* tempOrg = head;
+    Node* cloneHead = NULL;
+    Node* cloneTail = NULL;
+    unordered_map<Node*, Node*> oldToNew;
+
+    while(tempOrg != NULL) {
+        Node* newNode = new Node(tempOrg->data);
+        if(cloneHead == NULL || cloneTail == NULL) {
+            cloneHead = cloneTail = newNode;
+        }
+        else {
+            cloneTail->next = newNode;
+            cloneTail = newNode;
+        }
+        oldToNew[tempOrg] = cloneTail;
+        tempOrg = tempOrg->next;
     }
 
-    mid->next = revLL(mid->next);
-    return true;
+    tempOrg = head;
+    Node* tempClone = cloneHead;
+    while(tempOrg != NULL) {
+        tempClone->random = oldToNew[tempOrg->random]
+        tempOrg = tempOrg->next;
+        tempClone = tempClone->next;
+    }
+
+    return cloneHead;
+}
+
+Node* cloneRandom3(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* tempOrg = head;
+    while(tempOrg != NULL) {
+        Node* newNode = new Node(tempOrg->data);
+        newNode->next = tempOrg->next;
+        tempOrg->next = newNode;
+        tempOrg = newNode->next;
+    }
+
+    tempOrg = head;
+    while(tempOrg != NULL) {
+        if(tempOrg->random != NULL) {
+            tempOrg->next->random = tempOrg->random->next;
+        }
+        tempOrg = tempOrg->next->next;
+    }
+
+    tempOrg = head;
+    Node* cloneHead = head->next;
+    Node* tempClone = cloneHead;
+    while(tempClone != NULL) {
+        tempOrg->next = tempOrg->next->next;
+        if(tempClone->next != NULL) tempClone->next = tempClone->next->next;
+        tempOrg = tempOrg->next;
+        tempClone = tempClone->next;
+    }
+    return cloneHead;
 }
 
 void printList(Node* head) {
@@ -100,6 +171,6 @@ int main() {
     insertNode(head2, tail2, 5);
     insertNode(head2, tail2, 6);
 
-    Node* ans = mergeTwoLists(head, head2);
+    Node* ans = addingLLs(head, head2);
     printList(ans);
 }
