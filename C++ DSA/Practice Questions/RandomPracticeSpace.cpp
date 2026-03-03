@@ -145,6 +145,40 @@ Node* cloneRandom3(Node* head) {
     return cloneHead;
 }
 
+NodE* mergeLL(Node* LL1, Node* LL2) {
+    if(LL1 == NULL) return LL2;
+    if(LL2 == NULL) return LL1;
+
+    Node* dummyHead = new Node(INT_MIN);
+    Node* temp = dummyHead;
+
+    while(LL1 != NULL && LL2 != NULL) {
+        if(LL1->data <= LL2->data) {
+            temp->down = LL1;
+            temp = LL1;
+            LL1 = LL1->down;
+        }
+        else {
+            temp->down = LL2;
+            temp = LL2;
+            LL2 = LL2->down;
+        }
+        temp->next = NULL;
+    }
+
+    if(LL1 != NULL) temp->down = LL1;
+    if(LL2 != NULL) temp->down = LL2;
+
+    return dummyHead->down;
+}
+
+Node* flattenLL(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* mergeHead = flattenLL(head->next);
+    return mergeLL(head, mergeHead);
+}
+
 void printList(Node* head) {
     if(head == NULL) return;
     Node* temp = head;
