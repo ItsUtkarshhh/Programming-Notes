@@ -1,76 +1,41 @@
 #include<iostream>
-#include<map>
 #include<climits>
+#include<vector>
 using namespace std;
 
-class Node {
-    public:
-    int data;
-    Node* next;
-    Node* prev;
-
-    Node(int data) {
-        this->data = data;
-        this->next = NULL;
-        this->prev = NULL;
-    }
-};
-
-void insertNode(Node* &head, Node* &tail, int data) {
-    Node* newNode = new Node(data);
-    if(head == NULL) {
-        head = tail = newNode;
-        return;
-    }
-    tail->next = newNode;
-    newNode->prev = tail;
-    tail = newNode;
-}
-
-void printLL(Node* &head) {
-    if(head == NULL) return;
-
-    Node* temp = head;
-    while(temp != NULL) {
-        cout<<temp->next<<" > ";
-        temp = temp->next;
-    }
-    cout<<"NULL"<<endl;
-}
-
-// Delete all occurences of a key from the in DLL!
-Node* deleteAllOcc(Node* head, int data) {
-    if(head == NULL) return NULL;
-
-    Node* dummyNode = new Node(INT_MIN);
-    Node* prev = dummyNode;
-    Node* curr = head;
-    Node* forward = NULL;
-
-    while(curr != NULL) {
-        forward = curr->next;
-        if(curr->data == data) {
-            Node* ntd = curr;
-            prev->next = forward;
-            forward->prev = prev;
-            ntd->next = NULL;
-            ntd->prev = NULL;
-            delete ntd;
+int minimumIndex(vector<int>& capacity, int itemSize) {
+    int minSize = INT_MAX;
+    int minSizeIndex = -1;
+    for(int i = 0; i < capacity.size(); i++) {
+        if(capacity[i] < minSize && capacity[i] >= itemSize) {
+            minSize = capacity[i];
+            minSizeIndex = i;
         }
-        prev = curr;
-        curr = forward;
     }
-    return dummyNode->next;
+    return minSizeIndex;
+}
+
+int smallestBalancedIndex(vector<int>& nums) {
+    int minIndex = INT_MAX;
+    for(int i = 0; i < nums.size(); i++) {
+        int sum = 0;
+        int prod = 1;
+        for(int j = 0; j < i; j++) {
+            sum += nums[j];
+        }
+        for(int k = nums.size() - 1; k > i; k--) {
+            prod *= nums[k];
+        }
+        if(sum == prod) {
+            minIndex = min(minIndex, i);
+        }
+    }
+    if(minIndex == INT_MAX) return -1;
+    return minIndex;
 }
 
 int main() {
-    Node* head = NULL;
-    Node* tail = NULL;
-
-    insertNode(head, tail, 1);
-    insertNode(head, tail, 2);
-    insertNode(head, tail, 3);
-    insertNode(head, tail, 4);
-    insertNode(head, tail, 5);
-    insertNode(head, tail, 6);
+    vector<int> arr = {2,1,2};
+    // int itemSize = 5;
+    cout<<smallestBalancedIndex(arr);
 }
