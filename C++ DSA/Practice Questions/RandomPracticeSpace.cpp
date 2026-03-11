@@ -1,41 +1,44 @@
 #include<iostream>
-#include<climits>
 #include<vector>
 using namespace std;
 
-int minimumIndex(vector<int>& capacity, int itemSize) {
-    int minSize = INT_MAX;
-    int minSizeIndex = -1;
-    for(int i = 0; i < capacity.size(); i++) {
-        if(capacity[i] < minSize && capacity[i] >= itemSize) {
-            minSize = capacity[i];
-            minSizeIndex = i;
-        }
+class Node {
+    public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
     }
-    return minSizeIndex;
+};
+
+void insertAtTail(Node* &head, Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
 }
 
-int smallestBalancedIndex(vector<int>& nums) {
-    int minIndex = INT_MAX;
-    for(int i = 0; i < nums.size(); i++) {
-        int sum = 0;
-        int prod = 1;
-        for(int j = 0; j < i; j++) {
-            sum += nums[j];
-        }
-        for(int k = nums.size() - 1; k > i; k--) {
-            prod *= nums[k];
-        }
-        if(sum == prod) {
-            minIndex = min(minIndex, i);
-        }
+Node* deleteAllOcc(Node* head, int data) {
+    if(head == NULL) return head;
+
+    Node* dummy = new Node(data);
+    dummy->next = head;
+
+    Node* previous = dummy;
+    Node* current = head;
+    Node* forward = current->next;
+
+    while(current != NULL) {
+        
     }
-    if(minIndex == INT_MAX) return -1;
-    return minIndex;
 }
 
 int main() {
-    vector<int> arr = {2,1,2};
-    // int itemSize = 5;
-    cout<<smallestBalancedIndex(arr);
+
 }
