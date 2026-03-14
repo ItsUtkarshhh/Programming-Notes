@@ -28,17 +28,25 @@ Node* deleteAllOcc(Node* head, int data) {
     if(head == NULL) return head;
 
     Node* dummy = new Node(data);
-    dummy->next = head;
-
     Node* previous = dummy;
     Node* current = head;
-    Node* forward = current->next;
 
     while(current != NULL) {
-        
+        if(current->data == data) {
+            Node* ntd = current;
+            previous->next = current->next;
+            current->next->prev = previous;
+            ntd->next = ntd->prev = NULL;
+            delete ntd;
+        }
+        else {
+            previous = current;
+        }
+        current = current->next;
     }
+    return dummy->next;
 }
 
 int main() {
-
+    Node* n1
 }
