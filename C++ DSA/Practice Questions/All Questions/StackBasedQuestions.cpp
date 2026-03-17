@@ -1,3 +1,238 @@
+// ------------------------------------------------------------- Lecture Notes Questions ---------------------------------------------------------------------->
+// Problem 1 : Implement Stack using Arrays!
+// Approach : We needed - Parameterized Constructor : For Stack building
+//                      - Copy Constructor : So that we do not perform certain operations on the same stack, like while printing we need to pop, and if we do not use copy constructor, it will be shallow copy while passing the stack as argument in the print function, which maybe dangerous
+//                      - Destructor : To destroy the stack after use.
+//                      - General Operations like : push, pop, peek, isEmpty, isFull, stackSize.
+#include<iostream>
+using namespace std;
+
+class Stack {
+    private:
+    int size;
+    int* arr;
+    int top;
+
+    public:
+    Stack(int size) {
+        this->size = size;
+        arr = new int[size];
+        top = -1;
+    }
+
+    Stack(const Stack& other) { // Deep copy constructor!
+        size = other.size;
+        top = other.top;
+        arr = new int[size];
+
+        for(int i = 0; i <= top; i++) {
+            arr[i] = other.arr[i];
+        }
+    }
+
+    ~Stack() {
+        delete []arr;
+    }
+
+    void push(int data) {
+        if(top < size - 1) {
+            top++;
+            arr[top] = data;
+            return;
+        }
+        else {
+            cout<<"Stack Overflow!";
+            return;
+        }
+    }
+
+    void pop() {
+        if(top >= 0) {
+            top--;
+            return;
+        }
+        else {
+            cout<<"Stack Undeflow!";
+            return;
+        }
+    }
+
+    int peek() {
+        if(top >= 0) {
+            return arr[top];
+        }
+        else {
+            cout<<"Empty List!";
+            return 0;
+        }
+    }
+
+    int stackSize() {
+        return top + 1;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == size - 1;
+    }
+};
+
+void printStack(Stack st) {
+    if(st.isEmpty()) {
+        cout<<"Empty Stack!";
+        return;
+    }
+
+    Stack temp = Stack(st); // Deep copy
+    while(!temp.isEmpty()) {
+        cout<<temp.peek()<<" ";
+        temp.pop();
+    }
+}
+
+int main() {
+    Stack st1(5);
+    st1.push(1);
+    st1.push(2);
+    st1.push(3);
+    st1.push(4);
+    st1.push(5);
+
+    printStack(st1);
+}
+
+// Problem 2 : Implement Stack using Linked Lists!
+// Approach : We needed top variable which will be a pointer to the top, can also use another variable as size to achieve the O(1) TC to find stack size.
+//          : Same components are used here too, just as above, just with a slightly different approach due to presence of Linked List Nodes.
+#include<iostream>
+using namespace std;
+
+class Node {
+    public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+class Stack {
+    private:
+    Node* top;
+
+    public:
+    Stack() {
+        top = NULL;
+    }
+
+    Stack(const Stack& other) {
+        if(other.top == NULL) {
+            top = NULL;
+            return;
+        }
+
+        // copy first node
+        top = new Node(other.top->data);
+
+        Node* currOther = other.top->next;
+        Node* currThis = top;
+
+        while(currOther != NULL) {
+            currThis->next = new Node(currOther->data);
+            currThis = currThis->next;
+            currOther = currOther->next;
+        }
+    }
+
+    ~Stack() {
+        while(top != NULL) {
+            Node* temp = top;
+            top = top->next;
+            temp->next = NULL;
+            delete temp;
+        }
+    }
+
+    void push(int data) {
+        Node* newNode = new Node(data);
+        newNode->next = top;
+        top = newNode;
+    }
+
+    void pop() {
+        if(top == NULL) {
+            cout<<"Stack Underflow!";
+            return;
+        }
+        Node* temp = top;
+        top = top->next;
+        temp->next = NULL;
+        delete temp;
+    }
+
+    int peek() {
+        if(top == NULL) {
+            cout<<"Stack Underflow!";
+            return -1;
+        }
+        return top->data;
+    }
+
+    int stackSize() { // Not Optimized, as it takes O(n) TC. Whereas in array implementation it was O(1) due to "top" variable, we can do that also here by simply using size istance variable and incrementing/decrementing it with push pop methods.
+        if(top == NULL) {
+            cout<<"Stack Underflow!";
+            return -1;
+        }
+        Node* temp = top;
+        int count = 0;
+        while(temp != NULL) {
+            count++;
+            temp = temp->next;
+        }
+        return count;
+    }
+
+    bool isEmpty() {
+        return top == NULL;
+    }
+};
+
+void printStack(Stack st) {
+    if(st.isEmpty()) {
+        cout<<"Stack is Empty!";
+        return;
+    }
+
+    Stack temp = st;
+    while(!st.isEmpty()) {
+        cout<<st.peek()<<" ";
+        st.pop();
+    }
+}
+
+int main() {
+    Stack st1;
+    st1.push(1);
+    st1.push(2);
+    st1.push(3);
+    st1.push(4);
+    st1.push(5);
+
+    printStack(st1);
+}
+
+// Problem 3 : Implement Two Stacks in an Array!
+// Problem 4 : Reverse a String using Stack!
+// Problem 5 : Delete the middle node using Stack!
+// Problem 6 : Add an element at bottom of the Stack!
+// Problem 7 : Reverse a Stack!
+// Problem 8 : Sort a Stack! - Without using Loop!
+
 // ------------------------------------------------------------ Monotonic Stack Concept ----------------------------------------------------------------------->
 // Question 1 : Find the next greater element for each element in an array!
 // Thinking : Although this questions is a most traditional question for Monotonic Stack, we will try to solve it using brute force first!

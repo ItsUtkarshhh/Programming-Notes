@@ -985,7 +985,7 @@ class Stack1 {
 
     // Push Function - Inserts an element into the stack
     void push(int element) {
-        if(size - top > 1) { // Check if space is available
+        if(top < size - 1) { // Check if space is available
             top++; // Move top pointer
             arr[top] = element; // Insert element at top
         }
@@ -1019,6 +1019,18 @@ class Stack1 {
     bool empty() {
         return (top == -1); // Returns true if stack is empty
     }
+
+    int size() {
+        return top + 1;
+    }
+
+    bool isFull() {
+        return top == size - 1;
+    }
+
+    ~Stack1() {
+        delete [] arr;
+    }
 };
 
 int main() {
@@ -1046,6 +1058,15 @@ int main() {
     
     return 0;
 }
+// In C++, we need to free the memory to get the memory free from the object that we created, now here is two things : Object created in stack & Objects created in heap memory.
+// Now, the thing is, if an object is being created in a stack, then in that case once the scope ends, C++ will automatically frees the memory by itself calling the destructor.
+// But, if the object is being created using the new keyword, we need to manually free the memory! using the "delete" keyword. And then C++ will call the destructor to free the memory from that dynamically allocated object.
+
+// Now, if there is no destructor to clean the memory during program getting executed, in case of stack based object, C++ will free all the memory which are created for the program inside the stack, but if during program execution, if there's any memory head based object creation or allocation, those will not be cleaned by C++ itself, we need to clean it, otherwise it will be memory leak.
+// And these memory will not be cleaned until the program does not terminate.
+// Example 1 : LinkedList list1; Stack based allocation of list, but the internal operation may include allocation like Node* newNode = new Node(data); here using the new keyword, the newNode memory gets allocated in the heap, so after program execution, C++ will clean the memory allocated to "list1" in the stack, but will not cleaned for memories like "newNode" in the heap.
+// Example 2 : LinkedList* list2 = new LinkedList(); Now in this case the whole linked list is inside the heap memory, only the pointer is in the stack, so the same things applies here as well.
+// In the example 1, the list1 object will be stored in the stack memory, but list2 object will be stored in the heap memory.
 
 // Implementation of Stack (Using LinkedList)!
 // A stack follows the LIFO (Last In, First Out) principle, where the last inserted element is the first one to be removed. We can implement this behavior efficiently using a singly linked list.
@@ -1078,6 +1099,8 @@ class NodeforStack2 {
 class Stack2 {
     private:
     NodeforStack2* top; // Top pointer
+    // int size; // If you do not maintain this instance variable for this implementation, then while finding out the size, it will take O(n) time complexity, whereas for arrays based implementation its already O(1) as it just need to return top + 1.
+    // But due to the structural difference between arrays and LLs, we need to maintain this instance variable to achieve constant time complexity while finding size of the stack (implemented via LL). Simple size++ while push operations & size-- while pop operations.
 
     public:
     // Constructor - Initialize top to NULL
