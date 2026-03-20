@@ -1573,6 +1573,8 @@ int main() {
 #include <stack>
 using namespace std;
 
+// In this particular problem, separating into helper and wrapper functions is not strictly necessary since it doesn’t affect performance or significantly improve clarity.
+// However, it demonstrates the concept of separation of concerns. In more complex recursive or backtracking problems, helper functions are useful to maintain a clean public interface, manage additional state parameters, and improve code reusability
 void insertAtBottomHelper(stack<int> &inputStack, int value) {
     // Base case
     if (inputStack.empty()) {
@@ -1587,17 +1589,10 @@ void insertAtBottomHelper(stack<int> &inputStack, int value) {
     inputStack.push(topElement);
 }
 
-stack<int> insertAtBottom(stack<int> &inputStack, int value) {
+// stack<int> insertAtBottom(stack<int> &inputStack, int value) { // We do not need to have a return type for this method, as we are already using "pass by reference using &" - This is same for any implementation of this method.
+void insertAtBottom(stack<int> &inputStack, int value) {
     insertAtBottomHelper(inputStack, value);
-    return inputStack;
-}
-
-void printStack(stack<int> stk) {
-    while (!stk.empty()) {
-        cout << stk.top() << " ";
-        stk.pop();
-    }
-    cout << endl;
+    // return inputStack;
 }
 
 void reverseStack(stack<int> &inputStack) {
@@ -1611,6 +1606,14 @@ void reverseStack(stack<int> &inputStack) {
     // Recursive call
     reverseStack(inputStack);
     insertAtBottom(inputStack, topElement);
+}
+
+void printStack(stack<int> stk) {
+    while (!stk.empty()) {
+        cout << stk.top() << " ";
+        stk.pop();
+    }
+    cout << endl;
 }
 
 int main() {

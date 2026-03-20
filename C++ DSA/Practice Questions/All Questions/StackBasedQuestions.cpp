@@ -698,6 +698,88 @@ int main() {
 }
 
 // Problem 7 : Reverse a Stack!
+// Approach 1 : Do a recursive call for recursion, but to insert the top element at the bottom, use another stack with an iterative approach!
+// Approach 2 : To reverse a stack, we remove the top element and recursively reverse the remaining stack. After that, we insert the removed element at the bottom.
+//            : Key Idea : The actual modification happens during the backtracking phase of recursion, where elements are reinserted in reversed order.
+//            : Strategy : This follows recursive decomposition, where the problem is reduced from n to n-1, and then rebuilt during the return phase.
+//            : Constraint : Since we cannot use extra data structures, we use the recursion call stack, as an implicit temporary storage.
+#include<iostream>
+#include<stack>
+using namespace std;
+
+void reverseStack1(stack<int> &st) {
+    if(st.empty()) return;
+
+    int topElement = st.top();
+    st.pop();
+    reverseStack2(st);
+
+    stack<int> temp;
+    while(!st.empty()) {
+        temp.push(st.top());
+        st.pop();
+    }
+
+    st.push(topElement);
+
+    while(!temp.empty()) {
+        st.push(temp.top());
+        temp.pop();
+    }
+}
+
+void pushAtBottomHelper(stack<int> &st, int value) {
+    if(st.empty()) {
+        st.push(value);
+        return;
+    }
+
+    int topElement = st.top();
+    st.pop();
+
+    pushAtBottomHelper(st, value);
+    st.push(topElement);
+}
+
+void pushAtBottom(stack<int> &st, int value) {
+    pushAtBottomHelper(st, value);
+}
+
+void reverseStack2(stack<int> &st) {
+    if(st.empty()) return;
+
+    int topElement = st.top();
+    st.pop();
+
+    reverseStack2(st);
+    pushAtBottom(st, topElement);
+}
+
+void printStack(stack<int> st) {
+    if(st.empty()) {
+        cout<<"Empty List";
+        return;
+    }
+
+    while(!st.empty()) {
+        cout<<st.top()<<" ";
+        st.pop();
+    }
+    cout<<endl;
+}
+
+int main() {
+    stack<int> st;
+    st.push(1);     
+    st.push(2);     
+    st.push(3);     
+    st.push(4);     
+    st.push(5);
+    
+    reverseStack2(st);
+    printStack(st);
+}
+
 // Problem 8 : Sort a Stack! - Without using Loop!
 // Problem 9 : Valid Parentheses!
 // Problem 10 : Remove redudant brackets!

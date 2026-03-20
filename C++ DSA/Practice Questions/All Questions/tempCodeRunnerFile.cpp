@@ -1,69 +1,81 @@
 #include<iostream>
-#include<stack>
 using namespace std;
 
-void addBottomOfStack(stack<int> &st, int value) {
-    if(st.empty()) {
-        cout<<"Empty stack!";
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+void insertNode(Node* &head, Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL || tail == NULL) {
+        head = tail = newNode;
         return;
     }
 
-    stack<int> temp;
-    while(!st.empty()) {
-        temp.push(st.top());
-        st.pop();
-    }
-
-    st.push(value);
-
-    while(!temp.empty()) {
-        st.push(temp.top());
-        temp.pop();
-    }
+    tail->next = newNode;
+    tail = newNode;
 }
 
-void addBottomOfStack2Helper(stack<int> &st, int value) {
-    if(st.empty()) {
-        st.push(value);
-        return;
+int findLen(Node* head) {
+    if(head == NULL) return 0;
+    if(head->next == NULL) return 1;
+
+    Node* temp = head;
+    int count = 0;
+    while(temp != NULL) {
+        temp = temp->next;
+        count++;
     }
-    int val = st.top();
-    st.pop();
-    addBottomOfStack2Helper(st, value);
-    st.push(val);
+    return count;
 }
 
-void addBottomOfStack2(stack<int> &st, int value) {
-    if(st.empty()) {
-        cout<<"Empty stack!";
-        return;
+Node* findMid(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
     }
-    addBottomOfStack2Helper(st, value);
+    int mid = findLen(head) / 2;
+    int count = 1;
+
+    Node* temp = head;
+    while(count <= mid) {
+        temp = temp->next;
+        count++;
+    }
+
+    return temp;
 }
 
-void printStack(stack<int> st) {
-    if(st.empty()) {
-        cout<<"Empty Stack!";
-        return;
+Node* findMid2(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
     }
 
-    while(!st.empty()) {
-        cout<<st.top()<<" ";
-        st.pop();
+    Node* fast = head;
+    Node* slow = head;
+    while(fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
     }
+    return slow;
 }
 
 int main() {
-    stack<int> st;
-    st.push(1);
-    st.push(2);
-    st.push(3);
-    st.push(4);
-    st.push(5);
+    Node* head = NULL;
+    Node* tail = NULL;
+    insertNode(head, tail, 1);
+    insertNode(head, tail, 2);
+    insertNode(head, tail, 3);
+    insertNode(head, tail, 4);
+    insertNode(head, tail, 5);
+    insertNode(head, tail, 6);
 
-    int val;
-    cin>>val;
-
-    addBottomOfStack2(st, val);
-    printStack(st);
+    cout<<findMid(head)->data<<endl;
+    cout<<findMid2(head)->data<<endl;
 }
