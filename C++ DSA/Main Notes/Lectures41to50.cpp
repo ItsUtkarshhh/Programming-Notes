@@ -4065,78 +4065,82 @@ int main() {
 // Space Complexity (SC) : Recursive calls reverse K nodes at a time, requiring n/K recursive calls. Since each call uses O(K) space, total space used is O(n).
 
 // Implementation Approach 2 :
-Node* revK2(Node* head, Node* tail, int k) {
-    if(head == NULL) return NULL;
+Node* reverseLL(Node* head, int k) {
+    if(head == NULL || head->next == NULL) return head;
 
-    Node* dummy = new Node(-1);
-    dummy->next = head;
-    Node* prevGroupEnd = dummy;
+    Node* dummyNode = new Node(INT_MIN);
+    dummyNode->next = head;
+    Node* prevGroupEnd = dummyNode;
 
     while(true) {
-        Node* kth = prevGroupEnd; // groupEnd
+        Node* kth = prevGroupEnd;
         int i = 0;
         while(i < k && kth != NULL) {
             kth = kth->next;
             i++;
         }
-        
+
         if(kth == NULL) break;
 
         Node* groupStart = prevGroupEnd->next;
-        Node* nextGroupStart = kth->next;
-
+        Node* newGroupStart = kth->next;
         kth->next = NULL;
 
         Node* prev = NULL;
         Node* curr = groupStart;
+        Node* forward = NULL;
 
         while(curr != NULL) {
-            Node* forward = curr->next;
+            forward = curr->next;
             curr->next = prev;
             prev = curr;
             curr = forward;
         }
 
         prevGroupEnd->next = prev;
-        groupStart->next = nextGroupStart;
+        groupStart->next = newGroupStart;
         prevGroupEnd = groupStart;
     }
-    return dummy->next;
+    return dummyNode->next;
 }
 
 // Implementation Approach 3 :
-Node* revK3(Node* head, Node* tail, int k) {
-    if(head == NULL) return NULL;
+Node* reverseLL2(Node* head, int k) {
+    if(head == NULL || head->next == NULL) return head;
 
-    Node* dummy = new Node(-1);
-    dummy->next = head;
-    Node* prevGroupEnd = dummy;
+    Node* dummyNode = new Node(INT_MIN);
+    dummyNode->next = head;
+    Node* prevGroupEnd = dummyNode;
 
     while(true) {
-        Node* kth = prevGroupEnd; // groupEnd
+        Node* kth = prevGroupEnd;
         int i = 0;
         while(i < k && kth != NULL) {
             kth = kth->next;
             i++;
         }
-        
+
         if(kth == NULL) break;
 
         Node* groupStart = prevGroupEnd->next;
-        Node* prev = kth->next;
-        Node* curr = groupStart;
+        Node* newGroupStart = kth->next;
 
-        for(i = 0; i < k; i++) {
-            Node* forward = curr->next;
+        Node* prev = newGroupStart;
+        Node* curr = groupStart;
+        Node* forward = NULL;
+
+        while(curr != newGroupStart) {
+            forward = curr->next;
             curr->next = prev;
             prev = curr;
             curr = forward;
         }
 
         prevGroupEnd->next = prev;
+        groupStart->next = newGroupStart;
         prevGroupEnd = groupStart;
     }
-    return dummy->next;
+    return dummyNode->next;
 }
 
 // Question 2 : Check whether a LinkedList is Circular or Not.
