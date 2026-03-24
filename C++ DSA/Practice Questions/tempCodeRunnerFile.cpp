@@ -64,7 +64,7 @@ Node* reverseKNodes(Node* head, int k) {
     return dummyNode->next;
 }
 
-Node* reverseKNodes1(Node* head, int k) {
+Node* reverseKNodes(Node* head, int k) {
     if(head == NULL) {
         return NULL;
     }

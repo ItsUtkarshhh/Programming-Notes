@@ -217,7 +217,9 @@ int main() {
 //                                 : And then we create a dummyNode, because we are not sure about the new head! then few important pointers like prevGroupEnd to track the end of previus group which will be helpful while linking previous group to the new group.
 //                                 : Now another is, groupStart which determines the current group start and kth pointer which is technically curr groupEnd, but will become prevGroupEnd when we move forward.
 //                                 : Now in a similar manner, we simply keep traversing the list one by one! until we do find K nodes!
-// Approach 2 (Recursive Approach) : 
+// Approach 2 (Recursive Approach) : In order to think in the recursive way, we need to think about minimizing the problem to least! and then building it at every step by increasing the number of nodes!
+//                                 : Means, what will I do if there is no nodes, I will return NULL, and what if there are "n" nodes, and k = 2, thinking in recursion would be, I will break the linkedlist into K parts with each recursion call! where this recursive stack will behave as a hidden memory to save my progress kind of stuff.
+//                                 : And I will reverse that every K size list in every recursive call until we reaches the base case of recursion, which will be curr == NULL, and when it does that, we start returning, for the first time we will simply return NULL, and as the moment when base case was hit, was when were dealing with the last k size list, and we have applied the logic in such a way, that after recursive call returns, the returned node (whether NULL/Non-NULL) will be attached to the next of the previous list's head. And after that when recursion unbinds, every previous head will get connected to the prev.
 Node* reverseLL(Node* head, int k) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -316,3 +318,184 @@ Node* reverseRecursion(Node* head, int k) {
     }
     return prev;
 }
+
+// Problem 4 : Check whether a LinkedList is Circular or Not.
+// Approach 1 : If we want to check for the full circle, its simple just check whether after traversing some temp node in a list moving forward, does it ever become NULL or again points at head, in either of the case we have our answer!
+// Approach 2 (Floyd's Cycle Algorithm) : For Incomplete circle : Intuitive thinking will be, if there are two cycles on a track - one's speed is twice the other's, then while cycling on a circular track, they will eventually meet.
+//                                      : Mathematically, what's happening is : Let L be distance (number of nodes) to reach the start of circular track.
+//                                                                            : Let t be the number steps (nodes) traversed by slow & Let C be the length of the circular track.
+//                                                                            : Now, if slow traversed "t" distance, fast must already traversed "2t" distance, and within the circular track the distance will be calculated with "(mod)C".
+//                                                                            : And distance covered inside the circular track will be "t-L" for slow & "2t-L" for fast. Overall total distance travelled by both slow and fast will be "(t-L)modC" by slow & "(2t-L)modC" by fast. And meeting condition should be (t-L)modC = (2t-L)modC.
+//                                                                            : Which gives t = 0, which means "t = kC" - this equation can confirm that "Fast has gained exactly one full lap over slow." & can also be interpreted as "slow has traversed kC distance from start of the List"
+// Approach 3 (Hashing) : Simply traverse the list, if the current node is marked as visited, return true, otherwise first mark it as true and then move forward. And keep doing it until the list end.
+bool checkCircular(Node* head) {
+    if(head == NULL) return false;
+
+    Node* temp = head;
+
+    while(temp != NULL) {
+        temp = temp->next;
+        if(temp == head) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkLoop(Node* head) {
+    if(head == NULL) return false;
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next;
+        if(fast != NULL) fast = fast->next;
+
+        if(slow == fast) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkLoop2(Node* head) {
+    if(head == NULL) return false;
+
+    unordered_map<Node*, bool> visited; // Also can use unordered_set - as order or duplicates does not matter!
+    Node* temp = head;
+
+    while(temp != NULL) {
+        if(visited[temp]) return true;
+        visited[temp] = true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+// Problem 5 : Finding the starting node of the Loop inside the List!
+// Approach 1 (Hashing) : We cab simply use the hashing, as while traversing, if we again meet the visited node, then that is the starting point of the loop!
+// Approach 2 (Floyd's Cycle Algorithm) : Intuition is basically, if two runners are running on a track, and from the point of their meeting, if another runner starts running at the same pace as of the two runners already running in the circular path, they will eventually meet at the starting point in of circular path.
+//                                      : Mathematics proves it : 1. Suppose L - Distance from head to starting point of the circular path, M - Distance from the starting point to the meeting point, C - Total length of the circular path.
+//                                                              : 2. We know that, slow total distance is = L + M= kC (as slow meets fast first time after fast exactly completes its first full round), so effectively = slow total distance = L + M = C
+//                                                              : 3. Now, from equation - L + M = kC, we know "k" is just some full circles, so effectively, L + M = C, hence L = C - M - Which means : Distance from head to cycle start = Distance from meeting point to cycle start.
+//                                      : Which creates symmetry, hence the algorithm based on this logic works.
+Node* checkLoop(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next;
+        if(fast != NULL) fast = fast->next;
+
+        if(slow == fast) {
+            return slow;
+        }
+    }
+    return NULL;
+}
+
+Node* startingNode(Node* head) {
+    if(head == NULL) return NULL;
+
+    unordered_map<Node*, bool> visited; // Also can use unordered_set - as order or duplicates does not matter!
+    Node* temp = head;
+
+    while(temp != NULL) {
+        if(visited[temp]) return temp;
+        visited[temp] = true;
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+Node* startingNode2(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* intersection = checkLoop(head);
+    if(intersection == NULL) return NULL; 
+
+    Node* slow = head;
+
+    while(slow != intersection) {
+        slow = slow->next;
+        intersection = intersection->next;
+    }
+    return slow;
+}
+
+// Problem 6 : Remove the Loop!
+// Approach 1 (Hashing using sets/maps) : We can simply can check the next node to be visited or not, by marking the first item already visited, and then traversing until the end. And when the next node is visited then we can simply cur the loop link from there.
+// Approach 2 (Use Floyd Algorithm) : Simply get the starting node of the loop, and traverse until the temp->next != starting, and then simply break the list from there. This solution works because the Floyd's Algorithm in startingNode & checkLoop actually works.
+Node* checkLoop(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next;
+        if(fast != NULL) fast = fast->next;
+
+        if(slow == fast) {
+            return slow;
+        }
+    }
+    return NULL;
+}
+
+Node* startingNode(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* intersection = checkLoop(head);
+    if(intersection == NULL) return NULL; 
+
+    Node* slow = head;
+
+    while(slow != intersection) {
+        slow = slow->next;
+        intersection = intersection->next;
+    }
+    return slow;
+}
+
+Node* removeLoop(Node* head) {
+    if(head == NULL) return NULL;
+
+    unordered_set<Node*> visited;
+    Node* temp = head;
+
+    while(temp != NULL && temp->next != NULL) {
+        if(visited.find(temp->next) != visited.end()) {
+            temp->next = NULL;
+            return head;
+        }
+        visited.insert(temp);
+        temp = temp->next;
+    }
+
+    return head;
+}
+
+Node* removeLoop(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* starting = startingNode(head);
+    if(starting == NULL) return NULL;
+    Node* temp = starting;
+
+    while(temp->next != starting) {
+        temp = temp->next;
+    }
+
+    temp->next = NULL;
+    return head;
+}
+
+// Problem 7 : Remove duplicates from a Linked List - Sorted
+// Approach 1 : 
