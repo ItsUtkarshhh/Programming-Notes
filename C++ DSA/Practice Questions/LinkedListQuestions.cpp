@@ -498,4 +498,189 @@ Node* removeLoop(Node* head) {
 }
 
 // Problem 7 : Remove duplicates from a Linked List - Sorted
-// Approach 1 : 
+// Approach 1 : Simplest approach would be insert all the nodes inside a ordered set and then simply re-iterate it to create a new list. It will cost extra space tho.
+// Approach 2 : Simply iterate the list in a nested loop structure, and remove duplicate nodes.
+// Approach 3 : The best and most optimal approach would be, iterating using two pointers, one will be to tell that till where the list has no duplicates & another will be actually use to track duplicates and we will just keep adjusting links to always point at the temp.
+//            : Here, there is no point to use a dummyNode, as because dummy nodes are used generally when we are not sure whether the head of the list will be remain there or not, we only use it when the head of the list may change due to deletion, traversal or any operation.
+Node* deleteDuplicates(Node* head) {
+    if(head == NULL) return NULL;
+
+    set<int> st;
+    Node* temp = head;
+    while(temp != NULL) {
+        st.insert(temp->val);
+        temp = temp->next;
+    }
+
+    Node* dummyHead = new Node(INT_MIN);
+    Node* dummyTail = dummyHead;
+    for(int x : st) {
+        Node* newNode = new Node(x);
+        dummyTail->next = newNode;
+        dummyTail = newNode;
+    }
+    return dummyHead->next;
+}
+
+Node* deleteDuplicates(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* curr = head;
+    while(curr != NULL) {
+        Node* temp = curr;
+        Node* tempNext = curr->next;
+        while(tempNext != NULL) {
+            if(temp->val == tempNext->val) {
+                Node* ntd = tempNext;
+                temp->next = tempNext->next;
+                tempNext = tempNext->next;
+                ntd->next = NULL;
+                delete ntd;
+            }
+            else {
+                temp = temp->next;
+                tempNext = tempNext->next;
+            }
+        }
+        curr = curr->next;
+    }
+    return head;
+}
+
+Node* deleteDuplicates(Node* head) { // Here you can also choose to delete the duplicate node, but just chose to adjust the links around it
+    if(head == NULL) return NULL;
+
+    Node* correct = head;
+    Node* temp = correct->next;
+
+    while(temp != NULL) {
+        if(correct->val == temp->val) {
+            correct->next = temp->next;
+        }
+        else {
+            correct = temp;
+        }
+        temp = temp->next;
+    }
+    return head;
+}
+
+// Problem 8 : Remove duplicates from a Linked List - UnSorted
+// Approach 1 : Here the nested approach will still work! As the nested loop does not care for any sorted structure!
+// Approach 2 : Sort the list using merge or quick sort and then simply follow the previous sorted linkedlists approach! - Here everything will be same as above one, just the difference will be for merge sort, that will practice when question comes.
+// Approach 3 : Use Hashing : using unordered set, iterate through the list and store elements in the set and once you visit a value which is already there in the set, simply remove it by adjusting pointers accordingly.
+Node* deleteDuplicates(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* curr = head;
+    while(curr != NULL) {
+        Node* temp = curr;
+        Node* tempNext = curr->next;
+        while(tempNext != NULL) {
+            if(temp->val == tempNext->val) {
+                Node* ntd = tempNext;
+                temp->next = tempNext->next;
+                tempNext = tempNext->next;
+                ntd->next = NULL;
+                delete ntd;
+            }
+            else {
+                temp = temp->next;
+                tempNext = tempNext->next;
+            }
+        }
+        curr = curr->next;
+    }
+    return head;
+}
+
+Node* deleteDuplicates(Node* head) {
+    if(head == NULL) return NULL;
+
+    unordered_set<int> exist;
+    Node* prev = head; // Here you need to understand an important insight into problem solving : Which is - When you build a logic, you try to follow every instruction of it, and change your direction of thinking/execution/or writing code for some special cases like here!
+    // Here, its fine, Node* prev = head works fine, but it breaks the "logical" consistency of the problem, we used this method where we meant to make prev pointer a pointer which will denote the large "processed" & "unique" node of the list! but we initially only before processing if we put prev = head, means we are breaking the logocal consistency!
+    // It may not break correctness in simple cases, but it weakens the invariant, which can lead to bugs in other variations or extensions!
+    Node* curr = prev;
+    while(curr != NULL) {
+        if(exist.find(curr->data) != exist.end()) {
+            prev->next = curr->next;
+        }
+        else {
+            exist.insert(curr->data);
+            prev = curr;
+        }
+        curr = curr->next;
+    }
+}
+
+// Problem 9 : Sort 0s 1s 2s - Linked List
+// Approach 1 : Simply insert all the elements into an array, sort and retrieve again in the same list!
+// Approach 2 : Simply use the merge sort algorithm!
+// Approach 3 : Simply insert in an array and use the Dutch National Flag Algorithm!
+// Approach 4 : Simply count the 0s, 1s, 2s and then just modify the values in the lists!
+// Approach 5 : We can simply create a new list while traversing the original list and creating a new list using the original list values!
+// Approach 6 : Simple iterate over the list using three dummy pointers, one for 1s, 2s & 3s and so on. And then just build there separate lists and then merge them together! - Here we can use dummynodes because we are not sure about the head, that which will be the head!
+Node* sort012(Node* head) {
+    if(head == NULL) {
+        return NULL;
+    }
+
+    Node* zeroHead = new Node(INT_MIN);
+    Node* zeroTail = zeroHead;
+
+    Node* oneHead = new Node(INT_MIN);
+    Node* oneTail = oneHead;
+
+    Node* twoHead = new Node(INT_MIN);
+    Node* twoTail = twoHead;
+
+    Node* temp = head;
+    while(temp != NULL) {
+        if(temp->data == 0) {
+            zeroTail->next = temp;
+            zeroTail = temp;
+        }
+        else if(temp->data == 1) {
+            oneTail->next = temp;
+            oneTail = temp;
+        }
+        else {
+            twoTail->next = temp;
+            twoTail = temp;
+        }
+        temp = temp->next;
+    }
+
+    if(oneHead->next != NULL) {
+        zeroTail->next = oneHead->next;
+    }
+    else {
+        zeroTail->next = twoHead->next;
+    }
+
+    oneTail->next = twoHead->next;
+    twoTail->next = NULL;
+
+    head = zeroHead->next;
+    delete zeroHead;
+    delete oneHead;
+    delete twoHead;
+
+    return head;
+}
+
+// Problem 10 : Merge Two Linked Lists
+// Approach 1 : If both the lists are sorted : Simply traverse using two pointers L1 & L2 and simply compare and modify the links between the nodes!
+// Approach 2 : If both the lists are unsorted : Sort them and apply the previous approach!
+// Approach 3 : If one sorted and one unsorted, and your main reference list is the unsorted one!
+Node* mergeTwoLists(Node* LL1, Node* LL2) {
+    if(LL1 == NULL) return LL2;
+    if(LL2 == NULL) return LL1;
+
+}
+
+Node* mergeTwoLists(Node* LL1, Node* LL2) {
+    if(LL1 == NULL) return LL2;
+    if(LL2 == NULL) return LL1;
+}
