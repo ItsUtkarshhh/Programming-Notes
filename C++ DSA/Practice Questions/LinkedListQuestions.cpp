@@ -673,14 +673,65 @@ Node* sort012(Node* head) {
 // Problem 10 : Merge Two Linked Lists
 // Approach 1 : If both the lists are sorted : Simply traverse using two pointers L1 & L2 and simply compare and modify the links between the nodes!
 // Approach 2 : If both the lists are unsorted : Sort them and apply the previous approach!
-// Approach 3 : If one sorted and one unsorted, and your main reference list is the unsorted one!
+// Approach 3 : If one sorted and one unsorted, and your main reference list is the unsorted one! Then simply pick each node from the unsorted list and keep inserting it into the sorted list in sorted manner!
 Node* mergeTwoLists(Node* LL1, Node* LL2) {
     if(LL1 == NULL) return LL2;
     if(LL2 == NULL) return LL1;
 
+    Node* dummyHead = new Node(INT_MIN);
+    Node* dummyTail = dummyHead;
+
+    while(LL1 != NULL && LL2 != NULL) {
+        if(LL1->data < LL2->data) {
+            dummyTail->next = LL1;
+            dummyTail = LL1;
+            LL1 = LL1->next;
+        }
+        else {
+            dummyTail->next = LL2;
+            dummyTail = LL2;
+            LL2 = LL2->next;
+        }
+    }
+
+    if(LL1 != NULL) dummyTail->next = LL1;
+    if(LL2 != NULL) dummyTail->next = LL2;
+
+    return dummyHead->next;
 }
 
-Node* mergeTwoLists(Node* LL1, Node* LL2) {
+Node* insertNode(Node* head, Node* nodeToInsert) {
+    if(head == NULL || head->data >= nodeToInsert->data) {
+        nodeToInsert->next = head;
+        head = nodeToInsert;
+        return head;
+    }
+
+    Node* temp = head;
+
+    while(temp->next != NULL && temp->next->data < nodeToInsert->data) {
+        temp = temp->next;
+    }
+
+    nodeToInsert->next = temp->next;
+    temp->next = nodeToInsert;
+
+    return head;
+}
+
+Node* mergeTwoLists2(Node* LL1, Node* LL2) {
     if(LL1 == NULL) return LL2;
     if(LL2 == NULL) return LL1;
+
+    Node* temp = LL1;
+
+    while(temp != NULL) { // LL1 is unsorted
+        Node* remainingList = temp->next;
+        temp->next = NULL;
+        
+        LL2 = insertNode(LL2, temp);
+
+        temp = remainingList;
+    }
+    return LL2;
 }
