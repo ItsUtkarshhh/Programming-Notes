@@ -1,13 +1,28 @@
 // ------------------------------------------------------- Linked List Questions ------------------------------------------------------------------------>
-// Problem 1 : Reverse a Linkedlist!
-// Approach 1 (Array + Two Pointers) : Convert the linked list into an array. Use two pointers (left and right) and swap elements while moving them toward the center.
-// Approach 2 (Iterative Pointer Reversal) : Use three pointers: prev, curr, and forward. curr points to the current node. forward stores curr->next so we don’t lose the rest of the list. Reverse the link by pointing curr->next to prev. Move all pointers forward until curr == NULL.
-// Approach 3 (Recursive Reversal) : In this approach too, we follow a similar strategy as of previous iterative one.
-//                                 : We know that will need a prev, curr always so that we can always point our curr to prev in order to reverse the links of linked list.
-//                                 : But that's not it, we also need to keep the track of remaining linked list, that's the job of forward. So as now we know the roles of each pointer, we will simple initiate with the prev & curr first, initially prev will be NULL & curr will be at head.
-//                                 : And now, we will create a separate recursive rev function, because the current main function, is to handle the edge cases related to the linked list, like empty list or single node cases, also as the parameter only has a head, why we will ask the user to input the curr and prev pointers as an argument, that is why we need separated functions so that we can use it for better abstraction of functionality and design.
-//                                 : Now after this, in order to move forward in the list, we will create a forward pointer which will be curr->next and will pass it into the recursive helper function for easy traversal (why need to traverse?) Because in recursion we first reduce the problem at every step until it gets so small and reaches the base case and then the based case returns and while returning down in the call stack, we actually start solving the problem.
-//                                 : That's why we solve it change the curr->next pointing to prev once recursive method returns and executes the later line of code.
+// ------------------------------------------------------- Question 1 : Reverse a Linkedlist ------------------------------------------------------------------------>
+// Pattern Recognition : "Linked List Traversal & Pointer Manipulation" - Very Common Pattern, used in every next question you solve for Linked List.
+//                     : "Three pointers - prev, curr, forward" - Not so common as first one, but yes used oftenly for the specified use cases.
+// Difficulty : Easy
+// Understand the problem : Reversing a linked list means changing the direction of the links between nodes. Unlike arrays, we cannot swap elements using indices because linked lists do not support random access.
+// Special case handling : Empty list
+//                       : Single node
+// Approach 1 (Brute Force) : If the problem is that arrays have indexes, so they are easy & intuitive to reverse using random access.
+//                          : So, simply insert all the nodes into an array, and reverse the array, and either rebuild a new list or change the values of the original list starting from first node.
+//                          : TC = O(n) & SC = O(n)
+// Approach 2 (Optimized) : Approach 1 is taking extra space, so need to think of some solution in-place!
+//                        : For that, we know, each node contains a pointer (next) that determines the order of the list. So, reversing the list means : Updating every node’s next pointer to point to its previous node instead of the next one.
+//                        : The main challenge was : While reversing the pointers, we risk losing access to the remaining part of the list.
+//                        : But, as a solution, we can use three pointers : pointer 1 : pointer where we are going to point the current node to reverse the order - prev
+//                                                                        : pointer 2 : tracking current pointer, which pointer is going to be manipulated - curr
+//                                                                        : pointer 3 : temporarily stores the next node (to avoid losing the list) - forward
+//                        : TC = O(n) & SC = O(1)
+// Approach 3 (Recursive Reversal) : In the recursive approach, we reverse the linked list by breaking the problem into smaller subproblems.
+//                                 : Instead of explicitly maintaining prev, curr, and next like in iteration, recursion uses the call stack to manage state.
+//                                 : Reverse the rest of the list first, then fix the current node. Assume that all nodes after the current node are already reversed. Then adjust the current node to fit into the reversed structure
+//                                 : Key Insight : Recursion works in two phases - Going down → reach last node (base case) & Coming back → reverse links step by step
+//                                               : Although, recursion is working here, but there is no practical advantage of using recursion for reversing a linked list compared to the iterative approach, in this case.
+//                                 : TC = O(n) & SC = O(n) - Extra space due to recursion call stack.
+//                                 : Recursion is not required here for optimization, but it demonstrates an alternative way of solving the problem using divide-and-conquer and backtracking. However, iterative is more space-efficient and preferred.
 #include<iostream>
 #include<vector>
 using namespace std;
@@ -66,7 +81,7 @@ Node* reverseLL2(Node* head) {
     Node* prev = NULL;
     Node* curr = head;
     Node* forward = NULL;
-
+    
     while(curr != NULL) {
         forward = curr->next;
         curr->next = prev;
@@ -90,7 +105,7 @@ void revRecursive(Node* &head, Node* &tail, Node* prev, Node* curr) {
 
 Node* reverseLL3(Node* &head, Node* &tail) {
     if(head == NULL || head->next == NULL) return head;
-
+    
     Node* prev = NULL;
     Node* curr = head;
 
@@ -124,11 +139,28 @@ int main() {
     printNode(head);
 }
 
-// Problem 2 : Find Middle of the Linked List!
-// Approach 1 : Compute the length of the list and identify the middle index (len / 2). Traverse the list up to the node just before the middle,
-//            : then adjust pointers to remove the middle node. This can be done using either two pointers (prev & curr) or a single temp pointer.
-// Approach 2 (Optimized) : Use the fast and slow pointer technique. Move fast by 2 steps and slow by 1 step. When fast reaches the end, slow will be at the middle.
-//                        : Maintain a previous pointer to remove the middle node efficiently.
+// Problems with similar pattern : Reverse Linked List 2 ()
+//                               : Reverse Nodes in K Group
+//                               : Palindrome Linked List
+//                               : Rotate List
+// ------------------------------------------------------- Question 2 : Find Middle of the Linked List! ------------------------------------------------------------------------>
+// Pattern Recognition : "Two Pointers using Fast & Slow pointer" - Primary pattern
+//                     : "Linked List Traversal" - Secondary pattern
+// Difficulty : Easy
+// Understand the problem : In arrays, finding the middle element is straightforward : We can directly access index = n/2 in O(1) time.
+//                        : However, in a linked list, random access is not possible. We must traverse the list sequentially to reach any position.
+// Special case handling : Empty List
+//                       : Single node
+// Approach 1 (Brute Force) : Now, again if the problem is the data structure itself, we can simply change the data structure and input the values in an array and simply give the answer by finding the length in O(1).
+//                          : TC = O(n) && SC = O(n)
+// Approach 2 (Optmized Brute Force) : Instead of using extra space, we can : Find length of the linked list & Traverse again to reach middle (len/2).
+//                                   : Start counter with 0, and traverse the list, until the count < (len/2) condition is true!
+//                                   : Rule of traversal, while traversing in LL or any data structure, just think about : What is the condition where I need to stop! or What is the last valid condition!
+//                                   : TC = O(n) && SC = O(1)
+// Approach 3 (Optimized Solution) : But, still the above approach is traversing the LL twice.
+//                                 : Here comes a two pointers using fast & slow ppointer technique - Where on moving one pointer two times and one only one time, and when the fast one becomes NULL or reaches last node, whichever comes first, the slow will pointing at the middle node!
+//                                 : Why it works : Because think about it - If you are moving one pointer with x speed and one with 2x speed, so its obvious by the time faster one will cover d distance, the slower one will only be able to cover d/2 distance, that is the core logic of it!
+//                                 : TC = O(n) & SC = O(1)
 #include<iostream>
 using namespace std;
 
@@ -173,7 +205,7 @@ Node* findMid(Node* head) {
     }
     int mid = findLen(head) / 2;
     int count = 1;
-
+    
     Node* temp = head;
     while(count <= mid) {
         temp = temp->next;
@@ -187,7 +219,7 @@ Node* findMid2(Node* head) {
     if(head == NULL || head->next == NULL) {
         return head;
     }
-
+    
     Node* fast = head;
     Node* slow = head;
     while(fast != NULL && fast->next != NULL) {
@@ -211,7 +243,15 @@ int main() {
     cout<<findMid2(head)->data<<endl;
 }
 
-// Problem 3 : Reverse the Linked List in a group of size K.
+// Problems with similar patterns : Split Linked List into Two Halves
+//                                : Linked List Cycle Loop
+//                                : Find Start of Cycle
+//                                : Palindrome Linked List
+//                                : Remove Nth Node from End
+//                                : Intersection of Two Linked Lists
+// ------------------------------------------------------- Question 3 : Reverse the Linked List in a group of size K! ------------------------------------------------------------------------>
+// Pattern Recognition : "Linked List Traversal & Pointer Manipulation"
+//                     : ""
 // Approach 1 (Iterative Approach) : Approach is simple, you want to traverse the full list in K groups, and you are going to reverse every group, you can see its demanding two nested loops!
 //                                 : We use while(true) because the stopping condition depends on checking whether k nodes exist ahead, which can only be determined inside the loop after traversal. So instead of pre-checking, we use an internal break for cleaner and efficient logic.
 //                                 : And then we create a dummyNode, because we are not sure about the new head! then few important pointers like prevGroupEnd to track the end of previus group which will be helpful while linking previous group to the new group.
