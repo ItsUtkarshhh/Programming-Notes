@@ -250,16 +250,42 @@ int main() {
 //                                : Remove Nth Node from End
 //                                : Intersection of Two Linked Lists
 // ------------------------------------------------------- Question 3 : Reverse the Linked List in a group of size K! ------------------------------------------------------------------------>
-// Pattern Recognition : "Linked List Traversal & Pointer Manipulation"
-//                     : ""
-// Approach 1 (Iterative Approach) : Approach is simple, you want to traverse the full list in K groups, and you are going to reverse every group, you can see its demanding two nested loops!
-//                                 : We use while(true) because the stopping condition depends on checking whether k nodes exist ahead, which can only be determined inside the loop after traversal. So instead of pre-checking, we use an internal break for cleaner and efficient logic.
-//                                 : And then we create a dummyNode, because we are not sure about the new head! then few important pointers like prevGroupEnd to track the end of previus group which will be helpful while linking previous group to the new group.
-//                                 : Now another is, groupStart which determines the current group start and kth pointer which is technically curr groupEnd, but will become prevGroupEnd when we move forward.
-//                                 : Now in a similar manner, we simply keep traversing the list one by one! until we do find K nodes!
-// Approach 2 (Recursive Approach) : In order to think in the recursive way, we need to think about minimizing the problem to least! and then building it at every step by increasing the number of nodes!
-//                                 : Means, what will I do if there is no nodes, I will return NULL, and what if there are "n" nodes, and k = 2, thinking in recursion would be, I will break the linkedlist into K parts with each recursion call! where this recursive stack will behave as a hidden memory to save my progress kind of stuff.
-//                                 : And I will reverse that every K size list in every recursive call until we reaches the base case of recursion, which will be curr == NULL, and when it does that, we start returning, for the first time we will simply return NULL, and as the moment when base case was hit, was when were dealing with the last k size list, and we have applied the logic in such a way, that after recursive call returns, the returned node (whether NULL/Non-NULL) will be attached to the next of the previous list's head. And after that when recursion unbinds, every previous head will get connected to the prev.
+// Pattern Recognition : "Linked List Traversal & Pointer Manipulation" with "Segmentation"
+// Difficult : Hard
+// Understand the problem : You have a linked list, and you have reverse each node to point to the previous self, right? But with a catch, we have to do it in chunks/groups of size K!
+//                        : Reversing in size K, what can we imply from it, it means that every group's first element after reversing will point to the previous group's last element - LET THAT SINK IN.
+//                        : As because, linked list with this : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> NULL and reversal in size 2, will give this result : NULL <- 2 <- 1 <- 4 <- 3 <- 6 <- 5 which will be seen as this : 5 -> 6 -> 3 -> 4 -> 1 -> 2 -> NULL
+//                        : How can we achieve it? Lets see the problems with the previous approaches and what to do next.
+// Edge Case Handling : Empty List
+//                    : Single Node
+//                    : Group of size < K
+// Approach 1 (Iterative Approach) : This approach is an improved version of the basic 3-pointer reversal technique. To understand it properly, we must first identify the issue in the naive approach.
+//                                 : Problem with naive approach : If we reverse each K-sized group independently using the standard 3-pointer technique (prev, curr, next) with a counter (count < K), then after each group reversal, 'prev' will point to the head of that reversed group.
+//                                                               : However, since we are not maintaining connections between consecutive groups, the previously reversed groups become disconnected.
+//                                                               : As we continue this process, 'prev' keeps getting updated and finally points As we continue this process, 'prev' keeps getting updated and finally points Therefore, although all groups are reversed in memory, only the last group remains accessible, while earlier groups are effectively lost due to missing links.
+//                                 : Fixing the problem : To maintain the structure of the linked list, we need to track : The end of the previous group → to connect it with the current reversed group
+//                                                                                                                       : The start of the current group → which becomes the end after reversal
+//                                                      : So, we need to manage connections between : (previous group end) & (current group start after reversal)
+//                                                      : Additionaly, Before reversing a group, we must ensure that K nodes exist ahead. If the remaining nodes are less than K, we should not reverse them and simply leave them as it is.
+//                                                      : Important dry run : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> NULL
+//                                                                          : 2 -> 1 -> 3 -> 4 -> 5 -> 6 -> NULL
+//                                                                          : 2 -> 1 -> 4 -> 3 -> 5 -> 6 -> NULL
+//                                                                          : 2 -> 1 -> 4 -> 3 -> 6 -> 5 -> NULL
+//                                                      : Don't think like this, it will confuse you : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> NULL
+//                                                                                                   : NULL <- 1 <- 2 <- 3 <- 4 <- 5 <- 6 (You actually reversed the whole list)
+//                                 : TC = O(n) & SC = O(1)
+// Approach 2 (Recursive Approach) : This approach is mainly to understand how recursion fits into this problem.
+//                                 : First, while thinking recursively, we break the problem into smaller parts. We are given a linked list, and we need to process it in groups of size K.So the idea is: reverse the first K nodes, and then recursively solve remaining list.
+//                                 : But there are some important catches and insights : We cannot assume that every group will always have K nodes. So at every recursive step, we must first check whether K nodes exist. If not, we simply return the remaining list as it is.
+//                                 : Now, assuming that a valid group of size K exists : We reverse the first K nodes using the standard 3-pointer technique.
+//                                                                                     : After reversing, 'prev' will point to the new head of this group, and 'head' (original head) will become the tail of this group.
+//                                                                                     : Now the question is : Where do we attach the remaining list? After reversal, the current group's tail (which is the original head) will be pointing to NULL temporarily. So we need to connect it to the result of the recursive call.
+//                                                                                     : That is why we do : head->next = reverseRecursion(nextGroupStart, k); Here, the recursive call will process the remaining list in the same way, and return the head of the next processed (reversed or untouched) part.
+//                                 : As recursion continues, we eventually reach the base case : If no nodes are left → return NULL, If nodes are less than K → return them as it is
+//                                                                                             : Then, while the recursion stack unwinds, each group gets correctly connected to the next group using head->next.
+//                                                                                             : So effectively : Each recursive call reverses one group & And connects it with the result of the next recursive call
+//                                                                                             : This is how the recursive solution builds the final list step by step.
+//                                 : TC = O(n) && SC = O(n) - (due to recursion stack)
 Node* reverseLL(Node* head, int k) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -268,21 +294,25 @@ Node* reverseLL(Node* head, int k) {
     Node* prevGroupEnd = dummyNode;
 
     while(true) {
-        Node* kth = prevGroupEnd;
-        int i = 0;
-        while(i < k && kth != NULL) {
+        Node* kth = prevGroupEnd->next;
+        Node* currGroupStart = prevGroupEnd->next;
+        int count = 1;
+
+        while(count < k && kth != NULL) {
+            // count == K && kth == NULL - Not possible condition! both together can't happen!
+            // count == K and kth != NULL - Possible condition! "more nodes after the current node" condition
+            // count != K and kth != NULL - Possible condition! "loop running" condition
+            // count != K && kth == NULL - Possible condition! "No more groups further" condition
             kth = kth->next;
-            i++;
+            count++;
         }
 
-        if(kth == NULL) break;
-
-        Node* groupStart = prevGroupEnd->next;
-        Node* newGroupStart = kth->next;
-        kth->next = NULL;
+        if(kth == NULL) break; // No groups available condition
+        Node* nextGroupStart = kth->next;
+        kth->next = NULL; // Isolated the group to be reversed
 
         Node* prev = NULL;
-        Node* curr = groupStart;
+        Node* curr = currGroupStart;
         Node* forward = NULL;
 
         while(curr != NULL) {
@@ -292,10 +322,12 @@ Node* reverseLL(Node* head, int k) {
             curr = forward;
         }
 
+        // Now actual linking starts
+        currGroupStart->next = nextGroupStart;
         prevGroupEnd->next = prev;
-        groupStart->next = newGroupStart;
-        prevGroupEnd = groupStart;
+        prevGroupEnd = currGroupStart;
     }
+
     return dummyNode->next;
 }
 
@@ -307,50 +339,74 @@ Node* reverseLL2(Node* head, int k) {
     Node* prevGroupEnd = dummyNode;
 
     while(true) {
-        Node* kth = prevGroupEnd;
-        int i = 0;
-        while(i < k && kth != NULL) {
+        Node* kth = prevGroupEnd->next;
+        Node* currGroupStart = prevGroupEnd->next;
+        int count = 1;
+
+        while(count < k && kth != NULL) {
+            // count == K && kth == NULL - Not possible condition! both together can't happen!
+            // count == K and kth != NULL - Possible condition! "more nodes after the current node" condition
+            // count != K and kth != NULL - Possible condition! "loop running" condition
+            // count != K && kth == NULL - Possible condition! "No more groups further" condition
             kth = kth->next;
-            i++;
+            count++;
         }
 
-        if(kth == NULL) break;
+        if(kth == NULL) break; // No groups available condition
+        Node* nextGroupStart = kth->next;
+        // kth->next = NULL; // Isolated the group to be reversed
 
-        Node* groupStart = prevGroupEnd->next;
-        Node* newGroupStart = kth->next;
-
-        Node* prev = newGroupStart;
-        Node* curr = groupStart;
+        Node* prev = nextGroupStart;
+        Node* curr = currGroupStart;
         Node* forward = NULL;
 
-        while(curr != newGroupStart) {
+        while(curr != nextGroupStart) {
             forward = curr->next;
             curr->next = prev;
             prev = curr;
             curr = forward;
         }
 
+        // Now actual linking starts
+        // currGroupStart->next = nextGroupStart; // Now we don't need this condition as already handled in the above case!
         prevGroupEnd->next = prev;
-        groupStart->next = newGroupStart;
-        prevGroupEnd = groupStart;
+        prevGroupEnd = currGroupStart;
     }
+
     return dummyNode->next;
 }
 
 Node* reverseRecursion(Node* head, int k) {
-    if(head == NULL) return NULL;
+    if(head == NULL || head->next == NULL) return head;
+
+    int count = 1;
+    Node* temp = head;
+    while(count < k && temp != NULL) {
+        temp = temp->next;
+        count++;
+    }
+
+    if(temp == NULL) return head;
 
     Node* prev = NULL;
     Node* curr = head;
     Node* forward = NULL;
-    int count = 0;
+    count = 1;
 
-    while(count < k && curr != NULL) {
+    // Important things to note here :
+    // First condition : Condition here is count <= K, unlike in the previous approach of using multiple pointers, we simply traversed with the condition count < k, there also count was initiated with 1 only, but still the condition there was count < k only. Why?
+    //                 : Reason being, in the previous question, we were simply traversing the list with kth pointer, that's it! We were not doing any manipulation operations within the loop! So it didn't bothered us at that time even if the count becomes equals K, it will satisfy our needs, because we just needed to REACH the last node of the group.
+    //                 : But here, we do not just need to REACH the last of the group, we are going to do some operations for that last node too, that is why we needed count <= K
+    // Second condition : In the previous approach we checked for group existence using Kth pointer with the same condition of curr != NULL, so earlier I was assuming that curr != NULL will also do the same thing which it did in the last use case, but no here it didn't! Reason?
+    //                  : Because again, last time we were just "traversing" but there, but here we are also doing pointer manipulation too with each node while traversing!
+    //                  : That's why we handled that group existence check logic in the earlier code block, and then moved further. But this may raise a question, that why do we even need the curr pointer now in the condition? As the existence is already checked earlier!
+    //                  : This is where comes the SRP principle : Which says, design systems with enabling it to only handle one single responsibility! Also, even if you have handled the edge case in the previous code blocks, you should still make sure nothing breaks and your code stays robust!
+    //                  : This is how we achieve separation of concerns! Its not about the code, the code will be correct even if you remove the condition curr != NULL. but from industry stand point its important and interviewers may see that, whether you are thinking to make robust systems or just you know it won't break, so you are staying with that truth of yours
+    while(count <= k && curr != NULL) {
         forward = curr->next;
         curr->next = prev;
         prev = curr;
         curr = forward;
-        count++;
     }
 
     if(curr != NULL) {
@@ -359,7 +415,7 @@ Node* reverseRecursion(Node* head, int k) {
     return prev;
 }
 
-// Problem 4 : Check whether a LinkedList is Circular or Not.
+// ------------------------------------------------------- Question 3 : Check whether a LinkedList is Circular or Not ------------------------------------------------------------------------>
 // Approach 1 : If we want to check for the full circle, its simple just check whether after traversing some temp node in a list moving forward, does it ever become NULL or again points at head, in either of the case we have our answer!
 // Approach 2 (Floyd's Cycle Algorithm) : For Incomplete circle : Intuitive thinking will be, if there are two cycles on a track - one's speed is twice the other's, then while cycling on a circular track, they will eventually meet.
 //                                      : Mathematically, what's happening is : Let L be distance (number of nodes) to reach the start of circular track.
