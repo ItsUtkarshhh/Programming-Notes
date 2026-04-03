@@ -416,6 +416,23 @@ Node* reverseRecursion(Node* head, int k) {
 }
 
 // ------------------------------------------------------- Question 3 : Check whether a LinkedList is Circular or Not ------------------------------------------------------------------------>
+// Understand the Problem : A Linked List is said to be circular if during traversal we never encounter NULL. Instead, the traversal either loops back to the starting node or enters a cycle.
+//                        : There are two possible cases of circular nature in a Linked List : Completely Circular Linked List : The last node points back to the head (first node).
+//                                                                                                                             : While traversing from the head, if we reach the head again, it confirms that the list is completely circular.
+//                                                                                                                             : If we encounter NULL instead, then the list is not circular.
+//                                                                                           : Partially Circular (Cycle in Linked List) : The list contains a cycle, but it does NOT necessarily link back to the head.
+//                                                                                                                                       : While traversing, we never reach NULL. Instead, we keep visiting the same set of nodes repeatedly. This indicates the presence of a loop (cycle) somewhere in the list.
+//                        : Key Insight : If traversal reaches NULL → Not circular
+//                                      : If traversal revisits any node → Circular (either complete or partial)
+// Difficulty : Medium
+// Case 1 : Approach 1 (Basic Force) : Start traversing from the head node -> Continue moving to next nodes -> If during traversal we reach NULL → the list is NOT circular -> If we reach the head node again → the list is circular.
+//                                   : TC = O(n) & SC = O(1).
+//        : Approach 2 (Optimal) : If a tail pointer is available, directly check : tail->next == head? If true → the list is circular. If false → the list is not circular.
+//                               : TC = O(1) & SC = O(1)
+// Case 2 : 
+
+// Traverse in the list, and use a hashmap, to store addresses of every nodes, and while traversing just keep a check on every key value to check whether already visited or not.
+
 // Approach 1 : If we want to check for the full circle, its simple just check whether after traversing some temp node in a list moving forward, does it ever become NULL or again points at head, in either of the case we have our answer!
 // Approach 2 (Floyd's Cycle Algorithm) : For Incomplete circle : Intuitive thinking will be, if there are two cycles on a track - one's speed is twice the other's, then while cycling on a circular track, they will eventually meet.
 //                                      : Mathematically, what's happening is : Let L be distance (number of nodes) to reach the start of circular track.
