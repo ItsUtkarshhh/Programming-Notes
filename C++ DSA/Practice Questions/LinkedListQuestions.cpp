@@ -1,7 +1,7 @@
 // ------------------------------------------------------- Linked List Questions ------------------------------------------------------------------------>
 // ------------------------------------------------------- Question 1 : Reverse a Linkedlist ------------------------------------------------------------------------>
-// Pattern Recognition : "Linked List Traversal & Pointer Manipulation" - Very Common Pattern, used in every next question you solve for Linked List.
-//                     : "Three pointers - prev, curr, forward" - Not so common as first one, but yes used oftenly for the specified use cases.
+// Pattern Recognition : "In-place Reversal"
+// Approach, Techniques & Sub-Patterns : "LL Fundamentals" + "Pointer Manipulation" + "Recursion"
 // Difficulty : Easy
 // Understand the problem : Reversing a linked list means changing the direction of the links between nodes. Unlike arrays, we cannot swap elements using indices because linked lists do not support random access.
 // Special case handling : Empty list
@@ -144,8 +144,8 @@ int main() {
 //                               : Palindrome Linked List
 //                               : Rotate List
 // ------------------------------------------------------- Question 2 : Find Middle of the Linked List! ------------------------------------------------------------------------>
-// Pattern Recognition : "Two Pointers using Fast & Slow pointer" - Primary pattern
-//                     : "Linked List Traversal" - Secondary pattern
+// Pattern Recognition : "Two Pointers"
+// Approach, Techniques & Sub-Patterns : "Fast & Slow Pointer"
 // Difficulty : Easy
 // Understand the problem : In arrays, finding the middle element is straightforward : We can directly access index = n/2 in O(1) time.
 //                        : However, in a linked list, random access is not possible. We must traverse the list sequentially to reach any position.
@@ -250,7 +250,8 @@ int main() {
 //                                : Remove Nth Node from End
 //                                : Intersection of Two Linked Lists
 // ------------------------------------------------------- Question 3 : Reverse the Linked List in a group of size K! ------------------------------------------------------------------------>
-// Pattern Recognition : "Linked List Traversal & Pointer Manipulation" with "Segmentation"
+// Pattern Recognition : "In-place Reversal"
+// Approach, Techniques & Sub-Patterns : "Segmentation" + "Pointer Manipulation" + "Recursion"
 // Difficult : Hard
 // Understand the problem : You have a linked list, and you have reverse each node to point to the previous self, right? But with a catch, we have to do it in chunks/groups of size K!
 //                        : Reversing in size K, what can we imply from it, it means that every group's first element after reversing will point to the previous group's last element - LET THAT SINK IN.
@@ -416,7 +417,8 @@ Node* reverseRecursion(Node* head, int k) {
 }
 
 // ------------------------------------------------------- Question 4 : Check whether a LinkedList is Circular or Not ------------------------------------------------------------------------>
-// Pattern Recognition : Two Pointers - Floyd Cycle Algorithm - using Fast & Slow Pointer
+// Pattern Recognition : "Two Pointers"
+// Approach, Techniques & Sub-Patterns : "Fast Slow Pointer" + "Hashing"
 //                     : Hashing
 // Difficulty : Easy
 // Understand the Problem : A Linked List is said to be circular if during traversal we never encounter NULL. Instead, the traversal either loops back to the starting node or enters a cycle.
@@ -488,8 +490,8 @@ bool detectLoop2(Node* head) {
 }
 
 // ------------------------------------------------------- Question 5 : Finding the starting node of the Loop inside the List ------------------------------------------------------------------------>
-// Pattern Recognition : Two Pointers - Floyd Cycle Algorithm - using Fast & Slow Pointer
-//                     : Hashing
+// Pattern Recognition : "Two Pointers"
+// Approach, Techniques & Sub-Patterns : "Fast Slow Pointer" + "Hashing"
 // Difficulty : Easy
 // Understand the Problem : Now to actually find the starting node of the loop of the list, for that first we need to check whether the loop exist or not! 
 //                        : Now, after confirming the list exists, then we need to find the starting node, where this loop actually starts.
@@ -554,8 +556,8 @@ Node* getStartingNode(Node* head) {
 }
 
 // ------------------------------------------------------- Question 6 : Remove the Loop! ------------------------------------------------------------------------>
-// Pattern : Two Pointers - Floyd Cycle Algorithm - using Fast & Slow Pointer
-//         : Hashing
+// Pattern Recognition : "Two Pointers"
+// Approach, Techniques & Sub-Patterns : "Fast Slow Pointer" + "Hashing"
 // Understand the Problem : Problem is simple, just remove the loop whether complete loop or internal loop!
 // Difficulty : Easy
 // Edge case : Empty list
@@ -634,33 +636,33 @@ void removeLoop2(Node* &head) {
 }
 
 // ------------------------------------------------------- Question 7 : Remove duplicates from a Linked List - Sorted ------------------------------------------------------------------------>
-// Pattern : Adjacent Comparison + In-place Skipping - Special use case of Linked List Traversal and Pointer Manipulation
+// Pattern Recognition : "Traversal & Basic Manipulation"
+// Approach, Techniques & Sub-Patterns : "Pointer Manipulation" + "Adjacent Comparision" + "Pointer Skipping"
 // Difficulty : Easy
 // Edge case : Empty list
 //           : Single Node
-// Approach 1 (Brute Force) : Simply traverse the list, and store every value in an ordered set, then simply use the final set to re-generate the linked list from scratch.
+// Approach 1 (Brute Force) : Traverse the linked list and insert each node’s value into a set (to keep only unique elements).
+//                          : Then, create a new linked list using the values stored in the set.
 //                          : TC = O(n) && SC = O(n)
-// Approach 2 (Another Brute Force) : Simply iterate the list in a nested loop structure, and remove duplicate nodes.
+// Approach 2 (Another Brute Force) : For every node, traverse the remaining list and remove all nodes having the same value. This uses a nested loop structure to eliminate duplicates.
 //                                  : TC = O(n^2) && SC = O(1)
-// Approach 3 (Optimal) : The best approach comes when you start using the condition 
-
-
-
-// Approach 2 : Simply iterate the list in a nested loop structure, and remove duplicate nodes.
-// Approach 3 : The best and most optimal approach would be, iterating using two pointers, one will be to tell that till where the list has no duplicates & another will be actually use to track duplicates and we will just keep adjusting links to always point at the temp.
-//            : Here, there is no point to use a dummyNode, as because dummy nodes are used generally when we are not sure whether the head of the list will be remain there or not, we only use it when the head of the list may change due to deletion, traversal or any operation.
+// Approach 3 (Optimal) : The most optimal approach comes from identifying the right pattern and leveraging the given constraints or properties of the problem to reduce time and space complexity.
+//                      : Since the list is sorted, duplicate elements appear consecutively. Traverse the list and compare each node with its next node.
+//                      : If they are equal, skip the duplicate node by adjusting pointers. Otherwise, move forward.
+//                      : TC = O(n) && SC = O(1)
 Node* deleteDuplicates(Node* head) {
-    if(head == NULL) return NULL;
+    if(head == NULL || head->next == NULL) return head;
 
     set<int> st;
     Node* temp = head;
     while(temp != NULL) {
-        st.insert(temp->val);
+        st.insert(temp->data);
         temp = temp->next;
     }
 
     Node* dummyHead = new Node(INT_MIN);
     Node* dummyTail = dummyHead;
+
     for(int x : st) {
         Node* newNode = new Node(x);
         dummyTail->next = newNode;
@@ -669,47 +671,47 @@ Node* deleteDuplicates(Node* head) {
     return dummyHead->next;
 }
 
-Node* deleteDuplicates(Node* head) {
-    if(head == NULL) return NULL;
+Node* deleteDuplicates2(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
 
-    Node* curr = head;
-    while(curr != NULL) {
-        Node* temp = curr;
-        Node* tempNext = curr->next;
-        while(tempNext != NULL) {
-            if(temp->val == tempNext->val) {
-                Node* ntd = tempNext;
-                temp->next = tempNext->next;
-                tempNext = tempNext->next;
+    Node* lastUnique = head;
+
+    while(lastUnique != NULL) {
+        Node* prev = lastUnique;
+        Node* curr = lastUnique->next;
+        while(curr != NULL) {
+            if(prev->data == curr->data) {
+                Node* ntd = curr;
+                prev->next = curr->next;
+                curr = curr->next;
                 ntd->next = NULL;
                 delete ntd;
             }
             else {
-                temp = temp->next;
-                tempNext = tempNext->next;
+                prev = curr;
+                curr = curr->next;
             }
         }
-        curr = curr->next;
+        lastUnique = lastUnique->next;
     }
     return head;
 }
 
-Node* deleteDuplicates(Node* head) { // Here you can also choose to delete the duplicate node, but just chose to adjust the links around it
-    if(head == NULL) return NULL;
+Node* deleteDuplicates(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
 
-    Node* correct = head;
-    Node* temp = correct->next;
+    Node* lastUnique = NULL;
+    Node* curr = head;
 
-    while(temp != NULL) {
-        if(correct->val == temp->val) {
-            correct->next = temp->next;
+    while() {
+        if(lastUnique->data == curr->data) {
+            curr = curr->next;
         }
         else {
-            correct = temp;
+            lastUnique = curr;
+            curr = curr->next;
         }
-        temp = temp->next;
     }
-    return head;
 }
 
 // Problem 8 : Remove duplicates from a Linked List - UnSorted
