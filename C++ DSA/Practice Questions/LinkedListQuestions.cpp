@@ -638,6 +638,8 @@ void removeLoop2(Node* &head) {
 // ------------------------------------------------------- Question 7 : Remove duplicates from a Linked List - Sorted ------------------------------------------------------------------------>
 // Pattern Recognition : "Traversal & Basic Manipulation"
 // Approach, Techniques & Sub-Patterns : "Pointer Manipulation" + "Adjacent Comparision" + "Pointer Skipping"
+// Understand the problem : You are given the head of a sorted singly linked list where elements are arranged in non-decreasing order. Remove all duplicate elements such that each value appears only once, and return the modified linked list.
+//                        : Since the list is sorted, duplicate values will always appear consecutively (adjacent to each other), which allows local comparison between nodes.
 // Difficulty : Easy
 // Edge case : Empty list
 //           : Single Node
@@ -700,22 +702,56 @@ Node* deleteDuplicates2(Node* head) {
 Node* deleteDuplicates(Node* head) {
     if(head == NULL || head->next == NULL) return head;
 
-    Node* lastUnique = NULL;
-    Node* curr = head;
+    Node* lastUnique = head;
+    Node* curr = head->next;
 
-    while() {
+    while(curr != NULL) {
         if(lastUnique->data == curr->data) {
             curr = curr->next;
         }
         else {
+            lastUnique->next = curr;
             lastUnique = curr;
             curr = curr->next;
         }
     }
+    lastUnique->next = NULL;
+    return head;
 }
 
-// Problem 8 : Remove duplicates from a Linked List - UnSorted
-// Approach 1 : Here the nested approach will still work! As the nested loop does not care for any sorted structure!
+// ------------------------------------------------------- Question 8 : Remove duplicates from a Linked List - UnSorted ------------------------------------------------------------------------>
+// Pattern Recognition : "Traversal & Basic Manipulation"
+// Approach, Techniques & Sub-Patterns : "Pointer Manipulation" + "Hashing"
+// Understand the problem : You are given the head of an unsorted singly linked list.
+//                        : Remove all duplicate nodes such that only the first occurrence of each value is retained, and return the modified linked list.
+//                        : Since the list is not sorted, duplicate values may appear at any position, so duplicates cannot be detected using only local comparisons.
+// Difficulty : Medium
+// Edge case : Empty list
+//           : Single Node
+// Approach 1 (Brute Force) : When dealing with an unsorted linear structure (like a linked list or array), and no additional constraints or extra space are used, a common brute force approach is to use a nested traversal.
+//                          : For each node, we traverse the remaining list and remove all nodes that have the same value as the current node. This ensures that only the first occurrence of each element is retained.
+//                          : TC = O(n^2) && SC = O(1)
+// Approach 2 (Better Brute Force) : Since the list is unsorted, we can first sort the linked list using an efficient sorting algorithm (like Merge Sort for linked lists).
+//                                 : Once the list becomes sorted, all duplicate elements will be adjacent, allowing us to remove them using a simple linear traversal (as in the sorted case).
+//                                 : When a problem becomes easier on sorted data, we can first sort the data to exploit that structure and then apply a simpler linear solution
+//                                 : TC = O(nlogn) && SC = O(1) / O(logn) - recursive stack
+// Approach 3 (Optimized Solution) : Now, if take some extra space to reduce some time taken, that can be a possible trade of which we can do to optimize the final outcome!
+//                                 : We can use a set, to input the data inton the list every time we traverse the list and eventually delete the nodes which getting repeated after they are first time inserted into the set.
+Node* deleteDuplicatesUnsorted(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* temp1 = head;
+
+    while(temp1->next != NULL) {
+        Node* temp2 = temp1->next;
+        while(temp2 != NULL) {
+            
+        }
+    }
+}
+
+
+// Here the nested approach will still work! As the nested loop does not care for any sorted structure!
 // Approach 2 : Sort the list using merge or quick sort and then simply follow the previous sorted linkedlists approach! - Here everything will be same as above one, just the difference will be for merge sort, that will practice when question comes.
 // Approach 3 : Use Hashing : using unordered set, iterate through the list and store elements in the set and once you visit a value which is already there in the set, simply remove it by adjusting pointers accordingly.
 Node* deleteDuplicates(Node* head) {
