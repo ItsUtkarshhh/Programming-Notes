@@ -49,6 +49,7 @@ void insertNode(Node* &head, Node* &tail, int data) {
     tail = newNode;
 }
 
+// Approach 1 :
 Node* reverseLL(Node* head) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -75,6 +76,7 @@ Node* reverseLL(Node* head) {
     return head;
 }
 
+// Approach 2 : 
 Node* reverseLL2(Node* head) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -103,6 +105,7 @@ void revRecursive(Node* &head, Node* &tail, Node* prev, Node* curr) {
     curr->next = prev;
 }
 
+// Approach 3 :
 Node* reverseLL3(Node* &head, Node* &tail) {
     if(head == NULL || head->next == NULL) return head;
     
@@ -199,6 +202,7 @@ int findLen(Node* head) {
     return count;
 }
 
+// Approach 1 : 
 Node* findMid(Node* head) {
     if(head == NULL || head->next == NULL) {
         return head;
@@ -215,6 +219,7 @@ Node* findMid(Node* head) {
     return temp;
 }
 
+// Approach 2 : 
 Node* findMid2(Node* head) {
     if(head == NULL || head->next == NULL) {
         return head;
@@ -287,6 +292,8 @@ int main() {
 //                                                                                             : So effectively : Each recursive call reverses one group & And connects it with the result of the next recursive call
 //                                                                                             : This is how the recursive solution builds the final list step by step.
 //                                 : TC = O(n) && SC = O(n) - (due to recursion stack)
+
+// Approach 1 :
 Node* reverseLL(Node* head, int k) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -334,16 +341,16 @@ Node* reverseLL(Node* head, int k) {
 
 Node* reverseLL2(Node* head, int k) {
     if(head == NULL || head->next == NULL) return head;
-
+    
     Node* dummyNode = new Node(INT_MIN);
     dummyNode->next = head;
     Node* prevGroupEnd = dummyNode;
-
+    
     while(true) {
         Node* kth = prevGroupEnd->next;
         Node* currGroupStart = prevGroupEnd->next;
         int count = 1;
-
+        
         while(count < k && kth != NULL) {
             // count == K && kth == NULL - Not possible condition! both together can't happen!
             // count == K and kth != NULL - Possible condition! "more nodes after the current node" condition
@@ -352,31 +359,32 @@ Node* reverseLL2(Node* head, int k) {
             kth = kth->next;
             count++;
         }
-
+        
         if(kth == NULL) break; // No groups available condition
         Node* nextGroupStart = kth->next;
         // kth->next = NULL; // Isolated the group to be reversed
-
+        
         Node* prev = nextGroupStart;
         Node* curr = currGroupStart;
         Node* forward = NULL;
-
+        
         while(curr != nextGroupStart) {
             forward = curr->next;
             curr->next = prev;
             prev = curr;
             curr = forward;
         }
-
+        
         // Now actual linking starts
         // currGroupStart->next = nextGroupStart; // Now we don't need this condition as already handled in the above case!
         prevGroupEnd->next = prev;
         prevGroupEnd = currGroupStart;
     }
-
+    
     return dummyNode->next;
 }
 
+// Approach 2 :
 Node* reverseRecursion(Node* head, int k) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -445,6 +453,8 @@ Node* reverseRecursion(Node* head, int k) {
 //                                                                      : Now, the meeting condition will be (t-L) % C = (2t-L) % C - which gives us t = 0 or can be interpreted as "t = kC"
 //                                                                      : "t = kC" means two things - Slow has completed full cycles & Fast has gained exactly one full lap over slow. That is why they meet!
 //                                                     : Intuition : If two cyclist are running on a same track, one with a "t" speed and one with a "2t" speed, they will obviously meet, this is the logic used to check whether the loop exists or not!
+
+// Case 1 : Approach 1 : 
 bool checkCircular(Node* head) { // Only for complete circle
     if(head == NULL || head->next == NULL) return false;
 
@@ -457,6 +467,7 @@ bool checkCircular(Node* head) { // Only for complete circle
     return false;
 }
 
+// Case 2 : Approach 1 : 
 bool detectLoop(Node* head) {
     if(head == NULL || head->next == NULL) return false;
 
@@ -473,6 +484,7 @@ bool detectLoop(Node* head) {
     return false;
 }
 
+// Case 2 : Approach 2 : 
 bool detectLoop2(Node* head) {
     if(head == NULL || head->next == NULL) return false;
 
@@ -510,6 +522,8 @@ bool detectLoop2(Node* head) {
 //                                                                                         - Now, we can simplify to also interpret that, L + x = nC, which can be rearrange to interpret it : L = nC - x and this can be easily interpreted as : L = y, that is why this algorithm works here!
 //                      : Intuition : At this point, its fine to getting intuition about why it works, but for now just understand the mathematics and approach it uses, as maths can never be wrong, it can only be interpreted wrong. Will figure out the intuition later on.
 //                      : TC = O(n) && SC = O(1)
+
+// Approach 1 :
 Node* getIntersection(Node* head) {
     if(head == NULL || head->next == NULL) return NULL;
 
@@ -526,6 +540,7 @@ Node* getIntersection(Node* head) {
     return NULL;
 }
 
+// Approach 2 :
 Node* getIntersection2(Node* head) {
     if(head == NULL || head->next == NULL) return NULL;
 
@@ -595,6 +610,7 @@ Node* getStartingNode(Node* head) {
     return temp;
 }
 
+// Approach 1 :
 void removeLoop(Node* &head) {
     if(head == NULL || head->next == NULL) {
         cout<<"No Loop Exist!";
@@ -604,7 +620,7 @@ void removeLoop(Node* &head) {
     Node* prev = NULL;
     Node* curr = head;
     unordered_set<Node*> visited;
-
+    
     while(curr != NULL) {
         if(visited.find(curr) != visited.end()) {
             prev->next = NULL;
@@ -617,6 +633,7 @@ void removeLoop(Node* &head) {
     return;
 }
 
+// Approach 2 :
 void removeLoop2(Node* &head) {
     if(head == NULL || head->next == NULL) {
         cout<<"No Loop Exist!";
@@ -652,6 +669,8 @@ void removeLoop2(Node* &head) {
 //                      : Since the list is sorted, duplicate elements appear consecutively. Traverse the list and compare each node with its next node.
 //                      : If they are equal, skip the duplicate node by adjusting pointers. Otherwise, move forward.
 //                      : TC = O(n) && SC = O(1)
+
+// Approach 1 :
 Node* deleteDuplicates(Node* head) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -673,11 +692,12 @@ Node* deleteDuplicates(Node* head) {
     return dummyHead->next;
 }
 
+// Approach 2 :
 Node* deleteDuplicates2(Node* head) {
     if(head == NULL || head->next == NULL) return head;
-
+    
     Node* lastUnique = head;
-
+    
     while(lastUnique != NULL) {
         Node* prev = lastUnique;
         Node* curr = lastUnique->next;
@@ -699,6 +719,7 @@ Node* deleteDuplicates2(Node* head) {
     return head;
 }
 
+// Approach 1 :
 Node* deleteDuplicates(Node* head) {
     if(head == NULL || head->next == NULL) return head;
 
@@ -737,87 +758,112 @@ Node* deleteDuplicates(Node* head) {
 //                                 : TC = O(nlogn) && SC = O(1) / O(logn) - recursive stack
 // Approach 3 (Optimized Solution) : Now, if take some extra space to reduce some time taken, that can be a possible trade of which we can do to optimize the final outcome!
 //                                 : We can use a set, to input the data inton the list every time we traverse the list and eventually delete the nodes which getting repeated after they are first time inserted into the set.
-Node* deleteDuplicatesUnsorted(Node* head) {
+//                                 : TC = O(n) && SC = O(n)
+
+// Approach 1 :
+Node* deleteDuplicatesUnsorted(Node* &head) {
     if(head == NULL || head->next == NULL) return head;
 
     Node* temp1 = head;
-
-    while(temp1->next != NULL) {
-        Node* temp2 = temp1->next;
-        while(temp2 != NULL) {
-            
-        }
-    }
-}
-
-
-// Here the nested approach will still work! As the nested loop does not care for any sorted structure!
-// Approach 2 : Sort the list using merge or quick sort and then simply follow the previous sorted linkedlists approach! - Here everything will be same as above one, just the difference will be for merge sort, that will practice when question comes.
-// Approach 3 : Use Hashing : using unordered set, iterate through the list and store elements in the set and once you visit a value which is already there in the set, simply remove it by adjusting pointers accordingly.
-Node* deleteDuplicates(Node* head) {
-    if(head == NULL) return NULL;
-
-    Node* curr = head;
-    while(curr != NULL) {
-        Node* temp = curr;
-        Node* tempNext = curr->next;
-        while(tempNext != NULL) {
-            if(temp->val == tempNext->val) {
-                Node* ntd = tempNext;
-                temp->next = tempNext->next;
-                tempNext = tempNext->next;
-                ntd->next = NULL;
-                delete ntd;
+    while(temp1 != NULL) {
+        Node* temp2 = temp1;
+        while(temp2->next != NULL) {
+            if(temp1->data == temp2->next->data) {
+                temp2->next = temp2->next->next;
             }
             else {
-                temp = temp->next;
-                tempNext = tempNext->next;
+                temp2 = temp2->next; // Earlier I have kept it without else, but that is wrong, as it will update the temp2 always which might end up skipping the actual duplicate nodes for the case when you are having adjacent duplicate nodes!
             }
+        }
+        temp1 = temp1->next;
+    }
+    return head;
+}
+
+// Approach 3 :
+Node* deleteDuplicatesUnsorted2(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    unordered_set<int> st;
+    Node* prev = NULL;
+    Node* curr = head;
+    
+    while(curr != NULL) {
+        if(st.find(curr->data) != st.end()) {
+            prev->next = curr->next;
+        }
+        else {
+            st.insert(curr->data);
+            prev = curr;
         }
         curr = curr->next;
     }
     return head;
 }
 
-Node* deleteDuplicates(Node* head) {
-    if(head == NULL) return NULL;
+// ------------------------------------------------------- Question 9 : Sort 0s 1s 2s in Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "Dummy Node"
+// Approach, Techniques & Sub-Patterns : "Pointer Manipulation"
+// Understand the problem : You are given the head of a singly linked list where each node contains a value of either 0, 1, or 2. Rearrange the nodes of the linked list such that all nodes with value 0 come first, followed by nodes with value 1, and then nodes with value 2.
+//                        : The relative order within each group does not necessarily need to be preserved, but the final list should be grouped by values in sorted order.
+//                        : Since the list contains only a limited set of distinct values (0, 1, 2), the problem can be approached by grouping or counting elements instead of applying a general sorting algorithm.
+// Difficulty : Medium
+// Edge case : Empty list
+//           : Single Node 
+// Approach 1 (Brute Force) : Sort the list, with some sorting algorithms like merge sort.
+//                          : TC = O(nlogn) && SC = O(n)
+// Approach 2 (Brute Force) : Count all 0s, 1s, 2s and simply traverse the original list and over write the values.
+//                          : TC = O(n) && SC = O(1)
+// Approach 3 (Optimal) : Traverse the linked list and create three separate lists using dummy nodes: one for nodes with value 0, one for 1, and one for 2.
+//                      : For each node, append it to the corresponding list based on its value. After traversal, connect the three lists in order (0s → 1s → 2s) to form the final sorted list.
+//                      : TC = O(n) && SC = O(1)
 
-    unordered_set<int> exist;
-    Node* prev = head; // Here you need to understand an important insight into problem solving : Which is - When you build a logic, you try to follow every instruction of it, and change your direction of thinking/execution/or writing code for some special cases like here!
-    // Here, its fine, Node* prev = head works fine, but it breaks the "logical" consistency of the problem, we used this method where we meant to make prev pointer a pointer which will denote the large "processed" & "unique" node of the list! but we initially only before processing if we put prev = head, means we are breaking the logocal consistency!
-    // It may not break correctness in simple cases, but it weakens the invariant, which can lead to bugs in other variations or extensions!
-    Node* curr = prev;
-    while(curr != NULL) {
-        if(exist.find(curr->data) != exist.end()) {
-            prev->next = curr->next;
+// Approach 1 :
+Node* sort012A(Node* &head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    int count0 = 0;
+    int count1 = 0;
+    int count2 = 0;
+
+    Node* temp = head;
+    while(temp != NULL) {
+        if(temp->data == 0) count0++;
+        else if(temp->data == 1) count1++;
+        else count2++;
+        temp = temp->next;
+    }
+    
+    temp = head;
+    while(temp != NULL) {
+        if(count0) {
+            temp->data = 0;
+            count0--;
+        }
+        else if(count1) {
+            temp->data = 1;
+            count1--;
         }
         else {
-            exist.insert(curr->data);
-            prev = curr;
+            temp->data = 2;
+            count2--;
         }
-        curr = curr->next;
+        temp = temp->next;
     }
+    return head;
 }
 
-// Problem 9 : Sort 0s 1s 2s - Linked List
-// Approach 1 : Simply insert all the elements into an array, sort and retrieve again in the same list!
-// Approach 2 : Simply use the merge sort algorithm!
-// Approach 3 : Simply insert in an array and use the Dutch National Flag Algorithm!
-// Approach 4 : Simply count the 0s, 1s, 2s and then just modify the values in the lists!
-// Approach 5 : We can simply create a new list while traversing the original list and creating a new list using the original list values!
-// Approach 6 : Simple iterate over the list using three dummy pointers, one for 1s, 2s & 3s and so on. And then just build there separate lists and then merge them together! - Here we can use dummynodes because we are not sure about the head, that which will be the head!
-Node* sort012(Node* head) {
-    if(head == NULL) {
-        return NULL;
-    }
-
-    Node* zeroHead = new Node(INT_MIN);
+// Approach 2 :
+Node* sort012A(Node* &head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    Node* zeroHead = new Node(-1);
     Node* zeroTail = zeroHead;
 
-    Node* oneHead = new Node(INT_MIN);
+    Node* oneHead = new Node(-1);
     Node* oneTail = oneHead;
 
-    Node* twoHead = new Node(INT_MIN);
+    Node* twoHead = new Node(-1);
     Node* twoTail = twoHead;
 
     Node* temp = head;
@@ -839,15 +885,15 @@ Node* sort012(Node* head) {
 
     if(oneHead->next != NULL) {
         zeroTail->next = oneHead->next;
+        oneTail->next = twoHead->next;
     }
     else {
         zeroTail->next = twoHead->next;
     }
 
-    oneTail->next = twoHead->next;
     twoTail->next = NULL;
-
     head = zeroHead->next;
+
     delete zeroHead;
     delete oneHead;
     delete twoHead;
@@ -855,36 +901,54 @@ Node* sort012(Node* head) {
     return head;
 }
 
-// Problem 10 : Merge Two Linked Lists
-// Approach 1 : If both the lists are sorted : Simply traverse using two pointers L1 & L2 and simply compare and modify the links between the nodes!
-// Approach 2 : If both the lists are unsorted : Sort them and apply the previous approach!
-// Approach 3 : If one sorted and one unsorted, and your main reference list is the unsorted one! Then simply pick each node from the unsorted list and keep inserting it into the sorted list in sorted manner!
-Node* mergeTwoLists(Node* LL1, Node* LL2) {
+// ------------------------------------------------------- Question 10 : Merge Two Linked Lists ------------------------------------------------------------------------>
+// Pattern Recognition : "Dummy Node" + "Two Pointers"
+// Approach, Techniques & Sub-Patterns : "Pointer Manipulation" 
+// Understand the problem : You are given the heads of two singly linked lists. Your task is to merge them into a single linked list such that the resulting list maintains a meaningful order based on the input conditions.
+//                        : The nature of merging depends on the structure of the given lists : Case 1 : If both linked lists are sorted, then the goal is to merge them into a single sorted linked list by comparing elements and placing them in order.
+//                                                                                            : Case 2 : If the lists are unsorted, then there is no inherent order to preserve, so merging can simply mean appending one list to another, or optionally sorting afterward if required.
+//                                                                                            : Case 3 : If one list is sorted and the other is not, then to merge in ascending order, we either have two choices : 1) Insert every node of the unsorted list in between the nodes of the sorted list.
+//                                                                                                                                                                                                                : 2) Sort the unsorted list, and finally merge both the lists into one.
+// Difficulty : Medium
+// Edge case : Empty list
+//           : Single Node
+// Case 1 (Both Sorted) : Approach 1 : Use two pointers for both lists and iteratively compare nodes. Attach the smaller node to the result list and move the corresponding pointer forward, ensuring the merged list remains sorted.
+//                                   : TC = O(n + m) && SC = O(1)
+// Case 2 (Both Unsorted) : Approach 1 : Since there is no order to preserve, first append one list to the other, and then sort the combined list using an efficient linked list sorting algorithm (like merge sort).
+//                                     : TC = O((n+m)log(n+m)) && SC = O(log(n+m))
+// Case 3 (One Sorted & One Unsorted) : Approach 1 : Traverse the unsorted list, and for each node, insert it into the correct position in the sorted list.
+//                                                 : TC = O(n*m) && SC = O(1)
+//                                    : Approach 2 : First sort the unsorted list, then apply the standard merge two sorted lists approach.
+//                                                 : TC = O(mlogm) && SC = O(logm)
+
+// Case 1 : Approach 1 :
+Node* mergeTwoLists1(Node* LL1, Node* LL2) {
     if(LL1 == NULL) return LL2;
     if(LL2 == NULL) return LL1;
 
-    Node* dummyHead = new Node(INT_MIN);
-    Node* dummyTail = dummyHead;
+    Node* dummyNode = new Node(INT_MIN);
+    Node* temp = dummyNode;
 
     while(LL1 != NULL && LL2 != NULL) {
-        if(LL1->data < LL2->data) {
-            dummyTail->next = LL1;
-            dummyTail = LL1;
+        if(LL1->data <= LL2->data) {
+            temp->next = LL1;
+            temp = LL1;
             LL1 = LL1->next;
         }
         else {
-            dummyTail->next = LL2;
-            dummyTail = LL2;
+            temp->next = LL2;
+            temp = LL2;
             LL2 = LL2->next;
         }
     }
 
-    if(LL1 != NULL) dummyTail->next = LL1;
-    if(LL2 != NULL) dummyTail->next = LL2;
+    if(LL1 != NULL) temp->next = LL1;
+    if(LL2 != NULL) temp->next = LL2;
 
-    return dummyHead->next;
+    return dummyNode->next;
 }
 
+// Case 3 : Approach 1 :
 Node* insertNode(Node* head, Node* nodeToInsert) {
     if(head == NULL || head->data >= nodeToInsert->data) {
         nodeToInsert->next = head;
@@ -920,3 +984,5 @@ Node* mergeTwoLists2(Node* LL1, Node* LL2) {
     }
     return LL2;
 }
+
+// ------------------------------------------------------- Question 11 : Clone a linked list with Random Pointer ------------------------------------------------------------------------>
