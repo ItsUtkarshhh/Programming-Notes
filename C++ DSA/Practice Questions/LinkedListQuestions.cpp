@@ -916,6 +916,8 @@ Node* sort012A(Node* &head) {
 //                                   : TC = O(n + m) && SC = O(1)
 // Case 2 (Both Unsorted) : Approach 1 : Since there is no order to preserve, first append one list to the other, and then sort the combined list using an efficient linked list sorting algorithm (like merge sort).
 //                                     : TC = O((n+m)log(n+m)) && SC = O(log(n+m))
+//                        : Approach 2 : The problem with the approach 1 is that the time complexity can be reduced, if we sort the individual lists first and then merge them using two pointer approach. As the resultant time complexity will be : O(n log n + m log m) which is < O((n + m) log(n + m))
+//                                     : TC = O(nlogn + mlogm) && SC = O(1)
 // Case 3 (One Sorted & One Unsorted) : Approach 1 : Traverse the unsorted list, and for each node, insert it into the correct position in the sorted list.
 //                                                 : TC = O(n*m) && SC = O(1)
 //                                    : Approach 2 : First sort the unsorted list, then apply the standard merge two sorted lists approach.
@@ -985,4 +987,291 @@ Node* mergeTwoLists2(Node* LL1, Node* LL2) {
     return LL2;
 }
 
-// ------------------------------------------------------- Question 11 : Clone a linked list with Random Pointer ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 11 : Check palindrome in a Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "In-place Reversal" + "Two Pointers"
+// Difficulty : Medium
+// Understand the problem : Given the head of a singly linked list, determine whether the linked list represents a palindrome sequence. A palindrome is a sequence that reads the same forward and backward.
+//                        : Return true if the linked list is a palindrome, otherwise return false.
+//                        : Actual problem : In linked list we do not have indexed based access, also its a singly linked list we are talking about where we cannot traverse the list backwards.
+//                                         : Also we do not know the length of the linked list, also we have to solve this in O(1) space complexity
+// Approach 1 (Brute force) : Traverse the linked list and store all node values in an auxiliary data structure (such as an array or vector). Then, use a two-pointer technique on this structure to check whether the sequence is a palindrome.
+//                          : TC = O(n) && SC = O(n)
+// Approach 2 (Optimal) : Use the fast and slow pointer technique to find the middle of the linked list. Then, reverse the second half of the list in-place. After that, compare the first half and the reversed second half node by node.
+//                      : Finally, restore the list to its original structure before returning the result.
+//                      : TC = O(n) && SC = O(1)
+
+// Approach 2 :
+Node* reverseLLs(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    while(curr != NULL) {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+    
+    return prev;
+}
+
+bool checkPalindrome(Node* head) {
+    if(head == NULL || head->next == NULL) return true;
+    
+    Node* slow = head;
+    Node* fast = head->next;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    Node* newHead = slow->next;
+    slow->next = NULL;
+    
+    Node* revHead = reverseLLs(newHead);
+    
+    Node* temp1 = head;
+    Node* temp2 = revHead;
+    bool isPalindrome = true;
+    
+    while(temp1 != NULL && temp2 != NULL) {
+        if(temp1->data != temp2->data) {
+            isPalindrome = false;
+            break;
+        }
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+    }
+    
+    slow->next = reverseLLs(revHead);
+    return isPalindrome;
+}
+
+// ------------------------------------------------------- Question 12 : Add Two Number as Linked Lists ------------------------------------------------------------------------>
+// Pattern Recognition : "Traversal & Basic Manipulation"
+// Difficulty : Medium
+// Understand the problem : You are given two non-empty singly linked lists representing two non-negative integers. Add the two numbers and return the sum as a linked list.
+//                        : The actual problem : No indexed based access, need a proper and careful carry handling across nodes, its not a full number, the digits of the number are spread across the nodes.
+//                                             : Need to build a new linked list dynamically on the basis of the sum between each nodes.
+//                                             : Also, need to manage the unequal linked list cases carefully.
+// Approach 1 (Brute Force) : Convert the linked list into an array/vector, and then add the numbers there and then recreate a linked list using that final answer sum.
+//                          : Finally, construct a new linked list from the computed result.
+//                          : TC = O(n + m) && SC = O(n + m)
+// Approach 2 (Optimal) : Traverse both linked lists simultaneously while maintaining a carry value initialized to 0. At each step, take the current node values (if present; otherwise treat as 0), add them along with the carry, and create a new node with the digit equal to sum % 10.
+//                      : Update the carry as sum / 10 and move forward in both lists. After one list ends, continue processing the remaining list along with the carry.
+//                      : If a carry remains after traversal, create an additional node for it. The result list is formed in the correct order during traversal, so no reversal is required.
+//                      : TC = O(n + m) && SC = O(1) - Excluding the output list, as that was a requirement
+
+// Approach 2 :
+Node* reverseLLs(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    while(curr != NULL) {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+    
+    return prev;
+}
+
+void insertNode(Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(tail == NULL) {
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
+
+Node* findSum(Node* LL1, Node* LL2) {
+    if(LL1 == NULL) return LL2;
+    if(LL2 == NULL) return LL1;
+    
+    Node* revLL1 = reverseLLs(LL1);
+    Node* revLL2 = reverseLLs(LL2);
+    
+    int carry = 0;
+    Node* temp1 = revLL1;
+    Node* temp2 = revLL2;
+    int sum = 0;
+
+    Node* dummyHead = new Node(INT_MIN);
+    Node* dummyTail = dummyHead;
+    
+    while(temp1 != NULL || temp2 != NULL || carry != 0) {
+        int val1 = 0;
+        int val2 = 0;
+        
+        if(temp1 != NULL) val1 = temp1->data;
+        if(temp2 != NULL) val2 = temp2->data;
+        
+        sum = val1 + val2 + carry;
+        carry = sum / 10;
+        int digit = sum % 10;
+
+        insertNode(dummyTail, digit);
+
+        if(temp1 != NULL) temp1 = temp1->next;
+        if(temp2 != NULL) temp2 = temp2->next;
+    }
+    
+    Node* finalAns = reverseLLs(dummyHead->next);
+    return finalAns;
+}
+
+// ------------------------------------------------------- Question 13 : Clone a linked list with Random Pointer ------------------------------------------------------------------------>
+// Pattern Recognition : "Traversal & Basic Manipulation" + "Hashing" + "Inplace Interleaving"
+// Difficulty : Medium
+// Understand the problem : You are given the head of a singly linked list where each node contains : An integer value val, A pointer next to the next node in the list & A pointer random which can point to any node in the list or NULL.
+//                        : Your task is to create a deep copy of this linked list.
+//                        : The deep copy should consist of entirely new nodes such that : Each node in the new list has the same value as the corresponding node in the original list.
+//                                                                                       : The next pointers form the same sequence as the original list.
+//                                                                                       : The random pointers correctly point to the corresponding nodes in the new list (not the original list).
+//                        : Primary challenges : How do we know which node the random pointer should point to in the new list?
+//                                             : Cloning a graph-like structure where each node has both linear and arbitrary connections
+// Approach 1 (Brute Force) : I need to create a deep copy where both next and random pointers are preserved.
+//                          : Each node has : next & random pointers, so the problem becomes - How do I map an original node’s random pointer to the correct cloned node?
+//                          : Thought process - We don’t have a direct mapping (like hashmap), But we notice that Clone list is built in the same order & which means the positions corresponds.
+//                                            - So the idea is if I can find the position of the random node in original list, I can reach the same position in clone list.
+//                          : Now for each node, we simulate a mapping by traversing both lists simultaneously to locate the corresponding random node.
+//                          : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal Brute Force) : Key idea is, if I can directly map each original node to its cloned node, I can easily assign both next and random pointers.
+//                                  : Overall, We first clone nodes, then use a hashmap to maintain a direct mapping from original nodes to cloned nodes, which allows us to assign random pointers in constant time.
+//                                  : TC = O(n) && SC = O(n) due to hashmap
+// Approach 3 (Optimal) : I need to map each original node to its cloned node, but I don’t want to use extra space (like a hashmap)
+//                      : What if I place the cloned node right next to its original node?
+//                      : We interleave cloned nodes within the original list to implicitly maintain mapping, use this structure to assign random pointers in O(1), and then separate both lists
+//                      : TC = O(n) && SC = O(1)
+
+// Approach 1 :
+Node* cloneRandom(Node* head) {
+    if(head == NULL) return NULL;
+    
+    // Step 1 : Clone the original list, without random pointers
+    Node* originalHead = head;
+    Node* cloneHead = new Node(originalHead->data);
+    Node* cloneTail = cloneHead;
+    
+    Node* temp = originalHead->next;
+    while(temp != NULL) {
+        Node* newNode = new Node(temp->data);
+        cloneTail->next = newNode;
+        cloneTail = newNode;
+        temp = temp->next;
+    }
+    
+    // Step 2 : Re-traverse the original to set the random pointers
+    Node* original = originalHead;
+    Node* clone = cloneHead;
+    
+    while(original != NULL) {
+        if(original->random != NULL) {
+            Node* tempOrg = original;
+            Node* tempClone = clone;
+            
+            while(tempOrg != original->random) {
+                tempOrg = tempOrg->next;
+                tempClone = tempClone->next;
+            }
+            clone->random = tempClone;
+        }
+        original = original->next;
+        clone = clone->next;
+    }
+    
+    return cloneHead;
+}
+
+// Approach 2 :
+Node* cloneRandom(Node* head) {
+    if(head == NULL) return NULL;
+    
+    // Step 1 : Clone the original list, without random pointers
+    Node* originalHead = head;
+    Node* cloneHead = new Node(originalHead->data);
+    Node* cloneTail = cloneHead;
+    
+    Node* tempOrg = originalHead->next;
+    while(tempOrg != NULL) {
+        Node* newNode = new Node(tempOrg->data);
+        cloneTail->next = newNode;
+        cloneTail = newNode;
+        tempOrg = tempOrg->next;
+    }
+    
+    // Step 2 : Map each node of the original list with the cloned list
+    tempOrg = originalHead;
+    Node* tempClone = cloneHead;
+    unordered_map<Node*, Node*> hash;
+    while(tempOrg != NULL) {
+        hash[tempOrg] = tempClone;
+        tempOrg = tempOrg->next;
+        tempClone = tempClone->next;
+    }
+    
+    // Step 3 : Finally traverse the cloned list & set the random pointers
+    tempClone = cloneHead;
+    tempOrg = originalHead;
+    
+    while(tempClone != NULL) {
+        if(tempOrg->random != NULL) tempClone->random = hash[tempOrg->random];
+        tempOrg = tempOrg->next;
+        tempClone = tempClone->next;
+    }
+    
+    return cloneHead;
+}
+
+// Approach 3 :
+Node* cloneRandom(Node* head) {
+    if(head == NULL) return NULL;
+    
+    // Step 1: Interleave clone nodes
+    Node* curr = head;
+    while(curr != NULL) {
+        Node* next = curr->next;
+        Node* clone = new Node(curr->data);
+
+        curr->next = clone;
+        clone->next = next;
+        
+        curr = next;
+    }
+
+    // Step 2: Set random pointers
+    curr = head;
+    while(curr != NULL) {
+        if(curr->random != NULL)
+        curr->next->random = curr->random->next;
+    
+    curr = curr->next->next;
+}
+
+// Step 3: Separate lists
+curr = head;
+Node* cloneHead = head->next;
+
+while(curr != NULL) {
+    Node* clone = curr->next;
+    curr->next = clone->next;
+    
+    if(clone->next != NULL)
+    clone->next = clone->next->next;
+
+curr = curr->next;
+}
+
+return cloneHead;
+}
+
+// ------------------------------------------------------- Question 14 : Merge Sort in Linked List ------------------------------------------------------------------------>
