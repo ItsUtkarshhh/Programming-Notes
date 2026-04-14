@@ -1275,3 +1275,251 @@ return cloneHead;
 }
 
 // ------------------------------------------------------- Question 14 : Merge Sort in Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "Divide, Merge & Structural Transformation" & "Two Pointers"
+// Difficulty : Medium
+// Understand the problem : You are given the head of a singly linked list containing n nodes. Each node contains an integer value.
+//                        : Your task is to sort the linked list in ascending order using the merge sort algorithm and return the head of the sorted linked list.
+// Approach 1 (Brute Force) : Take each element and put them into an array and then sort the array by any means of sorting , Whether Bubble sort, Insertion Sort, Selecction Sort, Merge Sort or Quick Sort. And finally rewrite the original list itself and return the head.
+//                          : TC = O(nlogn)/O(n^2) && SC = O(n) 
+// Approach 2 (Merge Sort) : When deciding which sorting algorithm to use for a linked list, the key is to understand the constraints of the data structure.
+//                         : Limitations : Do not support random access (no indexing like arr[i])
+//                                       : Require sequential traversal (node by node)
+//                                       : Make swapping nodes costly, since it involves pointer manipulation rather than simple value swaps
+//                         : Problems with other sorting algorithms : Bubble Sort - In arrays → swapping is easy, but in linked lists → swapping requires changing pointers → messy and inefficient.
+//                                                                  : Insertion Sort / Selection Sort - Require frequent repositioning of elements. In linked lists → involves complex pointer updates
+//                                                                  : Quick sort - Works well on arrays due to direct index access. In linked lists : No random access → partitioning becomes inefficient & Pointer manipulation becomes complex.
+//                         : How merge sort fits best : Merge Sort aligns perfectly with linked list properties - Does not require random access, Splitting is easy using slow & fast pointer, Merging can be done efficiently using pointer manipulation (no swapping needed), Guaranteed O(n log n) time complexity & Stable and clean to implement.
+//                         : Thinking : Problem is we are given an unsorted linked list, and we need to sort it efficiently.
+//                                    : Use the slow and fast pointer technique to find the middle node. Split the list into two halves : Left half → from head to mid
+//                                                                                                                                      : Right half → from mid->next to end
+//                                                                                                                                      : Then break the link : mid->next = NULL;
+//                                    : Apply the same process on both halves. Keep dividing until : Each sublist contains only one node.
+//                                    : Now, Start merging starts during recursion backtracking, not specifically at “two nodes” .
+//                                    : Now, as recursion returns : You start merging two sorted linked lists, Use the standard merge two sorted lists approach.
+//                                    : And during the backtracking, in the end the whole list is sorted.
+//                         : TC = O(nlogn) && SC = O(nlogn)
+Node* middleNode(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    Node* slow = head;
+    Node* fast = head->next;
+    
+    while(fast != NULL || fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    return slow;
+}
+
+Node* mergeList(Node* left, Node* right) {
+    if(left == NULL) return right;
+    if(right == NULL) return left;
+    
+    Node* temp1 = left;
+    Node* temp2 = right;
+    
+    Node* dummyHead = new Node(-1);
+    Node* dummyTail = dummyHead;
+    
+    while(temp1 != NULL && temp2 != NULL) {
+        if(temp1->data <= temp2->data) {
+            dummyTail->next = temp1;
+            dummyTail = temp1;
+            temp1 = temp1->next;
+        }
+        else {
+            dummyTail->next = temp2;
+            dummyTail = temp2;
+            temp2 = temp2->next;
+        }
+    }
+
+    if(temp1 == NULL) dummyTail->next = temp2;
+    if(temp2 == NULL) dummyTail->next = temp1;
+    
+    return dummyHead->next;
+}
+
+Node* sortList(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    Node* mid = middleNode(head);
+    
+    Node* left = head;
+    Node* right = mid->next;
+    mid->next = NULL;
+    
+    left = sortList(left);
+    right = sortList(right);
+    
+    return mergeList(left, right);
+}
+
+// ------------------------------------------------------- Question 15 : Flattening a Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "Divide, Merge & Structural Transformation" & "Two Pointers"
+// Difficulty : Hard
+// Understand the problem : You are given a linked list where each node has two pointers : next → points to the next node in the main list & down → points to a sorted linked list.
+//                        : Each down list is sorted in ascending order.
+//                        : Let, N = total number of nodes & k = number of lists
+// Approach 1 (Basic Brute Force) : When the linked list structure is complex to manipulate directly, we can simplify the problem by using an auxiliary data structure like an array.
+//                                : Traverse the entire linked list (including all down chains) -> Store all node values into an array -> Sort the array using an efficient sorting algorithm -> Reconstruct a new flattened linked list from the sorted values.
+//                                : TC = O(nlogn) && SC = O(n)
+// Approach 2 (Brute Force) : To flatten the linked list, we treat each vertical (down) chain as an individual sorted list and merge them one by one.
+//                          : Idea : We maintain three pointers : prev : represents the current merged list.
+//                                                              : curr : represents the next list to be merged
+//                                                              : forward : keeps track of the remaining lists
+//                          : Initialize prev = head & curr = head->next,
+//                          : Iterate while curr != NULL & Store next list with forward = curr->next;
+//                          : Merge prev and curr using the merge of two sorted linked lists (via down pointers)
+//                          : Update pointers : prev = mergedHead → new merged list & curr = forward → move to next list
+//                                            : Continue until all lists are merged.
+//                          : Finally : prev will point to the fully flattened and sorted list
+//                          : TC = O(n*k) && SC = O(1)
+// Approach 2.2 (Brute Force - Striver) : Whatever we have done earlier, will do this time using recursion, and will start merging from the end.
+//                                      : TC = O(n*k) && SC = O(1)
+// Approach 3 (Optimal Approach) : Instead of merging lists one by one, split the problem into smaller parts → solve → merge results.
+//                               : If we merge sequentially like in the above two approaches, one list keeps growing & Repeated work.
+//                               : Algorithmic flow will be : Find middle of list -> Split into 2 halves -> Recursively flatten both halves -> Merge both sorted lists
+//                               : TC = O(Nlogk) && SC = O(log k) due to recursion call stack
+
+// Approach 2 :
+Node* mergeList(Node* l1, Node* l2) {
+    if(l1 == NULL) return l2;
+    if(l2 == NULL) return l1;
+    
+    Node* temp1 = l1;
+    Node* temp2 = l2;
+    
+    Node* dummyHead = new Node(-1);
+    Node* dummyTail = dummyHead;
+    
+    while(temp1 != NULL && temp2 != NULL) {
+        if(temp1->data <= temp2->data) {
+            temp1->next = NULL;
+            dummyTail->down = temp1;
+            dummyTail = temp1;
+            temp1 = temp1->down;
+        }
+        else {
+            temp2->next = NULL;
+            dummyTail->down = temp2;
+            dummyTail = temp2;
+            temp2 = temp2->down;
+        }
+    }
+    
+    if(temp1 == NULL) dummyTail->down = temp2;
+    if(temp2 == NULL) dummyTail->down = temp1;
+    
+    return dummyHead->down;
+}
+
+Node* flattenList(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* prev = head;
+    Node* curr = head->next;
+    Node* forward = NULL;
+    
+    while(curr != NULL) {
+        forward = curr->next;
+        Node* temp1 = prev;
+        Node* temp2 = curr;
+        
+        Node* mergedHead = mergeList(temp1, temp2);
+        prev = mergedHead;
+        curr = forward;
+    }
+    
+    return prev;
+}
+
+// Approach 2.2 :
+Node* mergeList(Node* LL1, Node* LL2) {
+    if (LL1 == NULL) return LL2;
+    if (LL2 == NULL) return LL1;
+    
+    Node* dummyNode = new Node(-1);
+    Node* result = dummyNode;
+    while(LL1 != NULL && LL2 != NULL) {
+        if(LL1->data < LL2->data) {
+            result->down = LL1;
+            result = LL1;
+            LL1 = LL1->down;
+        }
+        else {
+            result->down = LL2;
+            result = LL2;
+            LL2 = LL2->down;
+        }
+        result->next = NULL;
+    }
+    if(LL1 != NULL) result->down = LL1;
+    else result->down = LL2;
+    
+    return dummyNode->down;
+}
+
+Node* flattenList(Node* head) {
+    if (head == NULL || head->next == NULL)
+    return head;
+
+Node* mergeHead = flatten(head->next);
+return mergeList(head, mergeHead);
+}
+
+// Approach 3 : 
+Node* mergeList(Node* l1, Node* l2) {
+    if(l1 == NULL) return l2;
+    if(l2 == NULL) return l1;
+    
+    Node* dummy = new Node(-1);
+    Node* tail = dummy;
+    
+    while(l1 != NULL && l2 != NULL) {
+        if(l1->data <= l2->data) {
+            tail->down = l1;
+            l1 = l1->down;
+        } else {
+            tail->down = l2;
+            l2 = l2->down;
+        }
+        tail = tail->down;
+        tail->next = NULL; // IMPORTANT: break horizontal links
+    }
+    
+    if(l1) tail->down = l1;
+    if(l2) tail->down = l2;
+    
+    return dummy->down;
+}
+
+Node* flattenList(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    // Step 1: Split into two halves
+    Node* slow = head;
+    Node* fast = head->next;
+    
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    Node* second = slow->next;
+    slow->next = NULL; // break into two halves
+    
+    // Step 2: Recursively flatten both halves
+    Node* left = flattenList(head);
+    Node* right = flattenList(second);
+    
+    // Step 3: Merge both sorted lists
+    return mergeList(left, right);
+}
+
+// ------------------------------------------------------- Question 16 : Intersection of Two Linked Lists ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 17 : Rotate a Linked List ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 18 : Delete all occurrences of a key in DLL ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 19 : Find Pairs with Given Sum in Doubly Linked List - Sorted ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 20 : Remove duplicates from sorted DLL ------------------------------------------------------------------------>
