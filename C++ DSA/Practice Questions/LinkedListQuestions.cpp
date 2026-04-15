@@ -1518,8 +1518,248 @@ Node* flattenList(Node* head) {
     return mergeList(left, right);
 }
 
-// ------------------------------------------------------- Question 16 : Intersection of Two Linked Lists ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 16 : Intersection of Two Linked Lists ------------------------------------------------------------------------>\
+// Pattern Recognition : "Two Pointer"
+// Difficulty : Medium
+// Understand the problem : You are given the heads of two singly linked lists, headA and headB.
+//                        : Return the node at which the two lists intersect. If the two linked lists have no intersection, return NULL.
+//                        : Important Conditions : Intersection is based on reference, not value
+//                                               : The lists may have different lengths
+//                                               : After intersection point, both lists share the same tail
+// Approach 1 (Brute Force) : Store all nodes of the first linked list in a hash-based data structure.
+//                          : Then traverse the second list and check : Have I already seen this node? -> The first common node encountered is the intersection point.
+//                          : TC = O(n + m) && SC = O(n);
+// Approach 2 (Optimal) : Idea is, If two linked lists have different lengths, the longer list has extra nodes at the beginning.
+//                      : Remove this extra part so that both lists become equal in remaining length. Then traverse both together — the first common node is the intersection.
+//                      : TC = O(n + m) && SC = O(1)
+
+// Approach 1 :
+Node* intersectionOfLists(Node* headA, Node* headB) {
+    if(headA == NULL || headB == NULL) return NULL;
+
+    Node* temp = headA;
+    unordered_map<Node*, bool> visited; // Can also use unordered set.
+
+    while(temp != NULL) {
+        visited[temp] = true;
+        temp = temp->next;
+    }
+
+    temp = headB;
+    while(temp != NULL) {
+        if(visited[temp]) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+// Approach 2 :
+int getLen(Node* head) {
+    if(head == NULL) return 0;
+
+    int count = 0;
+    Node* temp = head;
+    while(temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+Node* intersectionOfLists(Node* headA, Node* headB) {
+    if(headA == NULL || headB == NULL) return NULL;
+
+    int len1 = getLen(headA);
+    int len2 = getLen(headB);
+
+    if(len1 < len2) {
+        int diff = len2 - len1;
+        Node* temp = headB;
+        while(diff--) {
+            headB = headB->next;
+        }
+    }
+    else {
+        int diff = len1 - len2;
+        Node* temp = headA;
+        while(diff--) {
+            headA = headA->next;
+        }
+    }
+
+    Node* temp1 = headA;
+    Node* temp2 = headB;
+
+    while(temp1 != NULL && temp2 != NULL) {
+        if(temp1 == temp2) {
+            return temp1;
+        }
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+    }
+    return NULL;
+}
+
 // ------------------------------------------------------- Question 17 : Rotate a Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "Structural Transformation"
+// Difficulty : Medium
+// Understand the problem : You are given a singly linked list, You need to rotate it to the right by k positions.
+//                        : Last k nodes will come to the front, Order of nodes must remain same & Large k values → repetitive rotations → optimize using modulo.
+// Approach 1 (Brute Force) : Rotate the list one step at a time, k times. Repeat k times : Traverse to last node & Remove last node, Insert it at the front.
+//                          : But inefficient for large k & Repeated traversal → unnecessary work.
+//                          : TC = O(n*k) && SC = O(1)
+// Approach 2 (Optimal) : Convert list into a circle, then break it at correct point.
+//                      : First find length n, and then normalize k
+//                      : Make list circular : Last node → point to head, Find new head and Move (n - k) steps & Break the link and the new head becomes answer.
+//                      : TC = O(n) && SC = O(1).
+
+// Approach 1 :
+int getLen(Node* head) {
+    if(head == NULL) return 0;
+
+    int count = 0;
+    Node* temp = head;
+    while(temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+Node* rotateRight(Node* head, int k) {
+    if(head == NULL || head->next == NULL) return head;
+
+    int n = getLen(head);
+    k = k % n; // To normalise large values of K
+
+    while(k--) {
+        Node* prev = NULL;
+        Node* curr = head;
+        while(curr->next != NULL) {
+            prev = curr;
+            curr = curr->next;
+        }
+        curr->next = head;
+        prev->next = NULL;
+        head = curr;
+    }
+
+    return head;
+}
+
+// Approach 2 : 
+int getLen(Node* head) {
+    if(head == NULL) return 0;
+
+    int count = 0;
+    Node* temp = head;
+    while(temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+Node* rotateRight(Node* head, int k) {
+    if(head == NULL || head->next == NULL) return head;
+
+    int n = getLen(head);
+    k = k % n; // To normalise large values of K
+
+    Node* temp = head;
+    while(temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = head;
+
+    Node* prev = NULL;
+    Node* curr = head;
+    int steps = n - k;
+
+    while(steps > 0) {
+        prev = curr;
+        curr = curr->next;
+        steps--;
+    }
+
+    head = curr;
+    prev->next = NULL;
+
+    return head;
+}
+
 // ------------------------------------------------------- Question 18 : Delete all occurrences of a key in DLL ------------------------------------------------------------------------>
+// Pattern Recognition : 
+// Difficulty : Medium
+// Understand the problem : You are given the head of a doubly linked list (DLL) and an integer key. Delete all nodes in the list whose value is equal to key, and return the updated head of the list.
+//                        : The deletion must be done in-place, maintaining the integrity of both next and prev pointers.
+//                        : Idea : This list can be - Sorted → all occurrences of key will be adjacent & Unsorted → occurrences can be anywhere.
+//                               : In both cases, after deletion - The list should remain valid, No broken links (prev / next) & Head may change.
+// Okay so that thing, is the DLL can be sorted or unsorted! Now, if the list is sorted we can solve it simply by traversing the list and finding the key value, if it exists? then all the keys will be adjacenet to each other and we cab simply pass them all at once! And now, as the list is sorted, means once the node value surpasses the key value, we can simply break it and tell the key does nto exist!
+//                        : Another, for the unsorted list, we can simply traverse the list using two pointers, prev and curr, everytime we are having a curr value equals to key value, we can simply remove that from the list! and adjust the pointers
+// Approach 1 (Brute Force) : Keep searching for the key repeatedly and delete one occurrence at a time.
+//                          : Traverse the list to find a node with value = key → delete it → restart traversal again from head → repeat until no key is found.
+//                          : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal) : Traverse the list once and delete nodes on the go using DLL properties.
+//                      : Move a pointer curr from head to end - If curr->data == key : Update links - If curr->prev exists → connect it to curr->next
+//                                                                                                   - If curr->next exists → connect it to curr->prev
+//                                                             - If curr is head → move head forward, Move to next node safely.
+//                      : TC = O(n) && SC = O(1)
+// Approach 2.2 (Optimal - Special Case) : For sorted DLL - If the list is sorted : Once curr->data > key → you can stop early & Slight optimization, but worst case still O(n)
+//                                       : TC = O(n) && SC = O(1)
+
+// Approach 2 :
+Node* deleteAllOccurence(Node* head, int key) { // Unsorted
+    if(head == NULL) return NULL;
+
+    Node* temp = head;
+    while(temp != NULL) {
+        Node* nextNode = temp->next;
+
+        if(temp->data == key) {
+            if(temp->prev == NULL) {
+                head = head->next;
+                if(head != NULL) head->prev = NULL;
+            }
+            else {
+                temp->prev->next = temp->next;
+                if(temp->next != NULL) temp->next->prev = temp->prev;
+            }
+            delete temp;
+        }
+        temp = nextNode;
+    }
+    return head;
+}
+
+// Approach 2.2 :
+Node* deleteAllOccurence(Node* head, int key) { // Sorted
+    if(head == NULL) return NULL;
+
+    Node* temp = head;
+    while(temp != NULL) {
+        Node* nextNode = temp->next;
+
+        if(temp->data == key) {
+            if(temp->prev == NULL) {
+                head = head->next;
+                if(head != NULL) head->prev = NULL;
+            }
+            else {
+                temp->prev->next = temp->next;
+                if(temp->next != NULL) temp->next->prev = temp->prev;
+            }
+            delete temp;
+        }
+        else if(temp->data > key) {
+            break;
+        }
+        temp = nextNode;
+    }
+    return head;
+}
+
 // ------------------------------------------------------- Question 19 : Find Pairs with Given Sum in Doubly Linked List - Sorted ------------------------------------------------------------------------>
 // ------------------------------------------------------- Question 20 : Remove duplicates from sorted DLL ------------------------------------------------------------------------>
