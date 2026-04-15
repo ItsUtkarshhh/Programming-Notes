@@ -1720,7 +1720,7 @@ Node* deleteAllOccurence(Node* head, int key) { // Unsorted
 
         if(temp->data == key) {
             if(temp->prev == NULL) {
-                head = head->next;
+                head = head->next; // Optionally can : head = temp->next; - More consistent logic, as we are already deleting temp (ChatGPT recommended)
                 if(head != NULL) head->prev = NULL;
             }
             else {
@@ -1744,7 +1744,7 @@ Node* deleteAllOccurence(Node* head, int key) { // Sorted
 
         if(temp->data == key) {
             if(temp->prev == NULL) {
-                head = head->next;
+                head = head->next; // Optionally can : head = temp->next; - More consistent logic, as we are already deleting temp (ChatGPT recommended)
                 if(head != NULL) head->prev = NULL;
             }
             else {
