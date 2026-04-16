@@ -1762,4 +1762,125 @@ Node* deleteAllOccurence(Node* head, int key) { // Sorted
 }
 
 // ------------------------------------------------------- Question 19 : Find Pairs with Given Sum in Doubly Linked List - Sorted ------------------------------------------------------------------------>
+// Pattern Recognition : 
+// Difficulty :
+// Understand the problem :
+// Approach 1 (Brute Force) : Case 1 (Sorted/Unsorted - +ve/-ve) : Traverse the list using a pointer (temp1) from head to end. For each node, use another pointer (temp2) starting from temp1->next.
+//                                              : Check every pair: if (temp1->data + temp2->data == target), store the pair. Continue until all pairs are checked.
+//                          : Case 2 (Sorted - +ve) : Traverse list with temp1 from head. For each temp1, traverse temp2 = temp1->next. Calculate sum : If sum == target → store pair & If sum > target → break inner loop (since sorted). Then move temp1 forward and repeat.
+// Approach 2 (Optimal) : Case 1 (Sorted/Unsorted - +ve/-ve) : 
+//                      : Case 2 (Sorted - +ve) : 
+
+// Approach 1 :
+// Case 1 : (Sorted/Unsorted - +ve/-ve)
+vector<pair<int, int>> pairSum(Node* head, int sum) { // Unsorted
+    if(head == NULL || head->next == NULL) {
+        return {};
+    }
+
+    Node* temp1 = head;
+    vector<pair<int, int>> ans;
+
+    while(temp1->next != NULL) { // Can write : while(temp1 != NULL) for better consistency.
+        Node* temp2 = temp1->next;
+        int currSum = temp1->data + temp2->data;
+        while(temp2 != NULL) {
+            if(currSum == sum) {
+                ans.push_back({min(temp1->data, temp2->data), max(temp1->data, temp2->data)});
+            }
+            temp2 = temp2->next;
+        }
+        temp1 = temp1->next;
+    }
+    return ans;
+}
+
+// Approach 1 :
+// Case 2 : (Sorted - +ve)
+vector<pair<int, int>> pairSum(Node* head, int sum) { // Sorted & all positive
+    if(head == NULL || head->next == NULL) {
+        return {};
+    }
+
+    Node* temp1 = head;
+    vector<pair<int, int>> ans;
+
+    while(temp1->next != NULL) { // Can write : while(temp1 != NULL) for better consistency.
+        Node* temp2 = temp1->next;
+        int currSum = temp1->data + temp2->data;
+        while(temp2 != NULL) {
+            if(currSum == sum) {
+                ans.push_back({min(temp1->data, temp2->data), max(temp1->data, temp2->data)});
+            }
+            else if(currSum > sum) {
+                break;
+            }
+            temp2 = temp2->next;
+        }
+        temp1 = temp1->next;
+    }
+    return ans;
+}
+
+// Approach 2 :
+// Case 1 : (Sorted/Unsorted - +ve/-ve)
+vector<pair<int, int>> pairSum(Node* head, int sum) {
+    if(head == NULL || head->next == NULL) {
+        return {};
+    }
+
+    unordered_set<int> seen;
+    vector<pair<int,int>> ans;
+
+    Node* temp = head;
+
+    while(temp != NULL) {
+        int val = temp->data;
+        int required = sum - val;
+
+        if(seen.count(required)) {
+            ans.push_back({min(val, required), max(val, required)});
+        }
+
+        seen.insert(val);
+        temp = temp->next;
+    }
+
+    return ans;
+}
+
+// Approach 2 :
+// Case 2 : (Sorted - +ve)
+vector<pair<int, int>> pairSum(Node* head, int sum) {
+    if(head == NULL || head->next == NULL) {
+        return {};
+    }
+
+    Node* end = head;
+    while(end->next != NULL) {
+        end = end->next;
+    }
+
+    Node* start = head;
+    vector<pair<int,int>> ans;
+    while(start != end) {
+        int currSum = start->data + end->data;
+
+        if(currSum == sum) {
+            ans.push_back({min(start->data, end->data), max(start->data, end->data)});
+            start = start->next;
+            end = end->prev;
+        }
+        else if(currSum > sum) {
+            end = end->prev;
+        }
+        else {
+            start = start->next;
+        }
+    }
+
+    return ans;
+}
+
 // ------------------------------------------------------- Question 20 : Remove duplicates from sorted DLL ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 21 : Remove duplicates from unsorted DLL ------------------------------------------------------------------------>
