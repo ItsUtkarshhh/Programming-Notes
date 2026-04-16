@@ -1762,14 +1762,18 @@ Node* deleteAllOccurence(Node* head, int key) { // Sorted
 }
 
 // ------------------------------------------------------- Question 19 : Find Pairs with Given Sum in Doubly Linked List - Sorted ------------------------------------------------------------------------>
-// Pattern Recognition : 
+// Pattern Recognition : "Two Pointers"
 // Difficulty :
-// Understand the problem :
+// Understand the problem : Given a Doubly Linked List (DLL) and an integer target, find all unique pairs of nodes (a, b) such that a + b == target. Return the pairs as a list of {min, max} ordered tuples. Each node value may be used only once, and each pair should be reported only once.
 // Approach 1 (Brute Force) : Case 1 (Sorted/Unsorted - +ve/-ve) : Traverse the list using a pointer (temp1) from head to end. For each node, use another pointer (temp2) starting from temp1->next.
 //                                              : Check every pair: if (temp1->data + temp2->data == target), store the pair. Continue until all pairs are checked.
+//                                              : TC = O(n^2) && SC = O(1)
 //                          : Case 2 (Sorted - +ve) : Traverse list with temp1 from head. For each temp1, traverse temp2 = temp1->next. Calculate sum : If sum == target → store pair & If sum > target → break inner loop (since sorted). Then move temp1 forward and repeat.
-// Approach 2 (Optimal) : Case 1 (Sorted/Unsorted - +ve/-ve) : 
-//                      : Case 2 (Sorted - +ve) : 
+//                                                  : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal) : Case 1 (Sorted/Unsorted - +ve/-ve) : Traverse the list once with a single pointer temp. For each node, check if (target - temp->data) already exists in the hash set. If yes → store the pair {target - temp->data, temp->data}. If no → insert temp->data into the set. Move temp forward and repeat until end.
+//                                                           : TC = O(n) && SC = O(n)
+//                      : Case 2 (Sorted - +ve) : Find the end node by traversing to the tail. Place start at head and end at tail. While start != end and end->next != start (to handle crossing): compute currSum = start->data + end->data. If currSum == target → store pair, move start forward & end backward. If currSum > target → move end backward. If currSum < target → move start forward.
+//                                              : TC = O(n) && SC = O(1)
 
 // Approach 1 :
 // Case 1 : (Sorted/Unsorted - +ve/-ve)
@@ -1863,7 +1867,7 @@ vector<pair<int, int>> pairSum(Node* head, int sum) {
 
     Node* start = head;
     vector<pair<int,int>> ans;
-    while(start != end) {
+    while(start != end && start->prev != end) {
         int currSum = start->data + end->data;
 
         if(currSum == sum) {
