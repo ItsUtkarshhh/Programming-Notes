@@ -1887,4 +1887,35 @@ vector<pair<int, int>> pairSum(Node* head, int sum) {
 }
 
 // ------------------------------------------------------- Question 20 : Remove duplicates from sorted DLL ------------------------------------------------------------------------>
+// Pattern Recognition : "Two Pointers" / "Hashing"
+// Difficulty : Medium
+// Understand the problem : 
+// Approach 1 : Use a nested loop for each node and find its duplicate and remove it
+// Approach 2 : unordered set and rebuild a list
+// Approach 3 : As the DLL is sorted, so the duplicates will exist adjacent to eac h other can simply traverse using two pointers and remove them
+
+Node* removeDuplicateSortedDLL(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    Node* temp1 = head;
+    while(temp1 != NULL) {
+        Node* temp2 = temp1->next;
+        while(temp2 != NULL) {
+            if(temp1->data == temp2->data) {
+                Node* ntd = temp2;
+                temp2 = temp2->next;
+                ntd->next = ntd->prev = NULL;
+                delete ntd;
+            }
+            else {
+                temp2 = temp2->next;
+            }
+        }
+        temp1 = temp1->next;
+    }
+    return head;
+}
+
 // ------------------------------------------------------- Question 21 : Remove duplicates from unsorted DLL ------------------------------------------------------------------------>
