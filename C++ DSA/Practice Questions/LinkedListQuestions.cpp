@@ -1887,14 +1887,19 @@ vector<pair<int, int>> pairSum(Node* head, int sum) {
 }
 
 // ------------------------------------------------------- Question 20 : Remove duplicates from sorted DLL ------------------------------------------------------------------------>
-// Pattern Recognition : "Two Pointers" / "Hashing"
+// Pattern Recognition : "Two Pointers" / "Hashing" + "Adjacent Comparions"
 // Difficulty : Medium
-// Understand the problem : 
-// Approach 1 : Since the list is sorted, duplicates are guaranteed to be neighbors. You only need to compare the current node with its direct successor.
-//            : Start at the head with a pointer (e.g., curr). and another pointer next to it inside a nested loop, and once you found a curr and curr->next value equal just readjust the pointer for next and previous nodes and move the inner pointer forward, and repeat it until all the nodes are deleted.
-//            : TC = O(n) && SC = O(1)
-// Approach 2 : unordered set and rebuild a list
-// Approach 3 : As the DLL is sorted, so the duplicates will exist adjacent to eac h other can simply traverse using two pointers and remove them
+// Understand the problem : Given the head of a sorted doubly linked list, remove all duplicate nodes such that each element appears only once. Return the head of the modified list.
+// Approach 1 (Brute Force) : Since the list is sorted, duplicates are guaranteed to be neighbors. You only need to compare the current node with its direct successor.
+//                          : Start at the head with a pointer (e.g., curr). and another pointer next to it inside a nested loop, and once you found a curr and curr->next value equal just readjust the pointer for next and previous nodes and move the inner pointer forward, and repeat it until all the nodes are deleted.
+//                          : TC = O(n) && SC = O(1)
+// Approach 2 (Brute Force with Extra Space) : Traverse the given DLL and store all values in a set (sorted set)
+//                                           : And due to set, it automatically removed duplicates and also maintains the sorted order.
+//                                           : TC = O(nlogn) && SC = O(n)
+// Approach 3 (Optimal) : Core Idea - The DLL is already sorted, So duplicate values will always be adjacent, Compare each node with its next node & If equal → delete the next node.
+//                      : Start from head using pointer curr, Traverse the list while curr and curr->next exist & at each step if curr->data == curr->next->data simply delete that next node and when not equal simply move the curr pointer forward. 
+//                      : Key Observation : Do not move curr just after deletion, as it will cause you skip duplicate nodes too.
+//                      : TC = O(n) && SC = O(1)
 
 // Approach 1 :
 Node* removeDuplicateSortedDLL(Node* head) {
@@ -1924,10 +1929,10 @@ Node* removeDuplicateSortedDLL(Node* head) {
 }
 
 // Approach 2 :
-void insertNode(Node* &tail, int data) {
+void insertNode(Node* &head, Node* &tail, int data) {
     Node* newNode = new Node(data);
-    if(head == NULL) {
-        tail = newNode;
+    if(head == NULL || tail == NULL) {
+        head = tail = newNode;
         return;
     }
     tail->next = newNode;
@@ -1941,17 +1946,331 @@ Node* removeDuplicateSortedDLL(Node* head) {
         return head;
     }
 
-    unordered_set<int> uniqueNodes;
+    set<int> uniqueNodes;
     Node* temp = head;
     while(temp != NULL) {
         uniqueNodes.insert(temp->data);
         temp = temp->next;
     }
 
-    Node* dummyNode = new Node(INT_MIN);
-    for(int it : uniqueNodes) {
-        insertNode(dummyNode, it);
+    Node* newHead = NULL;
+    Node* newTail = NULL;
+    for(int value : uniqueNodes) {
+        insertNode(newHead, newTail, value);
     }
+
+    return newHead;
+}
+
+// Approach 3 :
+Node* removeDuplicateSortedDLL(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    Node* prev = NULL; // You can use it, or remove to helping alot, and then simply traverse with condition - while(curr != NULL && curr->next != NULL)
+    Node* curr = head;
+    while(curr->next != NULL) {
+        if(curr->data == curr->next->data) {
+            Node* ntd = curr->next;
+            curr->next = ntd->next;
+            if(ntd->next != NULL) ntd->next->prev = curr;
+            ntd->next = ntd->prev = NULL;
+            delete ntd;
+        }
+        else {
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+    return head;
 }
 
 // ------------------------------------------------------- Question 21 : Remove duplicates from unsorted DLL ------------------------------------------------------------------------>
+// Pattern Recognition : "Two Pointers" / "Hashing"
+// Difficulty : Medium
+// Understand the problem : Given the head of an unsorted doubly linked list, remove all duplicate nodes such that only the first occurrence of each value is retained. Return the head of the modified list.
+// Approach 1 (Brute Force) : Same as above
+// Approach 2 (Optimal) : Traverse the list while maintaining a hash set of seen values. For each node, if its value already exists in the set, delete it by relinking its neighbors and freeing the memory.
+//                      : Otherwise, insert its value into the set and move forward.
+//                      : TC = O(n) && SC = O(n)
+
+// Approach 2 :
+Node* removeDuplicateUnsortedDLL(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    Node* curr = head;
+    unordered_set<int> uniqueNodes;
+
+    while(curr != NULL) {
+        if(uniqueNodes.find(curr->data) != uniqueNodes.end()) { // Duplicates nodes
+            Node* ntd = curr;
+            curr = ntd->next;
+            if(ntd->prev != NULL) ntd->prev->next = ntd->next;
+            if(ntd->next != NULL) ntd->next->prev = ntd->prev;
+            ntd->next = ntd->prev= NULL;
+            delete ntd;
+        }
+        else {
+            uniqueNodes.insert(curr->data);
+            curr = curr->next;
+        }
+    }
+    return head;
+}
+
+// ------------------------------------------------------- Question 22 : Segregate odd and even nodes in Linked List ------------------------------------------------------------------------>
+// Pattern Recognition : "Dummy Node" + "Traversal & Basic Manipulation"
+// Difficulty : Medium
+// Understand the problem : Given the head of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return the reordered list.
+//                        : The first node is considered odd, and the second node is even, and so on. Note that the relative order inside both the even and odd groups should remain as it was in the input.
+//                        : You must solve the problem in O(1) extra space complexity and O(n) time complexity.
+// Approach 1 (Brute Force) : Store odd and even indexed elements separately, then rebuild the list.
+//                          : Traverse the list with index (1-based), Store - Odd index values → odd list & Even index values → even list.
+//                          : Create a new list - First add all odd values, Then add all even values.
+//                          : TC = O(n) && SC = O(n)
+// Approach 2 (Optimal) : Rearrange nodes by changing links without extra space.
+//                      : Traverse the list - Separate nodes into one Odd list & Even list. While moving a node, save next node & break its old link (next = NULL)
+//                      : Attach it to odd/even list, finally connect - oddTail → evenHead
+//                      : TC = O(n) && SC = O(1)
+
+// Approach 1 :
+Node* segregateOddEven(Node* head) {
+    if(head == NULL) return NULL;
+
+    vector<int> oddVector;
+    vector<int> evenVector;
+
+    Node* temp = head;
+    int index = 1;
+
+    while(temp != NULL) {
+        if(index % 2 != 0) {
+            oddVector.push_back(temp->data);
+        }
+        else {
+            evenVector.push_back(temp->data);
+        }
+        temp = temp->next;
+        index++;
+    }
+
+    Node* oddList = new Node(INT_MIN);
+    Node* oddListTail = oddList;
+    
+    Node* evenList = new Node(INT_MIN);
+    Node* evenListTail = evenList;
+
+    for(int i = 0; i < oddVector.size(); i++) {
+        Node* newNode = new Node(oddVector[i]);
+        oddListTail->next = newNode;
+        oddListTail = newNode;
+    }
+    for(int i = 0; i < evenVector.size(); i++) {
+        Node* newNode = new Node(evenVector[i]);
+        evenListTail->next = newNode;
+        evenListTail = newNode;
+    }
+
+    oddListTail->next = evenList->next;
+    return oddList->next;
+}
+
+// Approach 1 (Better Readability) :
+Node* segregateOddEven(Node* head) {
+    if(head == NULL) return NULL;
+
+    vector<int> oddVector;
+    vector<int> evenVector;
+
+    Node* temp = head;
+    int index = 1;
+
+    while(temp != NULL) {
+        if(index % 2 != 0) {
+            oddVector.push_back(temp->data);
+        } else {
+            evenVector.push_back(temp->data);
+        }
+        temp = temp->next;
+        index++; 
+    }
+
+    Node* dummy = new Node(-1);
+    Node* tail = dummy;
+
+    for(int val : oddVector) {
+        tail->next = new Node(val);
+        tail = tail->next;
+    }
+
+    for(int val : evenVector) {
+        tail->next = new Node(val);
+        tail = tail->next;
+    }
+
+    return dummy->next;
+}
+
+// Approach 2 :
+Node* segregateOddEven(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* oddHead = new Node(INT_MIN);
+    Node* oddTail = oddHead;
+    
+    Node* evenHead = new Node(INT_MIN);
+    Node* evenTail = evenHead;
+
+    Node* temp = head;
+    int index = 1;
+    while(temp != NULL) {
+        Node* nextNode = temp->next;
+        temp->next = NULL;
+        if(index % 2 != 0) {
+            oddTail->next = temp;
+            oddTail = temp;
+        }
+        else {
+            evenTail->next = temp;
+            evenTail = temp;
+        }
+        temp = nextNode;
+        index++;
+    }
+
+    oddTail->next = evenHead->next;
+    return oddHead->next;
+}
+
+// ------------------------------------------------------- Question 23 : Remove Nth node from the back of the LL ------------------------------------------------------------------------>
+// Pattern Recognition : "Two Pointers" - "Lagging Pointer"
+// Difficulty : Medium
+// Understand the problem : Given the head of a linked list, remove the nth node from the end of the list and return its head.
+// Approach 1 (Brute Force) : Find the length of the list and convert the problem into removing a node from a specific position from start.
+//                          : Traverse the list → compute length, Calculate - steps = length - n. If steps == 0, delete head node. 
+//                          : Else : Move steps times from head, Keep track of prev and curr, Delete curr node.
+//                          : TC : O(2n) && SC = O(1)
+// Approach 2 (Optimal) : Maintain a gap of N nodes between two pointers so that when one reaches end, the other is at the correct position.
+//                      : Initialize two pointers: curr and prev, move curr N steps ahead - if curr == NULL, delete head node.
+//                      : Else - Move both curr and prev together, stop when curr->next == NULL, delete prev->next.
+//                      : TC = O(n) && SC = O(1)
+
+// Approach 1 :
+int getLen(Node* head) {
+    if(head == NULL) return 0;
+
+    Node* temp = head;
+    int count = 0;
+
+    while(temp != NULL) {
+        temp = temp->next;
+        count++;
+    }
+    return count;
+}
+
+Node* removeNthNodeFromLast(Node* head, int n) {
+    if(head == NULL) return NULL;
+
+    int len = getLen(head);
+    int steps = len - n;
+    
+    if(n == len) {
+        Node* toDelete = head;
+        head = head->next;
+        delete toDelete;
+        return head;
+    }
+    
+    Node* prev = NULL;
+    Node* temp = head;
+    while(steps > 0) {
+        prev = temp;
+        temp = temp->next;
+        steps--;
+    }
+    
+    prev->next = temp->next;
+    temp->next = NULL;
+    delete temp;
+    return head;
+}
+
+// Approach 2 :
+Node* removeNthNodeFromLast(Node* head, int n) {
+    if(head == NULL) return NULL;
+    
+    int steps = n;
+    Node* curr = head;
+    while(steps > 0) {
+        curr = curr->next;
+        steps--;
+    }
+    
+    if(curr == NULL) {
+        Node* ntd = head;
+        head = head->next;
+        delete ntd;
+        return head;
+    }
+
+    Node* prev = head;
+    while(curr->next != NULL) {
+        prev = prev->next;
+        curr = curr->next;
+    }
+    
+    Node* ntd = prev->next;
+    prev->next = ntd->next;
+    ntd->next = NULL;
+    delete ntd;
+    
+    return head;
+}
+
+// ------------------------------------------------------- Question 24 : Delete the middle node in LL ------------------------------------------------------------------------>
+// Pattern Recognition : "Two Pointers" - "Fast & Slow Pointer"
+// Difficulty : Medium
+// Understand the problem : You are given the head of a linked list. Delete the middle node, and return the head of the modified linked list.
+//                        : The middle node of a linked list of size n is the ⌊n / 2⌋th node from the start using 0-based indexing, where ⌊x⌋ denotes the largest integer less than or equal to x.
+//                        : For n = 1, 2, 3, 4, and 5, the middle nodes are 0, 1, 1, 2, and 2, respectively.
+// Approach 1 (Brute Force) : 
+// Approach 2 (Optimal) : 
+
+// Approach 1 :
+int getLen(Node* head) {
+    if(head == NULL) return 0;
+
+    Node* temp = head;
+    int count = 0;
+
+    while(temp != NULL) {
+        temp = temp->next;
+        count++;
+    }
+    return count;
+}
+
+Node* deleteMiddle(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    int len = getLen(head);
+    int mid = len/2;
+
+    Node* prev = NULL;
+    Node* curr = head;
+
+    for(int i = 1; i < mid; i++) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    Node* ntd = prev->next;
+    prev->next = ntd->next;
+    ntd->next = NULL;
+    delete ntd;
+    return head;
+}
