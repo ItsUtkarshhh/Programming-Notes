@@ -1890,10 +1890,13 @@ vector<pair<int, int>> pairSum(Node* head, int sum) {
 // Pattern Recognition : "Two Pointers" / "Hashing"
 // Difficulty : Medium
 // Understand the problem : 
-// Approach 1 : Use a nested loop for each node and find its duplicate and remove it
+// Approach 1 : Since the list is sorted, duplicates are guaranteed to be neighbors. You only need to compare the current node with its direct successor.
+//            : Start at the head with a pointer (e.g., curr). and another pointer next to it inside a nested loop, and once you found a curr and curr->next value equal just readjust the pointer for next and previous nodes and move the inner pointer forward, and repeat it until all the nodes are deleted.
+//            : TC = O(n) && SC = O(1)
 // Approach 2 : unordered set and rebuild a list
 // Approach 3 : As the DLL is sorted, so the duplicates will exist adjacent to eac h other can simply traverse using two pointers and remove them
 
+// Approach 1 :
 Node* removeDuplicateSortedDLL(Node* head) {
     if(head == NULL || head->next == NULL) {
         return head;
@@ -1905,6 +1908,8 @@ Node* removeDuplicateSortedDLL(Node* head) {
         while(temp2 != NULL) {
             if(temp1->data == temp2->data) {
                 Node* ntd = temp2;
+                if(temp2->next) temp2->next->prev = temp2->prev;
+                temp2->prev->next = temp2->next;
                 temp2 = temp2->next;
                 ntd->next = ntd->prev = NULL;
                 delete ntd;
@@ -1916,6 +1921,37 @@ Node* removeDuplicateSortedDLL(Node* head) {
         temp1 = temp1->next;
     }
     return head;
+}
+
+// Approach 2 :
+void insertNode(Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL) {
+        tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    newNode->prev = tail;
+    tail = newNode;
+    return;
+}
+
+Node* removeDuplicateSortedDLL(Node* head) {
+    if(head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    unordered_set<int> uniqueNodes;
+    Node* temp = head;
+    while(temp != NULL) {
+        uniqueNodes.insert(temp->data);
+        temp = temp->next;
+    }
+
+    Node* dummyNode = new Node(INT_MIN);
+    for(int it : uniqueNodes) {
+        insertNode(dummyNode, it);
+    }
 }
 
 // ------------------------------------------------------- Question 21 : Remove duplicates from unsorted DLL ------------------------------------------------------------------------>
