@@ -2312,14 +2312,29 @@ Node* deleteMiddle(Node* head) {
 }
 
 // ------------------------------------------------------- Question 25 : Add 1 to a number represented by LL ------------------------------------------------------------------------>
-// Pattern Recognition :
+// Pattern Recognition : "Linked List Arithematic"
 // Difficulty : Medium
 // Understand the problem : Given the head of a singly linked list representing a positive integer number. Each node of the linked list represents a digit of the number, with the 1st node containing the leftmost digit of the number and so on.
 //                        : The task is to add one to the value represented by the linked list and return the head of a linked list containing the final value.
 //                        : The number will contain no leading zeroes except when the value represented is zero itself.
-// Approach 1 (Brute Force) : 
-// Approach 2 (Better Brute Force) :
-// Approach 2 (Optimal) :
+// Approach 1 (Brute Force) : Convert the Linked List into a number, add 1, then reconstruct the Linked List.
+//                          : Store digits in a vector, convert vector to integer, add 1 into the final integer value and then finally create new Linked List. Finally create a new Linked List.
+//                          : TC = O(n) && SC = O(n)
+// Approach 2 (Better Brute Force) : Simulate manual addition using carry, just like we do on paper.
+//                                 : Addition starts from last digit, but LL is in forward order, so first reverse the Linked List.
+//                                 : Reverse the Linked List, initialize carry, traverse and add, handle remaining carry & reverse again.
+//                                 : TC = O(n) && SC = O(n)
+// Approach 3 (Optimal 1) : The idea is identifying the last non 9 node.
+//                        : Core Idea : When we add +1, carry propagates from right to left, But carry only continues through digits = 9 & It stops at the first digit (from right) that is NOT 9.
+//                                    : Carry propagates only through trailing 9s and stops at the first non-9 digit.
+//                        : We don’t need to process entire list backward, we just need to stop at the node where carry will STOP (Rightmost node which is NOT 9)
+//                        : Cases : Case 1 : All 9s - Create a new head with value 1 & update all the next values with 0
+//                                : Case 2 : At least one non-9 exists - Increament last non 9 node and then simply update all the remaining nodes with 0.
+//                                : Case 3 : No trailing 9s - Just increament the last non 9 node (which will be the last node in this case) by 1 value.
+//                        : TC = O(n) && SC = O(1)
+// Approach 4 (Optimal 2) : Another approach can be the recursive method, where as we cannot access the last node of the list, so we can traverse there using recursion and then add the values by 1 while backtracking.
+//                        : Key Insight : Recursion allows us to simulate reverse traversal in a singly linked list
+//                        : TC = O(n) && SC = O(n) - Recursive Call Stack
 
 // Approach 1 :
 void insertNode(Node* &head, Node* &tail, int data) {
@@ -2445,4 +2460,66 @@ Node* add1ToLL(Node* head) {
     }
 
     return reverseLL(dummyHead);
+}
+
+// Approach 3 :
+Node* add1ToLL(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* lastNon9 = NULL;
+    Node* temp = head;
+    while(temp != NULL) {
+        if(temp->data != 9) lastNon9 = temp;
+        temp = temp->next;
+    }
+
+    // Case 1 - All 9s
+    if(lastNon9 == NULL) {
+        Node* newNode = new Node(1);
+        newNode->next = head;
+        head = newNode;
+        temp = head->next;
+        while(temp != NULL) {
+            temp->data = 0;
+            temp = temp->next;
+        }
+        return head;
+    }
+    else if(lastNon9->next == NULL) { // No trailing 9s
+        lastNon9->data += 1;
+        return head;
+    }
+    else {
+        lastNon9->data += 1;
+        temp = lastNon9->next;
+        while(temp != NULL) {
+            temp->data = 0;
+            temp = temp->next;
+        }
+        return head;
+    }
+} // Suggestion : You can reduce the code by merging the else if and else condition in one.
+
+// Approach 4 :
+int helper(Node* head) {
+    if(head == NULL) return 1;
+
+    int carry = helper(head->next);
+    int sum = head->data + carry;
+    head->data = sum % 10;
+    return sum / 10;
+}
+
+Node* add1ToLL(Node* head) {
+    // if(head == NULL) return NULL;
+    if(head == NULL) return new Node(1);
+
+    int carry = helper(head);
+
+    if(carry) {
+        Node* newNode = new Node(carry);
+        newNode->next = head;
+        head = newNode;
+    }
+    return head;
 }
