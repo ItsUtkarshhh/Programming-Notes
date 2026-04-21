@@ -2237,8 +2237,14 @@ Node* removeNthNodeFromLast(Node* head, int n) {
 // Understand the problem : You are given the head of a linked list. Delete the middle node, and return the head of the modified linked list.
 //                        : The middle node of a linked list of size n is the ⌊n / 2⌋th node from the start using 0-based indexing, where ⌊x⌋ denotes the largest integer less than or equal to x.
 //                        : For n = 1, 2, 3, 4, and 5, the middle nodes are 0, 1, 1, 2, and 2, respectively.
-// Approach 1 (Brute Force) : 
-// Approach 2 (Optimal) : 
+// Approach 1 (Brute Force) : This method relies on knowing the exact "address" (index) of the middle node.
+//                          : Steps : Traverse the entire list to find the total length (N). Calculate the middle index: mid = N / 2.
+//                                  : Traverse again from the head, stopping exactly at the node before the middle. Update the next pointer of the current node to skip the middle node.
+//                          : TC = O(n) + O(n/2) = O(n) && SC = O(1)
+// Approach 2 (Optimal) : Initialize two pointers: slow at head and fast at head->next. Move slow by one step and fast by two steps.
+//                      : Because fast travels twice as fast, when it hits the end of the list, slow will naturally be at the node immediately before the middle.
+//                      : Bridge the gap: slow->next = slow->next->next.
+//                      : TC = O(n) && SC = O(1)
 
 // Approach 1 :
 int getLen(Node* head) {
@@ -2255,7 +2261,13 @@ int getLen(Node* head) {
 }
 
 Node* deleteMiddle(Node* head) {
-    if(head == NULL || head->next == NULL) return head;
+    if(head == NULL) return NULL;
+    if(head->next == NULL) {
+        Node* ntd = head;
+        head = head->next;
+        delete ntd;
+        return NULL;
+    }
 
     int len = getLen(head);
     int mid = len/2;
@@ -2263,14 +2275,40 @@ Node* deleteMiddle(Node* head) {
     Node* prev = NULL;
     Node* curr = head;
 
-    for(int i = 1; i < mid; i++) {
+    for(int i = 0; i < mid; i++) {
         prev = curr;
         curr = curr->next;
     }
 
-    Node* ntd = prev->next;
-    prev->next = ntd->next;
+    prev->next = curr->next;
+    curr->next = NULL;
+    delete curr;
+    return head;
+}
+
+// Approach 2 :
+Node* deleteMiddle(Node* head) {
+    if(head == NULL) return NULL;
+    if(head->next == NULL) {
+        Node* ntd = head;
+        head = head->next; // Or rather, you can simply "delete head", as its just one node, but this is also fine, but yes this minor twik can be done.
+        delete ntd;
+        return NULL;
+    }
+
+    Node* slow = head;
+    Node* fast = head->next;
+
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    Node* ntd = slow->next;
+    slow->next = ntd->next;
     ntd->next = NULL;
     delete ntd;
     return head;
 }
+
+// ------------------------------------------------------- Question 25 :  ------------------------------------------------------------------------>
