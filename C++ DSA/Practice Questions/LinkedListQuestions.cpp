@@ -2311,4 +2311,138 @@ Node* deleteMiddle(Node* head) {
     return head;
 }
 
-// ------------------------------------------------------- Question 25 :  ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 25 : Add 1 to a number represented by LL ------------------------------------------------------------------------>
+// Pattern Recognition :
+// Difficulty : Medium
+// Understand the problem : Given the head of a singly linked list representing a positive integer number. Each node of the linked list represents a digit of the number, with the 1st node containing the leftmost digit of the number and so on.
+//                        : The task is to add one to the value represented by the linked list and return the head of a linked list containing the final value.
+//                        : The number will contain no leading zeroes except when the value represented is zero itself.
+// Approach 1 (Brute Force) : 
+// Approach 2 (Better Brute Force) :
+// Approach 2 (Optimal) :
+
+// Approach 1 :
+void insertNode(Node* &head, Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
+
+Node* reverseLL(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    while(curr != NULL) {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+    return prev;
+}
+
+Node* add1ToLL(Node* head) {
+    if(head == NULL) {
+        Node* newNode = new Node(1);
+        return newNode;
+    }
+    if(head->next == NULL) {
+        int sum = head->data + 1;
+        if(sum > 9) {
+            head->data = 1;
+            Node* newNode = new Node(0);
+            head->next = newNode;
+            return head;
+        }
+        else {
+            return head;
+        }
+    }
+
+    vector<int> num;
+    Node* temp = head;
+    while(temp != NULL) {
+        num.push_back(temp->data);
+        temp = temp->next;
+    }
+
+    // Forming a decimal number 
+    int finalNumber = 0;
+    for(int i = 0; i < num.size(); i++) {
+        int digit = num[i];
+        finalNumber = finalNumber*10 + digit;
+    }
+
+    finalNumber += 1;
+    Node* dummyHead = new Node(INT_MIN);
+    Node* dummyTail = dummyHead;
+
+    while(finalNumber) {
+        int digit = finalNumber % 10;
+        insertNode(dummyHead, dummyTail, digit);
+        finalNumber = finalNumber / 10;
+    }
+
+    Node* finalList = reverseLL(dummyHead->next);
+
+    return finalList;
+}
+
+// Approach 2 :
+Node* reverseLL(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    while(curr != NULL) {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+    return prev;
+}
+
+void insertNode(Node* &head, Node* &tail, int data) {
+    Node* newNode = new Node(data);
+    if(head == NULL) {
+        head = tail = newNode;
+        return;
+    }
+    tail->next = newNode;
+    tail = newNode;
+    return;
+}
+
+Node* add1ToLL(Node* head) {
+    if(head == NULL) return NULL;
+
+    Node* reversedHead = reverseLL(head);
+    Node* temp = reversedHead;
+
+    int carry = 1;
+
+    Node* dummyHead = NULL
+    Node* dummyTail = NULL;
+
+    while(temp != NULL || carry != 0) {
+        int val = (temp != NULL) ? temp->data : 0;
+        int total = val + carry;
+
+        carry = total / 10;
+        int digit = total % 10;
+
+        insertNode(dummyHead, dummyTail, digit);
+        if(temp != NULL) temp = temp->next;
+    }
+
+    return reverseLL(dummyHead);
+}
