@@ -1,3 +1,65 @@
+// ------------------------------------------------------- Stack Questions ------------------------------------------------------------------------>
+// ------------------------------------------------------- Question 1 : Implement a stack using arrays ------------------------------------------------------------------------>
+// Pattern Recognition : "Stack Basics"
+// Difficulty : "Easy"
+// Understand the problem : Implement a Last-In, First-Out (LIFO) data structure using a fixed-size array in C++.
+//                        : The implementation must support basic stack operations while handling boundary conditions (overflow and underflow) to ensure memory safety.
+//                        : Required : push, pop, peek, isEmpty & isFull methods.
+//                        : Why we actually require stack : In a regular array, you can access any index at any time ($O(1)$ access). This sounds good, but in complex systems, this "freedom" can lead to bugs. A Stack says: "You are only allowed to care about the very last thing that happened."
+//                        : Use cases : The "Undo" Button: When you press Ctrl+Z, the computer doesn't care what you did 10 minutes ago; it cares about the very last action you performed. That action is "popped" off the stack.
+//                                    : Function Calls (The Call Stack): When a function calls another function, the CPU "pushes" the current address onto a stack. When the function finishes, it "pops" that address to remember where to return.
+//                                    : Expression Evaluation: Compilers use stacks to parse math and logic, ensuring that parentheses are closed in the correct order.
+//                        : TC = O(1) && SC = O(n) - n = max size of the stack.
+class Stack {
+    private:
+    int* arr;
+    int size;
+    int top;
+
+    public:
+    Stack(int size) {
+        this->top = -1;
+        this->size = size;
+        arr = new int[size];
+    }
+
+    void push(int data) {
+        if(top == size - 1) {
+            cout<<"Stack Overflow";
+            return;
+        }
+        top++;
+        arr[top] = data;
+    }
+
+    void pop() {
+        if(top == -1) {
+            cout<<"Stack Undeflow";
+            return;
+        }
+        top--;
+    }
+
+    int peek() {
+        if(top == -1) {
+            cout<<"Empty stack!";
+            return -1;
+        }
+        return arr[top];
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+
+    bool isFull() {
+        return top == size;
+    }
+};
+
+
+
+
 // ------------------------------------------------------------- Lecture Notes Questions ---------------------------------------------------------------------->
 // Problem 1 : Implement Stack using Arrays!
 // Approach : We needed - Parameterized Constructor : For Stack building
