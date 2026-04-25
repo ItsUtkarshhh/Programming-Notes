@@ -428,18 +428,18 @@ void removeMiddle(stack<int> &st) {
     removeMiddleHelper(st, count, n);
 }
 
-// ------------------------------------------------------- Problem 7 : Delete the middle node using Stack ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 7 : Push at bottom of the stack ------------------------------------------------------------------------>
 // Pattern Recognition : "Stack Basics"
 // Difficulty : "Easy"
-// Problem Statement : Delete the middle element of a stack while preserving the order of remaining elements.
-// Understand the Problem : A stack follows LIFO and does not support random access.
-//                        : To delete the middle element, we must either : Traverse using another data structure (iterative) & Or simulate traversal using recursion (implicit stack)
-// Approach 1 (Iterative Approach) : Use an auxiliary stack to temporarily hold elements.
-//                                 : Steps : Find size n of stack and compute middle index (n/2) -> Pop elements one by one from original stack -> Skip the middle element while transferring others to temp stack -> Push elements back from temp to original stack.
-//                                 : This preserves order except the removed middle element.
+// Problem Statement : Delete the middle element of a stack while preserving the order of remaining elements. Understand the Problem : A stack follows LIFO and does not allow direct access to the bottom element.
+//                   : To insert at the bottom, we must either : Use an auxiliary data structure (iterative approach) & Or use recursion to reach the bottom (implicit stack)
+// Approach 1 (Iterative Approach) : Use an auxiliary stack to temporarily reverse the stack.
+//                                 : Steps : Pop all elements from original stack and push them into a temp stack, push the new element into the now-empty original stack (this becomes the bottom).
+//                                         : Push back all elements from temp stack to original stack, this restores original order with the new element at the bottom.
 //                                 : TC = O(n) && SC = O(n)
-// Approach 2 (Recursive Force) : Use recursion to simulate stack traversal without extra data structure.
-//                              : Steps : Recursively pop elements until reaching the middle (count == size/2) -> Remove the middle element at base case -> During backtracking, push the stored elements back -> This restores original order except the middle element.
+// Approach 2 (Recursive Force) : Use recursion to reach the bottom of the stack without extra data structure.
+//                              : Steps : Pop the top element and store it, recursively call the function until the stack becomes empty, when stack is empty, insert the new element (this is the bottom).
+//                                      : During backtracking, push all stored elements back in order. This restores original order with the new element at the bottom.
 //                              : TC = O(n) && SC = O(n) (due to recursion call stack)
 
 // Approach 1 :
