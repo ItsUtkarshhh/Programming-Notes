@@ -581,19 +581,191 @@ void sortStack(stack<int> &st) {
 //                                                                                 - Reason : It uses implicit call stack instead of explicit extra space.
 
 // ------------------------------------------------------- Problem 10 : Valid Parentheses ------------------------------------------------------------------------>
-// Problem 10 : Valid Parentheses!
+// Pattern Recognition : "Balanced/Bracket Matching"
+// Difficulty : Easy
+// Problem Statement : We are given a string containing only opening and closing brackets : () (Round Brackets), {} (Curly Braces) and [] (Square Brackets).
+//                   : Our task is to check whether the given string has valid parentheses or not. A set of parentheses is considered valid if : Every opening bracket has a corresponding closing bracket and the brackets are closed in the correct order.
+//                   : Examples of Valid Parentheses : "()" → Valid, as opening ( is closed by ). "{}[]" → Valid, as {} and [] are correctly closed. "{[()]}" → Valid, as {} contains [], which contains (), and all are closed in the correct order.
+//                   : Examples of Invalid Parentheses : "({)" → Invalid, because { is not closed before ). "{[}" → Invalid, because { is opened but not properly closed. "(" → Invalid, because an opening bracket is not closed.
+// Understand the problem : This is NOT just counting brackets. Order matters → e.g., "({)}" is invalid even though counts match.
+//                        : We need to ensure : Correct type matching, Correct order (inner closes before outer)
+//                        : Key observation : The most recently opened bracket must be closed first → LIFO behavior → Stack.
+// Appoach 1 (Brute Force) : Idea - Repeatedly remove valid pairs "()", "{}", "[]" from the string.
+//                         : Continue until no more changes can be made, if the string becomes empty → valid. Else → invalid.
+//                         : Steps : Loop while changes are happening : Find "()", remove it. Find "{}", remove it. Find "[]", remove it.
+//                                 : Repeat - Check if string is empty.
+//                         : Drawbacks : Inefficient for large inputs & Not scalable
+//                         : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal) : Idea : Use a stack to track opening brackets. For every closing bracket, check if it matches the last opening bracket.
+//                      : Steps : Traverse the string. If opening bracket → push to stack. If closing bracket : If stack is empty → invalid.
+//                                                                                                            : Else check top : If matching → pop or else → invalid
+//                              : At the end : If stack is empty → valid & else → invalid
+//                      : Advantages : Efficient, Clean logic & Industry-standard approach
+//                      : TC = O(n) && SC = O(n)
+
+// Approach 1 :
+bool isValidParantheses(string str) {
+    if(str.empty()) return true; // or false as per the logic needs.
+
+    bool changed = true;
+    while(changed) {
+        changed = false;
+
+        if(str.find("()") != string::npos) {
+            str.erase(str.find("()"), 2);
+            changed = true;
+        }
+        else if(str.find("{}") != string::npos) {
+            str.erase(str.find("{}"), 2);
+            changed = true;
+        }
+        else if(str.find("[]") != string::npos) {
+            str.erase(str.find("[]"), 2);
+            changed = true;
+        }
+    }
+    return str.empty();
+}
+
+// Approach 2 :
+bool isValidParantheses(string str) {
+    if(str.empty()) return true; // or false as per the logic needs.
+
+    stack<char> temp;
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] == '{' || str[i] == '[' || str[i] == '(') {
+            temp.push(str[i]);
+        }
+        else {
+            if(temp.empty()) return false;
+            if(str[i] == '}' && temp.top() == '{' || str[i] == ']' && temp.top() == '[' || str[i] == ')' && temp.top() == '(') {
+                temp.pop();
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    
+    return temp.empty();
+}
+
+// ------------------------------------------------------- Problem 11 : Detect redudant brackets ------------------------------------------------------------------------>
+// Pattern Recognition : "Expression Evaluation"
+// Difficulty : Medium
+// Problem Statement : Given a valid expression string containing brackets and operators (+, -, *, /), determine if the expression contains any redundant brackets.
+//                   : Redundant brackets are those which do not affect the expression. Example : ((a+b)) → redundant, (a) → redundant, (a+b) → NOT redundant & (a+(b)/c) → redundant around b
+// Understand the problem : Not about validity → expression is already valid. We need to detect "useless" brackets.
+//                        : A bracket is redundant if : There is NO operator inside it.
+//                        : Key idea : If inside a pair of brackets there is only a single variable or nothing meaningful → redundant.
+// Appoach 1 (Brute Force) : Idea : For every pair of brackets : Extract substring inside it, check if it contains any operator (+, -, *, /), if not → redundant.
+//                         : Steps : Iterate over string
+//                                 : For each '(' : Find its matching ')' & Check substring between them
+//                                                : If no operator found → return true (redundant exists)
+//                         : Drawbacks : Repeated scans & inefficient for nested expressions
+//                         : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal) : Idea : Use stack to track characters. When we encounter ')', we check what’s inside the corresponding '('.
+//                      : Steps : Traverse string, Push everything except ')'
+//                              : When ')' is found : Pop elements until '(' is found.
+//                                                  : Track if any operator was present, if NO operator found → redundant → return true
+//                                                  : Pop '(' & if traversal completes → no redundancy
+//                      : Advantages : Efficient & Handles nested expressions naturally
+//                      : TC = O(n) && SC = O(n)
+
+// Approach 1 :
+string hasRedudantBrackets(string str) {
+    if(str.empty()) return true;
+
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] == '(') {
+            int count = 0;
+            int j = i;
+            while(j < str.length()) {
+                if(str[j] == '(') count++;
+                if(str[j] == ')') count--;
+                if(count == 0) break;
+                j++;
+            }
+
+            bool hasOperator = false;
+            for(int k = i + 1; k < j; k++) {
+                if(str[k] == '*' || str[k] == '+' ||
+                str[k] == '/' || str[k] == '-') {
+                    hasOperator = true;
+                    break;
+                }
+            }
+
+            if(!hasOperator) return true;
+
+            if(i > 0 && j < str.length() - 1) {
+                if(str[i - 1] == '(' && str[j + 1] == ')') return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// Approach 2 :
+string hasRedudantBrackets(string str) {
+    if(str.empty()) return true;
+
+    stack<char> store;
+
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] != ')') {
+            store.push(str[i]);
+        }
+        else {
+            bool hasOperator = false;
+            while(!store.empty() && store.top() != '(') {
+                char top = store.top();
+                store.pop();
+
+                if(top == '*' || top == '/' || top == '+' || top == '-') {
+                    hasOperator = true;
+                }
+            }
+            store.pop();
+            if(!hasOperator) return true;
+        }
+    }
+
+    return false;
+}
+
+// ------------------------------------------------------- Problem 12 : Remove redudant brackets ------------------------------------------------------------------------>
+// Pattern Recognition : "Expression Evaluation" + "Stack — Bracket Matching + Operator Tracking while Popping"
+// Difficulty : Medium
+// Problem Statement : Given a valid mathematical expression as a string, remove all redundant brackets, without changing the value or meaning of the expression.
+//                   : A bracket pair is redundant if removing it does not change the expression's result.
+//                   : Expression contains operators: +, -, *, /
+//                   : Example : "((a+b))" → "(a+b)" & "(a+(b)/c)" → "(a+b/c)"  [inner (b) is redundant]
+// Understand the problem : Input : A valid balanced expression string (no spaces)
+//                        : Output : Same expression with redundant brackets removed
+//                        : Redundant Case 1 : Single variable inside brackets → (b) remove to b
+//                        : Redundant Case 2 : Already wrapped expression → ((a+b)) remove outer
+//                        : NOT Redundant : Brackets that group an operation → (a+b) keep as it is
+//                        : NOT Redundant : Brackets that change precedence → (a+b)*c keep as it is
+//                        : Key Insight : A bracket pair is NEEDED only if it & contains an operator at its own level.
+// Appoach 1 (Brute Force) : 
+// Approach 2 (Optimal) : 
+
+// Approach 1 :
+string removeRedudantBrackets(string str) {
+    if(str.empty()) return true;
+
+}
 
 
-
-
-
-
-
-// Problem 10 : Remove redudant brackets!
-// Problem 11 : Minimum Cost to Make a String Valid (Bracket Reversal Problem)
-// Problem 12 : Next smaller element! Next greater element!
-// Problem 13 : Next previous element! Next previous element!
-// Problem 14 : You are given a histogram where each bar represents a rectangle of the same width but with different heights. Your task is to find the largest rectangular area that can be formed using one or more consecutive bars.
+// ------------------------------------------------------- Problem 13 : Minimum Cost to Make a String Valid (Bracket Reversal Problem) ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 14 : Next smaller element & variations ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 15 : Largest Rectangular Area in Histogram ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 16 : Celebrity Problem ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 17 : Maximum area of the formed by all the 1's in a binary matrix ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 18 : N Stacks in an array ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 19 : Design Special Stack Problemy ------------------------------------------------------------------------>
 
 // ------------------------------------------------------------ Monotonic Stack Concept ----------------------------------------------------------------------->
 // Question 1 : Find the next greater element for each element in an array!
