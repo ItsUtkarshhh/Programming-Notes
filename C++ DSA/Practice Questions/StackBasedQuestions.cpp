@@ -754,8 +754,67 @@ string hasRedudantBrackets(string str) {
 
 // Approach 1 :
 string removeRedudantBrackets(string str) {
-    if(str.empty()) return true;
+    if(str.empty()) return "";
 
+    int n = str.length();
+    vector<bool> redundancy(n, false);
+    int i = 0;
+    while(i < n) {
+        if(str[i] == '(') {
+            int count = 0;
+            int j = i;
+            while(j < n) {
+                if(str[j] == '(') count++;
+                if(str[j] == ')') count--;
+                if(count == 0) break;
+                j++;
+            }
+
+            // Here you got one pair [i, j]
+            bool hasOperator = false;
+
+            for(int k = i + 1; k < j; k++) {
+                if(str[k] == '*' || str[k] == '/' || str[k] == '+' || str[k] == '-') {
+                    hasOperator = true;
+                    break;
+                }
+            }
+
+            if(!hasOperator) {
+                redundancy[i] = redundancy[j] = true;
+            }
+
+            else if(str[i+1] == '(') {
+                int innerCount = 0;
+                int k = i + 1;
+
+                while(k < j) {
+                    if(str[k] == '(') innerCount++;
+                    if(str[k] == ')') innerCount--;
+                    if(innerCount == 0) break;
+                    k++;
+                }
+
+                if(k == j - 1) {
+                    redundancy[i] = redundancy[j] = true;
+                }
+            }
+        }
+        i++;
+    }
+    for(int i = n-1; i >= 0; i--) {
+        if(redundancy[i] == true) {
+            str.erase(i, 1);
+        }
+    }
+    return str;
+}
+
+// Approach 2 :
+string removeRedudantBrackets(string str) {
+    if(str.empty()) return "";
+
+    
 }
 
 
