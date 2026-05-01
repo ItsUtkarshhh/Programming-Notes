@@ -1762,7 +1762,7 @@ int main() {
 //          : Step 2 : Use a Stack to Identify Misplaced Brackets : We process the string and use a stack to track unmatched brackets...
 //                                                                : If we find an opening bracket {, we push it onto the stack.
 //                                                                : If we find a closing bracket } : If the stack has an opening bracket {, we pop it (as it forms a valid pair).
-//                                                                                                : Otherwise, we push the } onto the stack (it remains unmatched).
+//                                                                                                 : Otherwise, we push the } onto the stack (it remains unmatched).
 //                                                                : Overall, at the end, the stack will contain only unbalanced brackets (either { or }).
 //          : Step 3 : Calculate the Minimum Cost : Suppose the stack has x { brackets and y } brackets left. We need to reverse pairs of these to balance them.
 //                                                : Formula to calculate cost : (x + y + 1)/2.

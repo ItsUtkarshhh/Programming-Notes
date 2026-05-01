@@ -737,7 +737,7 @@ string hasRedudantBrackets(string str) {
 
 // ------------------------------------------------------- Problem 12 : Remove redudant brackets ------------------------------------------------------------------------>
 // Pattern Recognition : "Expression Evaluation" + "Stack — Bracket Matching + Operator Tracking while Popping"
-// Difficulty : Medium
+// Difficulty : Hard
 // Problem Statement : Given a valid mathematical expression as a string, remove all redundant brackets, without changing the value or meaning of the expression.
 //                   : A bracket pair is redundant if removing it does not change the expression's result.
 //                   : Expression contains operators: +, -, *, /
@@ -749,82 +749,101 @@ string hasRedudantBrackets(string str) {
 //                        : NOT Redundant : Brackets that group an operation → (a+b) keep as it is
 //                        : NOT Redundant : Brackets that change precedence → (a+b)*c keep as it is
 //                        : Key Insight : A bracket pair is NEEDED only if it & contains an operator at its own level.
-// Appoach 1 (Brute Force) : 
-// Approach 2 (Optimal) : 
+// Appoach 1 (Brute Force) : Traverse the string -> For every '(', find its matching ')' -> Extract the inner substring ( ... )
+//                         : Decide : Remove OR Keep -> If removed → restart traversal -> Repeat until no changes possible.
+//                         : TC = O(n^2) && SC = O(1)
+//                         : Limitations : Associativity Issues - a-(b-c) ≠ a-b-c
+//                                       : Division Cases - a/(b*c) ≠ a/b*c
+//                                       : Complex Nesting - Cannot handle deep dependencies reliably
 
 // Approach 1 :
-string removeRedudantBrackets(string str) {
-    if(str.empty()) return "";
+#include <bits/stdc++.h>
+using namespace std;
 
-    int n = str.length();
-    vector<bool> redundancy(n, false);
-    int i = 0;
-    while(i < n) {
-        if(str[i] == '(') {
-            int count = 0;
-            int j = i;
-            while(j < n) {
-                if(str[j] == '(') count++;
-                if(str[j] == ')') count--;
-                if(count == 0) break;
+bool hasOperator(string s) {
+    for(char c : s) {
+        if(c == '+' || c == '-' || c == '*' || c == '/')
+            return true;
+    }
+    return false;
+}
+
+int precedence(char c) {
+    if(c == '+' || c == '-') return 1;
+    if(c == '*' || c == '/') return 2;
+    return 0;
+}
+
+string removeRedundant(string s) {
+    int n = s.length();
+
+    for(int i = 0; i < n; i++) {
+        if(s[i] == '(') {
+            int count = 1;
+            int j = i + 1;
+
+            while(j < n && count > 0) {
+                if(s[j] == '(') count++;
+                else if(s[j] == ')') count--;
                 j++;
             }
 
-            // Here you got one pair [i, j]
-            bool hasOperator = false;
+            int end = j - 1;
 
-            for(int k = i + 1; k < j; k++) {
-                if(str[k] == '*' || str[k] == '/' || str[k] == '+' || str[k] == '-') {
-                    hasOperator = true;
+            string inside = s.substr(i+1, end-i-1);
+
+            if(!hasOperator(inside)) {
+                s.erase(end, 1);
+                s.erase(i, 1);
+                i = -1;
+                n = s.length();
+                continue;
+            }
+
+            char leftOp = (i-1 >= 0) ? s[i-1] : '#';
+            char rightOp = (end+1 < n) ? s[end+1] : '#';
+
+            bool safe = true;
+
+            for(char c : inside) {
+                if((c == '+' || c == '-') &&
+                   (leftOp == '*' || leftOp == '/' ||
+                    rightOp == '*' || rightOp == '/' || leftOp == '-' || rightOp == '-')) {
+                    safe = false;
                     break;
                 }
             }
 
-            if(!hasOperator) {
-                redundancy[i] = redundancy[j] = true;
-            }
-
-            else if(str[i+1] == '(') {
-                int innerCount = 0;
-                int k = i + 1;
-
-                while(k < j) {
-                    if(str[k] == '(') innerCount++;
-                    if(str[k] == ')') innerCount--;
-                    if(innerCount == 0) break;
-                    k++;
-                }
-
-                if(k == j - 1) {
-                    redundancy[i] = redundancy[j] = true;
-                }
+            if(safe) {
+                s.erase(end, 1);
+                s.erase(i, 1);
+                i = -1;
+                n = s.length();
             }
         }
-        i++;
     }
-    for(int i = n-1; i >= 0; i--) {
-        if(redundancy[i] == true) {
-            str.erase(i, 1);
-        }
-    }
-    return str;
+
+    return s;
 }
-
-// Approach 2 :
-string removeRedudantBrackets(string str) {
-    if(str.empty()) return "";
-
-    
-}
-
 
 // ------------------------------------------------------- Problem 13 : Minimum Cost to Make a String Valid (Bracket Reversal Problem) ------------------------------------------------------------------------>
+// Pattern Recognition : "Expression Evaluation" + "Stack — Bracket Matching + Operator Tracking while Popping"
+// Difficulty : Medium
+// Problem Statement : We are given a string consisting of only curly brackets { and }. The string is called valid if : Every opening bracket { has a corresponding closing bracket } after it.
+//                   : Examples of Valid Strings : "{}{}", "{ { } }" and "{ { }{ } }".
+//                   : Examples of Invalid Strings : "}{" (Closing bracket appears before opening), "{ } { }{ }" (Extra closing bracket at the end), "{ { }{ } }{" (Extra opening bracket { at the end).
+//                   : Goal : We need to convert the given invalid string into a valid one with the minimum cost.
+//                          : Allowed operation: We can reverse any bracket { ↔ } at a cost of 1 unit per reversal and find the minimum cost needed to make the string valid.
+// Understand the problem : 
+// Appoach 1 (Brute Force) : 
+
+
 // ------------------------------------------------------- Problem 14 : Next smaller element & variations ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 15 : Largest Rectangular Area in Histogram ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 16 : Celebrity Problem ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 17 : Maximum area of the formed by all the 1's in a binary matrix ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 18 : N Stacks in an array ------------------------------------------------------------------------>
-// ------------------------------------------------------- Problem 19 : Design Special Stack Problemy ------------------------------------------------------------------------>
+// ------------------------------------------------------- Problem 19 : Design Special Stack Problem ------------------------------------------------------------------------>
 
 // ------------------------------------------------------------ Monotonic Stack Concept ----------------------------------------------------------------------->
 // Question 1 : Find the next greater element for each element in an array!
