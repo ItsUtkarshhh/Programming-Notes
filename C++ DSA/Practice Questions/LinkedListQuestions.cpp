@@ -307,7 +307,7 @@ Node* reverseLL(Node* head, int k) {
         int count = 1;
 
         while(count < k && kth != NULL) {
-            // count == K && kth == NULL - Not possible condition! both together can't happen!
+            // count == K && kth == NULL - Possible condition! "less number of nodes than k"
             // count == K and kth != NULL - Possible condition! "more nodes after the current node" condition
             // count != K and kth != NULL - Possible condition! "loop running" condition
             // count != K && kth == NULL - Possible condition! "No more groups further" condition
@@ -514,7 +514,7 @@ bool detectLoop2(Node* head) {
 // Approach 1 (Brute Force) : (Hashing) Use a unordered set, store every node address you visit, and then keep traversing and whenever you find that the node you are visiting is also present in the set, means that is a starting point.
 //                          : Here, we can use a ordered/un-ordered map or ordered set too, its just that as we do not have any concern with the order of the nodes getting stored in the map or set, that is why we can use unordered set/map!
 //                          : TC = O(n) && SC = O(n)
-// Approach 2 (Optimal) : We first the intersection of the two nodes using the previous method, now we initiate a node at the starting of the list, and another from the intersection point, and simply traverse them one step at a time. And when the eventually meet, that will be the starting node.
+// Approach 2 (Optimal) : We first find the intersection of the two nodes using the previous method, now we initiate a node at the starting of the list, and another from the intersection point, and simply traverse them one step at a time. And when the eventually meet, that will be the starting node.
 //                      : Mathematics proves it : Lets mark some distances : L (From starting of the list to starting of the cycle), C (Length of the cycle), x (distance moved by slow pointer from starting of loop to intersection point) & y (distance between point of intersection & starting of the cycle).
 //                                              : From the above markings, we can say that - slow moved : L + x distance
 //                                                                                         - fast moved : 2(L + x) distance
