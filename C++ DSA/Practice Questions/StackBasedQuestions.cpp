@@ -755,6 +755,41 @@ string hasRedudantBrackets(string str) {
 //                         : Limitations : Associativity Issues - a-(b-c) ≠ a-b-c
 //                                       : Division Cases - a/(b*c) ≠ a/b*c
 //                                       : Complex Nesting - Cannot handle deep dependencies reliably
+// Approach 2 (Optimal) : The core idea : Brackets are NOT always redundant just because they contain an operator. The question is whether they actually change the result given operator precedence rules.
+//                      : The three pass strategy : For each character, record which bracket pair it belongs to using v[] array (nesting level / bracket ID)
+//                                                : For each high-priority operator (* - /), scan adjacent brackets and decide which ones are necessary → store in st2
+//                                                : Build output — include a bracket only if it's in st2 (i.e. it was marked as necessary)
+//                      : The data structures used : Bracket Ownership Vector/Array - Size = length of string. v[i] stores the index of the opening bracket that currently owns character i. So every character inside a pair of brackets shares the same value — the index where that ( appeared.
+//                                                                                  - This lets us ask : "what bracket group does this character belong to?"
+//                                                 : A Stack - Stack of bracket indices (helper) & used only during Pass 1 to track the current open bracket. st.top() always gives the index of the nearest unclosed (.
+//                                                 : Some unordered sets - st1 : Set of bracket IDs that contain + or -. When we see a + or - inside any open bracket, we store that bracket's opening index into st1. This tells us later: "this bracket group has a low-precedence operator inside it."
+//                                                                       - st2 : Set of bracket indices that are NECESSARY — the final answer. This is the core output of Pass 2. A bracket index ends up in st2 only if we determine it actually changes the expression's value. In Pass 3 we only include brackets whose v[i] is in st2.
+//                                                                       - st3 : Set of bracket IDs that contain * or /. Same idea as st1 but for high-precedence operators. Used specifically to handle the a/(b*c) case — if a bracket group has * or / and appears after a /, it must be kept.
+//                      : Pass 1 : Build the bracket ownership map v[]
+//                               : Goal : Tag every character with the index of the opening bracket it belongs to.
+//                               : Scan left to right. For each character : If ( → push its index onto stack. Set v[i] = i (it owns itself).
+//                                                                        : If ) → set v[i] = st.top() (matches its opening bracket). Then pop the stack.
+//                                                                        : If + or - and stack is non-empty → set v[i] = st.top(). Insert st.top() into st1 (this bracket group contains a low-precedence operator).
+//                                                                        : If * or / and stack is non-empty → set v[i] = st.top(). Insert st.top() into st3 (this bracket group contains a high-precedence operator).
+//                                                                        : If any other character (operand) and stack non-empty → set v[i] = st.top().
+//                               : What you have after Pass 1 : v[] is a full map — every character knows which bracket owns it. st1 knows which bracket groups contain +/-. st3 knows which contain *//.
+//                      : Pass 2 : Decide which brackets are necessary → populate st2
+//                               : Goal : For each strong operator sitting outside all brackets, check its neighboring bracket groups. If removing those brackets would change the math, mark them in st2 as necessary.
+//                               : Scan left to right. Skip any character that is not *, /, or - (because + can never make brackets necessary).
+//                               : For each - or * found : Scan rightward — walk through consecutive ( characters after the operator. For each such (, check if v[j] is in st1. If yes → insert v[j] into st2 (a bracket containing +/- after - or * must be kept).
+//                                                       : Scan leftward — walk through consecutive ) characters before the operator. For each such ), check if v[j] is in st1. If yes → insert v[j] into st2.
+//                               : For each / found (additionally, on top of the above) : Scan rightward through consecutive ( characters. For each, also check if v[j] is in st3. If yes → insert v[j] into st2 (a bracket containing *// after / must be kept because a/(b*c) ≠ a/b*c).
+//                               : Reasoning behind each case : a-(b+c) → without brackets becomes a-b+c. Sign flips. Must keep.
+//                                                            : a*(b+c) → without brackets becomes a*b+c. Precedence breaks. Must keep.
+//                                                            : (a+b)*c → without brackets becomes a+b*c. Must keep.
+//                                                            : a/(b*c) → without brackets becomes a/b*c. Left-associativity changes the result. Must keep.
+//                                                            : a+(b+c) → + is skipped entirely. Brackets never enter st2. Safe to remove.
+//                      : Pass 3 : Build the output string
+//                               : Goal : Reconstruct the expression, including only the brackets that were marked necessary.
+//                               : Scan left to right. For each character : If it is not a bracket → always append to ans.
+//                                                                        : If it is ( or ) → check if v[i] exists in st2. If yes → append it. If no → silently skip it.
+//                               : Why this works cleanly : Both ( and ) of any pair share the same v[i] value (the opening index). So a single set lookup in st2 decides both halves of the pair together — you never have a dangling bracket because they're always dropped or kept as a unit.
+//                      : TC = O(n) && SC = O(n)
 
 // Approach 1 :
 #include <bits/stdc++.h>
@@ -824,6 +859,85 @@ string removeRedundant(string s) {
     }
 
     return s;
+}
+
+// Approach 2 (Optimal) :
+string removeBrackets(string s){    
+    //code here
+    string ans = "";
+    int f=0;
+    vector<int> v(s.size());
+    stack<int> st;
+    unordered_set<int> st1,st2,st3;
+    for(int i=0;i<s.size();i++){
+        if(s[i]=='('){
+            st.push(i);
+            v[i] = st.top();
+        }
+        else if(s[i]==')'){
+            v[i] = st.top();
+            st.pop();
+        }
+        else if((s[i]=='+' || s[i]=='-') && st.size()>0){
+            
+            v[i] = st.top();
+            st1.insert(st.top());   
+        }
+        else if((s[i]=='*' || s[i]=='/') && st.size()>0){
+            
+            v[i] = st.top();
+            st3.insert(st.top());   
+        }
+        else if(st.size()>0){
+            v[i] = st.top();
+        }
+        
+    }
+    for(int i=0;i<s.size();i++){
+        if(s[i]!='*' && s[i]!='/' && s[i]!='-') continue;
+        int j=i+1;
+        if(s[i]=='-'){
+            while(j<s.size()  && s[j]=='('){
+                if(st1.find(v[j])!=st1.end())
+                st2.insert(j);
+                j++;
+            }
+            continue;
+        }
+        j = i+1;
+        while(j<s.size() && s[j]=='('){
+            if(st1.find(v[j])!=st1.end())
+                st2.insert(j);
+                j++;
+        }
+        if(s[i]=='/'){
+            j = i+1;
+            while(j<s.size() && s[j]=='('){
+                if(st3.find(v[j])!=st3.end())
+                    st2.insert(j);
+                    j++;
+            }
+        }
+        
+        j = i-1;
+        while(j>=0  && s[j]==')'){
+            if(st1.find(v[j])!=st1.end())
+                st2.insert(j);
+                j--;
+        }
+    }
+    for(int i=0;i<s.size();i++){
+        if(s[i]!=')' && s[i]!='('){
+            ans+=s[i];
+        }
+        else{
+            if(st2.find(v[i])!=st2.end()){
+                ans+=s[i];
+            }
+        }
+    }
+    
+    return ans;
 }
 
 // ------------------------------------------------------- Problem 13 : Minimum Cost to Make a String Valid (Bracket Reversal Problem) ------------------------------------------------------------------------>
