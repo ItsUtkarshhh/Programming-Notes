@@ -1,6 +1,6 @@
 // ------------------------------------------------------- Stack Questions ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 1 : Implement a stack using arrays ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Array based Implementation"
 // Difficulty : "Easy"
 // Problem Statement : Implement a stack data structure using arrays.
 // Understand the problem : Implement a Last-In, First-Out (LIFO) data structure using a fixed-size array in C++.
@@ -59,7 +59,7 @@ class Stack {
 };
 
 // ------------------------------------------------------- Problem 2 : Implement a stack using Linked List ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Linked List based Implementation"
 // Difficulty : "Easy"
 // Problem Statement : Implement a stack data structure using linked list.
 // Understand the problem : Implement a Last-In, First-Out (LIFO) data structure using a singly linked list in C++.
@@ -133,7 +133,7 @@ class Stack {
 //      : The std:stack used in C++ STL is based on Deque data structure, where the std:stack is just the container adapter and the deque is the underlying data structure where stack imposes retrictions to the data access.
 
 // ------------------------------------------------------- Problem 3 : Implement a two stacks using arrays ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Array based Implementation"
 // Difficulty : "Easy"
 // Problem Statement : Implement two stacks in a single array such that both stacks utilize the array efficiently without wasting space.
 // Understand the problem : You are given a fixed-size array of size n, Instead of creating two separate arrays (wasting space), you must : Use one array & Maintain two stacks growing toward each other.
@@ -220,7 +220,7 @@ class TwoStack {
 };
 
 // ------------------------------------------------------- Problem 4 : Implement a two stacks using Linked List ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Linked List based Implementation"
 // Difficulty : "Easy"
 // Problem Statement : Implement two independent stacks using linked lists such that both stacks support standard stack operations efficiently.
 // Understand the problem : You need to implement two stacks, Each stack follows LIFO (Last-In, First-Out).
@@ -363,7 +363,7 @@ int main() {
 }
 
 // ------------------------------------------------------- Problem 6 : Delete the middle node using Stack ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Recursive Stack"
 // Difficulty : "Easy"
 // Problem Statement : Delete the middle element of a stack without disturbing the order of other elements.
 // Understand the Problem : Given a stack of size n, remove the middle element by finding the middle index = n/2 (0-based from top OR bottom—be consistent).
@@ -429,7 +429,7 @@ void removeMiddle(stack<int> &st) {
 }
 
 // ------------------------------------------------------- Problem 7 : Push at bottom of the stack ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Recursive Stack"
 // Difficulty : "Easy"
 // Problem Statement : Delete the middle element of a stack while preserving the order of remaining elements. Understand the Problem : A stack follows LIFO and does not allow direct access to the bottom element.
 //                   : To insert at the bottom, we must either : Use an auxiliary data structure (iterative approach) & Or use recursion to reach the bottom (implicit stack)
@@ -477,7 +477,7 @@ void pushAtBottom(stack<int> &st, int data) {
 }
 
 // ------------------------------------------------------- Problem 8 : Reverse a Stack ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : ""Recursive Stack"
 // Difficulty : "Easy"
 // Problem Statement : Reverse the elements of a stack such that the top becomes the bottom and vice versa, without using any extra data structure. 
 // Understand the Problem : A stack follows LIFO and does not allow random access. To reverse it, we must either use another stack (extra space) or use recursion to simulate the stack behavior.
@@ -529,7 +529,7 @@ void reverseStack(stack<int> &st) {
 }
 
 // ------------------------------------------------------- Problem 9 : Sort a Stack ------------------------------------------------------------------------>
-// Pattern Recognition : "Stack Basics"
+// Pattern Recognition : "Recursive Stack"
 // Difficulty : "Medium"
 // Problem Statement : Sort a stack such that the elements are arranged in a specific order (e.g., largest at top).
 // Understand the Problem : A stack does not allow random access, so we cannot directly sort it like an array. We must either use an auxiliary data structure or manipulate it using recursion.
@@ -581,7 +581,7 @@ void sortStack(stack<int> &st) {
 //                                                                                 - Reason : It uses implicit call stack instead of explicit extra space.
 
 // ------------------------------------------------------- Problem 10 : Valid Parentheses ------------------------------------------------------------------------>
-// Pattern Recognition : "Balanced/Bracket Matching"
+// Pattern Recognition : "Parenthesis Pattern"
 // Difficulty : Easy
 // Problem Statement : We are given a string containing only opening and closing brackets : () (Round Brackets), {} (Curly Braces) and [] (Square Brackets).
 //                   : Our task is to check whether the given string has valid parentheses or not. A set of parentheses is considered valid if : Every opening bracket has a corresponding closing bracket and the brackets are closed in the correct order.
@@ -736,7 +736,7 @@ string hasRedudantBrackets(string str) {
 }
 
 // ------------------------------------------------------- Problem 12 : Remove redudant brackets ------------------------------------------------------------------------>
-// Pattern Recognition : "Expression Evaluation" + "Stack — Bracket Matching + Operator Tracking while Popping"
+// Pattern Recognition : "Expression Evaluation"
 // Difficulty : Hard
 // Problem Statement : Given a valid mathematical expression as a string, remove all redundant brackets, without changing the value or meaning of the expression.
 //                   : A bracket pair is redundant if removing it does not change the expression's result.
@@ -941,184 +941,275 @@ string removeBrackets(string s){
 }
 
 // ------------------------------------------------------- Problem 13 : Minimum Cost to Make a String Valid (Bracket Reversal Problem) ------------------------------------------------------------------------>
-// Pattern Recognition : "Expression Evaluation" + "Stack — Bracket Matching + Operator Tracking while Popping"
+// Pattern Recognition : "Parenthesis Pattern"
 // Difficulty : Medium
 // Problem Statement : We are given a string consisting of only curly brackets { and }. The string is called valid if : Every opening bracket { has a corresponding closing bracket } after it.
 //                   : Examples of Valid Strings : "{}{}", "{ { } }" and "{ { }{ } }".
-//                   : Examples of Invalid Strings : "}{" (Closing bracket appears before opening), "{ } { }{ }" (Extra closing bracket at the end), "{ { }{ } }{" (Extra opening bracket { at the end).
+//                   : Examples of Invalid Strings : "}{" (Closing bracket appears before opening), "{ }{ }{ }}" (Extra closing bracket at the end), "{{ }{ }}{" (Extra opening bracket { at the end).
 //                   : Goal : We need to convert the given invalid string into a valid one with the minimum cost.
-//                          : Allowed operation: We can reverse any bracket { ↔ } at a cost of 1 unit per reversal and find the minimum cost needed to make the string valid.
-// Understand the problem : 
-// Appoach 1 (Brute Force) : 
+//                          : Allowed operation : We can reverse any bracket { ↔ } at a cost of 1 unit per reversal and find the minimum cost needed to make the string valid.
+// Understand the problem : You are given a string of only {, } brackets
+//                        : A string is valid if : Every { has a matching } also when the order is correct, not like - }{
+//                        : Invalid Examples : }{ → wrong order, {{} → one extra { & {}} → one extra }
+//                        : Allowed operation is flip the bracket, but every flip cost = 1. And our goal is to make the string valid with minimum cost
+//                        : First important observation : If the brackets are odd, its impossible to make the string valid.
+//                        : Instead of trying all possibilities, think like this : “Remove already valid pairs first… then deal with the leftovers.”
+//                        : How to calculate the cost : Method 1 : m - length of the remaining string, hence, Minimum Reversal : cost = m/2 ​+ (number of opening brackets in first half mod 2)
+//                                                    : Method 2 : Count number of open & close brackets, then cost = (open/2) + (close/2) 
+// Appoach 1 (Brute Force) : Try all ways of flipping brackets and check validity.
+//                         : Steps : Generate all possible combinations (flip or not flip each bracket)
+//                                 : For each : Check if valid & track minimum cost
+//                         : TC : O(2^n) - TLE Guaranteed && SC = O(n)
+//                         : Why it's bad : Completely impractical for n > 20 & just for understanding, not implementation.
+// Approach 2 (Optimal) : Core idea : Remove valid pairs → Solve only invalid leftovers
+//                      : Steps : Check for odd or even length of string, if odd then impossible
+//                              : Use Stack to Remove Valid Pairs - If character is "{" push it, if "}" then check the top if stack is not empty and if top is "{" pop it, else push that character.
+//                              : Count remaining brackets.
+//                              : Calculate the cost = (open/2) + (close/2) 
+//                      : TC = O(n) && SC = O(n)
 
+// Approach 2 :
+int minimumCostStringValid(string str) {
+    if(str.length() % 2 != 0) return -1;
+
+    stack<char> st;
+    for(char ch : str) {
+        if(ch == '{') {
+            st.push(ch);
+        }
+        else {
+            if(!st.empty() && st.top() == '{') {
+                st.pop();
+            }
+            else {
+                st.push(ch);
+            }
+        }
+    }
+
+    int open = 0;
+    int close = 0;
+    while(!st.empty()) {
+        if(st.top() == '{') open++;
+        else close++;
+        st.pop();
+    }
+
+    return ((open+1)/2) + ((close+1)/2);
+}
 
 // ------------------------------------------------------- Problem 14 : Next smaller element & variations ------------------------------------------------------------------------>
+// Pattern Recognition : "Monotonic Stack"
+// Difficulty : Medium
+// Problem Statement : For each element in the array, find the next smaller element to its right & If none exists → return -1.
+// Understand the problem : Take an element → look to the right → stop at the first smaller number.
+//                        : They do not mean : Smallest in the whole array, or any smaller. They are specific about "first smaller encountered"
+// Appoach 1 (Brute Force) : For each element, scan right side and find first smaller.
+//                         : TC = O(n^2) && SC = O(n)
+// Approach 2 (Optimal) : Build & maintain a stack such that it is monotonically increasing.
+//                      : Step : Traverse from right to left, maintain stack of “useful candidates”, pop all elements ≥ current, Top of stack = answer & finally push current element
+//                      : TC = O(n) && SC = O(n)
+
+// Approach 1 :
+vector<int> nextSmallerElement(vector<int> arr) {
+    if(arr.size() == 0) return {};
+
+    vector<int> ans(arr.size(), -1);
+
+    for(int i = 0; i < arr.size(); i++) {
+        for(int j = i + 1; j < arr.size(); j++) {
+            if(arr[j] < arr[i]) {
+                ans[i] = arr[j];
+                break;
+            }
+        }
+    }
+    return ans;
+}
+
+// Approach 2 :
+vector<int> nextSmallerElement(vector<int> arr) {
+    if(arr.size() == 0) return {};
+
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> temp;
+
+    for(int i = n-1; i >= 0; i--) {
+        while(!temp.empty() && temp.top() >= arr[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) {
+            ans[i] = temp.top();
+        }
+
+        temp.push(arr[i]);
+    }
+}
+
+// Variation 2 : Next Greater Element, Previous Smaller Element & Previous Greater Element
+// Note : Core Problem statement is same, core problem understanding is same & and core approach is same, just need to adjust as per the situation.
+vector<int> nextGreaterElement(vector<int> arr) {
+    if(arr.size() == 0) return {};
+
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> temp;
+
+    for(int i = n-1; i >= 0; i--) {
+        while(!temp.empty() && temp.top() <= arr[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) {
+            ans[i] = temp.top();
+        }
+
+        temp.push(arr[i]);
+    }
+
+    return ans;
+    
+}
+
+vector<int> previousGreaterElement(vector<int> arr) {
+    if(arr.size() == 0) return {};
+    
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> temp;
+
+    for(int i = 0; i < n; i++) {
+        while(!temp.empty() && temp.top() <= arr[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) {
+            ans[i] = temp.top();
+        }
+
+        temp.push(arr[i]);
+    }
+    
+    return ans;
+}
+
+vector<int> previousSmallerElement(vector<int> arr) {
+    if(arr.size() == 0) return {};
+    
+    int n = arr.size();
+    vector<int> ans(n, -1);
+    stack<int> temp;
+
+    for(int i = 0; i < n; i++) {
+        while(!temp.empty() && temp.top() >= arr[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) {
+            ans[i] = temp.top();
+        }
+
+        temp.push(arr[i]);
+    }
+    
+    return ans;
+}
+
 // ------------------------------------------------------- Problem 15 : Largest Rectangular Area in Histogram ------------------------------------------------------------------------>
+// Pattern Recognition : "Monotonic Stack"
+// Difficulty : Hard
+// Problem Statement : You’re given heights of bars example : [2, 1, 5, 6, 2, 3]. Each bar has width = 1 & height = given value.
+//                   : We need to find the maximum rectangular area that can be formed.
+// Understand the problem : For each bar, think : “If this bar is the smallest height in a rectangle, how far can I expand left and right?”
+//                        : Expand a bar until you hit a smaller element, not a greater one.
+// Appoach 1 (Brute Force) : For each index : Expand left until smaller element, Expand right until smaller element & Compute area.
+//                         : TC = O(n^2) && SC = O(1);
+// Approach 2 (Optimal) : Instead of expanding for every element : lets just pre-store there previous and next smaller element's indexes (not value this time).
+//                      : Core Idea : “How far can I extend left and right such that : I remain the smallest bar?”
+//                      : Use the indexes found through previous and next smaller element method, as left and right to find the width of the current rectangle.
+//                      : TC = O(n) && SC = O(n)
+
+// Approach 1 :
+int maxAreaOfHistogram(vector<int> arr) {
+    if(arr.empty()) return -1;
+
+    int maxArea = INT_MIN;
+    for(int i = 0; i < arr.size(); i++) {
+        int left = i; int right = i;
+
+        while(left >= 0 && arr[left] >= arr[i]) {
+            left--;
+        }
+
+        while(right < arr.size() && arr[right] >= arr[i]) {
+            right++;
+        }
+
+        int width = right - left - 1;
+        int area = width * arr[i];
+
+        maxArea = max(maxArea, area);
+    }
+    return area;
+}
+
+// Approach 2 :
+vector<int> nextSmallerElement(vector<int> v) {
+    if(v.empty()) return {};
+
+    int n = v.size();
+    vector<int> ans(n, n);
+    stack<int> temp;
+
+    for(int i = n-1; i >= 0; i--) {
+        while(!temp.empty() && v[temp.top()] >= v[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) ans[i] = temp.top();
+        temp.push(i);
+    }
+    return ans;
+}
+
+vector<int> previousSmallerElement(vector<int> v) {
+    if(v.empty()) return {};
+
+    int n = v.size();
+    vector<int> ans(n, -1);
+    stack<int> temp;
+
+    for(int i = 0; i < n; i++) {
+        while(!temp.empty() && v[temp.top()] >= v[i]) {
+            temp.pop();
+        }
+
+        if(!temp.empty()) ans[i] = temp.top();
+        temp.push(i);
+    }
+    return ans;
+}
+
+int maxAreaOfHistogram(vector<int> arr) {
+    if(arr.empty()) return -1;
+
+    vector<int> pse = previousSmallerElement(arr);
+    vector<int> nse = nseSmallerElement(arr);
+    int maxArea = INT_MIN;
+
+    for(int i = 0; i < arr.size(); i++) {
+        int width = nse[i] - pse[i] - 1;
+        int height = arr[i];
+
+        int area = width * height;
+        maxArea = max(maxArea, area);
+    }
+    return maxArea;
+}
+
 // ------------------------------------------------------- Problem 16 : Celebrity Problem ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 17 : Maximum area of the formed by all the 1's in a binary matrix ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 18 : N Stacks in an array ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 19 : Design Special Stack Problem ------------------------------------------------------------------------>
-
-// ------------------------------------------------------------ Monotonic Stack Concept ----------------------------------------------------------------------->
-// Question 1 : Find the next greater element for each element in an array!
-// Thinking : Although this questions is a most traditional question for Monotonic Stack, we will try to solve it using brute force first!
-// Approach 1 (Brute Force) : We will simple use nexted loop! and traverse the inner loop to check whether a next greater element exist for this current element!
-//                          : If it exists, we will assign that element's value for it! otherwise we will simple insert -1 for that element.
-//                          : Also, when we mean greater, it means strictly greater! even though array contains duplicates, we do not care! we will simple check strictly decreasing!
-// Approach 2 (Decreasing Monotonic Stack) : We traverse the array from right to left, because we want to know the next (i.e., future) greater element. While going from right to left, we maintain a stack of potential candidates for the next greater element.
-//                                         : Stack Rules : Stack stores elements in decreasing order (from top to bottom).
-//                                                       : That means the top of the stack is always the smallest "greater" candidate available for the current element.
-//                                         : For Example : arr = [4, 5, 2, 10, 8]
-//                                                       : We start from right to left, and for each element : Pop all elements from the stack that are less than or equal to the current element.
-//                                                                                                           : If the stack is not empty, the top is the next greater.
-//                                                                                                           : If the stack is empty, then there's no greater → push -1 in result.
-//                                                                                                           : Push current element to stack (to help future elements).
-// Approach 1 (Brute Force)
-#include<iostream>
-#include<stack>
-#include<vector>
-using namespace std;
-
-vector<int> nextGreaterElem1(vector<int> v) {
-    vector<int> result;
-    for(int i = 0; i < v.size(); i++) {
-        int nextGreater = -1;
-        for(int j = i; j < v.size(); j++) {
-            if(v[j] > v[i]) {
-                nextGreater = max(nextGreater, v[j]);
-                break;
-            }
-        }
-        result.push_back(nextGreater);
-    }
-    return result;
-}
-
-// Approach 2 (Monotonic Stack) :
-vector<int> nextGreaterElem2(vector<int> v) {
-    stack<int> st;
-    int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = n - 1; i >= 0; i--) {
-        while(!st.empty() && st.top() <= v[i]) {
-            st.pop();
-        }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
-    }
-    return result;
-}
-
-int main() {
-    int n;
-    cin>>n;
-    vector<int> arr(n);
-    for(int i = 0; i < n; i++) {
-        cin>>arr[i];
-    }
-    // vector<int> ans = nextGreaterElem1(arr);
-    vector<int> ans = nextGreaterElem2(arr);
-    for(int i = 0; i < ans.size(); i++) {
-        cout<<ans[i]<<" ";
-    }
-}
-
-// Question 2 : Find the prev greater element for each element in an array!
-// Thinking : We won't be writing the brute force approach this time! You can think of it before starting to code! We will simply write the optimized solution for this!
-// Approach (Decreasing Monotonic Stack) : Logic is same as previous one, we are just start to insert into the vector from the beginning!
-#include<iostream>
-#include<stack>
-#include<vector>
-using namespace std;
-
-vector<int> prevGreaterElem(vector<int> v) {
-    stack<int> st;
-    int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = 0; i < n; i++) {
-        while(!st.empty() && st.top() <= v[i]) {
-            st.pop();
-        }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
-    }
-    return result;
-}
-
-int main() {
-    int n;
-    cin>>n;
-    vector<int> arr(n);
-    for(int i = 0; i < n; i++) {
-        cin>>arr[i];
-    }
-    // vector<int> ans = nextGreaterElem1(arr);
-    vector<int> ans = prevGreaterElem(arr);
-    for(int i = 0; i < ans.size(); i++) {
-        cout<<ans[i]<<" ";
-    }
-}
-
-// Question 3 : Find the next smaller element for each element in an array!
-// Thinking : We will simple use the same previous methods, that is monotonic stack! and here we will simply reverse the comparisons!
-// Approach (Monotonic Increasing Stack.) : There is only one key difference from previous questions, Unlike Previous Greater or Next Greater questions that use a monotonic decreasing stack, here we want the next smaller element, so we use a monotonic increasing stack.
-//                                        : Traverse the array from right to left, because we're looking for the "next" element.
-//                                        : Maintain a stack where elements are in increasing order (top to bottom).
-//                                        : For each element : While the stack is not empty and the top element is greater than or equal to the current element, pop it.
-//                                                           : If the stack becomes empty → no smaller element → assign -1
-//                                                           : Otherwise → stack top is the next smaller element
-//                                                           : Push the current element to the stack for future comparisons.
-#include<iostream>
-#include<stack>
-#include<vector>
-using namespace std;
-
-vector<int> prevSmallerElem(vector<int> v) {
-    stack<int> st;
-    int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = 0; i < n; i++) {
-        while(!st.empty() && st.top() >= v[i]) {
-            st.pop();
-        }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
-    }
-    return result;
-}
-
-vector<int> nextSmallerElem(vector<int> v) {
-    stack<int> st;
-    int n = v.size();
-    vector<int> result(n);
-    
-    for(int i = n - 1; i >= 0; i--) {
-        while(!st.empty() && st.top() >= v[i]) {
-            st.pop();
-        }
-        result[i] = st.empty() ? -1 : st.top(); // Ternary Alternative!
-        st.push(v[i]);
-    }
-    return result;
-}
-
-int main() {
-    int n;
-    cin>>n;
-    vector<int> arr(n);
-    for(int i = 0; i < n; i++) {
-        cin>>arr[i];
-    }
-    vector<int> ans1 = prevSmallerElem(arr);
-    for(int i = 0; i < ans1.size(); i++) {
-        cout<<ans1[i]<<" ";
-    }
-
-    vector<int> ans2 = nextSmallerElem(arr);
-    for(int i = 0; i < ans2.size(); i++) {
-        cout<<ans2[i]<<" ";
-    }
-}
