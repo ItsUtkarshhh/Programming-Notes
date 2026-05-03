@@ -638,7 +638,7 @@ bool isValidParantheses(string str) {
         }
         else {
             if(temp.empty()) return false;
-            if(str[i] == '}' && temp.top() == '{' || str[i] == ']' && temp.top() == '[' || str[i] == ')' && temp.top() == '(') {
+            if((str[i] == '}' && temp.top() == '{') || (str[i] == ']' && temp.top() == '[') || (str[i] == ')' && temp.top() == '(')) { // Safe to use extra parenthesis for extra logic safety, you can remove too, but just better code readability and logic safety.
                 temp.pop();
             }
             else {
@@ -727,7 +727,7 @@ string hasRedudantBrackets(string str) {
                     hasOperator = true;
                 }
             }
-            store.pop();
+            if(!store.empty()) store.pop();
             if(!hasOperator) return true;
         }
     }
@@ -1152,7 +1152,7 @@ int maxAreaOfHistogram(vector<int> arr) {
 
         maxArea = max(maxArea, area);
     }
-    return area;
+    return maxArea;
 }
 
 // Approach 2 :
@@ -1210,6 +1210,8 @@ int maxAreaOfHistogram(vector<int> arr) {
 }
 
 // ------------------------------------------------------- Problem 16 : Celebrity Problem ------------------------------------------------------------------------>
+
+
 // ------------------------------------------------------- Problem 17 : Maximum area of the formed by all the 1's in a binary matrix ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 18 : N Stacks in an array ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 19 : Design Special Stack Problem ------------------------------------------------------------------------>

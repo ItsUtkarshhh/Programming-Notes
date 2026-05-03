@@ -1,46 +1,35 @@
 #include<iostream>
+#include<stack>
 using namespace std;
 
-class Node {
-    public:
-    int data;
-    Node* next;
+vector<int> nextSmallerElement(vector<int> arr) {
+    if(arr.empty()) return {};
 
-    Node(int data) {
-        this->data = data;
-        this->next = NULL;
-    }
-};
+    stack<int> temp;
+    vector<int> ans(arr.size(), -1);
 
-void insertNode(Node* &head, Node* &tail, int data) {
-    Node* newNode = new Node(data);
-    if(head == NULL || tail == NULL) {
-        head = tail = newNode;
-        return;
-    }
-    tail->next = newNode;
-    tail = newNode;
-}
-
-Node* removeDuplicatesSorted(Node* head) {
-    if(head == NULL || head->next == NULL) return head;
-
-    Node* unique = head;
-    Node* temp = head->next;
-    while(temp != NULL) {
-        if(unique->data != temp->data) {
-            unique->next = temp;
-            unique = temp;
+    for(int i = arr.size() - 1; i >= 0; i--) {
+        if(!temp.empty() && temp.top() < arr[i]) {
+            ans[i] = temp.top();
         }
-        temp = temp->next;
+        else {
+            while(!temp.empty() && temp.top() >= arr[i]) {
+                temp.pop();
+            }
+            if(!temp.empty()) ans[i] = temp.top();
+        }
+        temp.push(arr[i]);
     }
-    unique->next = NULL;
-    return head;
+    return ans;
 }
 
+int main() {
+    stack<int> st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    st.push(4);
+    st.push(5);
 
-Node* removeDuplicatesUnsorted(Node* head) {
-    if(head == NULL || head->next == NULL) return head;
-
-    
+    deleteMiddleElement(st, 0, st.size());
 }

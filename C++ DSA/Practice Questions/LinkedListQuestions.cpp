@@ -1179,7 +1179,7 @@ Node* cloneRandom(Node* head) {
             Node* tempOrg = original;
             Node* tempClone = clone;
             
-            while(tempOrg != original->random) {
+            while(tempOrg != NULL && tempOrg != original->random) {
                 tempOrg = tempOrg->next;
                 tempClone = tempClone->next;
             }
@@ -1465,8 +1465,8 @@ Node* flattenList(Node* head) {
     if (head == NULL || head->next == NULL)
     return head;
 
-Node* mergeHead = flatten(head->next);
-return mergeList(head, mergeHead);
+    Node* mergeHead = flatten(head->next);
+    return mergeList(head, mergeHead);
 }
 
 // Approach 3 : 
