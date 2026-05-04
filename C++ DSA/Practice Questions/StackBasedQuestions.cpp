@@ -1210,8 +1210,133 @@ int maxAreaOfHistogram(vector<int> arr) {
 }
 
 // ------------------------------------------------------- Problem 16 : Celebrity Problem ------------------------------------------------------------------------>
+// Pattern Recognition : "Stack Based Elimination"
+// Difficulty : Medium
+// Problem Statement : A celebrity is a person who is known by everyone else at the party but does not know anyone in return.
+//                   : Given a square matrix M of size N x N where M[i][j] is 1 if person i knows person j, and 0 otherwise, determine if there is a celebrity at the party. Return the index of the celebrity or -1 if no such person exists.
+// Understand the problem : We are given : M[i][j] = 1 → i knows j & M[i][j] = 0 → i does NOT know j.
+//                        : A celebrity must satisfy : Row condition → knows nobody & Column condition → everyone knows them
+// Appoach 1 (Brute Force) : For each person i - Check entire row → all 0 & Check entire column → all 1 (except self)
+//                         : Problem : Re-checking the same relationships again and again
+//                         : TC = O(n^2) && SC = O(1)
+// Approach 2 (Optimal) : Key observation, if we take any two person, we can eliminate one in the race of potential candidate for celebrity.
+//                      : Steps : Put all people in stack
+//                              : Compare pairwise
+//                              : Final candidate remains
+//                              : VERIFY the candidate
+//                              : Why Verification is Needed : Elimination guarantees “Everyone else is NOT celebrity” but does not gurantee, hence candidate might still fail conditions.
+//                      : TC = O(n) && SC = O(n)
 
+// Approach 1 :
+int whoIsCelebrity(vector<vector<int>> arr) {
+    if(arr.empty()) return -1;
+
+    for(int i = 0; i < arr.size(); i++) {
+        bool isCelebrity = true;
+        for(int j = i; j < arr[i].size(); j++) {
+            if(i == j) continue;
+            if(arr[i][j] == 1 || arr[j][i] == 0) {
+                isCelebrity = false;
+            }
+        }
+
+        if(isCelebrity) return i;
+    }
+    return -1;
+}
+
+// Approach 2 :
+int whoIsCelebrity(vector<vector<int>> arr) {
+    if(arr.empty()) return -1;
+
+    int n = arr.size();
+    stack<int> st;
+
+    for(int i = 0; i < n; i++) {
+        st.push(i);
+    }
+
+    while(st.size() > 1) {
+        int a = st.top(); st.pop();
+        int b = st.top(); st.pop();
+
+        if(arr[a][b] == 1) { // a is not the celebrity for sure, but not sure about b so will push it.
+            st.push(b);
+        }
+        else { // b is not the celebrity for sure, but not sure about a so will push it.
+            st.push(a);
+        }
+    }
+
+    int candidate = st.top();
+
+    for(int i = 0; i < n; i++) {
+        if(i != candidate) {
+            if(arr[i][candidate] == 0 || arr[candidate][i] == 1) {
+                return -1;
+            }
+        }
+    }
+
+    return candidate;
+}
 
 // ------------------------------------------------------- Problem 17 : Maximum area of the formed by all the 1's in a binary matrix ------------------------------------------------------------------------>
+// Pattern Recognition : "Monotonic Stack"
+// Difficulty : Medium
+// Problem Statement : Given a binary matrix (0 and 1), find the largest rectangular area consisting only of 1s.
+// Understand the problem : We need - Maximum area rectangle made only of 1s
+//                        : Key Observations : Rectangle must be - Continuous rows &  Continuous columns. Rectangle can end at any row, not just last row
+//                                           : Instead of checking all rectangles (expensive), we - Build heights of consecutive 1s & Convert each row into a histogram
+
+// Appoach 1 (Brute Force) : For every cell (i, j) : Treat it as top-left corner & try all possible bottom-right corners (x, y)
+//                                                 : Check if all elements inside rectangle are 1
+//                         : Sequence : Loop over all starting points -> Loop over all ending points -> Check entire rectangle & Compute area.
+//                         : TC = O(n^4) && SC = O(1)
+// Approach 2 (Optimal) : Convert matrix into histograms row by row
+//                      : Build heights row by row & then finally find the maximum area by solving maximum area in a histogram.
+//                      : TC = O(n x m) && SC = O(m)
+
+// Approach 2 :
+int largestRectangleArea(vector<int>& heights) {
+    stack<int> st;
+    int maxArea = 0;
+    int n = heights.size();
+
+    for(int i = 0; i <= n; i++) {
+        while(!st.empty() && (i == n || heights[st.top()] >= heights[i])) {
+            int h = heights[st.top()];
+            st.pop();
+
+            int width = st.empty() ? i : i - st.top() - 1;
+            maxArea = max(maxArea, h * width);
+        }
+        st.push(i);
+    }
+
+    return maxArea;
+}
+
+int maximalRectangle(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    int m = matrix[0].size();
+
+    vector<int> heights(m, 0);
+    int maxArea = 0;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(matrix[i][j] == 1)
+                heights[j] += 1;
+            else
+                heights[j] = 0;
+        }
+
+        maxArea = max(maxArea, largestRectangleArea(heights));
+    }
+
+    return maxArea;
+}
+
 // ------------------------------------------------------- Problem 18 : N Stacks in an array ------------------------------------------------------------------------>
 // ------------------------------------------------------- Problem 19 : Design Special Stack Problem ------------------------------------------------------------------------>
