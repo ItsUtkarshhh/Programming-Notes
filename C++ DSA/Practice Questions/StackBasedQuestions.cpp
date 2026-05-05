@@ -1288,7 +1288,6 @@ int whoIsCelebrity(vector<vector<int>> arr) {
 // Understand the problem : We need - Maximum area rectangle made only of 1s
 //                        : Key Observations : Rectangle must be - Continuous rows &  Continuous columns. Rectangle can end at any row, not just last row
 //                                           : Instead of checking all rectangles (expensive), we - Build heights of consecutive 1s & Convert each row into a histogram
-
 // Appoach 1 (Brute Force) : For every cell (i, j) : Treat it as top-left corner & try all possible bottom-right corners (x, y)
 //                                                 : Check if all elements inside rectangle are 1
 //                         : Sequence : Loop over all starting points -> Loop over all ending points -> Check entire rectangle & Compute area.
