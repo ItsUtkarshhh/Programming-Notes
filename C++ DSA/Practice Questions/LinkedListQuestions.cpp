@@ -302,6 +302,9 @@ Node* reverseLL(Node* head, int k) {
     Node* prevGroupEnd = dummyNode;
 
     while(true) {
+        // Another possible condition : "while(prevGroupEnd != NULL && prevGroupEnd->next != NULL)"
+        // We can also use while(true) here because the actual stopping condition is whether a complete group of k nodes exists,and that logic is determined inside the loop itself.
+        // So the choice mainly depends on coding style and readability. Using while(true) often makes the algorithm cleaner and more, natural to express, but using an explicit loop condition is also completely fine if written correctly.
         Node* kth = prevGroupEnd->next;
         Node* currGroupStart = prevGroupEnd->next;
         int count = 1;
@@ -395,7 +398,7 @@ Node* reverseRecursion(Node* head, int k) {
         count++;
     }
 
-    if(temp == NULL) return head;
+    if(temp == NULL) return head; // if you write "break;" here, it will cause compile time error, as break statement can be used only in 3 cases : Inside a Loop, Inside Switch statements & Inside if-else block if if-else block itself is inside a loop or a switch statement.
 
     Node* prev = NULL;
     Node* curr = head;

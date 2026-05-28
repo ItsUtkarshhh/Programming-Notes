@@ -30,9 +30,7 @@ Node* reverseInSizeK(Node* head, int k) {
     Node* prevGroupEnd = dummyNode;
     prevGroupEnd->next = head;
 
-    while(prevGroupEnd != NULL && prevGroupEnd->next != NULL) {
-        // We can also use while(true) here because the actual stopping condition is whether a complete group of k nodes exists,and that logic is determined inside the loop itself.
-        // So the choice mainly depends on coding style and readability. Using while(true) often makes the algorithm cleaner and more, natural to express, but using an explicit loop condition is also completely fine if written correctly.
+    while(true) {
         Node* currGroupStart = prevGroupEnd->next;
         Node* kth = currGroupStart;
 
@@ -87,7 +85,7 @@ int main() {
     insertNode(head, tail, 4);
     insertNode(head, tail, 5);
     insertNode(head, tail, 6);
-    // insertNode(head, tail, 7);
+    insertNode(head, tail, 7);
 
     int k;
     cout<<"Enter K : ";

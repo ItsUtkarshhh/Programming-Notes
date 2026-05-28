@@ -1317,11 +1317,11 @@ int largestRectangleArea(vector<int>& heights) {
 }
 
 int maximalRectangle(vector<vector<int>>& matrix) {
-    int n = matrix.size();
-    int m = matrix[0].size();
+    int n = matrix.size(); // number of rows
+    int m = matrix[0].size(); // number of columns in first row - as the matrix is square/rectangle so every row's number of columns are equal.
 
     vector<int> heights(m, 0);
-    int maxArea = 0;
+    int maxArea = 0; // or INT_MIN is also fine
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
