@@ -66,6 +66,35 @@ Node* reverseInSizeK(Node* head, int k) {
     return dummyNode->next;
 }
 
+Node* reverseInSizeK(Node* head, int k) {
+    if(head == NULL || head->next == NULL) return head;
+    
+    int count = 1;
+    Node* kth = head;
+    while(count < k && kth != NULL) {
+        kth = kth->next;
+        count++;
+    }
+
+    if(kth == NULL) return head;
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* forward = NULL;
+    count = 1;
+
+    while(count <= k) {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+        count++;
+    }
+    if(curr != NULL) {
+        head->next = reverseInSizeK(curr, k);
+    }
+    return prev;
+}
+
 void printLL(Node* head) {
     if(head == NULL) return;
 
