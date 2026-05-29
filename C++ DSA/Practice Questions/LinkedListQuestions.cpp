@@ -760,7 +760,7 @@ Node* deleteDuplicates(Node* head) {
 //                                 : When a problem becomes easier on sorted data, we can first sort the data to exploit that structure and then apply a simpler linear solution
 //                                 : TC = O(nlogn) && SC = O(1) / O(logn) - recursive stack
 // Approach 3 (Optimized Solution) : Now, if take some extra space to reduce some time taken, that can be a possible trade of which we can do to optimize the final outcome!
-//                                 : We can use a set, to input the data inton the list every time we traverse the list and eventually delete the nodes which getting repeated after they are first time inserted into the set.
+//                                 : We can use a set, to input the data into the list every time we traverse the list and eventually delete the nodes which getting repeated after they are first time inserted into the set.
 //                                 : TC = O(n) && SC = O(n)
 
 // Approach 1 :

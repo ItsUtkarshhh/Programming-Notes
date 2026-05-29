@@ -477,7 +477,7 @@ void pushAtBottom(stack<int> &st, int data) {
 }
 
 // ------------------------------------------------------- Problem 8 : Reverse a Stack ------------------------------------------------------------------------>
-// Pattern Recognition : ""Recursive Stack"
+// Pattern Recognition : "Recursive Stack"
 // Difficulty : "Easy"
 // Problem Statement : Reverse the elements of a stack such that the top becomes the bottom and vice versa, without using any extra data structure. 
 // Understand the Problem : A stack follows LIFO and does not allow random access. To reverse it, we must either use another stack (extra space) or use recursion to simulate the stack behavior.
