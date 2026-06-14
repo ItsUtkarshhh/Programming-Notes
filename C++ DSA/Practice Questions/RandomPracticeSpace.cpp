@@ -1,137 +1,71 @@
 #include<iostream>
 using namespace std;
 
-class Stack {
-    public:
-    int* arr;
-    int size;
-    int top;
-
-    Stack(int size) {
-        this->size = size;
-        this->arr = new int[size];
-        top = -1;
-    }
-
-    ~Stack() {
-        delete[] arr;
-    }
-
-    void push(int data) {
-        if(top == size - 1) {
-            cout<<"Stack Overflow!";
-            return;
-        }
-        top++;
-        arr[top] = data;
-    }
-
-    int pop() {
-        if(top == -1) {
-            cout<<"Stack Underflow!";
-            return -1;
-        }
-        int poppedVal = arr[top];
-        top--;
-        return poppedVal;
-    }
-
-    int peek() {
-        if(top == -1) {
-            cout << "Stack Empty!";
-            return -1;
-        }
-        return arr[top];
-    }
-
-    bool isEmpty() {
-        return top == -1;
-    }
-
-    bool isFull() {
-        return top == size - 1;
-    }
-
-    int stackSize() {
-        return size;
-    }
-};
-
-class Stack {
-    public:
-    int* arr;
-    int size;
-    int top;
-
-    Stack(int size) {
-        this->size = size;
-        this->arr = new int[size];
-        top = -1;
-    }
-
-    ~Stack() {
-        delete[] arr;
-    }
-
-    void push(int data) {
-        if(top == size - 1) {
-            cout<<"Stack Overflow!";
-            return;
-        }
-        top++;
-        arr[top] = data;
-    }
-
-    int pop() {
-        if(top == -1) {
-            cout<<"Stack Underflow!";
-            return -1;
-        }
-        int poppedVal = arr[top];
-        top--;
-        return poppedVal;
-    }
-
-    int peek() {
-        if(top == -1) {
-            cout << "Stack Empty!";
-            return -1;
-        }
-        return arr[top];
-    }
-
-    bool isEmpty() {
-        return top == -1;
-    }
-
-    bool isFull() {
-        return top == size - 1;
-    }
-
-    int stackSize() {
-        return size;
-    }
-};
-
-void printStack(Stack st) {
-    if(st.stackSize() == 0) {
-        cout<<"Empty Stack!";
-        return;
-    }
-
-    while(!st.isEmpty()) {
-        cout<<st.peek()<<" ";
-        st.pop();
-    }
+class Node {
+    
 }
 
-int main() {
-    Stack st(5);
-    st.push(1);
-    st.push(2);
-    st.push(3);
-    st.push(4);
-    st.push(5);
 
-    printStack(st);
+// Flattening a Linked List!
+// Idea : What is the problem right now?
+//      : There is list which has a down pointer attached with every node of it. and that is a sorted list
+//      : Idea is to merge all these downward sorted lists into one single downward sorted list
+// Step 1 : I think we can use three pointers, prev, curr & forward... where prev will point at first node, curr at the second and forward at the node next to curr (which will keep the track of remaining list while we do operations with the current two)
+// Step 2 : You will start a sorting of prev and curr lists
+// Step 3 : Create a dummyNode as a temp head & use two temp pointers which will sort the list and keep attaching it with the dummyNode and make sure you make every next pointer of these nodes = NULL
+// Step 4 : Once it happens and the lists are merged in sorted order, you will simply attached the head of this sorted list's next to the forward.
+// Step 5 : Then, simply point the prev at the new merged head & curr at the forward and forward at the curr's next.
+// Step 6 : Repeat the same pattern until curr goes NULL.
+
+Node* flattenList(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+
+    Node* prev = head;
+    Node* curr = head->next;
+    Node* forward = NULL;
+
+    while(curr != NULL) {
+        forward = curr->next;
+        Node* tempPrev = prev;
+        Node* tempCurr = curr;
+
+        Node* dummyNode = new Node(-1);
+        Node* dummyTail = dummyNode;
+
+        while(tempPrev != NULL && tempCurr != NULL) {
+            if(tempPrev->data <= tempCurr->data) {
+                dummyTail->down = tempPrev;
+                dummyTail = tempPrev;
+                tempPrev = tempPrev->down;
+            }
+            else {
+                dummyTail->down = tempCurr;
+                dummyTail = tempCurr;
+                tempCurr = tempCurr->down;
+            }
+            dummyTail->next = NULL;
+        }
+
+        if(tempPrev == NULL) {
+            while(tempCurr != NULL) {
+                dummyTail->down = tempCurr;
+                dummyTail = dummyTail->down;                
+                dummyTail->next = NULL;
+                tempCurr = tempCurr->down;
+            }
+        }
+        if(tempCurr == NULL) {
+            while(tempPrev != NULL) {
+                dummyTail->down = tempPrev;
+                dummyTail = dummyTail->down;
+                dummyTail->next = NULL;
+                tempPrev = tempPrev->down;
+            }
+        }
+
+        prev = dummyNode->down;
+        curr = forward;
+        delete dummyNode;
+    }
+    return prev;
 }

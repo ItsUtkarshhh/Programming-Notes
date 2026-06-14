@@ -305,13 +305,13 @@ Node* reverseLL(Node* head, int k) {
         // Another possible condition : "while(prevGroupEnd != NULL && prevGroupEnd->next != NULL)"
         // We can also use while(true) here because the actual stopping condition is whether a complete group of k nodes exists,and that logic is determined inside the loop itself.
         // So the choice mainly depends on coding style and readability. Using while(true) often makes the algorithm cleaner and more, natural to express, but using an explicit loop condition is also completely fine if written correctly.
-        Node* kth = prevGroupEnd->next;
+        Node* kth = prevGroupEnd;
         Node* currGroupStart = prevGroupEnd->next;
-        int count = 1;
+        int count = 0;
 
         while(count < k && kth != NULL) {
-            // count == K && kth == NULL - Possible condition! "less number of nodes than k"
-            // count == K and kth != NULL - Possible condition! "more nodes after the current node" condition
+            // count == K && kth == NULL - Possible condition! Exactly k nodes found, and no nodes exist after them
+            // count == K and kth != NULL - Possible condition! Exactly k nodes found, and more nodes remain
             // count != K and kth != NULL - Possible condition! "loop running" condition
             // count != K && kth == NULL - Possible condition! "No more groups further" condition
             kth = kth->next;
@@ -350,9 +350,9 @@ Node* reverseLL2(Node* head, int k) {
     Node* prevGroupEnd = dummyNode;
     
     while(true) {
-        Node* kth = prevGroupEnd->next;
+        Node* kth = prevGroupEnd;
         Node* currGroupStart = prevGroupEnd->next;
-        int count = 1;
+        int count = 0;
         
         while(count < k && kth != NULL) {
             // count == K && kth == NULL - Not possible condition! both together can't happen!
@@ -1254,22 +1254,20 @@ Node* cloneRandom(Node* head) {
     // Step 2: Set random pointers
     curr = head;
     while(curr != NULL) {
-        if(curr->random != NULL)
-        curr->next->random = curr->random->next;
-    
-    curr = curr->next->next;
-}
+        if(curr->random != NULL) curr->next->random = curr->random->next;
+        curr = curr->next->next;
+    }
 
-// Step 3: Separate lists
-curr = head;
-Node* cloneHead = head->next;
+    // Step 3: Separate lists
+    curr = head;
+    Node* cloneHead = head->next;
 
-while(curr != NULL) {
-    Node* clone = curr->next;
-    curr->next = clone->next;
-    
-    if(clone->next != NULL)
-    clone->next = clone->next->next;
+    while(curr != NULL) {
+        Node* clone = curr->next;
+        curr->next = clone->next;
+        
+        if(clone->next != NULL)
+        clone->next = clone->next->next;
 
 curr = curr->next;
 }
