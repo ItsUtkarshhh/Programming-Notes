@@ -1788,8 +1788,8 @@ vector<pair<int, int>> pairSum(Node* head, int sum) { // Unsorted
 
     while(temp1->next != NULL) { // Can write : while(temp1 != NULL) for better consistency.
         Node* temp2 = temp1->next;
-        int currSum = temp1->data + temp2->data;
         while(temp2 != NULL) {
+            int currSum = temp1->data + temp2->data;
             if(currSum == sum) {
                 ans.push_back({min(temp1->data, temp2->data), max(temp1->data, temp2->data)});
             }
@@ -1812,8 +1812,8 @@ vector<pair<int, int>> pairSum(Node* head, int sum) { // Sorted & all positive
 
     while(temp1->next != NULL) { // Can write : while(temp1 != NULL) for better consistency.
         Node* temp2 = temp1->next;
-        int currSum = temp1->data + temp2->data;
         while(temp2 != NULL) {
+            int currSum = temp1->data + temp2->data;
             if(currSum == sum) {
                 ans.push_back({min(temp1->data, temp2->data), max(temp1->data, temp2->data)});
             }
@@ -2211,6 +2211,7 @@ Node* removeNthNodeFromLast(Node* head, int n) {
         steps--;
     }
     
+    // When list size = n, remove head itself
     if(curr == NULL) {
         Node* ntd = head;
         head = head->next;
