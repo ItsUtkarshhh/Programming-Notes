@@ -18,37 +18,39 @@
 //          : Big Data tools and frameworks: Hadoop, Spark, Kafka, Hive.
 
 // ---------------------------------------------------------- LECTURE 1 - Basics --------------------------------------------------------------------------------------------------------->
-// To solve a problem we do the following steps like, understand the problem, look for the given values, analyse the approach to be taken to solve the problem and then start programming!
-// But proper program likhne se pehle hum ek rough code/solution likhte hai jisko hum pseudo code kehte hai!
-// Pehle hum solution sochte hai rough format me and then uske liye ek flowchart and pseudo code likhte hai and then hum proper program likhte hai code krke and then vo code machine level language me convert hota hai and then vo execute hota hai!
+// Problem-Solving Workflow : To solve any programming problem efficiently, follow this step-by-step pipeline
+//                          : Understand the Problem - Identify Given Values/Constraints
+//                          : Analyze the Approach / Logic
+//                          : Design Flowchart & Pseudo Code
+//                          : Write Proper Code
+//                          : Compilation & Execution
 
-// Flowchart : A diagramatic representation of the program/approach is called a flowchart! isme hum kuch symbols ka use krke apne rough solution ko diagramatic form me represent krte hai!
-// Pseudo Code : Generic way of representing a particular solution so that it can be coded in different languages!
+// Program Design Tools : Before jumping into coding, we use language-agnostic tools to map out our logic.
+//                      : Flowchart : A flowchart is a diagrammatic/visual representation of an algorithm using specific standard symbols.
+//                                  : Oval : Start / End - Marks the beginning or termination.
+//                                  : Parallelogram : Input / Output - Takes data from the user or displays results.
+//                                  : Rectangle : Process - Represents calculations or variable assignments.
+//                                  : Diamond : Decision - Represents conditional branching (True/False).
+//                      : Pseudo Code : A pseudo code is a generic, informal, and structured way of writing an algorithm without worrying about specific programming language syntax.
+//                                    : Why use it? It bridges the gap between human thought and actual code, ensures language independence, and helps catch logical bugs early.
 
-// Flowchart Components and Pseudo Code Explanation!
-// Flowchart Components : Oval Block : Represents the start or end of the program.
-//                      : Parallelogram Block : Used for input/output operations.
-//                      : Rectangle Block : Represents a process, such as calculations or variable assignments.
-//                      : Diamond Block : Represents decision-making (used for if-else conditions).
-//                      : Example : Flowchart for Summing Two Numbers, If you want to create a flowchart for adding two numbers, it would include the following steps...
-//                                : Start the program -> Take input values for a and b -> Compute the sum: sum = a + b -> Display the result -> End the program
+// C++ Essentials & Compiler Basics : Namespace (using namespace std) : What it is : C++ uses namespaces to group related functions, classes, and variables to avoid naming conflicts.
+//                                                                    : Why use it : By declaring using namespace std;, you tell the compiler to look into the standard (std) namespace by default.
+//                                                                    : Difference : With it - You can directly write cout << "Hello"; 
+//                                                                                 : Without it - You must explicitly specify the namespace using the scope resolution operator: std::cout << "Hello";
+//                                  : Understanding Errors : The compiler translates code into machine language and acts as your first line of defense against bugs:
+//                                                         : Compile-Time Errors : Syntax mistakes caught during compilation (e.g., missing semicolons, type mismatches).
+//                                                         : Runtime Errors : Logical errors or crashes that happen during execution (e.g., division by zero, segmentation faults).
 
-// Pseudo Code Explanation : Pseudo code is a structured way to represent an algorithm in a language-agnostic format, making it easy to translate into any programming language.
-//                         : The pseudo code for summing two numbers is : Start -> Read a, b -> sum = a + b -> Print sum -> End
-//                         : Why Use Pseudo Code? It provides a clear step-by-step logic before actual implementation. It ensures that the algorithm is understandable across different programming languages. It helps in debugging and improving logic before writing real code.
-
-// C/C++ Notes Summary
-// These notes comprehensively cover C and C++, making them complete for understanding the language. For additional practice, you can explore a variety of problems from platforms like LeetCode (LC), CodeStudio (CS), InterviewBit (IB), HackerRank (HR), HackerEarth (HE), GeeksforGeeks (GFG), and CodeChef (CC).
-// Understanding the Compiler : A compiler translates code into machine language and helps detect errors. It identifies compile-time errors (syntax errors) and runtime errors (logical errors that occur during execution).
-// Program Flow and Flowchart Representation : In C++, program execution starts with the int main() function. In a flowchart, the Start block corresponds to int main() in code.
-// Understanding using namespace std; in C++, C++ contains multiple namespaces, which group functions and variables to prevent naming conflicts. using namespace std; means we are specifically using the standard (std) namespace, which includes predefined functionalities like cout. Without this, we would have to use std::cout instead of cout for printing output.
-
-// How the cpp file converts to the executable file!
-// Preprocessing -> Compilation -> Assembler -> Linker
-// Preprocessor : Isme ye hota hai ki jo bhi pre processor directives hote hai, like file inclusion, macros expansion and all! ye sab hota hai like jo bhi hum likhte hai #include me vo saari directories and files include hoti hai file me! and saare macros expand hote hai like #define and all! and then iss step me humari ".cpp" file ".i" or ".ii" file me convert hoti hai!
-// Compilation : Isme jo humari preprocessed file hai vo ".i" se ".s" me convert hoti hai! and jo humara C++ ka code hai vo assembly code me convert hota hai! also iss process me saare errors and all check hote hai!
-// Assembler : Isme jo humari compiled file hoti hai ".s" vaali ye ".o" object file me convert hoti hai! means isme jo assembly code hai vo machine language code me convert hota hai! and the object file contains machine-level code, along with other information necessary for linking.
-// Linker : Isme saari object files include hoti hai and then ek final ".exe" file banti hai, jo final executable file hoti hai!
+// Compilation Pipeline, From .cpp to .exe : When you hit run, your C++ source code goes through four distinct stages to become an executable machine-level file:
+//                                         : Preprocessor : Processes directives starting with # (e.g., #include fetches header files, #define expands macros).
+//                                                        : Output : Generates a preprocessed source file (.i or .ii).
+//                                         : Compilation : Checks for syntax errors and translates the high-level preprocessed code into assembly instructions specific to the target architecture.
+//                                                       : Output : Generates an assembly code file (.s).
+//                                         : Assembler : Translates the assembly code into binary machine language instructions (machine code).
+//                                                     : Output : Generates an object file (.o or .obj).
+//                                         : Linker : Combines your object file with standard library object files and any other external dependencies to produce the final executable.
+//                                                  : Output : Generates the final executable file (.exe on Windows).
 
 #include <iostream>
 using namespace std;
