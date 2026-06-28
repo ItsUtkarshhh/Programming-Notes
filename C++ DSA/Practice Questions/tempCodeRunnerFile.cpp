@@ -1,96 +1,45 @@
+// Q1 : Finding maximum/minimum elements in an Array!
 #include<iostream>
+#include<map>
+#include<vector>
 using namespace std;
 
-class Node {
-    public:
-    int data;
-    Node* next;
+vector<int> uniqueElements(vector<int> v) {
+    if(v.size() == 0) return {};
 
-    Node(int data) {
-        this->data = data;
-        this->next = NULL;
+    map<int> hash;
+    for(int i = 0; i < v.size(); i++) {
+        hash[v[i]]++;
     }
-};
 
-void insertNode(Node* &head, Node* &tail, int data) {
-    Node* newNode = new Node(data);
-    if(head == NULL || tail == NULL) {
-        head = tail = newNode;
+    vector<int> ans;
+    for(auto it : hash) {
+        if(it.second == 1) {
+            ans.push_back(it.second);
+        }
+    }
+    return ans;
+}
+
+void printVector(vector<int> v) {
+    if(v.size() == 0) {
+        cout<<"Empty Vector";
         return;
     }
-    tail->next = newNode;
-    tail = newNode;
-    return;
-}
 
-Node* reverseInSizeK(Node* head, int k) {
-    if(head == NULL || head->next == NULL) return head;
-
-    Node* dummyNode = new Node(-1);
-    Node* prevGroupEnd = dummyNode;
-    prevGroupEnd->next = head;
-
-    while(true) {
-        Node* currGroupStart = prevGroupEnd->next;
-        Node* kth = currGroupStart;
-
-        int count = 1;
-        while(count < k && kth != NULL) {
-            kth = kth->next;
-            count++;
-        }
-
-        if(kth == NULL) break;
-        
-        Node* nextGroupStart = kth->next;
-        kth->next = NULL;
-
-        Node* prev = NULL;
-        Node* curr = currGroupStart;
-        Node* forward = NULL;
-
-        while(curr != NULL) {
-            forward = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = forward;
-        }
-
-        currGroupStart->next = nextGroupStart;
-        prevGroupEnd->next = prev;
-        prevGroupEnd = currGroupStart;
+    for(int i = 0; i < v.size(); i++) {
+        cout<<v[i]<<" ";
     }
-
-    return dummyNode->next;
-}
-
-void printLL(Node* head) {
-    if(head == NULL) return;
-
-    Node* temp = head;
-    while(temp != NULL) {
-        cout<<temp->data<<" > ";
-        temp = temp->next;
-    }
-    cout<<"NULL";
 }
 
 int main() {
-    Node* head = NULL;
-    Node* tail = NULL;
-    
-    insertNode(head, tail, 1);
-    insertNode(head, tail, 2);
-    insertNode(head, tail, 3);
-    insertNode(head, tail, 4);
-    insertNode(head, tail, 5);
-    insertNode(head, tail, 6);
-    insertNode(head, tail, 7);
+    int n;
+    cin>>n;
 
-    int k;
-    cout<<"Enter K : ";
-    cin>>k;
-
-    Node* ansHead = reverseInSizeK(head, k);
-    printLL(ansHead);
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin>>v[i];
+    }
+    vector<int> ans = uniqueElements(v);
+    printVector(ans);
 }

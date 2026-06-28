@@ -71,7 +71,7 @@ int maxVal(vector<int> v) {
         st.insert(i);
     }
     
-    return *--st.end();
+    return *--st.end(); // Unsafe method, because if the vector is empty, then the set will be empty and this dereferencing may crash.
 }
 
 int main() {
@@ -412,7 +412,7 @@ int main() {
 //                                : Idea : For each element in arr1, check if it exists in arr2. If found, store it in the result and mark the matched element in arr2 (e.g., as INT_MIN) so it won’t match again (helps handle duplicates correctly). This ensures each element from one array is only counted once in the intersection, even if duplicates are present.
 //                                : Time : O(n^2) — due to nested loops (for each element in arr1, we may traverse arr2). Space: O(n) — to store the intersection results (in worst case if all are common).
 // Approach 2 : Optimized Brute Force 1 : Works for : Case 2 and Case 3!
-//                                      : Idea : Its mostly same like the basic brute force! suppose that you have two arrays and one is unsorted (call it arr1) and one is sorted (call it arr2), Take each element from the first array (arr1).Compare it with each element of the second array (arr2), which is sorted.
+//                                      : Idea : Its mostly same like the basic brute force! suppose that you have two arrays and one is unsorted (call it arr1) and one is sorted (call it arr2), Take each element from the first array (arr1). Compare it with each element of the second array (arr2), which is sorted.
 //                                             : Use this sorted nature to skip unnecessary checks : If element < arr2[j] → break early because no match will be found afterward. and If element == arr2[j] → element is common, add to answer and mark arr2[j] = INT_MIN to avoid duplicates.
 //                                             : Repeat for all elements in arr1.
 //                                      : This approach is just slightly better than the basic brute force, but with that it comes with some restrictions that it works for only Case 2 and 3!
