@@ -420,3 +420,580 @@ int main() {
         cout<<endl;
     }
 }
+
+// Pattern 20 :         *
+//            :       * * *
+//            :     * * * * *
+//            :   * * * * * * *
+//            : * * * * * * * * *
+// Thought Process : To solve any pattern-related question in programming, the first step is to understand the relationship between rows and columns. But for pyramid patterns, things are a bit special — you need to understand three important components : Rows (Size), Spaces & Stars
+//                 : Star Logic : In a pyramid pattern, stars are printed in the center of each row and their count increases as we go down.
+//                              : One common observation is : Number of stars in any row "i" is = (2 * i) - 1. This means the number of stars depends only on the row number, not on the total size n.
+//                 : Space Logic : Before the stars, we print spaces to push the stars to the center, creating the pyramid shape. The spaces depend on both the current row number i and the total number of rows n. Two simple ways to calculate spaces...
+//                               : Method 1 : Spaces in row "i" : n - i
+//                                          : This is the easiest and most intuitive — as the row increases, the number of leading spaces decreases.
+//                               : Method 2 (alternative perspective) : Spaces in row "i" : (2 * (n - i + 1)) - 2)/2 (which is eqla to "n - i" but okay nvm)
+//                                                                    : This formula comes from total characters in a line and evenly splitting the remaining spaces. But this is more complex — use only if needed.
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = 1; j<=(2*i)-1; j++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 21 : * * * * * * * * *
+//            :   * * * * * * *
+//            :     * * * * *
+//            :       * * *
+//            :         *
+// Thought Process : Its mostly similar to previous logic, just in reverse!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = n; i>=1; i--) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = (2*i)-1; j>=1; j--) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Alternate Approach! As this time stars are depending upon both "n & i" but spaces are only depending upon "i".
+#include<iostream>
+using namespace std;
+
+int main() {
+    int nr;
+    cin>>nr;
+    for(int i = 1; i <= nr; i++) {
+        int spaces = i - 1;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+
+        int stars = 2*nr - (2*i - 1);
+        while(stars) {
+            cout<<"*"<<" ";
+            stars--;
+        }
+
+        spaces = i - 1;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 22 :         *
+//            :       * * *
+//            :     * * * * *
+//            :   * * * * * * *
+//            : * * * * * * * * *
+//            : * * * * * * * * *
+//            :   * * * * * * *
+//            :     * * * * *
+//            :       * * *
+//            :         *
+// // Thought Process : Here again you can just simply combine the logic of inverted & non-inverted pyramids!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = 1; j<=(2*i)-1; j++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n; i>=1; i--) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = (2*i)-1; j>=1; j--) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 23 : *
+//            : * *
+//            : * * *
+//            : * * * *
+//            : * * *
+//            : * *
+//            : *
+// Thought Process : Here, what we can simply do is, just use the combination of previous patterns and modify them according to the output rows!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout<<"Enter an odd number : ";
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        if(i < (n/2 + 1)) {
+            for(int j = 1; j <= i; j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
+        }
+        else {
+            for(int j = 1; j <= (n - i + 1); j++) {
+                cout<<"*"<<" ";
+            }
+            cout<<endl;
+        }
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; 2*i <= n; i++) {
+        for(int j = 1; j <= i; j++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n - 1; i >= 1; i--) {
+        for(int j = i; j >= 1; j--) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=i; j++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=(n-i); j++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }    
+}
+
+// Pattern 24 : 1
+//            : 0 1
+//            : 1 0 1
+//            : 0 1 0 1
+//            : 1 0 1 0 1
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        if(i%2 != 0) {
+            int start = 1;
+            for(int j = 1; j<=i; j++) {
+                cout<<start<<" ";
+                start = 1 - start;
+            }
+        }
+        if(i%2 == 0) {
+            int start = 0;
+            for(int j = 1; j<=i; j++) {
+                cout<<start<<" ";
+                start = 1 - start;
+            }
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 25 : 1                 1
+//            : 1 2             2 1
+//            : 1 2 3         3 2 1
+//            : 1 2 3 4     4 3 2 1
+//            : 1 2 3 4 5 5 4 3 2 1
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int num = 1;
+        while(num <= i) {
+            cout<<num<<" ";
+            num++;
+        }
+
+        int spaces = 2*(n - i);
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        } 
+
+        num = i;
+        while(num >= 1) {
+            cout<<num<<" ";
+            num--;
+        }
+        cout<<endl;
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=i; j++) {
+            cout<<j<<" ";
+        }
+        int space = 2*n - 2*i;
+        while(space) {
+            cout<<" "<<" ";
+            space = space - 1;
+        }
+        for(int j = i; j>=1; j--) {
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 26 : _ _ _ A _ _ _
+//            : _ _ A B A _ _
+//            : _ A B C B A _
+//            : A B C D C B A
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        int spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+
+        char ch = 'A';
+        for(int j = 0; j <= (2*i - 1)/2; j++) {
+            cout<<ch<<" ";
+            ch++;
+        }
+
+        ch = 'A' + i - 2;
+        for(int j = 0; j < i-1; j++) {
+            cout<<ch<<" ";
+            ch--;
+        }
+
+        spaces = n - i;
+        while(spaces) {
+            cout<<" "<<" ";
+            spaces--;
+        }
+        cout<<endl;
+    }
+}
+
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int space = n-i;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        char ch = 'A';
+        for(int j = 1; j<=(2*i)-1; j++) {
+            cout<<ch<<" ";
+            if(j <= i-1) ch++;
+            else ch--;
+        }
+
+        space = n-i;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 27 : * * * * * * * * * * 
+//            : * * * *     * * * * 
+//            : * * *         * * * 
+//            : * *             * * 
+//            : *                 * 
+//            : *                 * 
+//            : * *             * * 
+//            : * * *         * * * 
+//            : * * * *     * * * * 
+//            : * * * * * * * * * *
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 1; space<(2*i)-1; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+    for(int i = n; i>=1; i--) {
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = (2*i)-1; space>1; space--) {
+            cout<<" "<<" ";
+        }
+
+        for(int star = 0; star<=n-i; star++) {
+            cout<<"*"<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 29 : *                 *
+//            : * *             * *
+//            : * * *         * * *
+//            : * * * *     * * * *
+//            : * * * * * * * * * *
+//            : * * * *     * * * *
+//            : * * *         * * *
+//            : * *             * *
+//            : *                 *
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        int star = i;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+
+        int space = (2*n) - (2*i);
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        star = i;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+        cout<<endl;
+    }
+    for(int i = 0; i<n; i++) {
+        int star = (n-i)-1;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+
+        int space = 2*i+2;
+        while(space) {
+            cout<<" "<<" ";
+            space--;
+        }
+
+        star = (n-i)-1;
+        while(star) {
+            cout<<"*"<<" ";
+            star--;
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 30 : * * * *
+//            : *     *
+//            : *     *
+//            : * * * *
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        if(i == 1) {
+            int stars = n;
+            while(stars) {
+                cout<<"*"<<" ";
+                stars--;
+            }
+        }
+
+        if(i > 1 && i < n) {
+            cout<<"*"<<" ";
+            int spaces = n - 2;
+            while(spaces) {
+                cout<<" "<<" ";
+                spaces--;
+            }
+            cout<<"*"<<" ";
+        }
+
+        if(i == n) {
+            int stars = n;
+            while(stars) {
+                cout<<"*"<<" ";
+                stars--;
+            }
+        }
+        cout<<endl;
+    }
+}
+
+// Better Approach!
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int j = 1; j<=n; j++) {
+            if(i == 1 || i == n || j == 1 || j == n) {
+                cout<<"*"<<" ";
+            }
+            else cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Pattern 31 : 5 5 5 5 5 5 5 5 5
+//            : 5 4 4 4 4 4 4 4 5 
+//            : 5 4 3 3 3 3 3 4 5 
+//            : 5 4 3 2 2 2 3 4 5 
+//            : 5 4 3 2 1 2 3 4 5 
+//            : 5 4 3 2 2 2 3 4 5 
+//            : 5 4 3 3 3 3 3 4 5 
+//            : 5 4 4 4 4 4 4 4 5 
+//            : 5 5 5 5 5 5 5 5 5
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 0; i<(2*n-1); i++) {
+        for(int j = 0; j<(2*n-1); j++) {
+            int top = i;
+            int left = j;
+            int bottom = (2*n - 2) - i;
+            int right = (2*n - 2) - j;
+            cout<<(n - min(min(top,bottom), min(right,left)))<<" ";
+        }
+        cout<<endl;
+    }
+} // Re-solve this again, after sometime!
+
+// Extra Patterns :
+// Pattern 32 : ___*___
+//            : __*_*__
+//            : _*_*_*_
+//            : *_*_*_*
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++) {
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+
+        for(int j = 1; j<=i; j++) {
+            cout<<"*"<<" ";
+        }
+
+        for(int space = 0; space<n-i; space++) {
+            cout<<" "<<" ";
+        }
+        cout<<endl;
+    }
+}
