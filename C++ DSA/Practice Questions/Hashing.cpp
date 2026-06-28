@@ -1,5 +1,3 @@
-// --------------------------------------------------------------- Lec 6 : Learn Hashing Basics ---------------------------------------------------------------------------------------------------------------------------------------------->
-// Related Learnings!
 // Problem Statement : Imagine you are given an array like : [1, 2, 1, 3, 2] and Now, someone asks : "How many times does 1 appear?" or "How many times does 2, 3, 4, or even 10 appear?"
 //                   : The brute-force way would be : Use a count variable. Loop through the whole array every time you want to count how many times a number appears.
 //                   : So if : Array size = n, You want to check frequency of q numbers. Then the Time Complexity becomes : O(n) for each number → Total = O(q * n)
