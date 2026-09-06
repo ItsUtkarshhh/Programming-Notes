@@ -1,69 +1,88 @@
 #include<iostream>
 #include<vector>
+#include<map>
 using namespace std;
 
-void merge(vector<int> &arr, int s, int e) {
-    if(arr.size() < 2) return;
+int maximumElement(vector<int> v) {
+    if(v.size() < 1) return -1;
 
-    int mid = s + (e-s)/2;
-    int len1 = mid - s + 1;
-    int len2 = e - mid;
-
-    vector<int> left(len1);
-    vector<int> right(len2);
-
-    int k = s;
-    for(int i = 0; i < len1; i++) {
-        left[i] = arr[k++];
+    int maxi = INT_MIN;
+    for(int i = 0; i < v.size(); i++) {
+        if(v[i] > maxi) maxi = v[i];
     }
 
-    k = mid + 1;
-    for(int i = 0; i < len2; i++) {
-        right[i] = arr[k++];
-    }
-
-    int i = 0; int j = 0;
-    k = s;
-    while(i < left.size() && j < right.size()) {
-        if(left[i] <= right[j]) {
-            arr[k++] = left[i++];
-        }
-        else {
-            arr[k++] = right[j++];
-        }
-    }
-
-    while(i < left.size()) arr[k++] = left[i++]; 
-    while(j < right.size()) arr[k++] = left[j++];
+    return maxi;
 }
 
-void mergeSortHelper(vector<int> &arr, int s, int e) {
-    if(s >= e) return;
+int minimumElement(vector<int> v) {
+    if(v.size() < 1) return -1;
 
-    int mid = s + (e-s)/2;
-    mergeSortHelper(arr, s, mid);
-    mergeSortHelper(arr, mid + 1, e);
-    merge(arr, s, e);
+    int mini = INT_MAX;
+    for(int i = 0; i < v.size(); i++) {
+        if(v[i] < mini) mini = v[i];
+    }
+
+    return mini;
 }
 
-void mergeSort(vector<int> &arr) {
-    if(arr.size() < 2) return;
+void swapAlternatively(vector<int> &v) {
+    if(v.size() < 1) {
+        cout<<"Size is less than 1"<<endl;
+        return;
+    }
 
-    int s = 0; int e = arr.size() - 1;
-    mergeSortHelper(arr, s, e);
+    for(int i = 0; i < v.size() - 1; i = i + 2) {
+        swap(v[i], v[i+1]);
+    }
+}
+
+bool checkUnique(vector<int> v) {
+    if(v.size() < 1) return false;
+
+    int maxElement = INT_MIN;
+    for(int i = 0; i < v.size(); i++)  {
+        if(v[i] > maxElement) maxElement = v[i];
+    }
+
+    vector<int> freqArr(maxElement + 1);
+
+    for(int i = 0; i < v.size(); i++) {
+        freqArr[v[i]]++;
+    }
+
+    for(int i = 0; i <= maxElement; i++) {
+        if(freqArr[i] == 1) {
+            // cout<<"Unique Element Found : "<<i<<endl;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkUnique2(vector<int> v) {
+    if(v.size() < 1) return false;
+
+    map<int, int> freq;
+    for(int i = 0; i < v.size(); i++) {
+        freq[v[i]]++;
+    }
+
+    for(auto it : freq) {
+        if(it.first == 1) {
+            return true;
+        }
+    }
+    return false;
 }
 
 int main() {
-    int n;
-    cin>>n;
+    int size;
+    cin>>size;
 
-    vector<int> v(n);
-    for(int i = 0; i < n; i++) {
+    vector<int> v(size);
+    for(int i = 0; i < size; i++) {
         cin>>v[i];
     }
 
-    mergeSort(v);
-    for(int i = 0; i < v.size(); i++) {
-        cout<<v[i]<<" ";
-    }
+    cout<<checkUnique2(v);
 }

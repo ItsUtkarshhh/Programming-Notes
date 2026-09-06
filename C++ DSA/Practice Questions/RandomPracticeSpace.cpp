@@ -2,111 +2,88 @@
 #include<vector>
 using namespace std;
 
-void merge(vector<int> &arr, int s, int e) {
-    if(arr.size() < 2) return;
+// Both Sorted
+vector<int> intersectionOfTwoArrays(vector<int>  v1, vector<int> v2) {
+    if(v1.size() < 1  || v2.size() < 1) return {};
 
-    int mid = s + (e-s)/2;
-    int len1 = mid - s + 1;
-    int len2 = e - mid;
+    vector<int> result;
+    int first = 0; int second = 0;
 
-    vector<int> left(len1);
-    vector<int> right(len2);
-
-    int k = s;
-    for(int i = 0; i < len1; i++) {
-        left[i] = arr[k++];
-    }
-
-    k = mid + 1;
-    for(int i = 0; i < len2; i++) {
-        right[i] = arr[k++];
-    }
-
-    int i = 0; int j = 0;
-    k = s;
-    while(i < left.size() && j < right.size()) {
-        if(left[i] <= right[j]) {
-            arr[k++] = left[i++];
+    while(first < v1.size() && second < v2.size()) {
+        if(v1[first] == v2[second]) {
+            result.push_back(v1[first]);
+            first++;
+            second++;
+        }
+        else if(v1[first] > v2[second]) {
+            second++;
         }
         else {
-            arr[k++] = right[j++];
+            first++;
         }
     }
-
-    while(i < left.size()) arr[k++] = left[i++]; 
-    while(j < right.size()) arr[k++] = right[j++];
+    return result;
 }
 
-void mergeSortHelper(vector<int> &arr, int s, int e) {
-    if(s >= e) return;
+// Sorted vs Unsorted - Brute Force
+vector<int> intersectionOfTwoArrays(vector<int>  v1, vector<int> v2) {
+    if(v1.size() < 1  || v2.size() < 1) return {};
 
-    int mid = s + (e-s)/2;
-    mergeSortHelper(arr, s, mid);
-    mergeSortHelper(arr, mid + 1, e);
-    merge(arr, s, e);
-}
+    vector<int> result;
 
-void mergeSort(vector<int> &arr) {
-    if(arr.size() < 2) return;
-
-    int s = 0; int e = arr.size() - 1;
-    mergeSortHelper(arr, s, e);
-}
-
-int partition(vector<int> &arr, int s, int e) {
-    int pivot = arr[s];
-    int count = 0;
-
-    for(int i = s + 1; i <= e; i++) {
-        if(arr[i] < pivot) {
-            count++;
+    for(int i = 0; i < v1.size(); i++) {
+        int val1 = v1[i];
+        for(int j = 0; j < v2.size(); j++) {
+            if(v2[j] == val1) {
+                result.push_back(v2[j]);
+                v2[j] = INT_MIN;
+                break;
+            }
         }
     }
+    return result;
+}
 
-    int pivotIndex = s + count;
-    swap(arr[pivotIndex], arr[s]);
+// Sorted vs Unsorted - Better Force
+vector<int> intersectionOfTwoArrays(vector<int>  v1, vector<int> v2) {
+    if(v1.size() < 1  || v2.size() < 1) return {};
 
-    int i = s; int j = e;
-    while(i < pivotIndex && j > pivotIndex) {
-        while(arr[i] <= arr[pivotIndex] && i < pivotIndex) {
-            i++;
-        }
-        while(arr[j] > arr[pivotIndex] && j > pivotIndex) {
-            j--;
-        }
-        if(i < pivotIndex && j > pivotIndex) {
-            swap(arr[i++], arr[j--]);
+    vector<int> result;
+
+    for(int i = 0; i < v1.size(); i++) {
+        int val1 = v1[i];
+        for(int j = 0; j < v2.size(); j++) {
+            if(v2[j] == val1) {
+                result.push_back(v2[j]);
+                v2[j] = INT_MIN;
+                break;
+            }
+            else if(v2[j] > val1) {
+                break;
+            }
         }
     }
-    return pivotIndex;
-}
-
-void quickSortHelper(vector<int> &arr, int s, int e) {
-    if(s >= e) return;
-
-    int p = partition(arr, s, e);
-    quickSortHelper(arr, s, p - 1);
-    quickSortHelper(arr, p + 1, e);
-}
-
-void quickSort(vector<int> &arr) {
-    if(arr.size() < 2) return;
-
-    int s = 0; int e = arr.size() - 1;
-    quickSortHelper(arr, s, e);
+    return result;
 }
 
 int main() {
-    int n;
-    cin>>n;
-
-    vector<int> v(n);
-    for(int i = 0; i < n; i++) {
-        cin>>v[i];
+    int size1;
+    cin>>size1;
+    vector<int> v1(size1);
+    for(int i = 0; i < size1; i++) {
+        cin>>v1[i];
     }
 
-    mergeSort(v);
-    for(int i = 0; i < v.size(); i++) {
-        cout<<v[i]<<" ";
+    int size2;
+    cin>>size2;
+    vector<int> v2(size2);
+    for(int i = 0; i < size2; i++) {
+        cin>>v2[i];
     }
+
+    vector<int> ans = intersectionOfTwoArrays(v1, v2);
+    for(int i = 0; i < ans.size(); i++) {
+        cout<<ans[i]<<" ";
+    }
+
 }

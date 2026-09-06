@@ -1,0 +1,13 @@
+// Read the problems properly, understand it, understand its constraints, understand its special/given properties, understand the time & space complexity constraints if provided.
+// Go through the above process until you actually understand the core problem you need to solve with the contraints.
+
+// Identify the data structure, its algorithms and its technique or patterns required to solve the problem.
+// Do not try to solve all the variations, solve the given problem with its given constraints and properties.
+
+// ------------------------------------------------------ Arrays --------------------------------------------------------------------------------------->
+// If the problem you identified, needs array data strructure to solve...
+// Now, solve the problem or the part of the problem on paper and identify the core needs and behaviour - Is traversal needed? any other data structure is needed? Which algorithm or technique or pattern can be useful here...
+// Design the solution as per that very specific need of the problem...
+
+// Traversal - Take care of iteration starting and ending... where to start and where to end.
+//           - Take care of the behaviour of iteration... need to skip any element? mark any element or anything as such...

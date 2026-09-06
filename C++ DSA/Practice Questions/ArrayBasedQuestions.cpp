@@ -65,7 +65,6 @@ using namespace std;
 
 int maxVal(vector<int> v) {
     set<int> st;
-    int maxi = INT_MIN;
     
     for(int i : v) {
         st.insert(i);
