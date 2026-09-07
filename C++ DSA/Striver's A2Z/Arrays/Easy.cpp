@@ -296,30 +296,155 @@ int main() {
 }
 
 // ------------------------------------------------------- Question 8 : Union of Two Sorted Arrays ----------------------------------------------------------------------------------------------------------->
-// Brute Force : Traverse the first array, and traverse the second arrays nested to the first traversal, insert the value once in the result, and mark both of them traversed if matches found. Move forward
-// Better : 
+// Brute Force 1 : This problem is based on set union, and as the arrays can contain duplicates, we can simply use hashmaps, so store all values from both the arrays and then simply iterate over the map to restore the values in final result array.
+// Brute Force 2 : Similarly, we can use set, as we do not want duplicates in the final result, we can simply insert both the arrays into the set, and then insert back those set elements into the final result vector.
+// Optimal : We can use two pointer strategy, where we can simply traverse both the arrays, and will keep on adding those values into the final result array.
 
-// Brute Force :
+#include<iostream>
+#include<vector>
+#include<map>
+#include<set>
+using namespace std;
+
+// Brute Force 1 :
+vector<int> unionOfTwoArrays1(vector<int> &v1, vector<int> &v2) {
+    if(v1.empty()) return v2;
+    if(v2.empty()) return v1;
+    
+    map<int, int> freqMap;
+    for(int i : v1) freqMap[i]++;
+    for(int i : v2) freqMap[i]++;
+    
+    vector<int> result;
+    for(auto it : freqMap) {
+        result.push_back(it.first);
+    }
+    
+    return result;
+}
+
+// Brute Force 2 :
+vector<int> unionOfTwoArrays2(vector<int> &v1, vector<int> &v2) {
+    if(v1.empty()) return v2;
+    if(v2.empty()) return v1;
+
+    set<int> st;
+    for(int i : v1) st.insert(i);
+    for(int i : v2) st.insert(i);
+    
+    vector<int> result;
+    for(int i : st) {
+        result.push_back(i);
+    }
+
+    return result;
+}
+
+// Optimal :
+vector<int> unionOfTwoArrays3(vector<int> &v1, vector<int> &v2) {
+    if(v1.empty()) return v2;
+    if(v2.empty()) return v1;
+
+    int i = 0; int j = 0;
+    vector<int> result;
+
+    while(i < v1.size() && j < v2.size()) {
+        if(v1[i] < v2[j]) {
+            if(result.empty() || result.back() != v1[i]) {
+                result.push_back(v1[i]);
+            }
+            i++;
+        }
+        else if(v1[i] > v2[j]) {
+            if(result.empty() || result.back() != v2[j]) {
+                result.push_back(v2[j]);
+            }
+            j++;
+        }
+        else {
+            if(result.empty() || result.back() != v1[i]) {
+                result.push_back(v1[i]);
+            }
+            i++; j++;
+        }
+    }
+    
+    while(i < v1.size()) {
+        if(result.empty() || result.back() != v1[i]) {
+            result.push_back(v1[i]);
+            }
+            i++;
+        }
+        
+        while(j < v2.size()) {
+            if(result.empty() || result.back() != v2[j]) {
+                result.push_back(v2[j]);
+        }
+        j++;
+    }
+    
+    return result;
+}
+
+int main() {
+    int size1, size2;
+    cin>>size1>>size2;
+    
+    vector<int> v1(size1);
+    for(int i =  0; i < size1; i++) {
+        cin>>v1[i];
+    }
+    
+    vector<int> v2(size2);
+    for(int i =  0; i < size2; i++) {
+        cin>>v2[i];
+    }
+
+    vector<int> result = unionOfTwoArrays1(v1, v2);
+    for(int i = 0; i < result.size(); i++) {
+        cout<<result[i]<<" ";
+    }
+}
+
+// ------------------------------------------------------- Question 9 : Find the Missing Number ----------------------------------------------------------------------------------------------------------->
+// Brute Force : Simple linear traversal and finding the missing element between [1,N] in the array.
+// Better : Find the sum of all the numbers from 1-n & sum of all the numbers in the array and their subtraction will be the missing number.
+// Optimal : Use the XOR Operation.
+
 #include<iostream>
 #include<vector>
 using namespace std;
 
-vector<int> unionOfTwoArrays(vector<int> v1, vector<int> v2) {
-    if(v1.empty()) return v2;
-    if(v2.empty()) return v1;
+// Better
+int findMissingNumber1(vector<int> v) {
+    if(v.empty()) return -1;
+    
+    int range = v.size() + 1;
+    int sum1 = range * (range + 1) / 2;
 
-    vector<int> result;
-    for(int i = 0; i < v1.size(); i++) {
-        for(int j = 0; j < v2.size(); j++) {
-            if(v1[i] != v2[j]) {
-                result.push_back(v1[i]);
-                result.push_back(v2[j]);
-            }
-            else if(v1[i] == v2[j]) {
-                result.push_back()
-            }
-        }
+    int sum2 = 0;
+    for(int i = 0; i < v.size(); i++) {
+        sum2 += v[i];
     }
+    
+    return sum1 - sum2;
+}
+
+// Optimal
+int findMissingNumber2(vector<int> v) {
+    if(v.empty()) return -1;
+    
+    int range = v.size() + 1;
+    int XorVal = 0;
+    for(int i = 1; i <= range; i++) {
+        XorVal ^= i;
+    }
+
+    for(int i = 0; i < v.size(); i++) {
+        XorVal ^= v[i];
+    }
+    
+    return XorVal;
 }
 
 int main() {
@@ -331,5 +456,170 @@ int main() {
         cin>>v[i];
     }
     
-    
+    cout<<findMissingNumber2(v);
 }
+
+// ------------------------------------------------------- Question 10 : Count Maximum Consecutive One's in the array ----------------------------------------------------------------------------------------------------------->
+// Brute / Optimal : Traverse by keeping the track of maximum consecutive ones everytime the streak breaks. and return the final maximum ones value.
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int maxConsecutiveOnes(vector<int> &v) {
+    if(v.empty()) return -1;
+
+    int maxOnesCount = 0;
+    int currentCount = 0;
+    
+    for(int i = 0; i < v.size(); i++) {
+        if(v[i] == 1) {
+            currentCount++;
+        }
+        else {
+            currentCount = 0;
+        }
+        maxOnesCount = max(currentCount, maxOnesCount);
+    }
+
+    return maxOnesCount;
+}
+
+int main() {
+    int size;
+    cin>>size;
+    
+    vector<int> v(size);
+    for(int i =  0; i < size; i++) {
+        cin>>v[i];
+    }
+}
+
+// ------------------------------------------------------- Question 11 : Find the number that appears once, and the other numbers twice ----------------------------------------------------------------------------------------------------------->
+// Brute Force : Pick each element one by one and traverse the same array and count occurrence, and check for the count everytime the inner loop ends, if the count == 1, then return the number simply.
+// Better : Use a map to count frequency of each number, and then get the number with the frequency one. And this same can be done using another array (but that will waste a lots of space unneccessarily).
+// Optimal : We can use the properties, if the other numbers are appearing twice, we can simply XOR all the numbers in the array and only one number will remain at the end, that will be the unique number.
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+// Optimal :
+int getSingleElement(vector<int> &v) {
+    if(v.empty()) return -1;
+    
+    int XorVal = 0;
+    for(int i = 0; i < v.size(); i++) {
+        XorVal ^= v[i];
+    }
+    
+    return XorVal;
+}
+
+int main() {
+    int size;
+    cin>>size;
+    
+    vector<int> v(size);
+    for(int i =  0; i < size; i++) {
+        cin>>v[i];
+    }
+
+    cout<<getSingleElement(v);
+}
+
+// ------------------------------------------------------- Question 12 : Longest Subarray with given Sum K (Only Positives) ----------------------------------------------------------------------------------------------------------->
+// Brute Force : Traverse the array with two pointers, which will denote the window size. Keep adding values until the sum == K, if it get equals K, note the size of the subarray and break when size > K.
+// Better : Use two pointers to maintain, expand, and shrink the window size as per the sum value, and when sum == k, stores the maxLen and if sum > k then shrinks the window.
+// Optimal 1 : We don't need to shrink continously below the maxLen, so we replaced the "while" with "if"
+// Optimal 2 : Prefix Sum & Hashmap (Can be used here, but works best in case of +ve, -ve & zeroes.)
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+// Brute Force : 
+int longestSubarrayLen1(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    int maxLen = 0;
+    int sum = 0;
+    
+    for(int i = 0; i < v.size(); i++) {
+        sum = 0;
+        for(int j = i; j < v.size(); j++) {
+            sum += v[j];
+            if(sum == k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+            else if(sum > k) {
+                break;
+            }
+        }
+    }
+    return maxLen;
+}
+
+// Better :
+int longestSubarrayLen2(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    int left = 0;
+    int right = 0;
+    int sum = 0;
+    int maxLen = 0;
+    
+    while(right < v.size()) {
+        sum += v[right];
+        while(left <= right && sum > k) {
+            sum -= v[left];
+            left++;
+        }
+        if(sum == k) {
+            maxLen = max(maxLen, right - left + 1);
+        }
+        right++;
+    }
+    return maxLen;
+}
+
+// Optimal 1 :
+int longestSubarrayLen2(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    int left = 0;
+    int right = 0;
+    int sum = 0;
+    int maxLen = 0;
+    
+    while(right < v.size()) {
+        sum += v[right];
+        if(left <= right && sum > k) {
+            sum -= v[left];
+            left++;
+        }
+        if(sum == k) {
+            maxLen = max(maxLen, right - left + 1);
+        }
+        right++;
+    }
+    return maxLen;
+}
+
+int main() {
+    int size;
+    cin>>size;
+    
+    vector<int> v(size);
+    for(int i = 0; i < size; i++) {
+        cin>>v[i];
+    }
+    
+    int k;
+    cin>>k;
+
+    int finalLength = longestSubarrayLen(v, k);
+    cout<<finalLength<<endl;
+}
+
+// ------------------------------------------------------- Question 13 : Longest Subarray with given Sum K (Positives & Negatives) ----------------------------------------------------------------------------------------------------------->
