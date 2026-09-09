@@ -515,3 +515,232 @@ int allThreeCharactersSubstr(string str) {
 }
 
 // ----------------------------------------------------------------------- Problem 9 ---------------------------------------------------------------------------------------------------------------->
+// Problem : Longest Repeating Character Replacement
+// Brute Force : Generate every substring, track character frequencies, find the maximum frequency, and check whether the remaining characters can be replaced within k operations.
+// Optimal 1 : Use a sliding window, maintain character frequencies and current maximum frequency, shrink while replacements exceed k, and record the longest valid window.
+// Optimal 2 : Use a sliding window with historical maximum frequency, shrink once when replacements exceed k, and maintain the maximum achievable window length efficiently.
+
+// Brute Force :
+int longestRepeatingReplacement(string str, int k) {
+    if(str.empty()) return 0;
+    
+    int maxLen = 0;
+    for(int i = 0; i < str.length(); i++) {
+        int maxF = 0;
+        int hashArray[26] = {0};
+        for(int j =  i; j < str.length(); j++) {
+            hashArray[str[j] - 'A']++;
+            maxF = max(maxF, hashArray[str[j] - 'A']);
+            
+            int check = (j - i + 1) - maxF;
+            if(check <= k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+            else {
+                break;
+            }
+        }
+    }
+    return maxLen;
+}
+
+// Optimal 1 :
+int longestRepeatingReplacement(string str, int k) {
+    if(str.empty()) return 0;
+    
+    int maxLen = 0;
+    int maxF = 0;
+    int hashArray[26] = {0};
+    
+    int left =  0;
+    for(int right = 0; right < str.length(); right++) {
+        hashArray[str[right] - 'A']++;
+        maxF = max(maxF, hashArray[str[right] -'A']);
+        
+        while((right - left + 1) - maxF > k) {
+            hashArray[str[left] - 'A']--;
+            maxF = 0;
+            for(int i = 0; i < 26; i++) {
+                maxF = max(maxF, hashArray[i]);
+            }
+            left++;
+        }
+        if((right - left + 1) - maxF <= k) {
+            maxLen = max(maxLen, right - left + 1);
+        }
+    }
+    return maxLen;
+}
+
+// Optimal 2 : 
+int longestRepeatingReplacement(string str, int k) {
+    if(str.empty()) return 0;
+    
+    int maxLen = 0;
+    int maxF = 0;
+    int hashArray[26] = {0};
+    
+    int left =  0;
+    for(int right = 0; right < str.length(); right++) {
+        hashArray[str[right] - 'A']++;
+        maxF = max(maxF, hashArray[str[right] -'A']);
+        
+        if((right - left + 1) - maxF > k) {
+            hashArray[str[left] - 'A']--;
+            left++;
+        }
+        if((right - left + 1) - maxF <= k) {
+            maxLen = max(maxLen, right - left + 1);
+        }
+    }
+    return maxLen;
+}
+
+// ----------------------------------------------------------------------- Problem 10 ---------------------------------------------------------------------------------------------------------------->
+// Problem : Binary Subarrays With Sum = K
+// Brute Force : Generate every subarray, maintain its running sum while expanding, and increment the count whenever the subarray sum becomes exactly k.
+// Optimal : Count subarrays with sum at most k and subtract those with sum at most k−1, using a sliding window to count each efficiently.
+
+// Brute Force :
+int countBinarySubarraysWithSumK(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    for(int i = 0; i < v.size(); i++) {
+        int sum = 0;
+        for(int j = i; j < v.size(); j++) {
+            sum += v[j];
+            if(sum == k) count++;
+        }
+    }
+    return count;
+}
+
+// Optimal :
+int countBinarySubarraysSumAtMostK(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    if(k < 0) return 0;
+    
+    int left = 0;
+    int right = 0;
+    int count = 0;
+    int sum = 0;
+    
+    while(right < v.size()) {
+        sum += v[right];
+        while(sum > k) {
+            sum -= v[left];
+            left++;
+        }
+        count += right - left + 1;
+        right++;
+    }
+    return count;
+}
+
+int finalCount(vector<int> &v, int k) {
+    return countBinarySubarraysSumAtMostK(v, k) - countBinarySubarraysSumAtMostK(v, k-1);
+}
+
+// ----------------------------------------------------------------------- Problem 11 ---------------------------------------------------------------------------------------------------------------->
+// Problem : Count number of Nice subarrays, Nice subarrays where number of odd numbers in the sub array = K (K >= 0)
+// Brute Force : Generate every subarray, count its odd numbers while expanding, increment when exactly k odds are found, and stop when the count exceeds k.
+// Optimal : Treat odd numbers as 1 and even numbers as 0, count subarrays with at most k odds, then subtract those with at most k−1.
+
+// Brute Force :
+int countNiceSubarrays(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    int count = 0;
+    for(int i = 0; i < v.size(); i++) {
+        int countOdd = 0;
+        for(int j = i; j < v.size(); j++) {
+            if(v[j] % 2 == 1) countOdd++;
+            if(countOdd == k) count++;
+            if(countOdd > k) break;
+        }
+    }
+    return count;
+}
+
+// Optimal :
+int countNiceSubarrays(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    if(k < 0) return 0;
+    
+    int left = 0;
+    int right = 0;
+    int count = 0;
+    int sum = 0;
+    
+    while(right < v.size()) {
+        sum += v[right] % 2;
+        while(sum > k) {
+            sum -= v[left] % 2;
+            left++;
+        }
+        count += right - left + 1;
+        right++;
+    }
+    return count;
+}
+
+int finalCount(vector<int> &v, int k) {
+    return countNiceSubarrays(v, k) - countNiceSubarrays(v, k-1);
+}
+
+// ----------------------------------------------------------------------- Problem 12 ---------------------------------------------------------------------------------------------------------------->
+// Problem : Subarray with k different integers
+// Brute Force : Generate every subarray, track distinct elements using a set, count when exactly k distinct integers occur, and stop when the count exceeds k.
+// Optimal : Count subarrays having at most k and at most k−1 distinct integers using sliding windows, then subtract both counts to obtain exactly k.
+
+// Brute Force :
+int subarraysWithKDifferentInt(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    
+    int count = 0;
+    
+    for(int i = 0; i < v.size(); i++) {
+        set<int> st;
+        for(int j = i; j < v.size(); j++) {
+            st.insert(v[j]);
+            if(st.size() == k) count++;
+            if(st.size() > k) break;
+        }
+    }
+    return count;
+}
+
+// Optimal :
+int subarraysWithAtmostKDifferentInt(vector<int> &v, int k) {
+    if(v.empty()) return 0;
+    if(k < 0) return 0;
+    
+    int left = 0;
+    int right = 0;
+    int count = 0;
+    map<int, int> hash;
+    
+    while(right < v.size()) {
+        hash[v[right]]++;
+        while(hash.size() > k) {
+            hash[v[left]]--;
+            if(hash[v[left]] == 0) {
+                hash.erase(v[left]);
+            }
+            left++;
+        }
+        count += right - left + 1;
+        right++;
+    }
+    
+    return count;
+}
+
+int finalCount(vector<int> &v, int k) {
+    return subarraysWithAtmostKDifferentInt(v, k) - subarraysWithAtmostKDifferentInt(v, k - 1);
+}
+
+// ----------------------------------------------------------------------- Problem 13 ---------------------------------------------------------------------------------------------------------------->
+// Problem : Minimum Window Substring
+// Brute Force : 
+// Optimal : 
