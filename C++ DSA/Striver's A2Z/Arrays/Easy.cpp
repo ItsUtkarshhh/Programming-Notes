@@ -420,9 +420,9 @@ int findMissingNumber1(vector<int> v) {
     if(v.empty()) return -1;
     
     int range = v.size() + 1;
-    int sum1 = range * (range + 1) / 2;
+    long long sum1 = 1LL * range * (range + 1) / 2; // 1LL for just in case of large sums
+    long long sum2 = 0;
 
-    int sum2 = 0;
     for(int i = 0; i < v.size(); i++) {
         sum2 += v[i];
     }

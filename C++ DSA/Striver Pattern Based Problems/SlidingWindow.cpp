@@ -122,11 +122,12 @@ int main() {
 }
 
 // ----------------------------------------------------------------------- Problem 3 ---------------------------------------------------------------------------------------------------------------->
-// Problem : Maximum Points you can obtain from N cards.
+// Problem : Maximum Points you can obtain from N cards. Condition : You can either pick up from the front or from the back
 // Approach : Its a constant window problem, so first we will calculate the sum of the first window, and then will move forward, by subtracting one from the left side subarray and adding one from the right side subarray.
 
 int maxPointsFromCards(vector<int> &v, int k) {
-    if(v.empty()) return 0;
+    if(v.empty() || k == 0) return 0;
+    if(k < 0 || k > v.size()) return -1;
     
     int sum = 0;
     int maxSum = INT_MIN;

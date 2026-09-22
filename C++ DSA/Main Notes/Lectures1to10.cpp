@@ -18,7 +18,7 @@
 //          : Big Data tools and frameworks: Hadoop, Spark, Kafka, Hive.
 
 // ---------------------------------------------------------- LECTURE 1 - Basics --------------------------------------------------------------------------------------------------------->
-// You can learn about Fllowcharts, Pseudocode, and Algorithms as per the needs later.
+// You can learn about Flowcharts, Pseudocode, and Algorithms as per the needs later.
 
 // C++ Essentials & Compiler Basics : Namespace (using namespace std) : What it is : C++ uses namespaces to group related functions, classes, and variables to avoid naming conflicts.
 //                                                                    : Why use it : By declaring using namespace std, you tell the compiler to look into the standard (std) namespace by default.
@@ -502,7 +502,7 @@ int main() {
 // ---------------------------------------------------------- LECTURE 9 - Arrays --------------------------------------------------------------------------------------------------------->
 // Arrays : Can store multiple values/data in a single variable, similar type of data, data stored at contigous memory location, and can be stored using indexes!
 // Declaring Arrays : int dost[10]; -> Here we have created an array with the name dost which has 10 contigous memory locations and where the name dost is refering to the first element of the array or can say is pointing at the 0th index of the array!
-// Also maan lo agar int dost[10]; ek array banaya, toh ye memory me kaise dikhega, it will like suppose the first element is at memory address 100, now the 2nd element (means 1st index) will be at 104 becoz its data type is int and int has 4 byte, so one memory location (which will contain 32 bits) will be able to store a value of the int range which we know already! so means, dost[10] ka mtlb ki aisi 10 memory locations alot hojayengi dost naam ke variable ko jahaa pr hum 10 different (or same) values of same data type (here it is int) daal sakte hai and harr ek memory location (which is of 4 bytes = 32 bits) will be able to store value of the int range, which is -2^31 -> 2^31-1.
+// Declaring int dost[10]; allocates 10 consecutive 4-byte (32-bit) memory locations starting at a base address (e.g., 100, 104, 108...), where each slot independently stores an integer within the standard 32-bit range (-2³¹ to 2³¹-1).
 
 // Initiallization of Arrays : int dost[5] = {1,2,3,4,5}; Isse memory me 5 block bane and unn sab blocks me harr ek index ke according value store hogyi!
 //                           : int dost[5] = {0}; isse kya hua ki jitne memory blocks allocate hue iss array ko unn sab me 0 store hogya!
