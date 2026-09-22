@@ -483,13 +483,13 @@ int allThreeCharactersSubstr(string str) {
         {'b', -1},
         {'c', -1}
     };
-    int left = 0; int right = 0;
+    int right = 0;
 
     while(right < str.length()) {
         hash[str[right]] = right;
         
         if(hash['a'] >= 0 && hash['b'] >= 0 && hash['c'] >= 0) {
-            count = count + min(hash['a'], hash['b'], hash['c']) + 1;
+            count = count + min({hash['a'], hash['b'], hash['c']}) + 1;
         }
         right++;
     }
