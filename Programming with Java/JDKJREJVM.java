@@ -122,11 +122,3 @@
 // The Class Loader Subsystem : Grabs your .class file, verifies its safety structure (0xCAFEBABE), allocates space for static variables, and resolves symbolic links.
 // The Runtime Data Areas : Organizes the computer's RAM. The Method Area holds the class blueprints, the Heap holds your objects, and the JVM Stack opens up individual execution channels for your running threads.
 // The Execution Engine : The Interpreter jumps into action executing code instantly line-by-line, the JIT Compiler accelerates your heavy loops into native computer code, and the Garbage Collector keeps the memory clean.
-
-
-
-
-
-
-
-
