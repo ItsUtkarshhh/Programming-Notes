@@ -241,12 +241,163 @@ public class Main {
                 spaces--;
             }
 
+            int totalCharLeft = i + 1;
+            char val = 'A';
+            while(totalCharLeft > 0) {
+                System.out.print(val++ + " ");
+                totalCharLeft--;
+            }
+
+            int totalCharRight = i;
+            char val2 = (char)('A' + i - 1);
+            while(totalCharRight > 0) {
+                System.out.print(val2-- + " ");
+                totalCharRight--;
+            }
+
             spaces = rows - i - 1;
             while(spaces > 0) {
                 System.out.print("  ");
                 spaces--;
             }
             System.out.println();
+        }
+    }
+
+    public static void pattern18(int rows) {
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j <= i; j++) {
+                System.out.print((char)('A' + rows - j - 1) + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void pattern19(int rows) {
+        for(int i = 0; i < rows; i++) {
+            char val = (char)('A' + rows - 1 - i);
+            for(int j = 0; j <= i; j++) {
+                System.out.print(val++ + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void pattern20(int rows) {
+        for(int i = 0; i < rows; i++) {
+            int stars = rows - i;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+
+            int spaces = 2*i;
+            while(spaces > 0) {
+                System.out.print("  ");
+                spaces--;
+            }
+
+            stars = rows - i;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+            System.out.println();
+        }
+        for(int i = 0; i < rows; i++) {
+            int stars = i + 1;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+
+            int spaces = 2*rows - 2*(i+1);
+            while(spaces > 0) {
+                System.out.print("  ");
+                spaces--;
+            }
+
+            stars = i + 1;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+            System.out.println();
+        }
+    }
+
+    public static void pattern21(int rows) {
+        for(int i = 0; i < rows; i++) {
+            int stars = i + 1;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+
+            int spaces = (2*rows) - (2*(i+1));
+            while(spaces > 0) {
+                System.out.print("  ");
+                spaces--;
+            }
+
+            stars = i + 1;
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+            System.out.println();
+        }
+        for(int i = 0; i < rows; i++) {
+            int stars = rows - (i+1);
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+
+            int spaces = 2*(i+1);
+            while(spaces > 0) {
+                System.out.print("  ");
+                spaces--;
+            }
+
+            stars = rows - (i+1);
+            while(stars > 0) {
+                System.out.print("* ");
+                stars--;
+            }
+            System.out.println();
+        }
+    }
+
+    public static void pattern22(int rows) {
+        for(int i = 0; i < rows; i++) {
+            if(i == 0 || i == (rows - 1)) {
+                int stars  = rows;
+                while(stars > 0) {
+                    System.out.print("* ");
+                    stars--;
+                }
+            }
+            else {
+                System.out.print("* ");
+                
+                int spaces = rows - 2;
+                while(spaces > 0) {
+                    System.out.print("  ");
+                    spaces--;
+                }
+
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void pattern23(int rows) {
+        for(int i = 0; i < (2*rows - 1); i++) {
+            for(int j = 0; j < (2*rows - 1); j++) {
+                
+            }
         }
     }
 
@@ -273,6 +424,14 @@ public class Main {
         // pattern14(rows);
         // pattern15(rows);
         // pattern16(rows);
-        pattern17(rows);
+        // pattern17(rows);
+        // pattern18(rows);
+        // pattern19(rows);
+        // pattern20(rows);
+        // pattern21(rows);
+        // pattern22(rows);
+        pattern23(rows);
+
+        sc.close();
     }
 }
