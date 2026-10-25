@@ -1,6 +1,7 @@
+package DSA.Arrays;
 import java.util.Scanner;
 
-public class Main {
+public class Practice {
     // Q1 : Sum of arrays elements
     public static int arraySum(int[] arr) {
         int sum = 0;

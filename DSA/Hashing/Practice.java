@@ -1,7 +1,9 @@
-import java.util.HashMap;
-import java.util.Scanner;
+package DSA.Hashing;
 
-public class Main {
+import java.util.Scanner;
+import java.util.HashMap;
+
+public class Practice {
     // Q1 : Highest Occurring Element in an Array
     public static int maxFreq(int[] arr) {
         if(arr == null || arr.length == 0) {

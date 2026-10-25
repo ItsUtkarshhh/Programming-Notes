@@ -1,4 +1,5 @@
-// ------------------------------------------------------- Question 1 : Largest Element ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 1 ----------------------------------------------------------------------------------------------------------->
+// Problem : Largest Element
 // Brute Force : Sort the array and return the (n-1)th element of the array.
 // Better : Perform a linear traversal and iteratively find the largest value.
 
@@ -23,7 +24,8 @@ int main() {
     cout<<"Maximum Value : "<<maxi<<endl;
 }
 
-// ------------------------------------------------------- Question 2 : Second Largest Element ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 2 ----------------------------------------------------------------------------------------------------------->
+// Problem : Second Largest Element
 // Brute Force : Sort the array in ascending order and get the (n-2)th element
 // Better : Traverse the array, and maintain two values largest and second largest at every iteration, and by the end of the array, you will get the second largest.
 
@@ -51,7 +53,7 @@ int main() {
             secondMaxi = v[i];
         }
     }
-
+    
     if(secondMaxi == INT_MIN) {
         cout<<-1<<endl;
         return 0;
@@ -59,7 +61,8 @@ int main() {
     cout<<"Second Maximum Value : "<<secondMaxi<<endl;
 }
 
-// ------------------------------------------------------- Question 3 : Check if an Array is Sorted (Ascending) ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 3 ----------------------------------------------------------------------------------------------------------->
+// Problem : Check if an Array is Sorted (Ascending)
 // Brute Force : Keep comparing the next element to its previous element and if at any moment the next element is smaller than the previous element, then simply return false/unsorted.
 
 // Brute Force
@@ -85,7 +88,8 @@ int main() {
     return 0;
 }
 
-// ------------------------------------------------------- Question 4 : Remove Duplicates in-place from Sorted Array ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 4 ----------------------------------------------------------------------------------------------------------->
+// Problem : Remove Duplicates in-place from Sorted Array
 // Brute Force : (Not In Place) - Insert all the elemeents into a set and then insert back them into the original vector and decrease the size of the original vector to its new length.
 // Better : As the is sorted, we can traverse using two pointers, one will take care of the last unique element and the other will traverse further over duplicates until a new unique element occurs & then will resize the vector accordingly.
 
@@ -146,7 +150,8 @@ int main() {
     }
 }
 
-// ------------------------------------------------------- Question 5 : Left Rotate the Array by One ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 5 ----------------------------------------------------------------------------------------------------------->
+// Problem : Left Rotate the Array by One
 // Brute Force : Simply store the first value in a variable and shift the rest of the array by one towards left and update the last value with the stored value.
 // Better : Conceptually divide the arrays into three sections, index0 - (k-1), k - indexN & index0 - indexN, and Reverse the three sections one by one.
 
@@ -162,12 +167,12 @@ void leftRotateByOneA(vector<int> &v) {
         cout<<"Empty array!";
         return;
     }
-
+    
     int val = v[0];
     for(int i = 0; i < v.size() - 1; i++) {
         v[i] = v[i+1];
     }
-
+    
     v[v.size() - 1] = val;
 }
 
@@ -197,13 +202,14 @@ int main() {
     
     // leftRotateByOneA(v);
     leftRotateByOneB(v, k);
-
+    
     for(int i = 0; i < size; i++) {
         cout<<v[i]<<" ";
     }
 }
 
-// ------------------------------------------------------- Question 6 : Move all Zeros to the end of the array (Mainting Relative Order) ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 6 ----------------------------------------------------------------------------------------------------------->
+// Problem : Move all Zeros to the end of the array (Mainting Relative Order)
 // Brute Force : Input all values to temporary array & then append number of zeroes as present in the original array.
 // Better : (Order not maintained) Use two pointers, keep one at starting & another at the end, and swap based on zero and non zero conditions.
 // Optimal : Use the read & write pointer strategy, as similar as removing duplicates problem, where one pointer will keep the track of the last non zero value & read pointer will track the next zero values and will swap/assign.
@@ -264,7 +270,8 @@ int main() {
     }
 }
 
-// ------------------------------------------------------- Question 7 : Linear Search ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 7 ----------------------------------------------------------------------------------------------------------->
+// Problem :Linear Search
 // Brute Force : Traverse the array linear way and compare it with the key at every iteration and if matches, return true or that element as per the need.
 
 // Brute Force
@@ -295,7 +302,8 @@ int main() {
     cout<<linearSearch(v, key);
 }
 
-// ------------------------------------------------------- Question 8 : Union of Two Sorted Arrays ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 8 ----------------------------------------------------------------------------------------------------------->
+// Problem : Union of Two Sorted Arrays
 // Brute Force 1 : This problem is based on set union, and as the arrays can contain duplicates, we can simply use hashmaps, so store all values from both the arrays and then simply iterate over the map to restore the values in final result array.
 // Brute Force 2 : Similarly, we can use set, as we do not want duplicates in the final result, we can simply insert both the arrays into the set, and then insert back those set elements into the final result vector.
 // Optimal : We can use two pointer strategy, where we can simply traverse both the arrays, and will keep on adding those values into the final result array.
@@ -406,7 +414,8 @@ int main() {
     }
 }
 
-// ------------------------------------------------------- Question 9 : Find the Missing Number ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 9 ----------------------------------------------------------------------------------------------------------->
+// Problem : Find the Missing Number
 // Brute Force : Simple linear traversal and finding the missing element between [1,N] in the array.
 // Better : Find the sum of all the numbers from 1-n & sum of all the numbers in the array and their subtraction will be the missing number.
 // Optimal : Use the XOR Operation.
@@ -459,7 +468,8 @@ int main() {
     cout<<findMissingNumber2(v);
 }
 
-// ------------------------------------------------------- Question 10 : Count Maximum Consecutive One's in the array ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 10 ----------------------------------------------------------------------------------------------------------->
+// Problem : Count Maximum Consecutive One's in the array
 // Brute / Optimal : Traverse by keeping the track of maximum consecutive ones everytime the streak breaks. and return the final maximum ones value.
 
 #include<iostream>
@@ -495,7 +505,8 @@ int main() {
     }
 }
 
-// ------------------------------------------------------- Question 11 : Find the number that appears once, and the other numbers twice ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 11 ----------------------------------------------------------------------------------------------------------->
+// Problem : Find the number that appears once, and the other numbers twice
 // Brute Force : Pick each element one by one and traverse the same array and count occurrence, and check for the count everytime the inner loop ends, if the count == 1, then return the number simply.
 // Better : Use a map to count frequency of each number, and then get the number with the frequency one. And this same can be done using another array (but that will waste a lots of space unneccessarily).
 // Optimal : We can use the properties, if the other numbers are appearing twice, we can simply XOR all the numbers in the array and only one number will remain at the end, that will be the unique number.
@@ -528,7 +539,8 @@ int main() {
     cout<<getSingleElement(v);
 }
 
-// ------------------------------------------------------- Question 12 : Longest Subarray with given Sum K (Only Positives) ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 12 ----------------------------------------------------------------------------------------------------------->
+// Problem : Longest Subarray with given Sum K (Only Positives)
 // Brute Force : Traverse the array with two pointers, which will denote the window size. Keep adding values until the sum == K, if it get equals K, note the size of the subarray and break when size > K.
 // Better : Use two pointers to maintain, expand, and shrink the window size as per the sum value, and when sum == k, stores the maxLen and if sum > k then shrinks the window.
 // Optimal 1 : We don't need to shrink continously below the maxLen, so we replaced the "while" with "if"
@@ -622,4 +634,5 @@ int main() {
     cout<<finalLength<<endl;
 }
 
-// ------------------------------------------------------- Question 13 : Longest Subarray with given Sum K (Positives & Negatives) ----------------------------------------------------------------------------------------------------------->
+// ------------------------------------------------------- Problem 13 ----------------------------------------------------------------------------------------------------------->
+// Problem : Longest Subarray with given Sum K (Positives & Negatives)
