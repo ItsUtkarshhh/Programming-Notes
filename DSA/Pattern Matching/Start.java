@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main {
+public class Start {
     public static void pattern1(int rows) {
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < rows; j++) {
@@ -393,14 +393,6 @@ public class Main {
         }
     }
 
-    public static void pattern23(int rows) {
-        for(int i = 0; i < (2*rows - 1); i++) {
-            for(int j = 0; j < (2*rows - 1); j++) {
-                
-            }
-        }
-    }
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         
@@ -429,8 +421,7 @@ public class Main {
         // pattern19(rows);
         // pattern20(rows);
         // pattern21(rows);
-        // pattern22(rows);
-        pattern23(rows);
+        pattern22(rows);
 
         sc.close();
     }

@@ -89,5 +89,7 @@ public class Main {
         for(int num : arr) {
             System.out.print(num + " ");
         }
+
+        sc.close();
     }
 }

@@ -37,31 +37,33 @@ public class Main {
             hash.put(num, hash.getOrDefault(num, 0) + 1);
         }
 
-        int maxEle = -1;
-        int maxValue = Integer.MIN_VALUE;
-        
-        int secMaxEle = maxEle;
-        int secMaxValue = maxValue;
+        int maxElement = -1;    
+        int maxElementFreq = 0;
+
+        int secondMaxElement = -1;
+        int secondMaxElementFreq = 0;
 
         for(HashMap.Entry<Integer, Integer> entry : hash.entrySet()) {
-            if(entry.getValue() > maxValue) {
-                secMaxEle = maxEle;
-                secMaxValue = maxValue;
-                
-                maxEle = entry.getKey();
-                maxValue = entry.getValue();
+            int currentElement = entry.getKey();
+            int currentElementFreq = entry.getValue();
+
+            if(currentElementFreq > maxElementFreq) {
+                secondMaxElement = maxElement;
+                secondMaxElementFreq = maxElementFreq;
+
+                maxElement = currentElement;
+                maxElementFreq = currentElementFreq;
             }
-            else if
-                (entry.getValue() < maxValue &&
-                (entry.getValue() > secMaxValue ||
-                (entry.getValue() == secMaxValue && entry.getKey() < secMaxEle
-                ))) 
-            {
-                secMaxEle = entry.getKey();
-                secMaxValue = entry.getValue();
+            else if(currentElementFreq < maxElementFreq &&
+                (currentElementFreq > secondMaxElementFreq ||
+                    (currentElementFreq == secondMaxElementFreq && currentElement < secondMaxElement)
+                )
+            ) {
+                secondMaxElement = currentElement;
+                secondMaxElementFreq = currentElementFreq;
             }
         }
-        return secMaxEle;
+        return secondMaxElement;
     }
 
     // Q3 : Sum of Highest & Lowest Frequencies
