@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.Arrays;
 
-public class Main {
+public class Practice {
     // Q1 : Count all Digits of a Number
     public static int countDigits(int num) {
         int count = 0;
